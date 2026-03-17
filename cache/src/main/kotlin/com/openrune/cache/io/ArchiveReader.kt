@@ -39,7 +39,7 @@ class ArchiveReader(rawData: ByteArray) {
         val payload = if (compressedSize != decompressedSize) {
             // Entire archive is bzip2 compressed
             val decompressed = ByteArray(decompressedSize)
-            BZip2.decompress(decompressed, decompressedSize, rawData, compressedSize, 6)
+            BZip2Decompressor.decompress(decompressed, decompressedSize, rawData, compressedSize, 6)
             decompressed
         } else {
             rawData
@@ -82,7 +82,7 @@ class ArchiveReader(rawData: ByteArray) {
                 val result = ByteArray(decompressedSizes[i])
                 if (compressedSizes[i] != decompressedSizes[i]) {
                     // Entry is individually compressed
-                    BZip2.decompress(result, decompressedSizes[i], data, compressedSizes[i], dataOffsets[i])
+                    BZip2Decompressor.decompress(result, decompressedSizes[i], data, compressedSizes[i], dataOffsets[i])
                 } else {
                     System.arraycopy(data, dataOffsets[i], result, 0, decompressedSizes[i])
                 }
