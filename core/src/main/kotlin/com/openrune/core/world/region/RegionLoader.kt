@@ -106,16 +106,18 @@ class RegionLoader(
         val entry = mapIndex?.lookup(regionX, regionY) ?: return
 
         if (entry.landscapeFileId >= 0) {
-            val data = cache.readFile(4, entry.landscapeFileId)
-            if (data != null) {
+            val rawLandscape = cache.readFile(4, entry.landscapeFileId)
+            if (rawLandscape != null) {
+                val data = decompressGzip(rawLandscape) ?: rawLandscape
                 try { decodeLandscape(data, baseX, baseY) }
                 catch (e: Exception) { log.debug("Landscape decode error ({}, {}): {}", regionX, regionY, e.message) }
             }
         }
 
         if (entry.objectFileId >= 0) {
-            val data = cache.readFile(4, entry.objectFileId)
-            if (data != null) {
+            val rawObjects = cache.readFile(4, entry.objectFileId)
+            if (rawObjects != null) {
+                val data = decompressGzip(rawObjects) ?: rawObjects
                 try { decodeObjects(data, baseX, baseY) }
                 catch (e: Exception) { log.debug("Object decode error ({}, {}): {}", regionX, regionY, e.message) }
             }
