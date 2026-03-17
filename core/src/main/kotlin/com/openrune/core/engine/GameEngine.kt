@@ -16,6 +16,7 @@ import com.openrune.core.world.update.NpcUpdateProtocol
 import com.openrune.core.world.update.PlayerUpdateProtocol
 import com.openrune.core.world.ObjectManager
 import com.openrune.core.world.GroundItemManager
+import com.openrune.core.world.interaction.ObjectInteractionHandler
 import com.openrune.cache.io.CacheReader
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
@@ -70,6 +71,7 @@ class GameEngine(
     val groundItemManager = GroundItemManager()
     val npcManager: NpcManager
     val regionLoader: RegionLoader
+    val objectInteractionHandler: ObjectInteractionHandler
 
     init {
         var cacheReader: CacheReader? = null
@@ -89,6 +91,10 @@ class GameEngine(
 
         // Wire NPC lookup into packet dispatcher
         packetDispatcher.npcLookup = { index -> npcManager.getByIndex(index) }
+
+        // Object interactions (doors, stairs, ladders) - engine-level
+        objectInteractionHandler = ObjectInteractionHandler(eventBus, playerManager)
+        objectInteractionHandler.initialize()
     }
 
     @Volatile var running = false; private set
@@ -166,6 +172,9 @@ class GameEngine(
 
         // Phase 9: Object manager (temporary object reverts)
         objectManager.process()
+
+        // Phase 9b: Object interaction handler (auto-close doors)
+        objectInteractionHandler.process()
 
         // Phase 10: Ground item processing (private->global, despawns)
         val groundResult = groundItemManager.process()
