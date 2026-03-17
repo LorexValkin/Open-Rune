@@ -138,7 +138,7 @@ class RegionLoader(
                         var actualZ = z
                         if (tileFlags[1][x][y] and TILE_BRIDGE != 0) actualZ = z - 1
                         if (actualZ >= 0) {
-                            collisionMap.addFlag(baseX + x, baseY + y, actualZ, CollisionFlag.OBJECT_TILE)
+                            collisionMap.addFlag(baseX + x, baseY + y, actualZ, CollisionFlag.OBJECT_TILE or CollisionFlag.OBJECT_BLOCK)
                         }
                     }
                 }
