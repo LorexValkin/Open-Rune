@@ -74,12 +74,51 @@ class PacketDispatcher(
         registerObjectClick(252, 2)
         registerObjectClick(70, 3)
 
-        // NPC interactions (first=155, second=17, third=21, fourth=18, attack=72)
-        registerNpcClick(155, 1)
-        registerNpcClick(17, 2)
-        registerNpcClick(21, 3)
-        registerNpcClick(72, 4)  // attack
-        registerNpcClick(131, 5)
+        // NPC interactions - each opcode uses a different byte encoding
+        // Verified against client.java doAction() write methods
+        // Opcode 155: first click, client writes LEShort (method431)
+        register(155) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readLEShort(0)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 1))
+        }
+        // Opcode 72: second click / attack, client writes ShortA (method432)
+        register(72) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readShortA(0)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 2))
+        }
+        // Opcode 17: third click, client writes LEShortA (method433)
+        register(17) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readLEShortA(0)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 3))
+        }
+        // Opcode 21: fourth click, client writes Short (writeWord)
+        register(21) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readShort(0)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 4))
+        }
+        // Opcode 18: fifth click, client writes LEShort (method431)
+        register(18) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readLEShort(0)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 5))
+        }
+        // Opcode 131: magic on NPC, client writes LEShortA(npcIndex) + ShortA(spellId)
+        register(131) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val npcIndex = pkt.readLEShortA(0)
+            val spellId = pkt.readShortA(2)
+            val npc = npcLookup?.invoke(npcIndex) ?: return@register
+            eventBus.emit(NpcInteractEvent(player, npc, 6))
+        }
 
         // Item clicks
         register(122) { index, pkt -> // first click
@@ -298,15 +337,6 @@ class PacketDispatcher(
             }
 
             eventBus.emit(ObjectInteractEvent(player, objectId, Position(x, y, player.position.z), option))
-        }
-    }
-
-    private fun registerNpcClick(opcode: Int, option: Int) {
-        register(opcode) { index, pkt ->
-            val player = playerManager.getByIndex(index) ?: return@register
-            val npcIndex = pkt.readLEShort(0)
-            val npc = npcLookup?.invoke(npcIndex) ?: return@register
-            eventBus.emit(NpcInteractEvent(player, npc, option))
         }
     }
 

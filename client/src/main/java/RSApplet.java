@@ -207,7 +207,7 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 		clickY = j;
 		clickTime = System.currentTimeMillis();
 		getGameComponent().requestFocusInWindow();
-		if(mouseevent.isMetaDown())
+		if(javax.swing.SwingUtilities.isRightMouseButton(mouseevent))
 		{
 			clickMode1 = 2;
 			clickMode2 = 2;
