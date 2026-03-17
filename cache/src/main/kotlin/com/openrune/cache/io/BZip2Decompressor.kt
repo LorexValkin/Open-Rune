@@ -1,4 +1,4 @@
-﻿package com.openrune.cache.io
+package com.openrune.cache.io
 
 /**
  * RS2 headerless BZip2 decompressor.
@@ -6,10 +6,6 @@
  * Clean Kotlin port of the client's working BZip2 implementation
  * (Class13.java / Class32.java). The RS2 cache uses standard BZip2 but
  * strips the "BZh" header - data starts directly at the block magic bytes.
- *
- * Architecture note: Self-contained, zero-dependency decompressor
- * designed for the OpenRune tool suite. Handles all 317 cache data
- * including jag archives (index 0) and map/landscape files (index 4).
  */
 object BZip2Decompressor {
 
@@ -50,7 +46,7 @@ object BZip2Decompressor {
 
             readByte(s); readByte(s); readByte(s); readByte(s); readByte(s)
             s.blockCount++
-            readByte(s); readByte(s); readByte(s)
+            readByte(s); readByte(s); readByte(s); readByte(s)
 
             val randomBit = readBit(s)
             if (randomBit.toInt() != 0) {
