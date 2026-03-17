@@ -196,26 +196,27 @@ class NpcManager(
         }
     }
     /**
-     * Natural random walk: NPCs pick a random destination tile within their
-     * walk range and path toward it step-by-step. Each step recalculates
-     * direction toward the destination, allowing curved paths around obstacles.
+     * Natural random walk: NPCs pick a random destination within walk range
+     * and queue tile-by-tile steps toward it. The MovementProcessor handles
+     * all collision checking — if a step is blocked, the path stops there.
      *
-     * Tuning (RS-like feel):
-     *   - 15% idle chance — NPCs move most of the time
-     *   - Walk distance: 2-5 tiles (weighted toward 3-4)
-     *   - Pause between walks: 2-7 ticks (~1.2-4.2 seconds)
-     *   - Hard leash: never exceeds walkRange from spawn
+     * Movement is identical to player walking (1 tile per tick, same collision).
+     * NPCs have walkingQueue.running=false so they never run.
+     *
+     * Behavior:
+     *   - 15% idle chance each cycle
+     *   - 2-7 tick pause between walks
+     *   - Picks destination 2-4 tiles away
+     *   - Hard leash: destination clamped to walkRange from spawn
      *   - Soft leash: biases toward spawn when past 50% of range
-     *   - Collision checked per step; stops at walls, doesn't break
      */
     private fun processRandomWalk(npc: Npc) {
         if (npc.def.walkRange <= 0) return
         if (--npc.randomWalkTimer > 0) return
 
-        // Short pause between walks — keeps them moving
         npc.randomWalkTimer = 2 + (Math.random() * 6).toInt()
 
-        // 15% idle chance — just enough to feel natural
+        // 15% chance to idle
         if (Math.random() < 0.15) return
 
         val range = npc.def.walkRange
@@ -223,58 +224,43 @@ class NpcManager(
         val spawnY = npc.spawnPosition.y
         val height = npc.position.z
 
-        // Pick a random destination tile within walk range of spawn
-        // Soft leash: if far from spawn, bias the destination toward spawn
+        // Soft leash: bias toward spawn when far
         val distFromSpawn = npc.position.distanceTo(npc.spawnPosition)
         val biasHome = distFromSpawn > (range * 0.5).toInt().coerceAtLeast(2)
 
         val destX: Int
         val destY: Int
         if (biasHome && Math.random() < 0.65) {
-            // Walk toward spawn area — pick a tile near spawn
             val halfRange = (range / 2).coerceAtLeast(1)
             destX = spawnX + (-halfRange..halfRange).random()
             destY = spawnY + (-halfRange..halfRange).random()
         } else {
-            // Free roam within range of spawn
             destX = spawnX + (-range..range).random()
             destY = spawnY + (-range..range).random()
         }
 
-        // Don't walk to where we already are
         if (destX == npc.position.x && destY == npc.position.y) return
 
-        // Walk distance: 2-5 tiles, weighted toward 3-4
-        val maxSteps = when ((Math.random() * 10).toInt()) {
-            in 0..1  -> 2   // 20% chance: short walk
-            in 2..5  -> 3   // 40% chance: medium walk
-            in 6..8  -> 4   // 30% chance: longer walk
-            else     -> 5   // 10% chance: full stroll
-        }
+        // Walk distance: 2-4 tiles
+        val maxSteps = 2 + (Math.random() * 3).toInt()
 
-        // Build path toward destination, step by step
+        // Queue steps toward destination — MovementProcessor will check
+        // collision on each step and stop if blocked (same as player)
         val steps = mutableListOf<com.openrune.api.world.Position>()
         var curX = npc.position.x
         var curY = npc.position.y
 
         for (step in 0 until maxSteps) {
-            // Direction toward destination (recalculated each step)
             val dx = (destX - curX).coerceIn(-1, 1)
             val dy = (destY - curY).coerceIn(-1, 1)
-            if (dx == 0 && dy == 0) break  // Arrived
+            if (dx == 0 && dy == 0) break
 
             val nextX = curX + dx
             val nextY = curY + dy
             val nextPos = com.openrune.api.world.Position(nextX, nextY, height)
 
-            // Hard leash check
+            // Hard leash — don't queue steps beyond walk range
             if (nextPos.distanceTo(npc.spawnPosition) > range) break
-
-            // Collision check
-            val dir = com.openrune.core.world.collision.Direction.between(curX, curY, nextX, nextY)
-            if (dir == com.openrune.core.world.collision.Direction.NONE) break
-            if (!collisionMap.canTraverse(curX, curY, height,
-                    npc.entitySize, npc.entitySize, dir)) break
 
             steps.add(nextPos)
             curX = nextX

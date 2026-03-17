@@ -41,7 +41,7 @@ class Npc(
     //  Movement (ENGINE-LEVEL)
     // ================================================================
 
-    override val walkingQueue = WalkingQueue()
+    override val walkingQueue = WalkingQueue().also { it.running = false }
     override val entitySize: Int get() = def.size
 
     override fun onMove(from: Position, to: Position, direction: Direction) {}
