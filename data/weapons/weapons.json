@@ -1,0 +1,83 @@
+[
+  {
+    "id": -1,
+    "name": "Unarmed",
+    "speed": 4,
+    "style": "MELEE",
+    "attackAnim": 422,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": { "attackCrush": 0, "meleeStrength": 0 }
+  },
+  {
+    "id": 4151,
+    "name": "Abyssal whip",
+    "speed": 4,
+    "style": "MELEE",
+    "attackAnim": 1658,
+    "defenceAnim": 1659,
+    "specialBar": true,
+    "specialCost": 50,
+    "twoHanded": false,
+    "bonuses": { "attackSlash": 82, "meleeStrength": 82 }
+  },
+  {
+    "id": 4587,
+    "name": "Dragon scimitar",
+    "speed": 4,
+    "style": "MELEE",
+    "attackAnim": 390,
+    "defenceAnim": 388,
+    "specialBar": true,
+    "specialCost": 55,
+    "twoHanded": false,
+    "bonuses": { "attackSlash": 67, "meleeStrength": 66 }
+  },
+  {
+    "id": 1333,
+    "name": "Rune scimitar",
+    "speed": 4,
+    "style": "MELEE",
+    "attackAnim": 390,
+    "defenceAnim": 388,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": { "attackSlash": 45, "meleeStrength": 44 }
+  },
+  {
+    "id": 861,
+    "name": "Magic shortbow",
+    "speed": 4,
+    "style": "RANGED",
+    "attackAnim": 426,
+    "defenceAnim": 424,
+    "specialBar": true,
+    "specialCost": 55,
+    "twoHanded": true,
+    "bonuses": { "attackRanged": 69, "rangedStrength": 0 }
+  },
+  {
+    "id": 11235,
+    "name": "Dark bow",
+    "speed": 9,
+    "style": "RANGED",
+    "attackAnim": 426,
+    "defenceAnim": 424,
+    "specialBar": true,
+    "specialCost": 65,
+    "twoHanded": true,
+    "bonuses": { "attackRanged": 95, "rangedStrength": 0 }
+  },
+  {
+    "id": 1381,
+    "name": "Staff of air",
+    "speed": 5,
+    "style": "MAGIC",
+    "attackAnim": 419,
+    "defenceAnim": 420,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": { "attackMagic": 10, "magicDamage": 0 }
+  }
+]

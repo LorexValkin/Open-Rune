@@ -1,0 +1,163 @@
+# ============================================================
+# OpenRune Client Build & Release
+# ============================================================
+# This goes in: openrune/.github/workflows/client-release.yml
+#
+# Triggers on version tags (v0.1.0, v0.2.0, etc.)
+# Builds the client JAR, calculates hash, creates a GitHub Release
+# with the JAR attached.
+#
+# After this runs, update bootstrap.json in the bootstrap repo
+# with the new hash (or use the auto-update workflow below).
+# ============================================================
+
+name: Build & Release Client
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g. 0.1.0)'
+        required: true
+        default: '0.1.0'
+
+jobs:
+  build-client:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            # Strip 'v' prefix from tag
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build client JAR
+        run: |
+          ./gradlew :client:jar
+          # Also build the server for convenience
+          ./gradlew :core:jar
+
+      - name: Prepare release artifacts
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          CLIENT_JAR="client/build/libs/openrune-client-${VERSION}.jar"
+          SERVER_JAR="core/build/libs/openrune-core-${VERSION}.jar"
+
+          # Rename if needed
+          mkdir -p release
+          cp client/build/libs/*.jar "release/openrune-client-${VERSION}.jar" 2>/dev/null || \
+            cp client/build/libs/client-*.jar "release/openrune-client-${VERSION}.jar" 2>/dev/null || true
+          cp core/build/libs/*.jar "release/openrune-server-${VERSION}.jar" 2>/dev/null || \
+            cp core/build/libs/core-*.jar "release/openrune-server-${VERSION}.jar" 2>/dev/null || true
+
+          # Generate hashes
+          cd release
+          for f in *.jar; do
+            sha256sum "$f" > "${f}.sha256"
+            echo "SHA-256 for $f: $(cat ${f}.sha256)"
+          done
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: OpenRune v${{ steps.version.outputs.version }}
+          body: |
+            ## OpenRune v${{ steps.version.outputs.version }}
+
+            ### Downloads
+            - **Client JAR**: For use with the launcher (auto-updated via bootstrap)
+            - **Server JAR**: Standalone server
+
+            ### Updating the launcher
+            After this release, update `bootstrap.json` in the bootstrap repo with the new hash.
+          files: |
+            release/*.jar
+            release/*.sha256
+          draft: false
+          prerelease: false
+
+  # Automatically update the bootstrap repo with new hashes
+  update-bootstrap:
+    needs: build-client
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout bootstrap repo
+        uses: actions/checkout@v4
+        with:
+          repository: LorexValkin/openrune-bootstrap
+          token: ${{ secrets.BOOTSTRAP_PAT }}
+          path: bootstrap
+
+      - name: Download release JAR
+        run: |
+          VERSION=${{ needs.build-client.outputs.version || github.event.inputs.version }}
+          VERSION=${VERSION:-${GITHUB_REF#refs/tags/v}}
+          JAR_NAME="openrune-client-${VERSION}.jar"
+          DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/v${VERSION}/${JAR_NAME}"
+
+          echo "Downloading: $DOWNLOAD_URL"
+          curl -L -o "$JAR_NAME" "$DOWNLOAD_URL" || echo "Download pending, release may still be processing"
+
+          if [ -f "$JAR_NAME" ]; then
+            HASH=$(sha256sum "$JAR_NAME" | awk '{print $1}')
+            SIZE=$(stat -c%s "$JAR_NAME")
+            echo "hash=$HASH" >> $GITHUB_ENV
+            echo "size=$SIZE" >> $GITHUB_ENV
+            echo "version=$VERSION" >> $GITHUB_ENV
+            echo "Hash: $HASH"
+            echo "Size: $SIZE"
+          fi
+
+      - name: Update bootstrap.json
+        if: env.hash != ''
+        working-directory: bootstrap
+        run: |
+          python3 -c "
+          import json
+          with open('bootstrap.json', 'r') as f:
+              data = json.load(f)
+          for a in data.get('artifacts', []):
+              if 'openrune-client' in a.get('name', ''):
+                  a['name'] = 'openrune-client-${{ env.version }}.jar'
+                  a['hash'] = '${{ env.hash }}'
+                  a['size'] = '${{ env.size }}'
+                  a['path'] = 'https://github.com/${{ github.repository }}/releases/download/v${{ env.version }}/openrune-client-${{ env.version }}.jar'
+          with open('bootstrap.json', 'w') as f:
+              json.dump(data, f, indent=2)
+              f.write('\n')
+          "
+
+      - name: Commit and push bootstrap
+        if: env.hash != ''
+        working-directory: bootstrap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bootstrap.json
+          git diff --cached --quiet || git commit -m "Update client to v${{ env.version }}"
+          git push

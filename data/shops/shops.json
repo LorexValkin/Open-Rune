@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "General Store",
+    "sellMultiplier": 1.0,
+    "buyMultiplier": 0.4,
+    "currency": 995,
+    "stock": [
+      {"itemId": 1931, "amount": 100, "price": -1},
+      {"itemId": 1935, "amount": 100, "price": -1},
+      {"itemId": 2347, "amount": 100, "price": -1},
+      {"itemId": 590,  "amount": 100, "price": -1}
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Weapons Shop",
+    "sellMultiplier": 1.0,
+    "buyMultiplier": 0.6,
+    "currency": 995,
+    "stock": [
+      {"itemId": 1351, "amount": 50, "price": 16},
+      {"itemId": 1349, "amount": 50, "price": 41},
+      {"itemId": 1353, "amount": 50, "price": 160},
+      {"itemId": 1265, "amount": 50, "price": 1},
+      {"itemId": 1267, "amount": 50, "price": 26}
+    ]
+  }
+]

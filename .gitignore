@@ -1,0 +1,19 @@
+# Build outputs
+build/
+.gradle/
+out/
+
+# IDE
+.idea/
+*.iml
+
+# Cache data (too large for git)
+cache-data/
+data/saves/
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log

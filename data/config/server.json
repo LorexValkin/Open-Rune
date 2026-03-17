@@ -1,0 +1,10 @@
+{
+  "port": 43594,
+  "maxPlayers": 2048,
+  "enabledPlugins": [],
+  "dataWatchEnabled": true,
+  "saveIntervalTicks": 500,
+  "debugMode": false,
+  "serverName": "OpenRune",
+  "welcomeMessage": "Welcome to OpenRune!"
+}

@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "name": "Man",
+    "examine": "A man.",
+    "combatLevel": 2,
+    "hitpoints": 7,
+    "maxHit": 1,
+    "attackSpeed": 4,
+    "respawnTicks": 25,
+    "aggressive": false,
+    "size": 1,
+    "walkRange": 5,
+    "attackAnim": 422,
+    "defenceAnim": 424,
+    "deathAnim": 836,
+    "bonuses": {
+      "attackStab": 0,
+      "attackSlash": 0,
+      "attackCrush": 0,
+      "defenceStab": 0,
+      "defenceSlash": 0,
+      "defenceCrush": 0,
+      "defenceMagic": 0,
+      "defenceRanged": 0
+    }
+  },
+  {
+    "id": 41,
+    "name": "Chicken",
+    "examine": "Cluck cluck.",
+    "combatLevel": 1,
+    "hitpoints": 3,
+    "maxHit": 1,
+    "attackSpeed": 4,
+    "respawnTicks": 15,
+    "aggressive": false,
+    "size": 1,
+    "walkRange": 3,
+    "attackAnim": 5849,
+    "defenceAnim": 5851,
+    "deathAnim": 5852
+  },
+  {
+    "id": 87,
+    "name": "Goblin",
+    "examine": "An ugly green creature.",
+    "combatLevel": 5,
+    "hitpoints": 5,
+    "maxHit": 1,
+    "attackSpeed": 4,
+    "respawnTicks": 25,
+    "aggressive": false,
+    "size": 1,
+    "walkRange": 5,
+    "attackAnim": 6184,
+    "defenceAnim": 6183,
+    "deathAnim": 6182
+  },
+  {
+    "id": 494,
+    "name": "Banker",
+    "examine": "A bank employee.",
+    "combatLevel": 0,
+    "hitpoints": 0,
+    "aggressive": false,
+    "size": 1,
+    "walkRange": 0
+  },
+  {
+    "id": 599,
+    "name": "Makeover Mage",
+    "examine": "A wizard who can change your appearance.",
+    "combatLevel": 0,
+    "hitpoints": 0,
+    "aggressive": false,
+    "size": 1,
+    "walkRange": 0
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {"id": 1, "npcId": 599, "x": 3094, "y": 3499, "z": 0, "walkRange": 0, "description": "Makeover Mage at Edgeville"},
+  {"id": 2, "npcId": 494, "x": 3094, "y": 3491, "z": 0, "walkRange": 0, "description": "Banker at Edgeville"},
+  {"id": 3, "npcId": 1,   "x": 3222, "y": 3218, "z": 0, "walkRange": 5, "description": "Man at Lumbridge"},
+  {"id": 4, "npcId": 1,   "x": 3224, "y": 3219, "z": 0, "walkRange": 5, "description": "Man at Lumbridge"},
+  {"id": 5, "npcId": 41,  "x": 3236, "y": 3295, "z": 0, "walkRange": 3, "description": "Chicken north of Lumbridge"},
+  {"id": 6, "npcId": 41,  "x": 3237, "y": 3296, "z": 0, "walkRange": 3, "description": "Chicken north of Lumbridge"},
+  {"id": 7, "npcId": 41,  "x": 3234, "y": 3297, "z": 0, "walkRange": 3, "description": "Chicken north of Lumbridge"},
+  {"id": 8, "npcId": 87,  "x": 3246, "y": 3228, "z": 0, "walkRange": 5, "description": "Goblin east of Lumbridge"}
+]

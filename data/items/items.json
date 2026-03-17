@@ -1,0 +1,78 @@
+[
+  {
+    "id": 995,
+    "name": "Coins",
+    "examine": "Lovely money!",
+    "tradeable": true,
+    "stackable": true,
+    "value": 1,
+    "weight": 0.0
+  },
+  {
+    "id": 526,
+    "name": "Bones",
+    "examine": "Ew, bones.",
+    "tradeable": true,
+    "stackable": false,
+    "value": 1
+  },
+  {
+    "id": 1351,
+    "name": "Bronze axe",
+    "examine": "A small axe.",
+    "tradeable": true,
+    "value": 16,
+    "equipSlot": 3,
+    "requirements": {"attack": 1},
+    "bonuses": {
+      "attackSlash": 4,
+      "attackCrush": 2,
+      "meleeStrength": 5
+    }
+  },
+  {
+    "id": 1265,
+    "name": "Bronze pickaxe",
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "value": 1,
+    "equipSlot": 3,
+    "requirements": {"attack": 1, "mining": 1}
+  },
+  {
+    "id": 590,
+    "name": "Tinderbox",
+    "examine": "Useful for lighting fires.",
+    "tradeable": true,
+    "value": 1
+  },
+  {
+    "id": 1511,
+    "name": "Logs",
+    "examine": "Some nicely cut logs.",
+    "tradeable": true,
+    "value": 4
+  },
+  {
+    "id": 2309,
+    "name": "Bread",
+    "examine": "A loaf of bread.",
+    "tradeable": true,
+    "value": 12
+  },
+  {
+    "id": 4151,
+    "name": "Abyssal whip",
+    "examine": "A weapon from the Abyss.",
+    "tradeable": true,
+    "value": 120001,
+    "highAlch": 72000,
+    "lowAlch": 48000,
+    "equipSlot": 3,
+    "requirements": {"attack": 70},
+    "bonuses": {
+      "attackSlash": 82,
+      "meleeStrength": 82
+    }
+  }
+]
