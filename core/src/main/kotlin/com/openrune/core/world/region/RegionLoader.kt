@@ -6,6 +6,9 @@ import com.openrune.cache.io.ArchiveReader
 import com.openrune.cache.io.CacheReader
 import com.openrune.cache.io.MapIndex
 import org.slf4j.LoggerFactory
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.util.zip.GZIPInputStream
 import java.nio.ByteBuffer
 
 /**
@@ -191,6 +194,27 @@ class RegionLoader(
             9 -> collisionMap.addWall(x, y, height, type, rotation)
             10, 11 -> collisionMap.addObject(x, y, height, 1, 1, true)
             22 -> collisionMap.addFlag(x, y, height, CollisionFlag.FLOOR_DECO)
+        }
+    }
+
+    /**
+     * Decompress GZip data. Map files in cache index 4 are GZip compressed.
+     * Returns the decompressed bytes, or null if decompression fails.
+     */
+    private fun decompressGzip(data: ByteArray): ByteArray? {
+        return try {
+            val bais = ByteArrayInputStream(data)
+            val gzip = GZIPInputStream(bais)
+            val baos = ByteArrayOutputStream()
+            val buf = ByteArray(4096)
+            var len: Int
+            while (gzip.read(buf).also { len = it } != -1) {
+                baos.write(buf, 0, len)
+            }
+            gzip.close()
+            baos.toByteArray()
+        } catch (e: Exception) {
+            null
         }
     }
 

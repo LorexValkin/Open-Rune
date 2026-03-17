@@ -196,19 +196,12 @@ class NpcManager(
         }
     }
     /**
-     * Natural random walk: NPCs pick a random destination within walk range
-     * and queue tile-by-tile steps toward it. The MovementProcessor handles
-     * all collision checking — if a step is blocked, the path stops there.
+     * Natural random walk with collision. NPCs pick a random destination
+     * within walk range and path toward it. Each step is collision-checked
+     * before queuing — only passable steps get added to the queue.
      *
-     * Movement is identical to player walking (1 tile per tick, same collision).
-     * NPCs have walkingQueue.running=false so they never run.
-     *
-     * Behavior:
-     *   - 15% idle chance each cycle
-     *   - 2-7 tick pause between walks
-     *   - Picks destination 2-4 tiles away
-     *   - Hard leash: destination clamped to walkRange from spawn
-     *   - Soft leash: biases toward spawn when past 50% of range
+     * Movement speed: 1 tile per tick (running disabled on NPC walkingQueue).
+     * Collision: checked per-step here AND by MovementProcessor (belt + suspenders).
      */
     private fun processRandomWalk(npc: Npc) {
         if (npc.def.walkRange <= 0) return
@@ -244,8 +237,7 @@ class NpcManager(
         // Walk distance: 2-4 tiles
         val maxSteps = 2 + (Math.random() * 3).toInt()
 
-        // Queue steps toward destination — MovementProcessor will check
-        // collision on each step and stop if blocked (same as player)
+        // Build path with collision check at EVERY step
         val steps = mutableListOf<com.openrune.api.world.Position>()
         var curX = npc.position.x
         var curY = npc.position.y
@@ -259,8 +251,15 @@ class NpcManager(
             val nextY = curY + dy
             val nextPos = com.openrune.api.world.Position(nextX, nextY, height)
 
-            // Hard leash — don't queue steps beyond walk range
+            // Hard leash
             if (nextPos.distanceTo(npc.spawnPosition) > range) break
+
+            // Collision check — same method player movement uses
+            val dir = com.openrune.core.world.collision.Direction.between(curX, curY, nextX, nextY)
+            if (dir == com.openrune.core.world.collision.Direction.NONE) break
+
+            if (!collisionMap.canTraverse(curX, curY, height,
+                    npc.entitySize, npc.entitySize, dir)) break
 
             steps.add(nextPos)
             curX = nextX
