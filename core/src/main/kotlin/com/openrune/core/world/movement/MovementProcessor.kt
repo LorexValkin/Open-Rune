@@ -1,4 +1,4 @@
-package com.openrune.core.world.movement
+﻿package com.openrune.core.world.movement
 
 import com.openrune.api.world.Position
 import com.openrune.core.world.collision.CollisionMap
@@ -164,8 +164,6 @@ class MovementProcessor(
         val current = entity.position
 
         val dir = Direction.between(current.x, current.y, next.x, next.y)
-                entity.javaClass.simpleName, entity.isPlayer,
-                current.x, current.y, next.x, next.y, dir, queue.stepCount())
         if (dir == Direction.NONE) {
             queue.pollNext()
             return Direction.NONE

@@ -1,4 +1,4 @@
-package com.openrune.core.net.handler
+﻿package com.openrune.core.net.handler
 
 import com.openrune.api.event.*
 import com.openrune.api.world.Position
@@ -306,9 +306,6 @@ class PacketDispatcher(
                 }
             }
             // Don't set walkTarget -- no A* pathfinding needed
-                player.name, numSteps, queue.stepCount(),
-                player.position.x, player.position.y,
-                firstX, firstY)
         }
     }
 
