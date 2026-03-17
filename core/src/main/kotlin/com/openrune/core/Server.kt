@@ -90,9 +90,19 @@ class OpenRuneServer {
         dataStore.startWatching()
 
         // Initialize game engine with cache for collision data
+        // Check cache-data/ first (project root), fall back to client cache location
         val cachePath = Path.of("cache-data")
+        val clientCachePath = Path.of(System.getProperty("user.home"), ".openrune", "cache")
+        val resolvedCache = when {
+            java.nio.file.Files.exists(cachePath) -> cachePath
+            java.nio.file.Files.exists(clientCachePath) -> {
+                log.info("Using client cache at: {}", clientCachePath)
+                clientCachePath
+            }
+            else -> null
+        }
         engine = GameEngine(eventBus, playerManager, packetDispatcher, playerSerializer, taskScheduler,
-            if (java.nio.file.Files.exists(cachePath)) cachePath else null)
+            resolvedCache)
 
         // Load NPC spawns from data
         log.info("Loading NPC spawns...")

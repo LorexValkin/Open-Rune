@@ -47,9 +47,23 @@ class RegionLoader(
         // Try every file in index 0 to find the archive containing "map_index".
         // Different 317 cache builds store it at different file IDs.
         val fileCount = cache.fileCount(0)
+        log.info("Scanning {} files in index 0 for map_index...", fileCount)
         for (fileId in 0 until fileCount) {
-            val data = cache.readFile(0, fileId) ?: continue
-            if (data.size < 8) continue
+            val data = cache.readFile(0, fileId)
+            if (data == null) {
+                log.debug("  File {}: read returned null", fileId)
+                continue
+            }
+            if (data.size < 8) {
+                log.debug("  File {}: too small ({} bytes)", fileId, data.size)
+                continue
+            }
+
+            log.info("  File {}: {} bytes, header: [{}, {}, {}, {}, {}, {}]",
+                fileId, data.size,
+                data[0].toInt() and 0xFF, data[1].toInt() and 0xFF,
+                data[2].toInt() and 0xFF, data[3].toInt() and 0xFF,
+                data[4].toInt() and 0xFF, data[5].toInt() and 0xFF)
 
             try {
                 val archive = ArchiveReader(data)
@@ -58,9 +72,11 @@ class RegionLoader(
                     mapIndex = MapIndex(mapIndexData)
                     log.info("Map index loaded from index 0, file {}: {} regions indexed", fileId, mapIndex!!.size)
                     return
+                } else {
+                    log.info("  File {}: archive parsed OK but no map_index entry", fileId)
                 }
-            } catch (_: Exception) {
-                // Not the right file or not a valid archive -- try next
+            } catch (e: Exception) {
+                log.info("  File {}: parse failed: {}", fileId, e.message)
             }
         }
 
