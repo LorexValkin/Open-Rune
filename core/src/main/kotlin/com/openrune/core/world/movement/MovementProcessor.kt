@@ -89,6 +89,7 @@ class WalkingQueue {
     fun peekNext(): Position? = steps.peekFirst()
     fun pollNext(): Position? = steps.pollFirst()
     fun stepCount(): Int = steps.size
+    fun lastStep(): Position? = steps.peekLast()
 }
 
 /**
@@ -110,6 +111,7 @@ class MovementProcessor(
         var position: Position
         val walkingQueue: WalkingQueue
         val entitySize: Int get() = 1
+        val isPlayer: Boolean get() = false
 
         /** Called when the entity successfully moves. */
         fun onMove(from: Position, to: Position, direction: Direction)
@@ -148,47 +150,47 @@ class MovementProcessor(
             }
         }
     }
-
     /**
-     * Take a single step from the queue, checking collision.
-     * Returns the direction moved, or NONE if blocked.
+     * Take a single step from the queue.
+     *
+     * Players: NO collision check. The 317 client does BFS pathfinding and
+     * sends pre-validated waypoints. Server just walks the path (PI behavior).
+     *
+     * NPCs: YES collision check. They have no client to pathfind for them.
      */
     private fun takeStep(entity: Movable): Direction {
         val queue = entity.walkingQueue
         val next = queue.peekNext() ?: return Direction.NONE
         val current = entity.position
 
-        // Calculate direction to the next step
         val dir = Direction.between(current.x, current.y, next.x, next.y)
+                entity.javaClass.simpleName, entity.isPlayer,
+                current.x, current.y, next.x, next.y, dir, queue.stepCount())
         if (dir == Direction.NONE) {
-            // Already at the next step; remove and try the one after
             queue.pollNext()
             return Direction.NONE
         }
 
-        // Check collision
-        if (!collisionMap.canTraverse(current.x, current.y, current.z, entity.entitySize, entity.entitySize, dir)) {
-            // Blocked! Clear the remaining path
-            queue.clear()
-            return Direction.NONE
+        // NPC-only collision check
+        if (!entity.isPlayer) {
+            if (!collisionMap.canTraverse(current.x, current.y, current.z,
+                    entity.entitySize, entity.entitySize, dir)) {
+                queue.clear()
+                return Direction.NONE
+            }
         }
 
         // Move
         val from = entity.position
         entity.position = Position(current.x + dir.dx, current.y + dir.dy, current.z)
 
-        // If we've arrived at the next step, remove it
         if (entity.position.x == next.x && entity.position.y == next.y) {
             queue.pollNext()
         }
 
-        // Check if the player moved into a new map region
         val regionChanged = (from.regionX != entity.position.regionX) ||
                             (from.regionY != entity.position.regionY)
-        if (regionChanged) {
-            entity.onRegionChange()
-        }
-
+        if (regionChanged) entity.onRegionChange()
         entity.onMove(from, entity.position, dir)
         return dir
     }

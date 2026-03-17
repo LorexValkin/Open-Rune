@@ -306,6 +306,9 @@ class PacketDispatcher(
                 }
             }
             // Don't set walkTarget -- no A* pathfinding needed
+                player.name, numSteps, queue.stepCount(),
+                player.position.x, player.position.y,
+                firstX, firstY)
         }
     }
 

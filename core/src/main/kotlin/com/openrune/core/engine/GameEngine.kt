@@ -144,17 +144,12 @@ class GameEngine(
         // Phase 3: Packets
         processPackets()
 
-        // Phase 4: Resolve walk targets -> pathfinder -> enqueue steps
+        // Phase 4: NPC walk target resolution (players use client BFS, no server pathfinding)
+        // Player walking is handled directly by the walking packet handler
+        // which fills the queue from client waypoints. No server A* needed.
+
+        // Phase 4: Get all players for this tick
         val players = playerManager.allPlayers()
-        for (player in players) {
-            val target = player.walkTarget
-            if (target != null) {
-                player.walkTarget = null
-                // Ensure the destination region is loaded
-                regionLoader.ensureLoaded(target.regionId)
-                movementProcessor.walkTo(player, target)
-            }
-        }
 
         // Phase 5: Movement processing
         for (player in players) {

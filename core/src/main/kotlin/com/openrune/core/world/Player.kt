@@ -52,6 +52,7 @@ class Player(
     // ================================================================
     override val walkingQueue = WalkingQueue()
     override val entitySize: Int = 1
+    override val isPlayer: Boolean = true
     var walkTarget: Position? = null
 
     override fun onMove(from: Position, to: Position, direction: Direction) {}

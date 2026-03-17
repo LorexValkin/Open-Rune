@@ -41,7 +41,6 @@ class ArchiveReader(rawData: ByteArray) {
             val decompressed = ByteArray(decompressedSize)
             // DIAGNOSTIC: print first 20 bytes at BZip2 start offset
             val preview = (6 until minOf(26, rawData.size)).map { rawData[it].toInt() and 0xFF }
-            println("  [RAW] decompSize=$decompressedSize compSize=$compressedSize first20bytes=$preview")
             BZip2Decompressor.decompress(decompressed, decompressedSize, rawData, compressedSize, 6)
             decompressed
         } else {
