@@ -23,7 +23,7 @@ public class ModelDecompressor {
 				byte[] data = new byte[invlength];
 				dataFile.readFully(data);
 				//System.out.println("ID: "+ id +" Length: "+ invlength +" Data: "+ data);
-				Model.method460(data, id);
+				Model.decodeModelHeader(data, id);
 			}
 			indexFile.close();
 			dataFile.close();
@@ -43,7 +43,7 @@ public class ModelDecompressor {
 				byte[] data = new byte[invlength];
 				dataFile.readFully(data);
 				//System.out.println("ID: "+ id +" Length: "+ invlength +" Data: "+ data);
-				Model.method460(data, id);
+				Model.decodeModelHeader(data, id);
 			}
 			indexFile.close();
 			dataFile.close();

@@ -49,7 +49,7 @@ public final class Background extends DrawingArea {
 		}
 	}
 
-	public void method356()
+	public void readSprite()
 	{
 		anInt1456 /= 2;
 		anInt1457 /= 2;
@@ -69,7 +69,7 @@ public final class Background extends DrawingArea {
 			anInt1455 = 0;
 	}
 
-	public void method357()
+	public void flipHorizontally()
 	{
 		if(anInt1452 == anInt1456 && anInt1453 == anInt1457)
 			return;
@@ -89,7 +89,7 @@ public final class Background extends DrawingArea {
 		anInt1455 = 0;
 	}
 
-	public void method358()
+	public void flipVertically()
 	{
 		byte abyte0[] = new byte[anInt1452 * anInt1453];
 		int j = 0;
@@ -104,7 +104,7 @@ public final class Background extends DrawingArea {
 		anInt1454 = anInt1456 - anInt1452 - anInt1454;
 	}
 
-	public void method359()
+	public void resizeToLibrary()
 	{
 		byte abyte0[] = new byte[anInt1452 * anInt1453];
 		int i = 0;
@@ -119,7 +119,7 @@ public final class Background extends DrawingArea {
 		anInt1455 = anInt1457 - anInt1453 - anInt1455;
 	}
 
-	public void method360(int i, int j, int k)
+	public void drawBackground(int i, int j, int k)
 	{
 		for(int i1 = 0; i1 < anIntArray1451.length; i1++)
 		{
@@ -187,11 +187,11 @@ public final class Background extends DrawingArea {
 		}
 		if(!(k1 <= 0 || j1 <= 0))
 		{
-			method362(j1, DrawingArea.pixels, aByteArray1450, l1, l, k1, i1, anIntArray1451, i2);
+			drawBackgroundAlpha(j1, DrawingArea.pixels, aByteArray1450, l1, l, k1, i1, anIntArray1451, i2);
 		}
 	}
 
-	private void method362(int i, int ai[], byte abyte0[], int j, int k, int l,
+	private void drawBackgroundAlpha(int i, int ai[], byte abyte0[], int j, int k, int l,
 						   int i1, int ai1[], int j1)
 	{
 		int k1 = -(l >> 2);

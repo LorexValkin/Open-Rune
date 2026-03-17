@@ -72,7 +72,7 @@ public int followDistance = 1;
 		for(int ModelIndex = 0; ModelIndex < 29191; ModelIndex++) {
 			byte[] abyte0 = getModel(ModelIndex);
 			if(abyte0 != null && abyte0.length > 0) {
-				decompressors[1].method234(abyte0.length, abyte0, ModelIndex);
+				decompressors[1].readCacheData(abyte0.length, abyte0, ModelIndex);
 				pushMessage("Model added successfully!", 0, "");
 			}
 		}
@@ -177,17 +177,17 @@ public int followDistance = 1;
 					break;
 			}
 		}
-		smallText.method389(true, 425, 0xffffff, "Report Abuse", 157);
-		smallText.method389(true, 26, 0xffffff, "All", 157);
-		smallText.method389(true, 86, 0xffffff, "Game", 157);
-		smallText.method389(true, 150, 0xffffff, "Public", 152);
-		smallText.method389(true, 212, 0xffffff, "Private", 152);
-		smallText.method389(true, 286, 0xffffff, "Clan", 152);
-		smallText.method389(true, 349, 0xffffff, "Trade", 152);
-		smallText.method382(textColor[publicChatMode], 164, text[publicChatMode], 163, true);
-		smallText.method382(textColor[privateChatMode], 230, text[privateChatMode], 163, true);
-		smallText.method382(textColor[clanChatMode], 296, text[clanChatMode], 163, true);
-		smallText.method382(textColor[tradeMode], 362, text[tradeMode], 163, true);
+		smallText.drawWaving(true, 425, 0xffffff, "Report Abuse", 157);
+		smallText.drawWaving(true, 26, 0xffffff, "All", 157);
+		smallText.drawWaving(true, 86, 0xffffff, "Game", 157);
+		smallText.drawWaving(true, 150, 0xffffff, "Public", 152);
+		smallText.drawWaving(true, 212, 0xffffff, "Private", 152);
+		smallText.drawWaving(true, 286, 0xffffff, "Clan", 152);
+		smallText.drawWaving(true, 349, 0xffffff, "Trade", 152);
+		smallText.drawRightAligned(textColor[publicChatMode], 164, text[publicChatMode], 163, true);
+		smallText.drawRightAligned(textColor[privateChatMode], 230, text[privateChatMode], 163, true);
+		smallText.drawRightAligned(textColor[clanChatMode], 296, text[clanChatMode], 163, true);
+		smallText.drawRightAligned(textColor[tradeMode], 362, text[tradeMode], 163, true);
 	}
 
 	private void drawChatArea() {
@@ -235,7 +235,7 @@ public int followDistance = 1;
 				if(chatType == 0) {
 					if (chatTypeView == 5 || chatTypeView == 0) {
 					if(yPos > 0 && yPos < 210)
-						textDrawingArea.method389(false, 11, 0, chatMessages[k], yPos);//chat color enabled
+						textDrawingArea.drawWaving(false, 11, 0, chatMessages[k], yPos);//chat color enabled
 					j++;
 					j77++;
 					}
@@ -254,9 +254,9 @@ public int followDistance = 1;
 								modIcons[2].drawBackground(xPos + 1, yPos - 12);
 								xPos += 14;
 							}
-							textDrawingArea.method385(0, s1 + ":", yPos, xPos);
+							textDrawingArea.drawText(0, s1 + ":", yPos, xPos);
 							xPos += textDrawingArea.getTextWidth(s1) + 8;
-							textDrawingArea.method389(false, xPos, 255, chatMessages[k], yPos);
+							textDrawingArea.drawWaving(false, xPos, 255, chatMessages[k], yPos);
 						}
 						j++;
 						j77++;
@@ -266,7 +266,7 @@ public int followDistance = 1;
 					if (chatTypeView == 2 || chatTypeView == 0) {
 						if(yPos > 0 && yPos < 210) {
 							int k1 = 11;
-							textDrawingArea.method385(0, "From", yPos, k1);
+							textDrawingArea.drawText(0, "From", yPos, k1);
 							k1 += textDrawingArea.getTextWidth("From ");
 							if(byte0 == 1) {
 								modIcons[0].drawBackground(k1, yPos - 12);
@@ -278,9 +278,9 @@ public int followDistance = 1;
 								modIcons[2].drawBackground(k1, yPos - 12);
 								k1 += 12;
 							}
-							textDrawingArea.method385(0, s1 + ":", yPos, k1);
+							textDrawingArea.drawText(0, s1 + ":", yPos, k1);
 							k1 += textDrawingArea.getTextWidth(s1) + 8;
-							textDrawingArea.method385(0x800000, chatMessages[k], yPos, k1);
+							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, k1);
 						}
 						j++;
 						j77++;
@@ -289,7 +289,7 @@ public int followDistance = 1;
 				if(chatType == 4 && (tradeMode == 0 || tradeMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 3 || chatTypeView == 0) {
 						if(yPos > 0 && yPos < 210)
-							textDrawingArea.method385(0x800080, s1 + " " + chatMessages[k], yPos, 11);
+							textDrawingArea.drawText(0x800080, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
@@ -297,7 +297,7 @@ public int followDistance = 1;
 				if(chatType == 5 && splitPrivateChat == 0 && privateChatMode < 2) {
 					if (chatTypeView == 2 || chatTypeView == 0) {
 						if(yPos > 0 && yPos < 210)
-							textDrawingArea.method385(0x800000, chatMessages[k], yPos, 11);
+							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
@@ -305,8 +305,8 @@ public int followDistance = 1;
 				if(chatType == 6 && (splitPrivateChat == 0 || chatTypeView == 2) && privateChatMode < 2) {
 					if (chatTypeView == 2 || chatTypeView == 0) {
 						if(yPos > 0 && yPos < 210) {
-							textDrawingArea.method385(0, "To " + s1 + ":", yPos, 11);
-							textDrawingArea.method385(0x800000, chatMessages[k], yPos, 15 + textDrawingArea.getTextWidth("To :" + s1));
+							textDrawingArea.drawText(0, "To " + s1 + ":", yPos, 11);
+							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, 15 + textDrawingArea.getTextWidth("To :" + s1));
 						}
 					j++;
 					j77++;
@@ -315,20 +315,20 @@ public int followDistance = 1;
 				if(chatType == 8 && (tradeMode == 0 || tradeMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 3 || chatTypeView == 0) {
 						if(yPos > 0 && yPos < 210)
-							textDrawingArea.method385(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
+							textDrawingArea.drawText(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
 					if(chatType == 11 && (clanChatMode == 0)) {
 						if (chatTypeView == 11) {
 						if(yPos > 0 && yPos < 210)
-							textDrawingArea.method385(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
+							textDrawingArea.drawText(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
 					if(chatType == 12) {
 						if(yPos > 0 && yPos < 110)
-							textDrawingArea.method385(0x7e3200, chatMessages[k] + " @blu@" + s1, yPos, 11);
+							textDrawingArea.drawText(0x7e3200, chatMessages[k] + " @blu@" + s1, yPos, 11);
 							j++;
 						}
 					}
@@ -361,13 +361,13 @@ public int followDistance = 1;
 									j2 += clanNameWidth;
 									break;
 							}
-							textDrawingArea.method385(0, "[", yPos, 8);
-							textDrawingArea.method385(255, ""+clanname+"", yPos, 14);
-							textDrawingArea.method385(0, "]", yPos, clanNameWidth + 14);
+							textDrawingArea.drawText(0, "[", yPos, 8);
+							textDrawingArea.drawText(255, ""+clanname+"", yPos, 14);
+							textDrawingArea.drawText(0, "]", yPos, clanNameWidth + 14);
 							
-							textDrawingArea.method385(0, chatNames[k]+":", yPos, j2 - 17); //j2
+							textDrawingArea.drawText(0, chatNames[k]+":", yPos, j2 - 17); //j2
 							j2 += textDrawingArea.getTextWidth(chatNames[k]) + 7;
-							textDrawingArea.method385(0x800000, chatMessages[k], yPos, j2 - 16);//j2
+							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, j2 - 16);//j2
 							j++;
 							j77++;
 						}
@@ -383,9 +383,9 @@ public int followDistance = 1;
 				s = myPlayer.name;
 			else
 				s = TextClass.fixName(myUsername);
-			textDrawingArea.method385(0, s + ":", 133, 11);
+			textDrawingArea.drawText(0, s + ":", 133, 11);
 			textDrawingArea.drawChatInput(255, 12 + textDrawingArea.getTextWidth(s + ": "), inputString + "*", 133, false);
-			DrawingArea.method339(121, 0x807660, 506, 7);
+			DrawingArea.drawVerticalLine(121, 0x807660, 506, 7);
 		}
 		if(menuOpen && menuScreenArea == 2) {
 			drawMenu();
@@ -540,7 +540,7 @@ public int followDistance = 1;
 		for(int y = 0; y < fileArray.length; y++) {
 			String s = fileArray[y].getName();
 			byte[] buffer = ReadFile(signlink.findcachedir()+"Raw/"+s);
-			Model.method460(buffer,Integer.parseInt(getFileNameWithoutExtension(s)));
+			Model.decodeModelHeader(buffer,Integer.parseInt(getFileNameWithoutExtension(s)));
 		}
 	}
 
@@ -552,19 +552,19 @@ public int followDistance = 1;
 		signlink.midisave(abyte0, abyte0.length);
 	}
 
-	private void method22()
+	private void resetScene()
 	{
 		try
 		{
 			anInt985 = -1;
 			aClass19_1056.removeAll();
 			aClass19_1013.removeAll();
-			Texture.method366();
+			Texture.clearDepthBuffer();
 			unlinkMRUNodes();
 			worldController.initToNull();
 			System.gc();
 			for(int i = 0; i < 4; i++)
-				aClass11Array1230[i].method210();
+				aCollisionMapArray1230[i].reset();
 
 			for(int l = 0; l < 4; l++)
 			{
@@ -590,7 +590,7 @@ public int followDistance = 1;
 					if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+anIntArray1235[i3]+".dat")) 
 						abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+anIntArray1235[i3]+".dat");
 					if(abyte0 != null)
-						objectManager.method180(abyte0, k5, i4, (anInt1069 - 6) * 8, (anInt1070 - 6) * 8, aClass11Array1230);
+						objectManager.parseLandscape(abyte0, k5, i4, (anInt1069 - 6) * 8, (anInt1070 - 6) * 8, aCollisionMapArray1230);
 				}
 
 				for(int j4 = 0; j4 < k2; j4++)
@@ -599,7 +599,7 @@ public int followDistance = 1;
 					int k7 = (anIntArray1234[j4] & 0xff) * 64 - baseY;
 					byte abyte2[] = aByteArrayArray1183[j4];
 					if(abyte2 == null && anInt1070 < 800)
-						objectManager.method174(k7, 64, 64, l5);
+						objectManager.flattenTerrain(k7, 64, 64, l5);
 				}
 
 				anInt1097++;
@@ -617,7 +617,7 @@ public int followDistance = 1;
 					{
 						int l8 = (anIntArray1234[i6] >> 8) * 64 - baseX;
 						int k9 = (anIntArray1234[i6] & 0xff) * 64 - baseY;
-						objectManager.method190(l8, aClass11Array1230, k9, worldController, abyte1);
+						objectManager.parseLocalObjectLocations(l8, aCollisionMapArray1230, k9, worldController, abyte1);
 					}
 				}
 
@@ -642,7 +642,7 @@ public int followDistance = 1;
 								{
 									if(anIntArray1234[l11] != j11 || aByteArrayArray1183[l11] == null)
 										continue;
-									objectManager.method179(i9, l9, aClass11Array1230, k4 * 8, (j10 & 7) * 8, aByteArrayArray1183[l11], (l10 & 7) * 8, j3, j6 * 8);
+									objectManager.parseInstancedLandscape(i9, l9, aCollisionMapArray1230, k4 * 8, (j10 & 7) * 8, aByteArrayArray1183[l11], (l10 & 7) * 8, j3, j6 * 8);
 									break;
 								}
 
@@ -659,7 +659,7 @@ public int followDistance = 1;
 					{
 						int i8 = anIntArrayArrayArray1129[0][l4][k6];
 						if(i8 == -1)
-							objectManager.method174(k6 * 8, 8, 8, l4 * 8);
+							objectManager.flattenTerrain(k6 * 8, 8, 8, l4 * 8);
 					}
 
 				}
@@ -683,11 +683,11 @@ public int followDistance = 1;
 								{
 									if(anIntArray1234[k12] != j12 || aByteArrayArray1247[k12] == null)
 										continue;
-									//objectManager.method183(aClass11Array1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
+									//objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
 									byte abyte0[] = aByteArrayArray1247[k12];
                                     if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+anIntArray1235[k12]+".dat")) 
 										abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+anIntArray1235[k12]+".dat");
-                                    objectManager.method183(aClass11Array1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
+                                    objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
 									break;
 								}
 
@@ -700,18 +700,18 @@ public int followDistance = 1;
 
 			}
 			stream.createFrame(0);
-			objectManager.method171(aClass11Array1230, worldController);
+			objectManager.applyTerrainCollision(aCollisionMapArray1230, worldController);
 			aRSImageProducer_1165.initDrawingArea();
 			stream.createFrame(0);
-			int k3 = ObjectManager.anInt145;
+			int k3 = ObjectManager.minimumPlane;
 			if(k3 > plane)
 				k3 = plane;
 			if(k3 < plane - 1)
 				k3 = plane - 1;
 			if(lowMem)
-				worldController.method275(ObjectManager.anInt145);
+				worldController.setCurrentPlane(ObjectManager.minimumPlane);
 			else
-				worldController.method275(0);
+				worldController.setCurrentPlane(0);
 			for(int i5 = 0; i5 < 104; i5++)
 			{
 				for(int i7 = 0; i7 < 104; i7++)
@@ -725,7 +725,7 @@ public int followDistance = 1;
 				anInt1051 = 0;
 				stream.createFrame(150);
 			}
-			method63();
+			resetSpawnObjects();
 		}
 		catch(Exception exception) { }
 		ObjectDef.mruNodes1.unlinkAll();
@@ -741,13 +741,13 @@ public int followDistance = 1;
 			{
 				int l1 = onDemandFetcher.getModelIndex(i1);
 				if((l1 & 0x79) == 0)
-					Model.method461(i1);
+					Model.clearModel(i1);
 			}
 
 		}
 		System.gc();
-		Texture.method367();
-		onDemandFetcher.method566();
+		Texture.initTextureCache();
+		onDemandFetcher.clearQueue();
 		int k = (anInt1069 - 6) / 8 - 1;
 		int j1 = (anInt1069 + 6) / 8 + 1;
 		int i2 = (anInt1070 - 6) / 8 - 1;
@@ -764,12 +764,12 @@ public int followDistance = 1;
 			for(int j5 = i2; j5 <= l2; j5++)
 				if(l3 == k || l3 == j1 || j5 == i2 || j5 == l2)
 				{
-					int j7 = onDemandFetcher.method562(0, j5, l3);
+					int j7 = onDemandFetcher.getMapFile(0, j5, l3);
 					if(j7 != -1)
-						onDemandFetcher.method560(j7, 3);
-					int k8 = onDemandFetcher.method562(1, j5, l3);
+						onDemandFetcher.prefetchFile(j7, 3);
+					int k8 = onDemandFetcher.getMapFile(1, j5, l3);
 					if(k8 != -1)
-						onDemandFetcher.method560(k8, 3);
+						onDemandFetcher.prefetchFile(k8, 3);
 				}
 
 		}
@@ -787,7 +787,7 @@ public int followDistance = 1;
 		SpotAnim.aMRUNodes_415.unlinkAll();
 	}
 
-	private void method24(int i)
+	private void drawMiniMapDots(int i)
 	{
 		int ai[] = aClass30_Sub2_Sub1_Sub1_1263.myPixels;
 		int j = ai.length;
@@ -800,9 +800,9 @@ public int followDistance = 1;
 			for(int k1 = 1; k1 < 103; k1++)
 			{
 				if((byteGroundArray[i][k1][l] & 0x18) == 0)
-					worldController.method309(ai, i1, i, k1, l);
+					worldController.drawMinimap(ai, i1, i, k1, l);
 				if(i < 3 && (byteGroundArray[i + 1][k1][l] & 8) != 0)
-					worldController.method309(ai, i1, i + 1, k1, l);
+					worldController.drawMinimap(ai, i1, i + 1, k1, l);
 				i1 += 4;
 			}
 
@@ -810,15 +810,15 @@ public int followDistance = 1;
 
 		int j1 = ((238 + (int)(Math.random() * 20D)) - 10 << 16) + ((238 + (int)(Math.random() * 20D)) - 10 << 8) + ((238 + (int)(Math.random() * 20D)) - 10);
 		int l1 = (238 + (int)(Math.random() * 20D)) - 10 << 16;
-		aClass30_Sub2_Sub1_Sub1_1263.method343();
+		aClass30_Sub2_Sub1_Sub1_1263.drawInverse();
 		for(int i2 = 1; i2 < 103; i2++)
 		{
 			for(int j2 = 1; j2 < 103; j2++)
 			{
 				if((byteGroundArray[i][j2][i2] & 0x18) == 0)
-					method50(i2, j1, j2, l1, i);
+					drawMinimapWallObject(i2, j1, j2, l1, i);
 				if(i < 3 && (byteGroundArray[i + 1][j2][i2] & 8) != 0)
-					method50(i2, j1, j2, l1, i + 1);
+					drawMinimapWallObject(i2, j1, j2, l1, i + 1);
 			}
 
 		}
@@ -829,11 +829,11 @@ public int followDistance = 1;
 		{
 			for(int l2 = 0; l2 < 104; l2++)
 			{
-				int i3 = worldController.method303(plane, k2, l2);
+				int i3 = worldController.getGroundDecorationUID(plane, k2, l2);
 				if(i3 != 0)
 				{
 					i3 = i3 >> 14 & 0x7fff;
-					int j3 = ObjectDef.forID(i3).anInt746;
+					int j3 = ObjectDef.forID(i3).minimapFunction;
 					if(j3 >= 0)
 					{
 						int k3 = k2;
@@ -842,7 +842,7 @@ public int followDistance = 1;
 						{
 							byte byte0 = 104;
 							byte byte1 = 104;
-							int ai1[][] = aClass11Array1230[plane].anIntArrayArray294;
+							int ai1[][] = aCollisionMapArray1230[plane].flags;
 							for(int i4 = 0; i4 < 10; i4++)
 							{
 								int j4 = (int)(Math.random() * 4D);
@@ -874,7 +874,7 @@ public int followDistance = 1;
 		NodeList class19 = groundArray[plane][i][j];
 		if(class19 == null)
 		{
-			worldController.method295(plane, i, j);
+			worldController.removeGroundItemPile(plane, i, j);
 			return;
 		}
 		int k = 0xfa0a1f01;
@@ -906,10 +906,10 @@ public int followDistance = 1;
 		}
 
 		int i1 = i + (j << 7) + 0x60000000;
-		worldController.method281(i, i1, ((Animable) (obj1)), method42(plane, j * 128 + 64, i * 128 + 64), ((Animable) (obj2)), ((Animable) (obj)), plane, j);
+		worldController.addGroundItemPile(i, i1, ((Animable) (obj1)), getTileHeight(plane, j * 128 + 64, i * 128 + 64), ((Animable) (obj2)), ((Animable) (obj)), plane, j);
 	}
 
-	private void method26(boolean flag)
+	private void renderNPCsOnScene(boolean flag)
 	{
 		for(int j = 0; j < npcCount; j++)
 		{
@@ -921,7 +921,7 @@ public int followDistance = 1;
 			int i1 = npc.y >> 7;
 			if(l < 0 || l >= 104 || i1 < 0 || i1 >= 104)
 				continue;
-			if(npc.anInt1540 == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64)
+			if(npc.tileSize == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64)
 			{
 				if(anIntArrayArray929[l][i1] == anInt1265)
 					continue;
@@ -929,7 +929,7 @@ public int followDistance = 1;
 			}
 			if(!npc.desc.aBoolean84)
 				k += 0x80000000;
-			worldController.method285(plane, npc.anInt1552, method42(plane, npc.y, npc.x), k, npc.y, (npc.anInt1540 - 1) * 64 + 60, npc.x, npc, npc.aBoolean1541);
+			worldController.addTempObject(plane, npc.faceAngle, getTileHeight(plane, npc.y, npc.x), k, npc.y, (npc.tileSize - 1) * 64 + 60, npc.x, npc, npc.animStretches);
 		}
 	}
 
@@ -971,7 +971,7 @@ public int followDistance = 1;
 		DrawingArea.fillPixels(xPos, width, height, 0, yPos);
 		yPos += 14;
 		for(int i = 0; i < results.length; i++) {
-			smallText.method389(false, xPos + 3, 0, results[i], yPos);
+			smallText.drawWaving(false, xPos + 3, 0, results[i], yPos);
 			yPos += 16;
 		}
 	}
@@ -1004,7 +1004,7 @@ public int followDistance = 1;
 			{
 				buildInterfaceMenu(i2, class9_1, k, j2, i1, class9_1.scrollPosition);
 				if(class9_1.scrollMax > class9_1.height)
-					method65(i2 + class9_1.width, class9_1.height, k, i1, class9_1, j2, true, class9_1.scrollMax);
+					processScrollbar(i2 + class9_1.width, class9_1.height, k, i1, class9_1, j2, true, class9_1.scrollMax);
 			} else
 			{
 				if(class9_1.atActionType == 1 && k >= i2 && i1 >= j2 && k < i2 + class9_1.width && i1 < j2 + class9_1.height)
@@ -1227,121 +1227,121 @@ public int followDistance = 1;
 			k1 = 8;
 		int l1 = ((j - 32 - k1) * k) / (j1 - j);
 		DrawingArea.drawPixels(k1, l + 16 + l1, i1, barFillColor, 16);
-		DrawingArea.method341(l + 16 + l1, 0x000001, k1, i1);
-		DrawingArea.method341(l + 16 + l1, 0x817051, k1, i1 + 1);
-		DrawingArea.method341(l + 16 + l1, 0x73654a, k1, i1 + 2);
-		DrawingArea.method341(l + 16 + l1, 0x6a5c43, k1, i1 + 3);
-		DrawingArea.method341(l + 16 + l1, 0x6a5c43, k1, i1 + 4);
-		DrawingArea.method341(l + 16 + l1, 0x655841, k1, i1 + 5);
-		DrawingArea.method341(l + 16 + l1, 0x655841, k1, i1 + 6);
-		DrawingArea.method341(l + 16 + l1, 0x61553e, k1, i1 + 7);
-		DrawingArea.method341(l + 16 + l1, 0x61553e, k1, i1 + 8);
-		DrawingArea.method341(l + 16 + l1, 0x5d513c, k1, i1 + 9);
-		DrawingArea.method341(l + 16 + l1, 0x5d513c, k1, i1 + 10);
-		DrawingArea.method341(l + 16 + l1, 0x594e3a, k1, i1 + 11);
-		DrawingArea.method341(l + 16 + l1, 0x594e3a, k1, i1 + 12);
-		DrawingArea.method341(l + 16 + l1, 0x514635, k1, i1 + 13);
-		DrawingArea.method341(l + 16 + l1, 0x4b4131, k1, i1 + 14);
-		DrawingArea.method339(l + 16 + l1, 0x000001, 15, i1);
-		DrawingArea.method339(l + 17 + l1, 0x000001, 15, i1);
-		DrawingArea.method339(l + 17 + l1, 0x655841, 14, i1);
-		DrawingArea.method339(l + 17 + l1, 0x6a5c43, 13, i1);
-		DrawingArea.method339(l + 17 + l1, 0x6d5f48, 11, i1);
-		DrawingArea.method339(l + 17 + l1, 0x73654a, 10, i1);
-		DrawingArea.method339(l + 17 + l1, 0x76684b, 7, i1);
-		DrawingArea.method339(l + 17 + l1, 0x7b6a4d, 5, i1);
-		DrawingArea.method339(l + 17 + l1, 0x7e6e50, 4, i1);
-		DrawingArea.method339(l + 17 + l1, 0x817051, 3, i1);
-		DrawingArea.method339(l + 17 + l1, 0x000001, 2, i1);
-		DrawingArea.method339(l + 18 + l1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 18 + l1, 0x564b38, 15, i1);
-		DrawingArea.method339(l + 18 + l1, 0x5d513c, 14, i1);
-		DrawingArea.method339(l + 18 + l1, 0x625640, 11, i1);
-		DrawingArea.method339(l + 18 + l1, 0x655841, 10, i1);
-		DrawingArea.method339(l + 18 + l1, 0x6a5c43, 7, i1);
-		DrawingArea.method339(l + 18 + l1, 0x6e6046, 5, i1);
-		DrawingArea.method339(l + 18 + l1, 0x716247, 4, i1);
-		DrawingArea.method339(l + 18 + l1, 0x7b6a4d, 3, i1);
-		DrawingArea.method339(l + 18 + l1, 0x817051, 2, i1);
-		DrawingArea.method339(l + 18 + l1, 0x000001, 1, i1);
-		DrawingArea.method339(l + 19 + l1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 19 + l1, 0x514635, 15, i1);
-		DrawingArea.method339(l + 19 + l1, 0x564b38, 14, i1);
-		DrawingArea.method339(l + 19 + l1, 0x5d513c, 11, i1);
-		DrawingArea.method339(l + 19 + l1, 0x61553e, 9, i1);
-		DrawingArea.method339(l + 19 + l1, 0x655841, 7, i1);
-		DrawingArea.method339(l + 19 + l1, 0x6a5c43, 5, i1);
-		DrawingArea.method339(l + 19 + l1, 0x6e6046, 4, i1);
-		DrawingArea.method339(l + 19 + l1, 0x73654a, 3, i1);
-		DrawingArea.method339(l + 19 + l1, 0x817051, 2, i1);
-		DrawingArea.method339(l + 19 + l1, 0x000001, 1, i1);
-		DrawingArea.method339(l + 20 + l1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 20 + l1, 0x4b4131, 15, i1);
-		DrawingArea.method339(l + 20 + l1, 0x544936, 14, i1);
-		DrawingArea.method339(l + 20 + l1, 0x594e3a, 13, i1);
-		DrawingArea.method339(l + 20 + l1, 0x5d513c, 10, i1);
-		DrawingArea.method339(l + 20 + l1, 0x61553e, 8, i1);
-		DrawingArea.method339(l + 20 + l1, 0x655841, 6, i1);
-		DrawingArea.method339(l + 20 + l1, 0x6a5c43, 4, i1);
-		DrawingArea.method339(l + 20 + l1, 0x73654a, 3, i1);
-		DrawingArea.method339(l + 20 + l1, 0x817051, 2, i1);
-		DrawingArea.method339(l + 20 + l1, 0x000001, 1, i1);
-		DrawingArea.method341(l + 16 + l1, 0x000001, k1, i1 + 15);
-		DrawingArea.method339(l + 15 + l1 + k1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x000001, 15, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x3f372a, 14, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x443c2d, 10, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x483e2f, 9, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x4a402f, 7, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x4b4131, 4, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x564b38, 3, i1);
-		DrawingArea.method339(l + 14 + l1 + k1, 0x000001, 2, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x443c2d, 15, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x4b4131, 11, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x514635, 9, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x544936, 7, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x564b38, 6, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x594e3a, 4, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x625640, 3, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x6a5c43, 2, i1);
-		DrawingArea.method339(l + 13 + l1 + k1, 0x000001, 1, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x443c2d, 15, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x4b4131, 14, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x544936, 12, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x564b38, 11, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x594e3a, 10, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x5d513c, 7, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x61553e, 4, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x6e6046, 3, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x7b6a4d, 2, i1);
-		DrawingArea.method339(l + 12 + l1 + k1, 0x000001, 1, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x000001, 16, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x4b4131, 15, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x514635, 14, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x564b38, 13, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x594e3a, 11, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x5d513c, 9, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x61553e, 7, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x655841, 5, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x6a5c43, 4, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x73654a, 3, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x7b6a4d, 2, i1);
-		DrawingArea.method339(l + 11 + l1 + k1, 0x000001, 1, i1);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x000001, k1, i1);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x817051, k1, i1 + 1);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x73654a, k1, i1 + 2);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x6a5c43, k1, i1 + 3);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x6a5c43, k1, i1 + 4);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x655841, k1, i1 + 5);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x655841, k1, i1 + 6);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x61553e, k1, i1 + 7);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x61553e, k1, i1 + 8);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x5d513c, k1, i1 + 9);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x5d513c, k1, i1 + 10);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x594e3a, k1, i1 + 11);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x594e3a, k1, i1 + 12);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x514635, k1, i1 + 13);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x4b4131, k1, i1 + 14);
+		DrawingArea.drawVerticalLine(l + 16 + l1, 0x000001, 15, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x000001, 15, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x655841, 14, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x6a5c43, 13, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x6d5f48, 11, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x73654a, 10, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x76684b, 7, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x7b6a4d, 5, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x7e6e50, 4, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x817051, 3, i1);
+		DrawingArea.drawVerticalLine(l + 17 + l1, 0x000001, 2, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x564b38, 15, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x5d513c, 14, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x625640, 11, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x655841, 10, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x6a5c43, 7, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x6e6046, 5, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x716247, 4, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x7b6a4d, 3, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x817051, 2, i1);
+		DrawingArea.drawVerticalLine(l + 18 + l1, 0x000001, 1, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x514635, 15, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x564b38, 14, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x5d513c, 11, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x61553e, 9, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x655841, 7, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x6a5c43, 5, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x6e6046, 4, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x73654a, 3, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x817051, 2, i1);
+		DrawingArea.drawVerticalLine(l + 19 + l1, 0x000001, 1, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x4b4131, 15, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x544936, 14, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x594e3a, 13, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x5d513c, 10, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x61553e, 8, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x655841, 6, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x6a5c43, 4, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x73654a, 3, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x817051, 2, i1);
+		DrawingArea.drawVerticalLine(l + 20 + l1, 0x000001, 1, i1);
+		DrawingArea.drawHorizontalLine(l + 16 + l1, 0x000001, k1, i1 + 15);
+		DrawingArea.drawVerticalLine(l + 15 + l1 + k1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x000001, 15, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x3f372a, 14, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x443c2d, 10, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x483e2f, 9, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x4a402f, 7, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x4b4131, 4, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x564b38, 3, i1);
+		DrawingArea.drawVerticalLine(l + 14 + l1 + k1, 0x000001, 2, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x443c2d, 15, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x4b4131, 11, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x514635, 9, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x544936, 7, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x564b38, 6, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x594e3a, 4, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x625640, 3, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x6a5c43, 2, i1);
+		DrawingArea.drawVerticalLine(l + 13 + l1 + k1, 0x000001, 1, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x443c2d, 15, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x4b4131, 14, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x544936, 12, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x564b38, 11, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x594e3a, 10, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x5d513c, 7, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x61553e, 4, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x6e6046, 3, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x7b6a4d, 2, i1);
+		DrawingArea.drawVerticalLine(l + 12 + l1 + k1, 0x000001, 1, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x000001, 16, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x4b4131, 15, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x514635, 14, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x564b38, 13, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x594e3a, 11, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x5d513c, 9, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x61553e, 7, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x655841, 5, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x6a5c43, 4, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x73654a, 3, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x7b6a4d, 2, i1);
+		DrawingArea.drawVerticalLine(l + 11 + l1 + k1, 0x000001, 1, i1);
 	}
 
 	private void updateNPCs(Stream stream, int i)
 	{
 		anInt839 = 0;
 		anInt893 = 0;
-		method139(stream);
-		method46(i, stream);
-		method86(stream);
+		parseNPCRemovals(stream);
+		parseNewNPCs(i, stream);
+		parseNPCUpdateMasks(stream);
 		for(int k = 0; k < anInt839; k++)
 		{
 			int l = anIntArray840[k];
-			if(npcArray[l].anInt1537 != loopCycle)
+			if(npcArray[l].textColor != loopCycle)
 			{
 				npcArray[l].desc = null;
 				npcArray[l] = null;
@@ -1449,7 +1449,7 @@ public int followDistance = 1;
 		}
 	}
 
-	private void method33(int i)
+	private void applyVarpSetting(int i)
 	{
 		int j = Varp.cache[i].anInt709;
 		if(j == 0)
@@ -1458,13 +1458,13 @@ public int followDistance = 1;
 		if(j == 1)
 		{
 			if(k == 1)
-				Texture.method372(0.90000000000000002D);
+				Texture.setBrightness(0.90000000000000002D);
 			if(k == 2)
-				Texture.method372(0.80000000000000004D);
+				Texture.setBrightness(0.80000000000000004D);
 			if(k == 3)
-				Texture.method372(0.69999999999999996D);
+				Texture.setBrightness(0.69999999999999996D);
 			if(k == 4)
-				Texture.method372(0.59999999999999998D);
+				Texture.setBrightness(0.59999999999999998D);
 			ItemDef.mruNodes1.unlinkAll();
 			welcomeScreenRaised = true;
 		}
@@ -1499,7 +1499,7 @@ public int followDistance = 1;
 				{
 					nextSong = currentSong;
 					songChanging = true;
-					onDemandFetcher.method558(2, nextSong);
+					onDemandFetcher.requestFile(2, nextSong);
 				} else
 				{
 					stopMidi();
@@ -1565,7 +1565,7 @@ public int followDistance = 1;
 			if(obj instanceof NPC) {
 				EntityDef entityDef = ((NPC)obj).desc;
 				if(entityDef.childrenIDs != null)
-					entityDef = entityDef.method161();
+					entityDef = entityDef.getChildDefinition();
 				if(entityDef == null)
 					continue;
 			}
@@ -1608,22 +1608,22 @@ public int followDistance = 1;
 				npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height);
 				if(spriteDrawX > -1 && anInt974 < anInt975)
 				{
-					anIntArray979[anInt974] = chatTextDrawingArea.method384(((Entity) (obj)).textSpoken) / 2;
+					anIntArray979[anInt974] = chatTextDrawingArea.getTextWidth(((Entity) (obj)).textSpoken) / 2;
 					anIntArray978[anInt974] = chatTextDrawingArea.anInt1497;
 					anIntArray976[anInt974] = spriteDrawX;
 					anIntArray977[anInt974] = spriteDrawY;
-					anIntArray980[anInt974] = ((Entity) (obj)).anInt1513;
-					anIntArray981[anInt974] = ((Entity) (obj)).anInt1531;
+					anIntArray980[anInt974] = ((Entity) (obj)).turnAroundAnimId;
+					anIntArray981[anInt974] = ((Entity) (obj)).animResetCycle;
 					anIntArray982[anInt974] = ((Entity) (obj)).textCycle;
 					aStringArray983[anInt974++] = ((Entity) (obj)).textSpoken;
-					if(anInt1249 == 0 && ((Entity) (obj)).anInt1531 >= 1 && ((Entity) (obj)).anInt1531 <= 3)
+					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle >= 1 && ((Entity) (obj)).animResetCycle <= 3)
 					{
 						anIntArray978[anInt974] += 10;
 						anIntArray977[anInt974] += 5;
 					}
-					if(anInt1249 == 0 && ((Entity) (obj)).anInt1531 == 4)
+					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle == 4)
 						anIntArray979[anInt974] = 60;
-					if(anInt1249 == 0 && ((Entity) (obj)).anInt1531 == 5)
+					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle == 5)
 						anIntArray978[anInt974] += 5;
 				}
 			}
@@ -1744,23 +1744,23 @@ public int followDistance = 1;
 						chatTextDrawingArea.drawText(i3, s, spriteDrawY, spriteDrawX);
 					}
 					if(anIntArray981[k] == 1) {
-						chatTextDrawingArea.method386(0, s, spriteDrawX, anInt1265, spriteDrawY + 1);
-						chatTextDrawingArea.method386(i3, s, spriteDrawX, anInt1265, spriteDrawY);
+						chatTextDrawingArea.drawTextShadow(0, s, spriteDrawX, anInt1265, spriteDrawY + 1);
+						chatTextDrawingArea.drawTextShadow(i3, s, spriteDrawX, anInt1265, spriteDrawY);
 					}
 					if(anIntArray981[k] == 2) {
-						chatTextDrawingArea.method387(spriteDrawX, s, anInt1265, spriteDrawY + 1, 0);
-						chatTextDrawingArea.method387(spriteDrawX, s, anInt1265, spriteDrawY, i3);
+						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, anInt1265, spriteDrawY + 1, 0);
+						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, anInt1265, spriteDrawY, i3);
 					}
 					if(anIntArray981[k] == 3) {
-						chatTextDrawingArea.method388(150 - anIntArray982[k], s, anInt1265, spriteDrawY + 1, spriteDrawX, 0);
-						chatTextDrawingArea.method388(150 - anIntArray982[k], s, anInt1265, spriteDrawY, spriteDrawX, i3);
+						chatTextDrawingArea.drawShaking(150 - anIntArray982[k], s, anInt1265, spriteDrawY + 1, spriteDrawX, 0);
+						chatTextDrawingArea.drawShaking(150 - anIntArray982[k], s, anInt1265, spriteDrawY, spriteDrawX, i3);
 					}
 					if(anIntArray981[k] == 4) {
-						int i4 = chatTextDrawingArea.method384(s);
+						int i4 = chatTextDrawingArea.getTextWidth(s);
 						int k4 = ((150 - anIntArray982[k]) * (i4 + 100)) / 150;
 						DrawingArea.setDrawingArea(334, spriteDrawX - 50, spriteDrawX + 50, 0);
-						chatTextDrawingArea.method385(0, s, spriteDrawY + 1, (spriteDrawX + 50) - k4);
-						chatTextDrawingArea.method385(i3, s, spriteDrawY, (spriteDrawX + 50) - k4);
+						chatTextDrawingArea.drawText(0, s, spriteDrawY + 1, (spriteDrawX + 50) - k4);
+						chatTextDrawingArea.drawText(i3, s, spriteDrawY, (spriteDrawX + 50) - k4);
 						DrawingArea.defaultDrawingAreaSize();
 					}
 					if(anIntArray981[k] == 5) {
@@ -1920,7 +1920,7 @@ public int followDistance = 1;
 		Texture.anIntArray1472 = anIntArray1182;
 	}
 
-	private void method37(int j) {
+	private void animateTexture(int j) {
 		if(!lowMem) {
 			if(Texture.anIntArray1480[17] >= j) {
 				Background background = Texture.aBackgroundArray1474s[17];
@@ -1934,7 +1934,7 @@ public int followDistance = 1;
 
 				background.aByteArray1450 = abyte3;
 				aByteArray912 = abyte0;
-				Texture.method370(17);
+				Texture.setTextureActive(17);
 				anInt854++;
 				if(anInt854 > 1235) {
 					anInt854 = 0;
@@ -1966,7 +1966,7 @@ public int followDistance = 1;
 
 				background_1.aByteArray1450 = abyte4;
 				aByteArray912 = abyte1;
-				Texture.method370(24);
+				Texture.setTextureActive(24);
 			}
 			if(Texture.anIntArray1480[34] >= j) {
 				Background background_2 = Texture.aBackgroundArray1474s[34];
@@ -1979,7 +1979,7 @@ public int followDistance = 1;
 
 				background_2.aByteArray1450 = abyte5;
 				aByteArray912 = abyte2;
-				Texture.method370(34);
+				Texture.setTextureActive(34);
 			}
 			if(Texture.anIntArray1480[40] >= j)
             {
@@ -1993,12 +1993,12 @@ public int followDistance = 1;
 
 				background_2.aByteArray1450 = abyte5;
 				aByteArray912 = abyte2;
-				Texture.method370(40);
+				Texture.setTextureActive(40);
             }
 		}
 	}
 
-	private void method38() {
+	private void processPlayerChat() {
 		for(int i = -1; i < playerCount; i++) {
 			int j;
 			if(i == -1)
@@ -2026,7 +2026,7 @@ public int followDistance = 1;
 	private void calcCameraPos() {
 		int i = anInt1098 * 128 + 64;
 		int j = anInt1099 * 128 + 64;
-		int k = method42(plane, j, i) - anInt1100;
+		int k = getTileHeight(plane, j, i) - anInt1100;
 		if(xCameraPos < i) {
 			xCameraPos += anInt1101 + ((i - xCameraPos) * anInt1102) / 1000;
 			if(xCameraPos > i)
@@ -2059,7 +2059,7 @@ public int followDistance = 1;
 		}
 		i = anInt995 * 128 + 64;
 		j = anInt996 * 128 + 64;
-		k = method42(plane, j, i) - anInt997;
+		k = getTileHeight(plane, j, i) - anInt997;
 		int l = i - xCameraPos;
 		int i1 = k - zCameraPos;
 		int j1 = j - yCameraPos;
@@ -2113,7 +2113,7 @@ public int followDistance = 1;
 		DrawingArea.drawPixels(l, j, i, i1, k);
 		DrawingArea.drawPixels(16, j + 1, i + 1, 0, k - 2);
 		DrawingArea.fillPixels(i + 1, k - 2, l - 19, 0, j + 18);
-		chatTextDrawingArea.method385(i1, "Choose Option", j + 14, i + 3);
+		chatTextDrawingArea.drawText(i1, "Choose Option", j + 14, i + 3);
 		int j1 = super.mouseX;
 		int k1 = super.mouseY;
 		if(menuScreenArea == 0) {
@@ -2137,7 +2137,7 @@ public int followDistance = 1;
 			int j2 = 0xffffff;
 			if(j1 > i && j1 < i + k && k1 > i2 - 13 && k1 < i2 + 3)
 				j2 = 0xffff00;
-			chatTextDrawingArea.method389(true, i + 3, j2, menuActionName[l1], i2);
+			chatTextDrawingArea.drawWaving(true, i + 3, j2, menuActionName[l1], i2);
 		}
 	}
 
@@ -2183,7 +2183,7 @@ public int followDistance = 1;
 		throw new RuntimeException();
 	}
 
-	private int method42(int i, int j, int k) {
+	private int getTileHeight(int i, int j, int k) {
 		int l = k >> 7;
 		int i1 = j >> 7;
 		if(l < 0 || i1 < 0 || l > 103 || i1 > 103)
@@ -2255,7 +2255,7 @@ followDistance = 1;
 		unlinkMRUNodes();
 		worldController.initToNull();
 		for(int i = 0; i < 4; i++)
-			aClass11Array1230[i].method210();
+			aCollisionMapArray1230[i].reset();
 		System.gc();
 		stopMidi();
 		currentSong = -1;
@@ -2263,7 +2263,7 @@ followDistance = 1;
 		prevSong = 0;
 	}
 
-	private void method45() {
+	private void resetDefaultAppearance() {
 		aBoolean1031 = true;
 		for(int j = 0; j < 7; j++) {
 			anIntArray1065[j] = -1;
@@ -2276,7 +2276,7 @@ followDistance = 1;
 		}
 	}
 
-	private void method46(int i, Stream stream) {
+	private void parseNewNPCs(int i, Stream stream) {
 		while(stream.bitPosition + 21 < i * 8) {
 			int k = stream.readBits(14);
 			if(k == 16383)
@@ -2285,7 +2285,7 @@ followDistance = 1;
 				npcArray[k] = new NPC();
 			NPC npc = npcArray[k];
 			npcIndices[npcCount++] = k;
-			npc.anInt1537 = loopCycle;
+			npc.textColor = loopCycle;
 			int l = stream.readBits(5);
 			if(l > 15)
 				l -= 32;
@@ -2297,13 +2297,13 @@ followDistance = 1;
 			int k1 = stream.readBits(1);
 			if(k1 == 1)
 				anIntArray894[anInt893++] = k;
-			npc.anInt1540 = npc.desc.aByte68;
-			npc.anInt1504 = npc.desc.anInt79;
-			npc.anInt1554 = npc.desc.walkAnim;
-			npc.anInt1555 = npc.desc.anInt58;
-			npc.anInt1556 = npc.desc.anInt83;
-			npc.anInt1557 = npc.desc.anInt55;
-			npc.anInt1511 = npc.desc.standAnim;
+			npc.tileSize = npc.desc.aByte68;
+			npc.turnSpeed = npc.desc.anInt79;
+			npc.walkBackAnimId = npc.desc.walkAnim;
+			npc.walkLeftAnimId = npc.desc.anInt58;
+			npc.walkRightAnimId = npc.desc.anInt83;
+			npc.runAnimId = npc.desc.anInt55;
+			npc.standAnimId = npc.desc.standAnim;
 			npc.setPos(myPlayer.smallX[0] + i1, myPlayer.smallY[0] + l, j1 == 1);
 		}
 		stream.finishBitAccess();
@@ -2320,7 +2320,7 @@ followDistance = 1;
 		processOnDemandQueue();
 	}
 
-	private void method47(boolean flag) {
+	private void renderPlayersOnScene(boolean flag) {
 		if(myPlayer.x >> 7 == destX && myPlayer.y >> 7 == destY)
 			destX = 0;
 		int j = playerCount;
@@ -2338,15 +2338,15 @@ followDistance = 1;
 			}
 			if(player == null || !player.isVisible())
 				continue;
-			player.aBoolean1699 = (lowMem && playerCount > 50 || playerCount > 200) && !flag && player.anInt1517 == player.anInt1511;
+			player.lowDetail = (lowMem && playerCount > 50 || playerCount > 200) && !flag && player.movementAnimId == player.standAnimId;
 			int j1 = player.x >> 7;
 			int k1 = player.y >> 7;
 			if(j1 < 0 || j1 >= 104 || k1 < 0 || k1 >= 104)
 				continue;
-			if(player.aModel_1714 != null && loopCycle >= player.anInt1707 && loopCycle < player.anInt1708) {
-				player.aBoolean1699 = false;
-				player.anInt1709 = method42(plane, player.y, player.x);
-				worldController.method286(plane, player.y, player, player.anInt1552, player.anInt1722, player.x, player.anInt1709, player.anInt1719, player.anInt1721, i1, player.anInt1720);
+			if(player.attachedModel != null && loopCycle >= player.attachedModelStartCycle && loopCycle < player.attachedModelEndCycle) {
+				player.lowDetail = false;
+				player.attachedModelHeight = getTileHeight(plane, player.y, player.x);
+				worldController.addTempObjectRect(plane, player.y, player, player.faceAngle, player.anInt1722, player.x, player.attachedModelHeight, player.anInt1719, player.anInt1721, i1, player.anInt1720);
 				continue;
 			}
 			if((player.x & 0x7f) == 64 && (player.y & 0x7f) == 64) {
@@ -2354,8 +2354,8 @@ followDistance = 1;
 					continue;
 				anIntArrayArray929[j1][k1] = anInt1265;
 			}
-			player.anInt1709 = method42(plane, player.y, player.x);
-			worldController.method285(plane, player.anInt1552, player.anInt1709, i1, player.y, 60, player.x, player, player.aBoolean1541);
+			player.attachedModelHeight = getTileHeight(plane, player.y, player.x);
+			worldController.addTempObject(plane, player.faceAngle, player.attachedModelHeight, i1, player.y, 60, player.x, player, player.animStretches);
 		}
 	}
 
@@ -2435,11 +2435,11 @@ followDistance = 1;
 		}
 		if(j == 324 && !aBoolean1047) {
 			aBoolean1047 = true;
-			method45();
+			resetDefaultAppearance();
 		}
 		if(j == 325 && aBoolean1047) {
 			aBoolean1047 = false;
-			method45();
+			resetDefaultAppearance();
 		}
 		if(j == 326) {
 			stream.createFrame(101);
@@ -2466,21 +2466,21 @@ followDistance = 1;
 		return false;
 	}
 
-	private void method49(Stream stream) {
+	private void parsePlayerUpdateMasks(Stream stream) {
 		for(int j = 0; j < anInt893; j++) {
 			int k = anIntArray894[j];
 			Player player = playerArray[k];
 			int l = stream.readUnsignedByte();
 			if((l & 0x40) != 0)
 				l += stream.readUnsignedByte() << 8;
-			method107(l, k, stream, player);
+			parsePlayerMaskData(l, k, stream, player);
 		}
 	}
 
-	private void method50(int i, int k, int l, int i1, int j1) {
-		int k1 = worldController.method300(j1, l, i);
+	private void drawMinimapWallObject(int i, int k, int l, int i1, int j1) {
+		int k1 = worldController.getWallObjectUID(j1, l, i);
 		if(k1 != 0) {
-			int l1 = worldController.method304(j1, l, i, k1);
+			int l1 = worldController.getObjectConfig(j1, l, i, k1);
 			int k2 = l1 >> 6 & 3;
 			int i3 = l1 & 0x1f;
 			int k3 = k;
@@ -2490,12 +2490,12 @@ followDistance = 1;
 			int k4 = 24624 + l * 4 + (103 - i) * 512 * 4;
 			int i5 = k1 >> 14 & 0x7fff;
 			ObjectDef class46_2 = ObjectDef.forID(i5);
-			if(class46_2.anInt758 != -1) {
-				Background background_2 = mapScenes[class46_2.anInt758];
+			if(class46_2.mapSceneId != -1) {
+				Background background_2 = mapScenes[class46_2.mapSceneId];
 				if(background_2 != null) {
-					int i6 = (class46_2.anInt744 * 4 - background_2.anInt1452) / 2;
-					int j6 = (class46_2.anInt761 * 4 - background_2.anInt1453) / 2;
-					background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - class46_2.anInt761) * 4 + j6);
+					int i6 = (class46_2.sizeX * 4 - background_2.anInt1452) / 2;
+					int j6 = (class46_2.sizeY * 4 - background_2.anInt1453) / 2;
+					background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - class46_2.sizeY) * 4 + j6);
 				}
 			} else {
 				if(i3 == 0 || i3 == 2)
@@ -2553,19 +2553,19 @@ followDistance = 1;
 					}
 			}
 		}
-		k1 = worldController.method302(j1, l, i);
+		k1 = worldController.getInteractiveObjectUID(j1, l, i);
 		if(k1 != 0) {
-			int i2 = worldController.method304(j1, l, i, k1);
+			int i2 = worldController.getObjectConfig(j1, l, i, k1);
 			int l2 = i2 >> 6 & 3;
 			int j3 = i2 & 0x1f;
 			int l3 = k1 >> 14 & 0x7fff;
 			ObjectDef class46_1 = ObjectDef.forID(l3);
-			if(class46_1.anInt758 != -1) {
-				Background background_1 = mapScenes[class46_1.anInt758];
+			if(class46_1.mapSceneId != -1) {
+				Background background_1 = mapScenes[class46_1.mapSceneId];
 				if(background_1 != null) {
-					int j5 = (class46_1.anInt744 * 4 - background_1.anInt1452) / 2;
-					int k5 = (class46_1.anInt761 * 4 - background_1.anInt1453) / 2;
-					background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - class46_1.anInt761) * 4 + k5);
+					int j5 = (class46_1.sizeX * 4 - background_1.anInt1452) / 2;
+					int k5 = (class46_1.sizeY * 4 - background_1.anInt1453) / 2;
+					background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - class46_1.sizeY) * 4 + k5);
 				}
 			} else if(j3 == 9) {
 				int l4 = 0xeeeeee;
@@ -2586,16 +2586,16 @@ followDistance = 1;
 				}
 			}
 		}
-		k1 = worldController.method303(j1, l, i);
+		k1 = worldController.getGroundDecorationUID(j1, l, i);
 		if(k1 != 0) {
 			int j2 = k1 >> 14 & 0x7fff;
 			ObjectDef class46 = ObjectDef.forID(j2);
-			if(class46.anInt758 != -1) {
-				Background background = mapScenes[class46.anInt758];
+			if(class46.mapSceneId != -1) {
+				Background background = mapScenes[class46.mapSceneId];
 				if(background != null) {
-					int i4 = (class46.anInt744 * 4 - background.anInt1452) / 2;
-					int j4 = (class46.anInt761 * 4 - background.anInt1453) / 2;
-					background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - class46.anInt761) * 4 + j4);
+					int i4 = (class46.sizeX * 4 - background.anInt1452) / 2;
+					int j4 = (class46.sizeY * 4 - background.anInt1453) / 2;
+					background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - class46.sizeY) * 4 + j4);
 				}
 			}
 		}
@@ -2704,7 +2704,7 @@ followDistance = 1;
 	}
 
 	private void loadingStages() {
-		if(lowMem && loadingStage == 2 && ObjectManager.anInt131 != plane) {
+		if(lowMem && loadingStage == 2 && ObjectManager.currentPlane != plane) {
 			aRSImageProducer_1165.initDrawingArea();
 			aTextDrawingArea_1271.drawText(0, "Loading - please wait.", 151, 257);
 			aTextDrawingArea_1271.drawText(0xffffff, "Loading - please wait.", 150, 256);
@@ -2713,7 +2713,7 @@ followDistance = 1;
 			aLong824 = System.currentTimeMillis();
 		}
 		if(loadingStage == 1) {
-			int j = method54();
+			int j = checkMapLoadStatus();
 			if(j != 0 && System.currentTimeMillis() - aLong824 > 0x57e40L) {
 				signlink.reporterror(myUsername + " glcfb " + aLong1215 + "," + j + "," + lowMem + "," + decompressors[0] + "," + onDemandFetcher.getNodeCount() + "," + plane + "," + anInt1069 + "," + anInt1070);
 				aLong824 = System.currentTimeMillis();
@@ -2721,11 +2721,11 @@ followDistance = 1;
 		}
 		if(loadingStage == 2 && plane != anInt985) {
 			anInt985 = plane;
-			method24(plane);
+			drawMiniMapDots(plane);
 		}
 	}
 
-	private int method54() {
+	private int checkMapLoadStatus() {
 		for(int i = 0; i < aByteArrayArray1183.length; i++) {
 			if(aByteArrayArray1183[i] == null && anIntArray1235[i] != -1)
 				return -1;
@@ -2742,7 +2742,7 @@ followDistance = 1;
 					k = 10;
 					l = 10;
 				}
-				flag &= ObjectManager.method189(k, abyte0, l);
+				flag &= ObjectManager.checkObjectData(k, abyte0, l);
 			}
 		}
 		if(!flag)
@@ -2751,14 +2751,14 @@ followDistance = 1;
 			return -4;
 		} else {
 			loadingStage = 2;
-			ObjectManager.anInt131 = plane;
-			method22();
+			ObjectManager.currentPlane = plane;
+			resetScene();
 			stream.createFrame(121);
 			return 0;
 		}
 	}
 
-	private void method55()
+	private void processProjectiles()
 	{
 		for(Animable_Sub4 class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetFirst(); class30_sub2_sub4_sub4 != null; class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetNext())
 			if(class30_sub2_sub4_sub4.anInt1597 != plane || loopCycle > class30_sub2_sub4_sub4.anInt1572)
@@ -2770,7 +2770,7 @@ followDistance = 1;
 				{
 					NPC npc = npcArray[class30_sub2_sub4_sub4.anInt1590 - 1];
 					if(npc != null && npc.x >= 0 && npc.x < 13312 && npc.y >= 0 && npc.y < 13312)
-						class30_sub2_sub4_sub4.method455(loopCycle, npc.y, method42(class30_sub2_sub4_sub4.anInt1597, npc.y, npc.x) - class30_sub2_sub4_sub4.anInt1583, npc.x);
+						class30_sub2_sub4_sub4.trackTarget(loopCycle, npc.y, getTileHeight(class30_sub2_sub4_sub4.anInt1597, npc.y, npc.x) - class30_sub2_sub4_sub4.anInt1583, npc.x);
 				}
 				if(class30_sub2_sub4_sub4.anInt1590 < 0)
 				{
@@ -2781,10 +2781,10 @@ followDistance = 1;
 					else
 						player = playerArray[j];
 					if(player != null && player.x >= 0 && player.x < 13312 && player.y >= 0 && player.y < 13312)
-						class30_sub2_sub4_sub4.method455(loopCycle, player.y, method42(class30_sub2_sub4_sub4.anInt1597, player.y, player.x) - class30_sub2_sub4_sub4.anInt1583, player.x);
+						class30_sub2_sub4_sub4.trackTarget(loopCycle, player.y, getTileHeight(class30_sub2_sub4_sub4.anInt1597, player.y, player.x) - class30_sub2_sub4_sub4.anInt1583, player.x);
 				}
-				class30_sub2_sub4_sub4.method456(anInt945);
-				worldController.method285(plane, class30_sub2_sub4_sub4.anInt1595, (int)class30_sub2_sub4_sub4.aDouble1587, -1, (int)class30_sub2_sub4_sub4.aDouble1586, 60, (int)class30_sub2_sub4_sub4.aDouble1585, class30_sub2_sub4_sub4, false);
+				class30_sub2_sub4_sub4.advanceProjectile(anInt945);
+				worldController.addTempObject(plane, class30_sub2_sub4_sub4.anInt1595, (int)class30_sub2_sub4_sub4.aDouble1587, -1, (int)class30_sub2_sub4_sub4.aDouble1586, 60, (int)class30_sub2_sub4_sub4.aDouble1585, class30_sub2_sub4_sub4, false);
 			}
 
 	}
@@ -2795,23 +2795,23 @@ followDistance = 1;
 		byte abyte0[] = titleStreamLoader.getDataForName("title.dat");
 		Sprite sprite = new Sprite(abyte0, this);
 		aRSImageProducer_1110.initDrawingArea();
-		sprite.method346(0, 0);
+		sprite.drawTransparent(0, 0);
 		aRSImageProducer_1111.initDrawingArea();
-		sprite.method346(-637, 0);
+		sprite.drawTransparent(-637, 0);
 		aRSImageProducer_1107.initDrawingArea();
-		sprite.method346(-128, 0);
+		sprite.drawTransparent(-128, 0);
 		aRSImageProducer_1108.initDrawingArea();
-		sprite.method346(-202, -371);
+		sprite.drawTransparent(-202, -371);
 		aRSImageProducer_1109.initDrawingArea();
-		sprite.method346(-202, -171);
+		sprite.drawTransparent(-202, -171);
 		aRSImageProducer_1112.initDrawingArea();
-		sprite.method346(0, -265);
+		sprite.drawTransparent(0, -265);
 		aRSImageProducer_1113.initDrawingArea();
-		sprite.method346(-562, -265);
+		sprite.drawTransparent(-562, -265);
 		aRSImageProducer_1114.initDrawingArea();
-		sprite.method346(-128, -171);
+		sprite.drawTransparent(-128, -171);
 		aRSImageProducer_1115.initDrawingArea();
-		sprite.method346(-562, -171);
+		sprite.drawTransparent(-562, -171);
 		int ai[] = new int[sprite.myWidth];
 		for(int j = 0; j < sprite.myHeight; j++) {
 			for(int k = 0; k < sprite.myWidth; k++)
@@ -2820,23 +2820,23 @@ followDistance = 1;
 			System.arraycopy(ai, 0, sprite.myPixels, sprite.myWidth * j, sprite.myWidth);
 		}
 		aRSImageProducer_1110.initDrawingArea();
-		sprite.method346(382, 0);
+		sprite.drawTransparent(382, 0);
 		aRSImageProducer_1111.initDrawingArea();
-		sprite.method346(-255, 0);
+		sprite.drawTransparent(-255, 0);
 		aRSImageProducer_1107.initDrawingArea();
-		sprite.method346(254, 0);
+		sprite.drawTransparent(254, 0);
 		aRSImageProducer_1108.initDrawingArea();
-		sprite.method346(180, -371);
+		sprite.drawTransparent(180, -371);
 		aRSImageProducer_1109.initDrawingArea();
-		sprite.method346(180, -171);
+		sprite.drawTransparent(180, -171);
 		aRSImageProducer_1112.initDrawingArea();
-		sprite.method346(382, -265);
+		sprite.drawTransparent(382, -265);
 		aRSImageProducer_1113.initDrawingArea();
-		sprite.method346(-180, -265);
+		sprite.drawTransparent(-180, -265);
 		aRSImageProducer_1114.initDrawingArea();
-		sprite.method346(254, -171);
+		sprite.drawTransparent(254, -171);
 		aRSImageProducer_1115.initDrawingArea();
-		sprite.method346(-180, -171);
+		sprite.drawTransparent(-180, -171);
 		sprite = new Sprite(titleStreamLoader, "logo", 0);
 		aRSImageProducer_1107.initDrawingArea();
 		sprite.drawSprite(382 - sprite.myWidth / 2 - 128, 18);
@@ -2858,7 +2858,7 @@ followDistance = 1;
 					return;
 				if(onDemandData.dataType == 0)
 				{
-					Model.method460(onDemandData.buffer, onDemandData.ID);
+					Model.decodeModelHeader(onDemandData.buffer, onDemandData.ID);
 					if((onDemandFetcher.getModelIndex(onDemandData.ID) & 0x62) != 0)
 					{
 						needDrawTabArea = true;
@@ -2867,7 +2867,7 @@ followDistance = 1;
 					}
 				}
 				if(onDemandData.dataType == 1 && onDemandData.buffer != null)
-					Class36.method529(onDemandData.buffer);
+					AnimFrame.decodeFrames(onDemandData.buffer);
 				if(onDemandData.dataType == 2 && onDemandData.ID == nextSong && onDemandData.buffer != null)
 					saveMidi(songChanging, onDemandData.buffer);
 				if(onDemandData.dataType == 3 && loadingStage == 1)
@@ -2890,8 +2890,8 @@ followDistance = 1;
 					}
 
 				}
-			} while(onDemandData.dataType != 93 || !onDemandFetcher.method564(onDemandData.ID));
-			ObjectManager.method173(new Stream(onDemandData.buffer), onDemandFetcher);
+			} while(onDemandData.dataType != 93 || !onDemandFetcher.isMapObjectFile(onDemandData.ID));
+			ObjectManager.preloadObjectModels(new Stream(onDemandData.buffer), onDemandFetcher);
 		} while(true);
 	}
 
@@ -2964,7 +2964,7 @@ followDistance = 1;
 		return abyte0 == null || signlink.wavesave(abyte0, i);
 	}
 
-	private void method60(int i)
+	private void resetInterfaceAnim(int i)
 	{
 		RSInterface class9 = RSInterface.interfaceCache[i];
 		for(int j = 0; j < class9.children.length; j++)
@@ -2975,7 +2975,7 @@ followDistance = 1;
 			RSInterface class9_1 = RSInterface.interfaceCache[class9.children[j]];
 			if(class9_1 == null) continue;
 			if(class9_1.type == 1)
-				method60(class9_1.id);
+				resetInterfaceAnim(class9_1.id);
 			class9_1.anInt246 = 0;
 			class9_1.anInt208 = 0;
 		}
@@ -3171,7 +3171,7 @@ followDistance = 1;
 			aBoolean1017 = false;
 			stream.createFrame(86);
 			stream.writeWord(anInt1184);
-			stream.method432(minimapInt1);
+			stream.writeWordBigA(minimapInt1);
 		}
 		if(super.awtFocus && !aBoolean954)
 		{
@@ -3186,14 +3186,14 @@ followDistance = 1;
 			stream.writeWordBigEndian(0);
 		}
 		loadingStages();
-		method115();
-		method90();
+		processSpawnObjects();
+		processSounds();
 		anInt1009++;
 		if(anInt1009 > 750)
 			dropClient();
-		method114();
-		method95();
-		method38();
+		processPlayerMovement();
+		processNPCMovement();
+		processPlayerChat();
 		anInt945++;
 		if(crossType != 0)
 		{
@@ -3266,10 +3266,10 @@ followDistance = 1;
 							class9.swapInventoryItems(anInt1085, mouseInvInterfaceIndex);
 						}
 						stream.createFrame(214);
-						stream.method433(anInt1084);
-						stream.method424(j1);
-						stream.method433(anInt1085);
-						stream.method431(mouseInvInterfaceIndex);
+						stream.writeWordLEBigA(anInt1084);
+						stream.writeNegByte(j1);
+						stream.writeWordLEBigA(anInt1085);
+						stream.writeWordLEA(mouseInvInterfaceIndex);
 					}
 				} else
 				if((anInt1253 == 1 || menuHasAddFriend(menuActionRow - 1)) && menuActionRow > 2)
@@ -3323,13 +3323,13 @@ followDistance = 1;
 			anInt1501--;
 		}
 		if(loadingStage == 2)
-			method108();
+			updateCamera();
 		if(loadingStage == 2 && aBoolean1160)
 			calcCameraPos();
 		for(int i1 = 0; i1 < 5; i1++)
 			anIntArray1030[i1]++;
 
-		method73();
+		processKeyInput();
 		super.idleTime++;
 		if(super.idleTime > 4500)
 		{
@@ -3401,17 +3401,17 @@ followDistance = 1;
 		}
 	}
 
-	private void method63()
+	private void resetSpawnObjects()
 	{
-		Class30_Sub1 class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetFirst();
-		for(; class30_sub1 != null; class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetNext())
-			if(class30_sub1.anInt1294 == -1)
+		SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst();
+		for(; spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
+			if(spawnObjectNode.delay == -1)
 			{
-				class30_sub1.anInt1302 = 0;
-				method89(class30_sub1);
+				spawnObjectNode.longestDelay = 0;
+				updateSpawnObjectInfo(spawnObjectNode);
 			} else
 			{
-				class30_sub1.unlink();
+				spawnObjectNode.unlink();
 			}
 
 	}
@@ -3493,7 +3493,7 @@ followDistance = 1;
 		}
 	}
 
-	private void method65(int i, int j, int k, int l, RSInterface class9, int i1, boolean flag,
+	private void processScrollbar(int i, int j, int k, int l, RSInterface class9, int i1, boolean flag,
 						  int j1)
 	{
 		int anInt992;
@@ -3532,10 +3532,10 @@ followDistance = 1;
 		}
 	}
 
-	private boolean method66(int i, int j, int k)
+	private boolean objectActionAtTile(int i, int j, int k)
 	{
 		int i1 = i >> 14 & 0x7fff;
-		int j1 = worldController.method304(plane, k, j, i);
+		int j1 = worldController.getObjectConfig(plane, k, j, i);
 		if(j1 == -1)
 			return false;
 		int k1 = j1 & 0x1f;
@@ -3547,14 +3547,14 @@ followDistance = 1;
 			int j2;
 			if(l1 == 0 || l1 == 2)
 			{
-				i2 = class46.anInt744;
-				j2 = class46.anInt761;
+				i2 = class46.sizeX;
+				j2 = class46.sizeY;
 			} else
 			{
-				i2 = class46.anInt761;
-				j2 = class46.anInt744;
+				i2 = class46.sizeY;
+				j2 = class46.sizeX;
 			}
-			int k2 = class46.anInt768;
+			int k2 = class46.surroundings;
 			if(l1 != 0)
 				k2 = (k2 << l1 & 0xf) + (k2 >> 4 - l1);
 			doWalkTo(2, 0, j2, 0, myPlayer.smallY[0], i2, k2, j, myPlayer.smallX[0], false, k);
@@ -3631,7 +3631,7 @@ followDistance = 1;
 				try
 				{
 					if(decompressors[0] != null)
-						decompressors[0].method234(abyte0.length, abyte0, i);
+						decompressors[0].readCacheData(abyte0.length, abyte0, i);
 				}
 				catch(Exception _ex)
 				{
@@ -3765,10 +3765,10 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(57);
-				stream.method432(anInt1285);
-				stream.method432(i1);
-				stream.method431(anInt1283);
-				stream.method432(anInt1284);
+				stream.writeWordBigA(anInt1285);
+				stream.writeWordBigA(i1);
+				stream.writeWordLEA(anInt1283);
+				stream.writeWordBigA(anInt1284);
 			}
 		}
 		if(l == 234)
@@ -3781,18 +3781,18 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(236);
-			stream.method431(k + baseY);
+			stream.writeWordLEA(k + baseY);
 			stream.writeWord(i1);
-			stream.method431(j + baseX);
+			stream.writeWordLEA(j + baseX);
 		}
-		if(l == 62 && method66(i1, k, j))
+		if(l == 62 && objectActionAtTile(i1, k, j))
 		{
 			stream.createFrame(192);
 			stream.writeWord(anInt1284);
-			stream.method431(i1 >> 14 & 0x7fff);
-			stream.method433(k + baseY);
-			stream.method431(anInt1283);
-			stream.method433(j + baseX);
+			stream.writeWordLEA(i1 >> 14 & 0x7fff);
+			stream.writeWordLEBigA(k + baseY);
+			stream.writeWordLEA(anInt1283);
+			stream.writeWordLEBigA(j + baseX);
 			stream.writeWord(anInt1285);
 		}
 		if(l == 511)
@@ -3805,19 +3805,19 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(25);
-			stream.method431(anInt1284);
-			stream.method432(anInt1285);
+			stream.writeWordLEA(anInt1284);
+			stream.writeWordBigA(anInt1285);
 			stream.writeWord(i1);
-			stream.method432(k + baseY);
-			stream.method433(anInt1283);
+			stream.writeWordBigA(k + baseY);
+			stream.writeWordLEBigA(anInt1283);
 			stream.writeWord(j + baseX);
 		}
 		if(l == 74)
 		{
 			stream.createFrame(122);
-			stream.method433(k);
-			stream.method432(j);
-			stream.method431(i1);
+			stream.writeWordLEBigA(k);
+			stream.writeWordBigA(j);
+			stream.writeWordLEA(i1);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -3837,7 +3837,7 @@ followDistance = 1;
 				switch(k){
 					case 19144:
 						sendFrame248(15106,3213);
-						method60(15106);
+						resetInterfaceAnim(15106);
 						inputTaken = true;
 						break;
 					default:
@@ -3879,7 +3879,7 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(155);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
 		if(l == 779)
@@ -3893,14 +3893,14 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(153);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
 		if(l == 516)
 			if(!menuOpen)
-				worldController.method312(super.saveClickY - 4, super.saveClickX - 4);
+				worldController.setClick(super.saveClickY - 4, super.saveClickX - 4);
 			else
-				worldController.method312(k - 4, j - 4);
+				worldController.setClick(k - 4, j - 4);
 		if(l == 1062)
 		{
 			anInt924 += baseX;
@@ -3910,10 +3910,10 @@ followDistance = 1;
 				stream.writeDWordBigEndian(0xe63271);
 				anInt924 = 0;
 			}
-			method66(i1, k, j);
+			objectActionAtTile(i1, k, j);
 			stream.createFrame(228);
-			stream.method432(i1 >> 14 & 0x7fff);
-			stream.method432(k + baseY);
+			stream.writeWordBigA(i1 >> 14 & 0x7fff);
+			stream.writeWordBigA(k + baseY);
 			stream.writeWord(j + baseX);
 		}
 		if(l == 679 && !aBoolean1149)
@@ -3925,9 +3925,9 @@ followDistance = 1;
 		if(l == 431)
 		{
 			stream.createFrame(129);
-			stream.method432(j);
+			stream.writeWordBigA(j);
 			stream.writeWord(k);
-			stream.method432(i1);
+			stream.writeWordBigA(i1);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -3957,9 +3957,9 @@ followDistance = 1;
 		if(l == 53)
 		{
 			stream.createFrame(135);
-			stream.method431(j);
-			stream.method432(k);
-			stream.method431(i1);
+			stream.writeWordLEA(j);
+			stream.writeWordBigA(k);
+			stream.writeWordLEA(i1);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -3972,9 +3972,9 @@ followDistance = 1;
 		if(l == 539)
 		{
 			stream.createFrame(16);
-			stream.method432(i1);
-			stream.method433(j);
-			stream.method433(k);
+			stream.writeWordBigA(i1);
+			stream.writeWordLEBigA(j);
+			stream.writeWordLEBigA(k);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4002,7 +4002,7 @@ followDistance = 1;
 					if(l == 484)
 					{
 						stream.createFrame(139);
-						stream.method431(playerIndices[j3]);
+						stream.writeWordLEA(playerIndices[j3]);
 					}
 					if(l == 6)
 					{
@@ -4027,10 +4027,10 @@ followDistance = 1;
 		{
 			stream.createFrame(53);
 			stream.writeWord(j);
-			stream.method432(anInt1283);
-			stream.method433(i1);
+			stream.writeWordBigA(anInt1283);
+			stream.writeWordLEBigA(i1);
 			stream.writeWord(anInt1284);
-			stream.method431(anInt1285);
+			stream.writeWordLEA(anInt1285);
 			stream.writeWord(k);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
@@ -4044,9 +4044,9 @@ followDistance = 1;
 		if(l == 847)
 		{
 			stream.createFrame(87);
-			stream.method432(i1);
+			stream.writeWordBigA(i1);
 			stream.writeWord(k);
-			stream.method432(j);
+			stream.writeWordBigA(j);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4086,9 +4086,9 @@ followDistance = 1;
 		if(l == 78)
 		{
 			stream.createFrame(117);
-			stream.method433(k);
-			stream.method433(i1);
-			stream.method431(j);
+			stream.writeWordLEBigA(k);
+			stream.writeWordLEBigA(i1);
+			stream.writeWordLEA(j);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4116,7 +4116,7 @@ followDistance = 1;
 					anInt986 = 0;
 				}
 				stream.createFrame(73);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
 		if(l == 213)
@@ -4129,16 +4129,16 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(79);
-			stream.method431(k + baseY);
+			stream.writeWordLEA(k + baseY);
 			stream.writeWord(i1);
-			stream.method432(j + baseX);
+			stream.writeWordBigA(j + baseX);
 		}
 		if(l == 632)
 		{
 			stream.createFrame(145);
-			stream.method432(k);
-			stream.method432(j);
-			stream.method432(i1);
+			stream.writeWordBigA(k);
+			stream.writeWordBigA(j);
+			stream.writeWordBigA(i1);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4280,9 +4280,9 @@ followDistance = 1;
 		if(l == 493)
 		{
 			stream.createFrame(75);
-			stream.method433(k);
-			stream.method431(j);
-			stream.method432(i1);
+			stream.writeWordLEBigA(k);
+			stream.writeWordLEA(j);
+			stream.writeWordBigA(i1);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4302,9 +4302,9 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(156);
-			stream.method432(j + baseX);
-			stream.method431(k + baseY);
-			stream.method433(i1);
+			stream.writeWordBigA(j + baseX);
+			stream.writeWordLEA(k + baseY);
+			stream.writeWordLEBigA(i1);
 		}
 		if(l == 94)
 		{
@@ -4316,10 +4316,10 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(181);
-			stream.method431(k + baseY);
+			stream.writeWordLEA(k + baseY);
 			stream.writeWord(i1);
-			stream.method431(j + baseX);
-			stream.method432(anInt1137);
+			stream.writeWordLEA(j + baseX);
+			stream.writeWordBigA(anInt1137);
 		}
 		if(l == 646)
 		{
@@ -4332,7 +4332,7 @@ followDistance = 1;
 				if(variousSettings[i2] != class9_2.anIntArray212[0])
 				{
 					variousSettings[i2] = class9_2.anIntArray212[0];
-					method33(i2);
+					applyVarpSetting(i2);
 					needDrawTabArea = true;
 				}
 			}
@@ -4355,7 +4355,7 @@ followDistance = 1;
 					anInt1226 = 0;
 				}
 				stream.createFrame(17);
-				stream.method433(i1);
+				stream.writeWordLEBigA(i1);
 			}
 		}
 		if(l == 965)
@@ -4390,8 +4390,8 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(131);
-				stream.method433(i1);
-				stream.method432(anInt1137);
+				stream.writeWordLEBigA(i1);
+				stream.writeWordBigA(anInt1137);
 			}
 		}
 		if(l == 200)
@@ -4403,7 +4403,7 @@ followDistance = 1;
 			{
 				EntityDef entityDef = class30_sub2_sub4_sub1_sub1_5.desc;
 				if(entityDef.childrenIDs != null)
-					entityDef = entityDef.method161();
+					entityDef = entityDef.getChildDefinition();
 				if(entityDef != null)
 				{
 					String s9;
@@ -4417,11 +4417,11 @@ followDistance = 1;
 		}
 		if(l == 900)
 		{
-			method66(i1, k, j);
+			objectActionAtTile(i1, k, j);
 			stream.createFrame(252);
-			stream.method433(i1 >> 14 & 0x7fff);
-			stream.method431(k + baseY);
-			stream.method432(j + baseX);
+			stream.writeWordLEBigA(i1 >> 14 & 0x7fff);
+			stream.writeWordLEA(k + baseY);
+			stream.writeWordBigA(j + baseX);
 		}
 		if(l == 412)
 		{
@@ -4434,7 +4434,7 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(72);
-				stream.method432(i1);
+				stream.writeWordBigA(i1);
 			}
 		}
 		if(l == 365)
@@ -4448,8 +4448,8 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(249);
-				stream.method432(i1);
-				stream.method431(anInt1137);
+				stream.writeWordBigA(i1);
+				stream.writeWordLEA(anInt1137);
 			}
 		}
 		if(l == 729)
@@ -4463,7 +4463,7 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(39);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
 		if(l == 577)
@@ -4477,16 +4477,16 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(139);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
-		if(l == 956 && method66(i1, k, j))
+		if(l == 956 && objectActionAtTile(i1, k, j))
 		{
 			stream.createFrame(35);
-			stream.method431(j + baseX);
-			stream.method432(anInt1137);
-			stream.method432(k + baseY);
-			stream.method431(i1 >> 14 & 0x7fff);
+			stream.writeWordLEA(j + baseX);
+			stream.writeWordBigA(anInt1137);
+			stream.writeWordBigA(k + baseY);
+			stream.writeWordLEA(i1 >> 14 & 0x7fff);
 		}
 		if(l == 567)
 		{
@@ -4498,9 +4498,9 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(23);
-			stream.method431(k + baseY);
-			stream.method431(i1);
-			stream.method431(j + baseX);
+			stream.writeWordLEA(k + baseY);
+			stream.writeWordLEA(i1);
+			stream.writeWordLEA(j + baseX);
 		}
 		if(l == 867)
 		{
@@ -4513,9 +4513,9 @@ followDistance = 1;
 				anInt1175 = 0;
 			}
 			stream.createFrame(43);
-			stream.method431(k);
-			stream.method432(i1);
-			stream.method432(j);
+			stream.writeWordLEA(k);
+			stream.writeWordBigA(i1);
+			stream.writeWordBigA(j);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4529,9 +4529,9 @@ followDistance = 1;
 		{
 			stream.createFrame(237);
 			stream.writeWord(j);
-			stream.method432(i1);
+			stream.writeWordBigA(i1);
 			stream.writeWord(k);
-			stream.method432(anInt1137);
+			stream.writeWordBigA(anInt1137);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4575,10 +4575,10 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(14);
-				stream.method432(anInt1284);
+				stream.writeWordBigA(anInt1284);
 				stream.writeWord(i1);
 				stream.writeWord(anInt1285);
-				stream.method431(anInt1283);
+				stream.writeWordLEA(anInt1283);
 			}
 		}
 		if(l == 639)
@@ -4613,8 +4613,8 @@ followDistance = 1;
 		{
 			stream.createFrame(41);
 			stream.writeWord(i1);
-			stream.method432(j);
-			stream.method432(k);
+			stream.writeWordBigA(j);
+			stream.writeWordBigA(k);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4643,32 +4643,32 @@ followDistance = 1;
 					anInt1155 = 0;
 				}
 				stream.createFrame(18);
-				stream.method431(i1);
+				stream.writeWordLEA(i1);
 			}
 		}
 		if(l == 113)
 		{
-			method66(i1, k, j);
+			objectActionAtTile(i1, k, j);
 			stream.createFrame(70);
-			stream.method431(j + baseX);
+			stream.writeWordLEA(j + baseX);
 			stream.writeWord(k + baseY);
-			stream.method433(i1 >> 14 & 0x7fff);
+			stream.writeWordLEBigA(i1 >> 14 & 0x7fff);
 		}
 		if(l == 872)
 		{
-			method66(i1, k, j);
+			objectActionAtTile(i1, k, j);
 			stream.createFrame(234);
-			stream.method433(j + baseX);
-			stream.method432(i1 >> 14 & 0x7fff);
-			stream.method433(k + baseY);
+			stream.writeWordLEBigA(j + baseX);
+			stream.writeWordBigA(i1 >> 14 & 0x7fff);
+			stream.writeWordLEBigA(k + baseY);
 		}
 		if(l == 502)
 		{
-			method66(i1, k, j);
+			objectActionAtTile(i1, k, j);
 			stream.createFrame(132);
-			stream.method433(j + baseX);
+			stream.writeWordLEBigA(j + baseX);
 			stream.writeWord(i1 >> 14 & 0x7fff);
-			stream.method432(k + baseY);
+			stream.writeWordBigA(k + baseY);
 		}
 		if(l == 1125)
 		{
@@ -4693,7 +4693,7 @@ followDistance = 1;
 			{
 				int l2 = class9_3.valueIndexArray[0][1];
 				variousSettings[l2] = 1 - variousSettings[l2];
-				method33(l2);
+				applyVarpSetting(l2);
 				needDrawTabArea = true;
 			}
 		}
@@ -4729,9 +4729,9 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(253);
-			stream.method431(j + baseX);
-			stream.method433(k + baseY);
-			stream.method432(i1);
+			stream.writeWordLEA(j + baseX);
+			stream.writeWordLEBigA(k + baseY);
+			stream.writeWordBigA(i1);
 		}
 		if(l == 1448)
 		{
@@ -4749,7 +4749,7 @@ followDistance = 1;
 
 	}
 
-	private void method70()
+	private void checkWildernessStatus()
 	{
 		anInt1251 = 0;
 		int j = (myPlayer.x >> 7) + baseX;
@@ -4787,9 +4787,9 @@ followDistance = 1;
 			menuActionRow++;
 		}
 		int j = -1;
-		for(int k = 0; k < Model.anInt1687; k++)
+		for(int k = 0; k < Model.mousePickCount; k++)
 		{
-			int l = Model.anIntArray1688[k];
+			int l = Model.mousePickResults[k];
 			int i1 = l & 0x7f;
 			int j1 = l >> 7 & 0x7f;
 			int k1 = l >> 29 & 3;
@@ -4797,11 +4797,11 @@ followDistance = 1;
 			if(l == j)
 				continue;
 			j = l;
-			if(k1 == 2 && worldController.method304(plane, i1, j1, l) >= 0)
+			if(k1 == 2 && worldController.getObjectConfig(plane, i1, j1, l) >= 0)
 			{
 				ObjectDef class46 = ObjectDef.forID(l1);
 				if(class46.childrenIDs != null)
-					class46 = class46.method580();
+					class46 = class46.getChildDef();
 				if(class46 == null)
 					continue;
 				if(itemSelected == 1)
@@ -5004,7 +5004,7 @@ followDistance = 1;
 		intGroundArray = null;
 		byteGroundArray = null;
 		worldController = null;
-		aClass11Array1230 = null;
+		aCollisionMapArray1230 = null;
 		anIntArrayArray901 = null;
 		anIntArrayArray825 = null;
 		bigX = null;
@@ -5098,7 +5098,7 @@ followDistance = 1;
 		Texture.nullLoader();
 		WorldController.nullLoader();
 		Model.nullLoader();
-		Class36.nullLoader();
+		AnimFrame.nullLoader();
 		System.gc();
 	}
 
@@ -5126,7 +5126,7 @@ followDistance = 1;
 			return this;
 	}
 
-	private void method73() {
+	private void processKeyInput() {
 		do {
 			int j = readChar(-796);
 			if(j == -1)
@@ -5161,7 +5161,7 @@ followDistance = 1;
 						stream.writeWordBigEndian(0);
 						int k = stream.currentOffset;
 						stream.writeQWord(aLong953);
-						TextInput.method526(promptInput, stream);
+						TextInput.encodeText(promptInput, stream);
 						stream.writeBytes(stream.currentOffset - k);
 						promptInput = TextInput.processText(promptInput);
 						//promptInput = Censor.doCensor(promptInput);
@@ -5243,7 +5243,7 @@ followDistance = 1;
 							anIntArray1045[300] = amt;
 							if(variousSettings[300] != amt) {
 								variousSettings[300] = amt;
-								method33(300);
+								applyVarpSetting(300);
 								needDrawTabArea = true;
 								if(dialogID != -1)
 									inputTaken = true;
@@ -5271,7 +5271,7 @@ followDistance = 1;
 							printDebug();
 						if(inputString.equals("::prefetchmusic")) {
 							for(int j1 = 0; j1 < onDemandFetcher.getVersionCount(2); j1++)
-								onDemandFetcher.method563((byte)1, 2, j1);
+								onDemandFetcher.requestArchive((byte)1, 2, j1);
 
 						}
 						if(inputString.equals("::x10on"))
@@ -5290,7 +5290,7 @@ followDistance = 1;
 							for(int k1 = 0; k1 < 4; k1++) {
 								for(int i2 = 1; i2 < 103; i2++) {
 									for(int k2 = 1; k2 < 103; k2++)
-										aClass11Array1230[k1].anIntArrayArray294[i2][k2] = 0;
+										aCollisionMapArray1230[k1].flags[i2][k2] = 0;
 
 								}
 							}
@@ -5303,7 +5303,7 @@ followDistance = 1;
 							int ModelIndex = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter model ID", "Model", 3));
 							byte[] abyte0 = getModel(ModelIndex);
 							if(abyte0 != null && abyte0.length > 0) {
-								decompressors[1].method234(abyte0.length, abyte0, ModelIndex);
+								decompressors[1].readCacheData(abyte0.length, abyte0, ModelIndex);
 								pushMessage("Model: [" + ModelIndex + "] added successfully!", 0, "");
 							} else {
 								pushMessage("Unable to find the model. "+ModelIndex, 0, "");
@@ -5394,17 +5394,17 @@ followDistance = 1;
 						stream.createFrame(4);
 						stream.writeWordBigEndian(0);
 						int j3 = stream.currentOffset;
-						stream.method425(i3);
-						stream.method425(j2);
+						stream.write128MinusByte(i3);
+						stream.write128MinusByte(j2);
 						aStream_834.currentOffset = 0;
-						TextInput.method526(inputString, aStream_834);
-						stream.method441(0, aStream_834.buffer, aStream_834.currentOffset);
+						TextInput.encodeText(inputString, aStream_834);
+						stream.writeBytesReverse128(0, aStream_834.buffer, aStream_834.currentOffset);
 						stream.writeBytes(stream.currentOffset - j3);
 						inputString = TextInput.processText(inputString);
 						//inputString = Censor.doCensor(inputString);
 						myPlayer.textSpoken = inputString;
-						myPlayer.anInt1513 = j2;
-						myPlayer.anInt1531 = i3;
+						myPlayer.turnAroundAnimId = j2;
+						myPlayer.animResetCycle = i3;
 						myPlayer.textCycle = 150;
 						if(myPrivilege == 2)
 							pushMessage(myPlayer.textSpoken, 2, "@cr2@" + myPlayer.name);
@@ -5776,7 +5776,7 @@ followDistance = 1;
 				for(int k1 = 0; k1 < 7; k1++)
 				{
 					int l1 = anIntArray1065[k1];
-					if(l1 >= 0 && !IDK.cache[l1].method537())
+					if(l1 >= 0 && !IDK.cache[l1].isIDKHeadModelReady())
 						return;
 				}
 
@@ -5787,24 +5787,24 @@ followDistance = 1;
 				{
 					int k2 = anIntArray1065[j2];
 					if(k2 >= 0)
-						aclass30_sub2_sub4_sub6s[i2++] = IDK.cache[k2].method538();
+						aclass30_sub2_sub4_sub6s[i2++] = IDK.cache[k2].getIDKHeadModel();
 				}
 
 				Model model = new Model(i2, aclass30_sub2_sub4_sub6s);
 				for(int l2 = 0; l2 < 5; l2++)
 					if(anIntArray990[l2] != 0)
 					{
-						model.method476(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
+						model.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
 						if(l2 == 1)
-							model.method476(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
+							model.replaceColor(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
 					}
 
-				model.method469();
-				model.method470(Animation.anims[myPlayer.anInt1511].anIntArray353[0]);
-				model.method479(64, 850, -30, -50, -30, true);
+				model.buildLabelGroups();
+				model.applyTransform(Animation.anims[myPlayer.standAnimId].anIntArray353[0]);
+				model.calculateLighting(64, 850, -30, -50, -30, true);
 				class9.anInt233 = 5;
 				class9.mediaID = 0;
-				RSInterface.method208(aBoolean994, model);
+				RSInterface.clearModelCache(aBoolean994, model);
 			}
 			return;
 		}
@@ -5815,20 +5815,20 @@ followDistance = 1;
 			rsInterface.modelRotation1 = verticleTilt;
 			rsInterface.modelRotation2 = animationSpeed;
 			if(aBoolean1031) {
-				Model characterDisplay = myPlayer.method452();
+				Model characterDisplay = myPlayer.getPlayerModel();
 				for(int l2 = 0; l2 < 5; l2++)
 					if(anIntArray990[l2] != 0) {
-						characterDisplay.method476(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
+						characterDisplay.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
 						if(l2 == 1)
-							characterDisplay.method476(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
+							characterDisplay.replaceColor(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
 					}
-				int staticFrame = myPlayer.anInt1511;
-				characterDisplay.method469();
-				characterDisplay.method470(Animation.anims[staticFrame].anIntArray353[0]);
-				//characterDisplay.method479(64, 850, -30, -50, -30, true);
+				int staticFrame = myPlayer.standAnimId;
+				characterDisplay.buildLabelGroups();
+				characterDisplay.applyTransform(Animation.anims[staticFrame].anIntArray353[0]);
+				//characterDisplay.calculateLighting(64, 850, -30, -50, -30, true);
 				rsInterface.anInt233 = 5;
 				rsInterface.mediaID = 0;
-				RSInterface.method208(aBoolean994, characterDisplay);
+				RSInterface.clearModelCache(aBoolean994, characterDisplay);
 			}
 			return;
 		}
@@ -6013,8 +6013,8 @@ followDistance = 1;
 				{
 					int l = 329 - i * 13;
 					int k1 = 4;
-					textDrawingArea.method385(0, "From", l, k1);
-					textDrawingArea.method385(65535, "From", l - 1, k1);
+					textDrawingArea.drawText(0, "From", l, k1);
+					textDrawingArea.drawText(65535, "From", l - 1, k1);
 					k1 += textDrawingArea.getTextWidth("From ");
 					if(byte1 == 1)
 					{
@@ -6026,24 +6026,24 @@ followDistance = 1;
 						modIcons[1].drawBackground(k1, l - 12);
 						k1 += 12;
 					}
-					textDrawingArea.method385(0, s + ": " + chatMessages[j], l, k1);
-					textDrawingArea.method385(65535, s + ": " + chatMessages[j], l - 1, k1);
+					textDrawingArea.drawText(0, s + ": " + chatMessages[j], l, k1);
+					textDrawingArea.drawText(65535, s + ": " + chatMessages[j], l - 1, k1);
 					if(++i >= 5)
 						return;
 				}
 				if(k == 5 && privateChatMode < 2)
 				{
 					int i1 = 329 - i * 13;
-					textDrawingArea.method385(0, chatMessages[j], i1, 4);
-					textDrawingArea.method385(65535, chatMessages[j], i1 - 1, 4);
+					textDrawingArea.drawText(0, chatMessages[j], i1, 4);
+					textDrawingArea.drawText(65535, chatMessages[j], i1 - 1, 4);
 					if(++i >= 5)
 						return;
 				}
 				if(k == 6 && privateChatMode < 2)
 				{
 					int j1 = 329 - i * 13;
-					textDrawingArea.method385(0, "To " + s + ": " + chatMessages[j], j1, 4);
-					textDrawingArea.method385(65535, "To " + s + ": " + chatMessages[j], j1 - 1, 4);
+					textDrawingArea.drawText(0, "To " + s + ": " + chatMessages[j], j1, 4);
+					textDrawingArea.drawText(65535, "To " + s + ": " + chatMessages[j], j1 - 1, 4);
 					if(++i >= 5)
 						return;
 				}
@@ -6203,12 +6203,12 @@ followDistance = 1;
 		}
 	}
 
-	private void method81(Sprite sprite, int j, int k) {
+	private void drawMinimapEdgeSprite(Sprite sprite, int j, int k) {
 		int l = k * k + j * j;
 		if(l > 4225 && l < 0x15f90) {
 			int i1 = minimapInt1 + minimapInt2 & 0x7ff;
-			int j1 = Model.modelIntArray1[i1];
-			int k1 = Model.modelIntArray2[i1];
+			int j1 = Model.SINE[i1];
+			int k1 = Model.COSINE[i1];
 			j1 = (j1 * 256) / (minimapInt3 + 256);
 			k1 = (k1 * 256) / (minimapInt3 + 256);
 			int l1 = j * j1 + k * k1 >> 16;
@@ -6216,7 +6216,7 @@ followDistance = 1;
 			double d = Math.atan2(l1, i2);
 			int j2 = (int)(Math.sin(d) * 63D);
 			int k2 = (int)(Math.cos(d) * 57D);
-			mapEdge.method353(83 - k2 - 20, d, (94 + j2 + 4) - 10);
+			mapEdge.drawRotated(83 - k2 - 20, d, (94 + j2 + 4) - 10);
 		} else {
 			markMinimap(sprite, k, j);
 		}
@@ -6389,7 +6389,7 @@ followDistance = 1;
 		}
 	}
 
-	private int method83(int i, int j, int k)
+	private int blendColors(int i, int j, int k)
 	{
 		int l = 256 - k;
 		return ((i & 0xff00ff) * l + (j & 0xff00ff) * k & 0xff00ff00) + ((i & 0xff00) * l + (j & 0xff00) * k & 0xff0000) >> 8;
@@ -6553,7 +6553,7 @@ followDistance = 1;
 				anInt1055 = 0;
 				anInt1054 = -1;
 				aBoolean1047 = true;
-				method45();
+				resetDefaultAppearance();
 				for(int j3 = 0; j3 < 5; j3++)
 					anIntArray990[j3] = 0;
 
@@ -6760,7 +6760,7 @@ followDistance = 1;
 		bigY[l3++] = j1;
 		boolean flag1 = false;
 		int j4 = bigX.length;
-		int ai[][] = aClass11Array1230[plane].anIntArrayArray294;
+		int ai[][] = aCollisionMapArray1230[plane].flags;
 		while(i4 != l3) 
 		{
 			j3 = bigX[i4];
@@ -6773,18 +6773,18 @@ followDistance = 1;
 			}
 			if(i1 != 0)
 			{
-				if((i1 < 5 || i1 == 10) && aClass11Array1230[plane].method219(k2, j3, k3, j, i1 - 1, i2))
+				if((i1 < 5 || i1 == 10) && aCollisionMapArray1230[plane].canReachWall(k2, j3, k3, j, i1 - 1, i2))
 				{
 					flag1 = true;
 					break;
 				}
-				if(i1 < 10 && aClass11Array1230[plane].method220(k2, i2, k3, i1 - 1, j, j3))
+				if(i1 < 10 && aCollisionMapArray1230[plane].canReachDeco(k2, i2, k3, i1 - 1, j, j3))
 				{
 					flag1 = true;
 					break;
 				}
 			}
-			if(k1 != 0 && k != 0 && aClass11Array1230[plane].method221(i2, k2, j3, k, l1, k1, k3))
+			if(k1 != 0 && k != 0 && aCollisionMapArray1230[plane].canReachObject(i2, k2, j3, k, l1, k1, k3))
 			{
 				flag1 = true;
 				break;
@@ -6941,7 +6941,7 @@ followDistance = 1;
 				stream.createFrame(98);
 				stream.writeWordBigEndian(k4 + k4 + 3);
 			}
-			stream.method433(k6 + baseX);
+			stream.writeWordLEBigA(k6 + baseX);
 			destX = bigX[0];
 			destY = bigY[0];
 			for(int j7 = 1; j7 < k4; j7++)
@@ -6951,14 +6951,14 @@ followDistance = 1;
 				stream.writeWordBigEndian(bigY[i4] - i7);
 			}
 
-			stream.method431(i7 + baseY);
-			stream.method424(super.keyArray[5] != 1 ? 0 : 1);
+			stream.writeWordLEA(i7 + baseY);
+			stream.writeNegByte(super.keyArray[5] != 1 ? 0 : 1);
 			return true;
 		}
 		return i != 1;
 	}
 
-	private void method86(Stream stream)
+	private void parseNPCUpdateMasks(Stream stream)
 	{
 		for(int j = 0; j < anInt893; j++)
 		{
@@ -6967,7 +6967,7 @@ followDistance = 1;
 			int l = stream.readUnsignedByte();
 			if((l & 0x10) != 0)
 			{
-				int i1 = stream.method434();
+				int i1 = stream.readWordLE();
 				if(i1 == 65535)
 					i1 = -1;
 				int i2 = stream.readUnsignedByte();
@@ -6976,45 +6976,45 @@ followDistance = 1;
 					int l2 = Animation.anims[i1].anInt365;
 					if(l2 == 1)
 					{
-						npc.anInt1527 = 0;
-						npc.anInt1528 = 0;
-						npc.anInt1529 = i2;
-						npc.anInt1530 = 0;
+						npc.animFrame = 0;
+						npc.animCycle = 0;
+						npc.animDelay = i2;
+						npc.animFrameCount = 0;
 					}
 					if(l2 == 2)
-						npc.anInt1530 = 0;
+						npc.animFrameCount = 0;
 				} else
 				if(i1 == -1 || npc.anim == -1 || Animation.anims[i1].anInt359 >= Animation.anims[npc.anim].anInt359)
 				{
 					npc.anim = i1;
-					npc.anInt1527 = 0;
-					npc.anInt1528 = 0;
-					npc.anInt1529 = i2;
-					npc.anInt1530 = 0;
-					npc.anInt1542 = npc.smallXYIndex;
+					npc.animFrame = 0;
+					npc.animCycle = 0;
+					npc.animDelay = i2;
+					npc.animFrameCount = 0;
+					npc.pathRemainder = npc.smallXYIndex;
 				}
 			}
 			if((l & 8) != 0)
 			{
-				int j1 = stream.method426();
-				int j2 = stream.method427();
+				int j1 = stream.readUnsignedByteAdd();
+				int j2 = stream.readUnsignedByteNeg();
 				npc.updateHitData(j2, j1, loopCycle);
 				npc.loopCycleStatus = loopCycle + 300;
-				npc.currentHealth = stream.method426();
+				npc.currentHealth = stream.readUnsignedByteAdd();
 				npc.maxHealth = stream.readUnsignedByte();
 			}
 			if((l & 0x80) != 0)
 			{
-				npc.anInt1520 = stream.readUnsignedWord();
+				npc.spotAnimId = stream.readUnsignedWord();
 				int k1 = stream.readDWord();
-				npc.anInt1524 = k1 >> 16;
-				npc.anInt1523 = loopCycle + (k1 & 0xffff);
-				npc.anInt1521 = 0;
-				npc.anInt1522 = 0;
-				if(npc.anInt1523 > loopCycle)
-					npc.anInt1521 = -1;
-				if(npc.anInt1520 == 65535)
-					npc.anInt1520 = -1;
+				npc.spotAnimHeight = k1 >> 16;
+				npc.spotAnimDelay = loopCycle + (k1 & 0xffff);
+				npc.spotAnimFrame = 0;
+				npc.spotAnimCycle = 0;
+				if(npc.spotAnimDelay > loopCycle)
+					npc.spotAnimFrame = -1;
+				if(npc.spotAnimId == 65535)
+					npc.spotAnimId = -1;
 			}
 			if((l & 0x20) != 0)
 			{
@@ -7031,28 +7031,28 @@ followDistance = 1;
 			}
 			if((l & 0x40) != 0)
 			{
-				int l1 = stream.method427();
-				int k2 = stream.method428();
+				int l1 = stream.readUnsignedByteNeg();
+				int k2 = stream.readUnsignedByteSub();
 				npc.updateHitData(k2, l1, loopCycle);
 				npc.loopCycleStatus = loopCycle + 300;
-				npc.currentHealth = stream.method428();
-				npc.maxHealth = stream.method427();
+				npc.currentHealth = stream.readUnsignedByteSub();
+				npc.maxHealth = stream.readUnsignedByteNeg();
 			}
 			if((l & 2) != 0)
 			{
-				npc.desc = EntityDef.forID(stream.method436());
-				npc.anInt1540 = npc.desc.aByte68;
-				npc.anInt1504 = npc.desc.anInt79;
-				npc.anInt1554 = npc.desc.walkAnim;
-				npc.anInt1555 = npc.desc.anInt58;
-				npc.anInt1556 = npc.desc.anInt83;
-				npc.anInt1557 = npc.desc.anInt55;
-				npc.anInt1511 = npc.desc.standAnim;
+				npc.desc = EntityDef.forID(stream.readWordLEBigA());
+				npc.tileSize = npc.desc.aByte68;
+				npc.turnSpeed = npc.desc.anInt79;
+				npc.walkBackAnimId = npc.desc.walkAnim;
+				npc.walkLeftAnimId = npc.desc.anInt58;
+				npc.walkRightAnimId = npc.desc.anInt83;
+				npc.runAnimId = npc.desc.anInt55;
+				npc.standAnimId = npc.desc.standAnim;
 			}
 			if((l & 4) != 0)
 			{
-				npc.anInt1538 = stream.method434();
-				npc.anInt1539 = stream.method434();
+				npc.textEffect = stream.readWordLE();
+				npc.textAlpha = stream.readWordLE();
 			}
 		}
 	}
@@ -7062,7 +7062,7 @@ followDistance = 1;
 		if(menuActionRow >= 400)
 			return;
 		if(entityDef.childrenIDs != null)
-			entityDef = entityDef.method161();
+			entityDef = entityDef.getChildDefinition();
 		if(entityDef == null)
 			return;
 		if(!entityDef.aBoolean84)
@@ -7228,33 +7228,33 @@ followDistance = 1;
 
 	}
 
-	private void method89(Class30_Sub1 class30_sub1)
+	private void updateSpawnObjectInfo(SpawnObjectNode spawnObjectNode)
 	{
 		int i = 0;
 		int j = -1;
 		int k = 0;
 		int l = 0;
-		if(class30_sub1.anInt1296 == 0)
-			i = worldController.method300(class30_sub1.anInt1295, class30_sub1.anInt1297, class30_sub1.anInt1298);
-		if(class30_sub1.anInt1296 == 1)
-			i = worldController.method301(class30_sub1.anInt1295, class30_sub1.anInt1297, class30_sub1.anInt1298);
-		if(class30_sub1.anInt1296 == 2)
-			i = worldController.method302(class30_sub1.anInt1295, class30_sub1.anInt1297, class30_sub1.anInt1298);
-		if(class30_sub1.anInt1296 == 3)
-			i = worldController.method303(class30_sub1.anInt1295, class30_sub1.anInt1297, class30_sub1.anInt1298);
+		if(spawnObjectNode.group == 0)
+			i = worldController.getWallObjectUID(spawnObjectNode.objectPlane, spawnObjectNode.objectX, spawnObjectNode.objectY);
+		if(spawnObjectNode.group == 1)
+			i = worldController.getWallDecorationUID(spawnObjectNode.objectPlane, spawnObjectNode.objectX, spawnObjectNode.objectY);
+		if(spawnObjectNode.group == 2)
+			i = worldController.getInteractiveObjectUID(spawnObjectNode.objectPlane, spawnObjectNode.objectX, spawnObjectNode.objectY);
+		if(spawnObjectNode.group == 3)
+			i = worldController.getGroundDecorationUID(spawnObjectNode.objectPlane, spawnObjectNode.objectX, spawnObjectNode.objectY);
 		if(i != 0)
 		{
-			int i1 = worldController.method304(class30_sub1.anInt1295, class30_sub1.anInt1297, class30_sub1.anInt1298, i);
+			int i1 = worldController.getObjectConfig(spawnObjectNode.objectPlane, spawnObjectNode.objectX, spawnObjectNode.objectY, i);
 			j = i >> 14 & 0x7fff;
 			k = i1 & 0x1f;
 			l = i1 >> 6;
 		}
-		class30_sub1.anInt1299 = j;
-		class30_sub1.anInt1301 = k;
-		class30_sub1.anInt1300 = l;
+		spawnObjectNode.previousId = j;
+		spawnObjectNode.previousType = k;
+		spawnObjectNode.previousOrientation = l;
 	}
 
-	private void method90()
+	private void processSounds()
 	{
 		for(int i = 0; i < anInt1062; i++)
 			if(anIntArray1250[i] <= 0)
@@ -7268,7 +7268,7 @@ followDistance = 1;
 							flag1 = true;
 					} else
 					{
-						Stream stream = Sounds.method241(anIntArray1241[i], anIntArray1207[i]);
+						Stream stream = Sounds.getSoundBuffer(anIntArray1241[i], anIntArray1207[i]);
 						if(System.currentTimeMillis() + (long)(stream.currentOffset / 22) > aLong1172 + (long)(anInt1257 / 22))
 						{
 							anInt1257 = stream.currentOffset;
@@ -7314,7 +7314,7 @@ followDistance = 1;
 			{
 				nextSong = currentSong;
 				songChanging = true;
-				onDemandFetcher.method558(2, nextSong);
+				onDemandFetcher.requestFile(2, nextSong);
 			}
 		}
 	}
@@ -7354,15 +7354,15 @@ followDistance = 1;
 			intGroundArray = new int[4][105][105];
 			worldController = new WorldController(intGroundArray);
 			for(int j = 0; j < 4; j++)
-				aClass11Array1230[j] = new Class11();
+				aCollisionMapArray1230[j] = new CollisionMap();
 
 			aClass30_Sub2_Sub1_Sub1_1263 = new Sprite(512, 512);
 			StreamLoader streamLoader_6 = streamLoaderForName(5, "update list", "versionlist", expectedCRCs[5], 60);
 			drawLoadingText(60, "Connecting to update server");
 			onDemandFetcher = new OnDemandFetcher();
 			onDemandFetcher.start(streamLoader_6, this);
-			Class36.method528(onDemandFetcher.getAnimCount());
-			Model.method459(onDemandFetcher.getVersionCount(0), onDemandFetcher);
+			AnimFrame.loadCustomAnimations(onDemandFetcher.getAnimCount());
+			Model.initModelStorage(onDemandFetcher.getVersionCount(0), onDemandFetcher);
 			ModelDecompressor.loadModels();
 			ModelDecompressor.loadModels2();
 			preloadModels();
@@ -7375,7 +7375,7 @@ followDistance = 1;
 				}
 				catch(Exception _ex) { }
 				songChanging = true;
-				onDemandFetcher.method558(2, nextSong);
+				onDemandFetcher.requestFile(2, nextSong);
 				while(onDemandFetcher.getNodeCount() > 0)
 				{
 					processOnDemandQueue();
@@ -7394,7 +7394,7 @@ followDistance = 1;
 			drawLoadingText(65, "Requesting animations");
 			int k = onDemandFetcher.getVersionCount(1);
 			for(int i1 = 0; i1 < k; i1++)
-				onDemandFetcher.method558(1, i1);
+				onDemandFetcher.requestFile(1, i1);
 
 			while(onDemandFetcher.getNodeCount() > 0)
 			{
@@ -7419,7 +7419,7 @@ followDistance = 1;
 			{
 				int l1 = onDemandFetcher.getModelIndex(k1);
 				if((l1 & 1) != 0)
-					onDemandFetcher.method558(0, k1);
+					onDemandFetcher.requestFile(0, k1);
 			}
 
 			k = onDemandFetcher.getNodeCount();
@@ -7438,18 +7438,18 @@ followDistance = 1;
 			if(decompressors[0] != null)
 			{
 				drawLoadingText(75, "Requesting maps");
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 48, 47));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 48, 47));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 48, 48));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 48, 48));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 48, 49));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 48, 49));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 47, 47));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 47, 47));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 47, 48));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 47, 48));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(0, 148, 48));
-				onDemandFetcher.method558(3, onDemandFetcher.method562(1, 148, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 48, 47));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 48, 47));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 48, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 48, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 48, 49));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 48, 49));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 47, 47));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 47, 47));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 47, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 47, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(0, 148, 48));
+				onDemandFetcher.requestFile(3, onDemandFetcher.getMapFile(1, 148, 48));
 				k = onDemandFetcher.getNodeCount();
 				while(onDemandFetcher.getNodeCount() > 0)
 				{
@@ -7492,16 +7492,16 @@ followDistance = 1;
 				if((l2 & 1) != 0)
 					byte0 = 3;
 				if(byte0 != 0)
-					onDemandFetcher.method563(byte0, 0, k2);
+					onDemandFetcher.requestArchive(byte0, 0, k2);
 			}
 
-			onDemandFetcher.method554(isMembers);
+			onDemandFetcher.prefetchMaps(isMembers);
 			if(!lowMem)
 			{
 				int l = onDemandFetcher.getVersionCount(2);
 				for(int i3 = 1; i3 < l; i3++)
-					if(onDemandFetcher.method569(i3))
-						onDemandFetcher.method563((byte)1, 2, i3);
+					if(onDemandFetcher.isFileReady(i3))
+						onDemandFetcher.requestArchive((byte)1, 2, i3);
 
 			}
 			drawLoadingText(80, "Unpacking media");
@@ -7533,7 +7533,7 @@ followDistance = 1;
 				redStones[r1] = new Sprite("redstones " + r1);
 			compass = new Sprite(streamLoader_2, "compass", 0);
 			mapEdge = new Sprite(streamLoader_2, "mapedge", 0);
-			mapEdge.method345();
+			mapEdge.drawCentered();
 			try
 			{
 				for(int k3 = 0; k3 < 100; k3++)
@@ -7583,16 +7583,16 @@ followDistance = 1;
 
 			Sprite sprite = new Sprite(streamLoader_2, "screenframe", 0);
 			leftFrame = new RSImageProducer(sprite.myWidth, sprite.myHeight, getGameComponent());
-			sprite.method346(0, 0);
+			sprite.drawTransparent(0, 0);
 			sprite = new Sprite(streamLoader_2, "screenframe", 1);
 			topFrame = new RSImageProducer(sprite.myWidth, sprite.myHeight, getGameComponent());
-			sprite.method346(0, 0);
+			sprite.drawTransparent(0, 0);
 			sprite = new Sprite(streamLoader_2, "screenframe", 2);
 			rightFrame = new RSImageProducer(sprite.myWidth, sprite.myHeight, getGameComponent());
-			sprite.method346(0, 0);
+			sprite.drawTransparent(0, 0);
 			sprite = new Sprite(streamLoader_2, "mapedge", 0);
 			mapEdgeIP = new RSImageProducer(sprite.myWidth, sprite.myHeight, getGameComponent());
-			sprite.method346(0, 0);
+			sprite.drawTransparent(0, 0);
 
 			int i5 = (int)(Math.random() * 21D) - 10;
 			int j5 = (int)(Math.random() * 21D) - 10;
@@ -7601,15 +7601,15 @@ followDistance = 1;
 			for(int i6 = 0; i6 < 100; i6++)
 			{
 				if(mapFunctions[i6] != null)
-					mapFunctions[i6].method344(i5 + l5, j5 + l5, k5 + l5);
+					mapFunctions[i6].drawShadowed(i5 + l5, j5 + l5, k5 + l5);
 				if(mapScenes[i6] != null)
-					mapScenes[i6].method360(i5 + l5, j5 + l5, k5 + l5);
+					mapScenes[i6].drawBackground(i5 + l5, j5 + l5, k5 + l5);
 			}
 
 			drawLoadingText(83, "Unpacking textures");
-			Texture.method368(streamLoader_3);
-			Texture.method372(0.80000000000000004D);
-			Texture.method367();
+			Texture.loadTextures(streamLoader_3);
+			Texture.setBrightness(0.80000000000000004D);
+			Texture.initTextureCache();
 			drawLoadingText(86, "Unpacking config");
 			Animation.unpackConfig(streamLoader);
 			ObjectDef.unpackConfig(streamLoader);
@@ -7678,13 +7678,13 @@ followDistance = 1;
 				anIntArray1229[l6 - 5] = l7 - j7;
 			}
 
-			Texture.method365(765, 503);
+			Texture.setViewport(765, 503);
 			fullScreenTextureArray = Texture.anIntArray1472;
-			Texture.method365(519, 165);
+			Texture.setViewport(519, 165);
 			anIntArray1180 = Texture.anIntArray1472;
-			Texture.method365(246, 335);
+			Texture.setViewport(246, 335);
 			anIntArray1181 = Texture.anIntArray1472;
-			Texture.method365(512, 334);
+			Texture.setViewport(512, 334);
 			anIntArray1182 = Texture.anIntArray1472;
 			int ai[] = new int[9];
 			for(int i8 = 0; i8 < 9; i8++)
@@ -7695,7 +7695,7 @@ followDistance = 1;
 				ai[i8] = l8 * i9 >> 16;
 			}
 
-			WorldController.method310(500, 800, 512, 334, ai);
+			WorldController.drawMinimapTile(500, 800, 512, 334, ai);
 			Censor.loadConfig(streamLoader_4);
 			mouseDetection = new MouseDetection(this);
 			startRunnable(mouseDetection, 10);
@@ -7711,7 +7711,7 @@ followDistance = 1;
 		loadingError = true;
 	}
 
-	private void method91(Stream stream, int i)
+	private void parseNewPlayers(Stream stream, int i)
 	{
 		while(stream.bitPosition + 10 < i * 8)
 		{
@@ -7726,7 +7726,7 @@ followDistance = 1;
 			}
 			playerIndices[playerCount++] = j;
 			Player player = playerArray[j];
-			player.anInt1537 = loopCycle;
+			player.textColor = loopCycle;
 			int k = stream.readBits(1);
 			if(k == 1)
 				anIntArray894[anInt893++] = j;
@@ -7811,7 +7811,7 @@ followDistance = 1;
 		Graphics g = getGameComponent().getGraphics();
 		g.setColor(Color.black);
 		g.fillRect(0, 0, 765, 503);
-		method4(1);
+		initDrawingArea(1);
 		if(loadingError)
 		{
 			aBoolean831 = false;
@@ -7871,117 +7871,117 @@ followDistance = 1;
 		return null;
 	}
 
-	private void method95() {
+	private void processNPCMovement() {
 		for(int j = 0; j < npcCount; j++) {
 			int k = npcIndices[j];
 			NPC npc = npcArray[k];
 			if(npc != null)
-				method96(npc);
+				processEntityMovement(npc);
 		}
 	}
 
-	private void method96(Entity entity)
+	private void processEntityMovement(Entity entity)
 	{
 		if(entity.x < 128 || entity.y < 128 || entity.x >= 13184 || entity.y >= 13184)
 		{
 			entity.anim = -1;
-			entity.anInt1520 = -1;
-			entity.anInt1547 = 0;
-			entity.anInt1548 = 0;
-			entity.x = entity.smallX[0] * 128 + entity.anInt1540 * 64;
-			entity.y = entity.smallY[0] * 128 + entity.anInt1540 * 64;
-			entity.method446();
+			entity.spotAnimId = -1;
+			entity.forceMoveEndCycle = 0;
+			entity.forceMoveStartCycle = 0;
+			entity.x = entity.smallX[0] * 128 + entity.tileSize * 64;
+			entity.y = entity.smallY[0] * 128 + entity.tileSize * 64;
+			entity.resetPath();
 		}
 		if(entity == myPlayer && (entity.x < 1536 || entity.y < 1536 || entity.x >= 11776 || entity.y >= 11776))
 		{
 			entity.anim = -1;
-			entity.anInt1520 = -1;
-			entity.anInt1547 = 0;
-			entity.anInt1548 = 0;
-			entity.x = entity.smallX[0] * 128 + entity.anInt1540 * 64;
-			entity.y = entity.smallY[0] * 128 + entity.anInt1540 * 64;
-			entity.method446();
+			entity.spotAnimId = -1;
+			entity.forceMoveEndCycle = 0;
+			entity.forceMoveStartCycle = 0;
+			entity.x = entity.smallX[0] * 128 + entity.tileSize * 64;
+			entity.y = entity.smallY[0] * 128 + entity.tileSize * 64;
+			entity.resetPath();
 		}
-		if(entity.anInt1547 > loopCycle)
-			method97(entity);
+		if(entity.forceMoveEndCycle > loopCycle)
+			processEntityForcedMove(entity);
 		else
-		if(entity.anInt1548 >= loopCycle)
-			method98(entity);
+		if(entity.forceMoveStartCycle >= loopCycle)
+			processEntityForcedWalk(entity);
 		else
-			method99(entity);
-		method100(entity);
-		method101(entity);
+			processEntityWalkAnim(entity);
+		processEntityTurnDir(entity);
+		processEntityAnimation(entity);
 	}
 
-	private void method97(Entity entity)
+	private void processEntityForcedMove(Entity entity)
 	{
-		int i = entity.anInt1547 - loopCycle;
-		int j = entity.anInt1543 * 128 + entity.anInt1540 * 64;
-		int k = entity.anInt1545 * 128 + entity.anInt1540 * 64;
+		int i = entity.forceMoveEndCycle - loopCycle;
+		int j = entity.forceMoveStartX * 128 + entity.tileSize * 64;
+		int k = entity.forceMoveStartY * 128 + entity.tileSize * 64;
 		entity.x += (j - entity.x) / i;
 		entity.y += (k - entity.y) / i;
-		entity.anInt1503 = 0;
-		if(entity.anInt1549 == 0)
+		entity.stepDelayCounter = 0;
+		if(entity.forceMoveDirection == 0)
 			entity.turnDirection = 1024;
-		if(entity.anInt1549 == 1)
+		if(entity.forceMoveDirection == 1)
 			entity.turnDirection = 1536;
-		if(entity.anInt1549 == 2)
+		if(entity.forceMoveDirection == 2)
 			entity.turnDirection = 0;
-		if(entity.anInt1549 == 3)
+		if(entity.forceMoveDirection == 3)
 			entity.turnDirection = 512;
 	}
 
-	private void method98(Entity entity)
+	private void processEntityForcedWalk(Entity entity)
 	{
-		if(entity.anInt1548 == loopCycle || entity.anim == -1 || entity.anInt1529 != 0 || entity.anInt1528 + 1 > Animation.anims[entity.anim].method258(entity.anInt1527))
+		if(entity.forceMoveStartCycle == loopCycle || entity.anim == -1 || entity.animDelay != 0 || entity.animCycle + 1 > Animation.anims[entity.anim].getFrameDuration(entity.animFrame))
 		{
-			int i = entity.anInt1548 - entity.anInt1547;
-			int j = loopCycle - entity.anInt1547;
-			int k = entity.anInt1543 * 128 + entity.anInt1540 * 64;
-			int l = entity.anInt1545 * 128 + entity.anInt1540 * 64;
-			int i1 = entity.anInt1544 * 128 + entity.anInt1540 * 64;
-			int j1 = entity.anInt1546 * 128 + entity.anInt1540 * 64;
+			int i = entity.forceMoveStartCycle - entity.forceMoveEndCycle;
+			int j = loopCycle - entity.forceMoveEndCycle;
+			int k = entity.forceMoveStartX * 128 + entity.tileSize * 64;
+			int l = entity.forceMoveStartY * 128 + entity.tileSize * 64;
+			int i1 = entity.forceMoveEndX * 128 + entity.tileSize * 64;
+			int j1 = entity.forceMoveEndY * 128 + entity.tileSize * 64;
 			entity.x = (k * (i - j) + i1 * j) / i;
 			entity.y = (l * (i - j) + j1 * j) / i;
 		}
-		entity.anInt1503 = 0;
-		if(entity.anInt1549 == 0)
+		entity.stepDelayCounter = 0;
+		if(entity.forceMoveDirection == 0)
 			entity.turnDirection = 1024;
-		if(entity.anInt1549 == 1)
+		if(entity.forceMoveDirection == 1)
 			entity.turnDirection = 1536;
-		if(entity.anInt1549 == 2)
+		if(entity.forceMoveDirection == 2)
 			entity.turnDirection = 0;
-		if(entity.anInt1549 == 3)
+		if(entity.forceMoveDirection == 3)
 			entity.turnDirection = 512;
-		entity.anInt1552 = entity.turnDirection;
+		entity.faceAngle = entity.turnDirection;
 	}
 
-	private void method99(Entity entity)
+	private void processEntityWalkAnim(Entity entity)
 	{
-		entity.anInt1517 = entity.anInt1511;
+		entity.movementAnimId = entity.standAnimId;
 		if(entity.smallXYIndex == 0)
 		{
-			entity.anInt1503 = 0;
+			entity.stepDelayCounter = 0;
 			return;
 		}
-		if(entity.anim != -1 && entity.anInt1529 == 0)
+		if(entity.anim != -1 && entity.animDelay == 0)
 		{
 			Animation animation = Animation.anims[entity.anim];
-			if(entity.anInt1542 > 0 && animation.anInt363 == 0)
+			if(entity.pathRemainder > 0 && animation.anInt363 == 0)
 			{
-				entity.anInt1503++;
+				entity.stepDelayCounter++;
 				return;
 			}
-			if(entity.anInt1542 <= 0 && animation.anInt364 == 0)
+			if(entity.pathRemainder <= 0 && animation.anInt364 == 0)
 			{
-				entity.anInt1503++;
+				entity.stepDelayCounter++;
 				return;
 			}
 		}
 		int i = entity.x;
 		int j = entity.y;
-		int k = entity.smallX[entity.smallXYIndex - 1] * 128 + entity.anInt1540 * 64;
-		int l = entity.smallY[entity.smallXYIndex - 1] * 128 + entity.anInt1540 * 64;
+		int k = entity.smallX[entity.smallXYIndex - 1] * 128 + entity.tileSize * 64;
+		int l = entity.smallY[entity.smallXYIndex - 1] * 128 + entity.tileSize * 64;
 		if(k - i > 256 || k - i < -256 || l - j > 256 || l - j < -256)
 		{
 			entity.x = k;
@@ -8012,37 +8012,37 @@ followDistance = 1;
 			entity.turnDirection = 1024;
 		else
 			entity.turnDirection = 0;
-		int i1 = entity.turnDirection - entity.anInt1552 & 0x7ff;
+		int i1 = entity.turnDirection - entity.faceAngle & 0x7ff;
 		if(i1 > 1024)
 			i1 -= 2048;
-		int j1 = entity.anInt1555;
+		int j1 = entity.walkLeftAnimId;
 		if(i1 >= -256 && i1 <= 256)
-			j1 = entity.anInt1554;
+			j1 = entity.walkBackAnimId;
 		else
 		if(i1 >= 256 && i1 < 768)
-			j1 = entity.anInt1557;
+			j1 = entity.runAnimId;
 		else
 		if(i1 >= -768 && i1 <= -256)
-			j1 = entity.anInt1556;
+			j1 = entity.walkRightAnimId;
 		if(j1 == -1)
-			j1 = entity.anInt1554;
-		entity.anInt1517 = j1;
+			j1 = entity.walkBackAnimId;
+		entity.movementAnimId = j1;
 		int k1 = 4;
-		if(entity.anInt1552 != entity.turnDirection && entity.interactingEntity == -1 && entity.anInt1504 != 0)
+		if(entity.faceAngle != entity.turnDirection && entity.interactingEntity == -1 && entity.turnSpeed != 0)
 			k1 = 2;
 		if(entity.smallXYIndex > 2)
 			k1 = 6;
 		if(entity.smallXYIndex > 3)
 			k1 = 8;
-		if(entity.anInt1503 > 0 && entity.smallXYIndex > 1)
+		if(entity.stepDelayCounter > 0 && entity.smallXYIndex > 1)
 		{
 			k1 = 8;
-			entity.anInt1503--;
+			entity.stepDelayCounter--;
 		}
-		if(entity.aBooleanArray1553[entity.smallXYIndex - 1])
+		if(entity.pathRunning[entity.smallXYIndex - 1])
 			k1 <<= 1;
-		if(k1 >= 8 && entity.anInt1517 == entity.anInt1554 && entity.anInt1505 != -1)
-			entity.anInt1517 = entity.anInt1505;
+		if(k1 >= 8 && entity.movementAnimId == entity.walkBackAnimId && entity.walkAnimId != -1)
+			entity.movementAnimId = entity.walkAnimId;
 		if(i < k)
 		{
 			entity.x += k1;
@@ -8070,14 +8070,14 @@ followDistance = 1;
 		if(entity.x == k && entity.y == l)
 		{
 			entity.smallXYIndex--;
-			if(entity.anInt1542 > 0)
-				entity.anInt1542--;
+			if(entity.pathRemainder > 0)
+				entity.pathRemainder--;
 		}
 	}
 
-	private void method100(Entity entity)
+	private void processEntityTurnDir(Entity entity)
 	{
-		if(entity.anInt1504 == 0)
+		if(entity.turnSpeed == 0)
 			return;
 		if(entity.interactingEntity != -1 && entity.interactingEntity < 32768)
 		{
@@ -8104,104 +8104,104 @@ followDistance = 1;
 					entity.turnDirection = (int)(Math.atan2(l1, i2) * 325.94900000000001D) & 0x7ff;
 			}
 		}
-		if((entity.anInt1538 != 0 || entity.anInt1539 != 0) && (entity.smallXYIndex == 0 || entity.anInt1503 > 0))
+		if((entity.textEffect != 0 || entity.textAlpha != 0) && (entity.smallXYIndex == 0 || entity.stepDelayCounter > 0))
 		{
-			int k = entity.x - (entity.anInt1538 - baseX - baseX) * 64;
-			int j1 = entity.y - (entity.anInt1539 - baseY - baseY) * 64;
+			int k = entity.x - (entity.textEffect - baseX - baseX) * 64;
+			int j1 = entity.y - (entity.textAlpha - baseY - baseY) * 64;
 			if(k != 0 || j1 != 0)
 				entity.turnDirection = (int)(Math.atan2(k, j1) * 325.94900000000001D) & 0x7ff;
-			entity.anInt1538 = 0;
-			entity.anInt1539 = 0;
+			entity.textEffect = 0;
+			entity.textAlpha = 0;
 		}
-		int l = entity.turnDirection - entity.anInt1552 & 0x7ff;
+		int l = entity.turnDirection - entity.faceAngle & 0x7ff;
 		if(l != 0)
 		{
-			if(l < entity.anInt1504 || l > 2048 - entity.anInt1504)
-				entity.anInt1552 = entity.turnDirection;
+			if(l < entity.turnSpeed || l > 2048 - entity.turnSpeed)
+				entity.faceAngle = entity.turnDirection;
 			else
 			if(l > 1024)
-				entity.anInt1552 -= entity.anInt1504;
+				entity.faceAngle -= entity.turnSpeed;
 			else
-				entity.anInt1552 += entity.anInt1504;
-			entity.anInt1552 &= 0x7ff;
-			if(entity.anInt1517 == entity.anInt1511 && entity.anInt1552 != entity.turnDirection)
+				entity.faceAngle += entity.turnSpeed;
+			entity.faceAngle &= 0x7ff;
+			if(entity.movementAnimId == entity.standAnimId && entity.faceAngle != entity.turnDirection)
 			{
-				if(entity.anInt1512 != -1)
+				if(entity.turnAnimId != -1)
 				{
-					entity.anInt1517 = entity.anInt1512;
+					entity.movementAnimId = entity.turnAnimId;
 					return;
 				}
-				entity.anInt1517 = entity.anInt1554;
+				entity.movementAnimId = entity.walkBackAnimId;
 			}
 		}
 	}
 
-	private void method101(Entity entity)
+	private void processEntityAnimation(Entity entity)
 	{
-		entity.aBoolean1541 = false;
-		if(entity.anInt1517 != -1)
+		entity.animStretches = false;
+		if(entity.movementAnimId != -1)
 		{
-			Animation animation = Animation.anims[entity.anInt1517];
-			entity.anInt1519++;
-			if(entity.anInt1518 < animation.anInt352 && entity.anInt1519 > animation.method258(entity.anInt1518))
+			Animation animation = Animation.anims[entity.movementAnimId];
+			entity.movementAnimCycle++;
+			if(entity.movementAnimFrame < animation.anInt352 && entity.movementAnimCycle > animation.getFrameDuration(entity.movementAnimFrame))
 			{
-				entity.anInt1519 = 0;
-				entity.anInt1518++;
+				entity.movementAnimCycle = 0;
+				entity.movementAnimFrame++;
 			}
-			if(entity.anInt1518 >= animation.anInt352)
+			if(entity.movementAnimFrame >= animation.anInt352)
 			{
-				entity.anInt1519 = 0;
-				entity.anInt1518 = 0;
+				entity.movementAnimCycle = 0;
+				entity.movementAnimFrame = 0;
 			}
 		}
-		if(entity.anInt1520 != -1 && loopCycle >= entity.anInt1523)
+		if(entity.spotAnimId != -1 && loopCycle >= entity.spotAnimDelay)
 		{
-			if(entity.anInt1521 < 0)
-				entity.anInt1521 = 0;
-			Animation animation_1 = SpotAnim.cache[entity.anInt1520].aAnimation_407;
-			for(entity.anInt1522++; entity.anInt1521 < animation_1.anInt352 && entity.anInt1522 > animation_1.method258(entity.anInt1521); entity.anInt1521++)
-				entity.anInt1522 -= animation_1.method258(entity.anInt1521);
+			if(entity.spotAnimFrame < 0)
+				entity.spotAnimFrame = 0;
+			Animation animation_1 = SpotAnim.cache[entity.spotAnimId].aAnimation_407;
+			for(entity.spotAnimCycle++; entity.spotAnimFrame < animation_1.anInt352 && entity.spotAnimCycle > animation_1.getFrameDuration(entity.spotAnimFrame); entity.spotAnimFrame++)
+				entity.spotAnimCycle -= animation_1.getFrameDuration(entity.spotAnimFrame);
 
-			if(entity.anInt1521 >= animation_1.anInt352 && (entity.anInt1521 < 0 || entity.anInt1521 >= animation_1.anInt352))
-				entity.anInt1520 = -1;
+			if(entity.spotAnimFrame >= animation_1.anInt352 && (entity.spotAnimFrame < 0 || entity.spotAnimFrame >= animation_1.anInt352))
+				entity.spotAnimId = -1;
 		}
-		if(entity.anim != -1 && entity.anInt1529 <= 1)
+		if(entity.anim != -1 && entity.animDelay <= 1)
 		{
 			Animation animation_2 = Animation.anims[entity.anim];
-			if(animation_2.anInt363 == 1 && entity.anInt1542 > 0 && entity.anInt1547 <= loopCycle && entity.anInt1548 < loopCycle)
+			if(animation_2.anInt363 == 1 && entity.pathRemainder > 0 && entity.forceMoveEndCycle <= loopCycle && entity.forceMoveStartCycle < loopCycle)
 			{
-				entity.anInt1529 = 1;
+				entity.animDelay = 1;
 				return;
 			}
 		}
-		if(entity.anim != -1 && entity.anInt1529 == 0)
+		if(entity.anim != -1 && entity.animDelay == 0)
 		{
 			Animation animation_3 = Animation.anims[entity.anim];
-			for(entity.anInt1528++; entity.anInt1527 < animation_3.anInt352 && entity.anInt1528 > animation_3.method258(entity.anInt1527); entity.anInt1527++)
-				entity.anInt1528 -= animation_3.method258(entity.anInt1527);
+			for(entity.animCycle++; entity.animFrame < animation_3.anInt352 && entity.animCycle > animation_3.getFrameDuration(entity.animFrame); entity.animFrame++)
+				entity.animCycle -= animation_3.getFrameDuration(entity.animFrame);
 
-			if(entity.anInt1527 >= animation_3.anInt352)
+			if(entity.animFrame >= animation_3.anInt352)
 			{
-				entity.anInt1527 -= animation_3.anInt356;
-				entity.anInt1530++;
-				if(entity.anInt1530 >= animation_3.anInt362)
+				entity.animFrame -= animation_3.anInt356;
+				entity.animFrameCount++;
+				if(entity.animFrameCount >= animation_3.anInt362)
 					entity.anim = -1;
-				if(entity.anInt1527 < 0 || entity.anInt1527 >= animation_3.anInt352)
+				if(entity.animFrame < 0 || entity.animFrame >= animation_3.anInt352)
 					entity.anim = -1;
 			}
-			entity.aBoolean1541 = animation_3.aBoolean358;
+			entity.animStretches = animation_3.aBoolean358;
 		}
-		if(entity.anInt1529 > 0)
-			entity.anInt1529--;
+		if(entity.animDelay > 0)
+			entity.animDelay--;
 	}
 
 	private void drawGameScreen()
 	{
 		if (fullscreenInterfaceID != -1 && (loadingStage == 2 || super.fullGameScreen != null)) {
 			if (loadingStage == 2) {
-				method119(anInt945, fullscreenInterfaceID);
+				animateInterface(anInt945, fullscreenInterfaceID);
 				if (openInterfaceID != -1) {
-					method119(anInt945, openInterfaceID);
+					animateInterface(anInt945, openInterfaceID);
 				}
 				anInt945 = 0;
 				resetAllImageProducers();
@@ -8258,7 +8258,7 @@ followDistance = 1;
 			needDrawTabArea = true;
 		if(invOverlayInterfaceID != -1)
 		{
-			boolean flag1 = method119(anInt945, invOverlayInterfaceID);
+			boolean flag1 = animateInterface(anInt945, invOverlayInterfaceID);
 			if(flag1)
 				needDrawTabArea = true;
 		}
@@ -8275,7 +8275,7 @@ followDistance = 1;
 		{
 			aClass9_1059.scrollPosition = anInt1211 - anInt1089 - 110;
 			if(super.mouseX > 478 && super.mouseX < 580 && super.mouseY > 342)
-				method65(494, 110, super.mouseX - 0, super.mouseY - 348, aClass9_1059, 0, false, anInt1211);
+				processScrollbar(494, 110, super.mouseX - 0, super.mouseY - 348, aClass9_1059, 0, false, anInt1211);
 			int i = anInt1211 - 110 - aClass9_1059.scrollPosition;
 			if(i < 0)
 				i = 0;
@@ -8288,7 +8288,7 @@ followDistance = 1;
 			}
 		}
 		if(backDialogID != -1) {
-			boolean flag2 = method119(anInt945, backDialogID);
+			boolean flag2 = animateInterface(anInt945, backDialogID);
 			if(flag2)
 				inputTaken = true;
 		}
@@ -8305,7 +8305,7 @@ followDistance = 1;
 			inputTaken = false;
 		}
 		if(loadingStage == 2)
-			method146();
+			processSceneEntities();
 		if(loadingStage == 2) {
 			drawMinimap();
 			aRSImageProducer_1164.drawGraphics(4, super.graphics, 545);
@@ -8362,7 +8362,7 @@ followDistance = 1;
 		}
 	}
 
-	private void method104()
+	private void processStationaryGfx()
 	{
 		Animable_Sub3 class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetFirst();
 		for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetNext())
@@ -8371,11 +8371,11 @@ followDistance = 1;
 			else
 			if(loopCycle >= class30_sub2_sub4_sub3.anInt1564)
 			{
-				class30_sub2_sub4_sub3.method454(anInt945);
+				class30_sub2_sub4_sub3.advanceSpotAnimFrame(anInt945);
 				if(class30_sub2_sub4_sub3.aBoolean1567)
 					class30_sub2_sub4_sub3.unlink();
 				else
-					worldController.method285(class30_sub2_sub4_sub3.anInt1560, 0, class30_sub2_sub4_sub3.anInt1563, -1, class30_sub2_sub4_sub3.anInt1562, 60, class30_sub2_sub4_sub3.anInt1561, class30_sub2_sub4_sub3, false);
+					worldController.addTempObject(class30_sub2_sub4_sub3.anInt1560, 0, class30_sub2_sub4_sub3.anInt1563, -1, class30_sub2_sub4_sub3.anInt1562, 60, class30_sub2_sub4_sub3.anInt1561, class30_sub2_sub4_sub3, false);
 			}
 
 	}
@@ -8389,7 +8389,7 @@ followDistance = 1;
 		DrawingArea.drawPixels(71, yPos - 1, xPos + 175, 0x2E2B23, 1);
 		DrawingArea.drawPixels(1, yPos - 1, xPos, 0x2E2B23, 175);
 		DrawingArea.drawPixels(1, yPos + 69, xPos, 0x2E2B23, 175);
-		DrawingArea.method335(0, yPos, 174, 68, 220, xPos);
+		DrawingArea.fillRect(0, yPos, 174, 68, 220, xPos);
 	}
 	
 	private void drawInterface(int j, int k, RSInterface class9, int l) {
@@ -8515,14 +8515,14 @@ followDistance = 1;
 										{
 											int k10 = class9_1.invStackSizes[i3];
 											if(k10 >= 1)
-												smallText.method385(0xFFFF00, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
+												smallText.drawText(0xFFFF00, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
 											if(k10 >= 100000)
-												smallText.method385(0xFFFFFF, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
+												smallText.drawText(0xFFFFFF, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
 											if(k10 >= 10000000)
-												smallText.method385(0x49E20E, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
+												smallText.drawText(0x49E20E, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
 
-											/*smallText.method385(0, intToKOrMil(k10), j6 + 10 + j7, k5 + 1 + k6);
-											smallText.method385(0xffff00, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);*/
+											/*smallText.drawText(0, intToKOrMil(k10), j6 + 10 + j7, k5 + 1 + k6);
+											smallText.drawText(0xffff00, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);*/
 										}
 									}
 								}
@@ -8554,9 +8554,9 @@ followDistance = 1;
 						else
 							DrawingArea.fillPixels(k2, class9_1.width, class9_1.height, j3, l2);
 					} else if(class9_1.aBoolean227)
-						DrawingArea.method335(j3, l2, class9_1.width, class9_1.height, 256 - (class9_1.aByte254 & 0xff), k2);
+						DrawingArea.fillRect(j3, l2, class9_1.width, class9_1.height, 256 - (class9_1.aByte254 & 0xff), k2);
 					else
-						DrawingArea.method338(l2, class9_1.height, 256 - (class9_1.aByte254 & 0xff), j3, class9_1.width, k2);
+						DrawingArea.drawRect(l2, class9_1.height, 256 - (class9_1.aByte254 & 0xff), j3, class9_1.width, k2);
 				} else if(class9_1.type == 4) {
 					TextDrawingArea textDrawingArea = class9_1.textDrawingAreas;
 					String s = class9_1.message;
@@ -8646,9 +8646,9 @@ followDistance = 1;
 							s = "";
 						}
 						if(class9_1.centerText)
-							textDrawingArea.method382(i4, k2 + class9_1.width / 2, s1, l6, class9_1.textShadow);
+							textDrawingArea.drawRightAligned(i4, k2 + class9_1.width / 2, s1, l6, class9_1.textShadow);
 						else
-							textDrawingArea.method389(class9_1.textShadow, k2, i4, s1, l6);
+							textDrawingArea.drawWaving(class9_1.textShadow, k2, i4, s1, l6);
 					}
 				} else if(class9_1.type == 5) {
 					Sprite sprite;
@@ -8679,13 +8679,13 @@ followDistance = 1;
 						i7 = class9_1.anInt257;
 					Model model;
 					if(i7 == -1) {
-						model = class9_1.method209(-1, -1, flag2);
+						model = class9_1.getWidgetModel(-1, -1, flag2);
 					} else {
 						Animation animation = Animation.anims[i7];
-						model = class9_1.method209(animation.anIntArray354[class9_1.anInt246], animation.anIntArray353[class9_1.anInt246], flag2);
+						model = class9_1.getWidgetModel(animation.anIntArray354[class9_1.anInt246], animation.anIntArray353[class9_1.anInt246], flag2);
 					}
 					if(model != null)
-						model.method482(class9_1.modelRotation2, 0, class9_1.modelRotation1, 0, i5, l5);
+						model.renderModel2D(class9_1.modelRotation2, 0, class9_1.modelRotation1, 0, i5, l5);
 					Texture.textureInt1 = k3;
 					Texture.textureInt2 = j4;
 				} else if(class9_1.type == 7) {
@@ -8701,9 +8701,9 @@ followDistance = 1;
 								int i9 = k2 + i6 * (115 + class9_1.invSpritePadX);
 								int k9 = l2 + j5 * (12 + class9_1.invSpritePadY);
 								if(class9_1.centerText)
-									textDrawingArea_1.method382(class9_1.textColor, i9 + class9_1.width / 2, s2, k9, class9_1.textShadow);
+									textDrawingArea_1.drawRightAligned(class9_1.textColor, i9 + class9_1.width / 2, s2, k9, class9_1.textShadow);
 								else
-									textDrawingArea_1.method389(class9_1.textShadow, i9, class9_1.textColor, s2, k9);
+									textDrawingArea_1.drawWaving(class9_1.textShadow, i9, class9_1.textColor, s2, k9);
 							}
 							k4++;
 						}
@@ -8750,59 +8750,59 @@ followDistance = 1;
 		}
 	}
 
-	private void method107(int i, int j, Stream stream, Player player)
+	private void parsePlayerMaskData(int i, int j, Stream stream, Player player)
 	{
 		if((i & 0x400) != 0)
 		{
-			player.anInt1543 = stream.method428();
-			player.anInt1545 = stream.method428();
-			player.anInt1544 = stream.method428();
-			player.anInt1546 = stream.method428();
-			player.anInt1547 = stream.method436() + loopCycle;
-			player.anInt1548 = stream.method435() + loopCycle;
-			player.anInt1549 = stream.method428();
-			player.method446();
+			player.forceMoveStartX = stream.readUnsignedByteSub();
+			player.forceMoveStartY = stream.readUnsignedByteSub();
+			player.forceMoveEndX = stream.readUnsignedByteSub();
+			player.forceMoveEndY = stream.readUnsignedByteSub();
+			player.forceMoveEndCycle = stream.readWordLEBigA() + loopCycle;
+			player.forceMoveStartCycle = stream.readWordBigA() + loopCycle;
+			player.forceMoveDirection = stream.readUnsignedByteSub();
+			player.resetPath();
 		}
 		if((i & 0x100) != 0)
 		{
-			player.anInt1520 = stream.method434();
+			player.spotAnimId = stream.readWordLE();
 			int k = stream.readDWord();
-			player.anInt1524 = k >> 16;
-			player.anInt1523 = loopCycle + (k & 0xffff);
-			player.anInt1521 = 0;
-			player.anInt1522 = 0;
-			if(player.anInt1523 > loopCycle)
-				player.anInt1521 = -1;
-			if(player.anInt1520 == 65535)
-				player.anInt1520 = -1;
+			player.spotAnimHeight = k >> 16;
+			player.spotAnimDelay = loopCycle + (k & 0xffff);
+			player.spotAnimFrame = 0;
+			player.spotAnimCycle = 0;
+			if(player.spotAnimDelay > loopCycle)
+				player.spotAnimFrame = -1;
+			if(player.spotAnimId == 65535)
+				player.spotAnimId = -1;
 		}
 		if((i & 8) != 0)
 		{
-			int l = stream.method434();
+			int l = stream.readWordLE();
 			if(l == 65535)
 				l = -1;
-			int i2 = stream.method427();
+			int i2 = stream.readUnsignedByteNeg();
 			if(l == player.anim && l != -1)
 			{
 				int i3 = Animation.anims[l].anInt365;
 				if(i3 == 1)
 				{
-					player.anInt1527 = 0;
-					player.anInt1528 = 0;
-					player.anInt1529 = i2;
-					player.anInt1530 = 0;
+					player.animFrame = 0;
+					player.animCycle = 0;
+					player.animDelay = i2;
+					player.animFrameCount = 0;
 				}
 				if(i3 == 2)
-					player.anInt1530 = 0;
+					player.animFrameCount = 0;
 			} else
 			if(l == -1 || player.anim == -1 || Animation.anims[l].anInt359 >= Animation.anims[player.anim].anInt359)
 			{
 				player.anim = l;
-				player.anInt1527 = 0;
-				player.anInt1528 = 0;
-				player.anInt1529 = i2;
-				player.anInt1530 = 0;
-				player.anInt1542 = player.smallXYIndex;
+				player.animFrame = 0;
+				player.animCycle = 0;
+				player.animDelay = i2;
+				player.animFrameCount = 0;
+				player.pathRemainder = player.smallXYIndex;
 			}
 		}
 		if((i & 4) != 0)
@@ -8815,16 +8815,16 @@ followDistance = 1;
 			} else
 			if(player == myPlayer)
 				pushMessage(player.textSpoken, 2, player.name);
-			player.anInt1513 = 0;
-			player.anInt1531 = 0;
+			player.turnAroundAnimId = 0;
+			player.animResetCycle = 0;
 			player.textCycle = 150;
 		}
 		if((i & 0x80) != 0)
 		{
 			//right fucking here
-			int i1 = stream.method434();
+			int i1 = stream.readWordLE();
 			int j2 = stream.readUnsignedByte();
-			int j3 = stream.method427();
+			int j3 = stream.readUnsignedByteNeg();
 			int k3 = stream.currentOffset;
 			if(player.name != null && player.visible)
 			{
@@ -8845,14 +8845,14 @@ followDistance = 1;
 					try
 					{
 						aStream_834.currentOffset = 0;
-						stream.method442(j3, 0, aStream_834.buffer);
+						stream.readBytesReverse(j3, 0, aStream_834.buffer);
 						aStream_834.currentOffset = 0;
-						String s = TextInput.method525(j3, aStream_834);
+						String s = TextInput.decodeText(j3, aStream_834);
 						//s = Censor.doCensor(s);
 						player.textSpoken = s;
-						player.anInt1513 = i1 >> 8;
+						player.turnAroundAnimId = i1 >> 8;
 						player.privelage = j2;
-						player.anInt1531 = i1 & 0xff;
+						player.animResetCycle = i1 & 0xff;
 						player.textCycle = 150;
 						if(j2 == 2 || j2 == 3)
 							pushMessage(s, 1, "@cr2@" + player.name);
@@ -8870,13 +8870,13 @@ followDistance = 1;
 		}
 		if((i & 1) != 0)
 		{
-			player.interactingEntity = stream.method434();
+			player.interactingEntity = stream.readWordLE();
 			if(player.interactingEntity == 65535)
 				player.interactingEntity = -1;
 		}
 		if((i & 0x10) != 0)
 		{
-			int j1 = stream.method427();
+			int j1 = stream.readUnsignedByteNeg();
 			byte abyte0[] = new byte[j1];
 			Stream stream_1 = new Stream(abyte0);
 			stream.readBytes(j1, 0, abyte0);
@@ -8885,30 +8885,30 @@ followDistance = 1;
 		}
 		if((i & 2) != 0)
 		{
-			player.anInt1538 = stream.method436();
-			player.anInt1539 = stream.method434();
+			player.textEffect = stream.readWordLEBigA();
+			player.textAlpha = stream.readWordLE();
 		}
 		if((i & 0x20) != 0)
 		{
 			int k1 = stream.readUnsignedByte();
-			int k2 = stream.method426();
+			int k2 = stream.readUnsignedByteAdd();
 			player.updateHitData(k2, k1, loopCycle);
 			player.loopCycleStatus = loopCycle + 300;
-			player.currentHealth = stream.method427();
+			player.currentHealth = stream.readUnsignedByteNeg();
 			player.maxHealth = stream.readUnsignedByte();
 		}
 		if((i & 0x200) != 0)
 		{
 			int l1 = stream.readUnsignedByte();
-			int l2 = stream.method428();
+			int l2 = stream.readUnsignedByteSub();
 			player.updateHitData(l2, l1, loopCycle);
 			player.loopCycleStatus = loopCycle + 300;
 			player.currentHealth = stream.readUnsignedByte();
-			player.maxHealth = stream.method427();
+			player.maxHealth = stream.readUnsignedByteNeg();
 		}
 	}
 
-	private void method108()
+	private void updateCamera()
 	{
 		try
 		{
@@ -8945,7 +8945,7 @@ followDistance = 1;
 				anInt1184 = 383;
 			int l = anInt1014 >> 7;
 			int i1 = anInt1015 >> 7;
-			int j1 = method42(plane, anInt1015, anInt1014);
+			int j1 = getTileHeight(plane, anInt1015, anInt1014);
 			int k1 = 0;
 			if(l > 3 && i1 > 3 && l < 100 && i1 < 100)
 			{
@@ -9076,15 +9076,15 @@ followDistance = 1;
 			crosses[4 + crossIndex / 100].drawSprite(crossX - 8 - 4, crossY - 8 - 4);
 		if(anInt1018 != -1)
 		{
-			method119(anInt945, anInt1018);
+			animateInterface(anInt945, anInt1018);
 			drawInterface(0, 0, RSInterface.interfaceCache[anInt1018], 0);
 		}
 		if(openInterfaceID != -1)
 		{
-			method119(anInt945, openInterfaceID);
+			animateInterface(anInt945, openInterfaceID);
 			drawInterface(0, 0, RSInterface.interfaceCache[openInterfaceID], 0);
 		}
-		method70();
+		checkWildernessStatus();
 		if(!menuOpen)
 		{
 			processRightClick();
@@ -9101,14 +9101,14 @@ followDistance = 1;
 			int i1 = 0xffff00;
 			if(super.fps < 15)
 				i1 = 0xff0000;
-			aTextDrawingArea_1271.method380("Fps:" + super.fps, c, i1, k);
+			aTextDrawingArea_1271.drawCenteredText("Fps:" + super.fps, c, i1, k);
 			k += 15;
 			Runtime runtime = Runtime.getRuntime();
 			int j1 = (int)((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
 			i1 = 0xffff00;
 			if(j1 > 0x2000000 && lowMem)
 				i1 = 0xff0000;
-			aTextDrawingArea_1271.method380("Mem:" + j1 + "k", c, 0xffff00, k);
+			aTextDrawingArea_1271.drawCenteredText("Mem:" + j1 + "k", c, 0xffff00, k);
 			k += 15;
 		}
 		int i1 = 0xffff00;
@@ -9120,16 +9120,16 @@ followDistance = 1;
 			int k = 20;
 			if(super.fps < 15)
 			i1 = 0xff0000;
-			aTextDrawingArea_1271.method385(0xffff00, "Fps: " + super.fps, 285, 5);
+			aTextDrawingArea_1271.drawText(0xffff00, "Fps: " + super.fps, 285, 5);
 			Runtime runtime = Runtime.getRuntime();
 			int j1 = (int)((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
 			i1 = 0xffff00;
 			if(j1 > 0x2000000 && lowMem)
 			i1 = 0xff0000;
 			k += 15;
-			aTextDrawingArea_1271.method385(0xffff00, "Mem: " + j1 + "k", 299, 5);
-			aTextDrawingArea_1271.method385(0xffff00, "Mouse X: " + super.mouseX + " , Mouse Y: " + super.mouseY, 314, 5);
-			aTextDrawingArea_1271.method385(0xffff00, "Coords: " + x + ", " + y, 329, 5);
+			aTextDrawingArea_1271.drawText(0xffff00, "Mem: " + j1 + "k", 299, 5);
+			aTextDrawingArea_1271.drawText(0xffff00, "Mouse X: " + super.mouseX + " , Mouse Y: " + super.mouseY, 314, 5);
+			aTextDrawingArea_1271.drawText(0xffff00, "Coords: " + x + ", " + y, 329, 5);
 		}
 		if(anInt1104 != 0)
 		{
@@ -9137,9 +9137,9 @@ followDistance = 1;
 			int l = j / 60;
 			j %= 60;
 			if(j < 10)
-				aTextDrawingArea_1271.method385(0xffff00, "System update in: " + l + ":0" + j, 329, 4);
+				aTextDrawingArea_1271.drawText(0xffff00, "System update in: " + l + ":0" + j, 329, 4);
 			else
-				aTextDrawingArea_1271.method385(0xffff00, "System update in: " + l + ":" + j, 329, 4);
+				aTextDrawingArea_1271.drawText(0xffff00, "System update in: " + l + ":" + j, 329, 4);
 			anInt849++;
 			if(anInt849 > 75)
 			{
@@ -9187,7 +9187,7 @@ followDistance = 1;
 		throw new RuntimeException();
 	}
 
-	private void method114()
+	private void processPlayerMovement()
 	{
 		for(int i = -1; i < playerCount; i++)
 		{
@@ -9198,39 +9198,39 @@ followDistance = 1;
 				j = playerIndices[i];
 			Player player = playerArray[j];
 			if(player != null)
-				method96(player);
+				processEntityMovement(player);
 		}
 
 	}
 
-	private void method115()
+	private void processSpawnObjects()
 	{
 		if(loadingStage == 2)
 		{
-			for(Class30_Sub1 class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetFirst(); class30_sub1 != null; class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetNext())
+			for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
 			{
-				if(class30_sub1.anInt1294 > 0)
-					class30_sub1.anInt1294--;
-				if(class30_sub1.anInt1294 == 0)
+				if(spawnObjectNode.delay > 0)
+					spawnObjectNode.delay--;
+				if(spawnObjectNode.delay == 0)
 				{
-					if(class30_sub1.anInt1299 < 0 || ObjectManager.method178(class30_sub1.anInt1299, class30_sub1.anInt1301))
+					if(spawnObjectNode.previousId < 0 || ObjectManager.objectHasActions(spawnObjectNode.previousId, spawnObjectNode.previousType))
 					{
-						method142(class30_sub1.anInt1298, class30_sub1.anInt1295, class30_sub1.anInt1300, class30_sub1.anInt1301, class30_sub1.anInt1297, class30_sub1.anInt1296, class30_sub1.anInt1299);
-						class30_sub1.unlink();
+						spawnOrRemoveObject(spawnObjectNode.objectY, spawnObjectNode.objectPlane, spawnObjectNode.previousOrientation, spawnObjectNode.previousType, spawnObjectNode.objectX, spawnObjectNode.group, spawnObjectNode.previousId);
+						spawnObjectNode.unlink();
 					}
 				} else
 				{
-					if(class30_sub1.anInt1302 > 0)
-						class30_sub1.anInt1302--;
-					if(class30_sub1.anInt1302 == 0 && class30_sub1.anInt1297 >= 1 && class30_sub1.anInt1298 >= 1 && class30_sub1.anInt1297 <= 102 && class30_sub1.anInt1298 <= 102 && (class30_sub1.anInt1291 < 0 || ObjectManager.method178(class30_sub1.anInt1291, class30_sub1.anInt1293)))
+					if(spawnObjectNode.longestDelay > 0)
+						spawnObjectNode.longestDelay--;
+					if(spawnObjectNode.longestDelay == 0 && spawnObjectNode.objectX >= 1 && spawnObjectNode.objectY >= 1 && spawnObjectNode.objectX <= 102 && spawnObjectNode.objectY <= 102 && (spawnObjectNode.objectId < 0 || ObjectManager.objectHasActions(spawnObjectNode.objectId, spawnObjectNode.objectOrientation)))
 					{
-						method142(class30_sub1.anInt1298, class30_sub1.anInt1295, class30_sub1.anInt1292, class30_sub1.anInt1293, class30_sub1.anInt1297, class30_sub1.anInt1296, class30_sub1.anInt1291);
-						class30_sub1.anInt1302 = -1;
-						if(class30_sub1.anInt1291 == class30_sub1.anInt1299 && class30_sub1.anInt1299 == -1)
-							class30_sub1.unlink();
+						spawnOrRemoveObject(spawnObjectNode.objectY, spawnObjectNode.objectPlane, spawnObjectNode.objectType, spawnObjectNode.objectOrientation, spawnObjectNode.objectX, spawnObjectNode.group, spawnObjectNode.objectId);
+						spawnObjectNode.longestDelay = -1;
+						if(spawnObjectNode.objectId == spawnObjectNode.previousId && spawnObjectNode.previousId == -1)
+							spawnObjectNode.unlink();
 						else
-						if(class30_sub1.anInt1291 == class30_sub1.anInt1299 && class30_sub1.anInt1292 == class30_sub1.anInt1300 && class30_sub1.anInt1293 == class30_sub1.anInt1301)
-							class30_sub1.unlink();
+						if(spawnObjectNode.objectId == spawnObjectNode.previousId && spawnObjectNode.objectType == spawnObjectNode.previousOrientation && spawnObjectNode.objectOrientation == spawnObjectNode.previousType)
+							spawnObjectNode.unlink();
 					}
 				}
 			}
@@ -9315,7 +9315,7 @@ followDistance = 1;
 		}
 	}
 
-	private void method117(Stream stream)
+	private void parseLocalPlayerMovement(Stream stream)
 	{
 		stream.initBitAccess();
 		int j = stream.readBits(1);
@@ -9387,7 +9387,7 @@ followDistance = 1;
 		aClass30_Sub2_Sub1_Sub1_1202 = null;
 	}
 
-	private boolean method119(int i, int j)
+	private boolean animateInterface(int i, int j)
 	{
 		boolean flag1 = false;
 		if(j < 0 || j >= RSInterface.interfaceCache.length)
@@ -9403,7 +9403,7 @@ followDistance = 1;
 				continue;
 			RSInterface class9_1 = RSInterface.interfaceCache[class9.children[k]];
 			if(class9_1.type == 1)
-				flag1 |= method119(i, class9_1.id);
+				flag1 |= animateInterface(i, class9_1.id);
 			if(class9_1.type == 6 && (class9_1.anInt257 != -1 || class9_1.anInt258 != -1))
 			{
 				boolean flag2 = interfaceIsSelected(class9_1);
@@ -9415,9 +9415,9 @@ followDistance = 1;
 				if(l != -1)
 				{
 					Animation animation = Animation.anims[l];
-					for(class9_1.anInt208 += i; class9_1.anInt208 > animation.method258(class9_1.anInt246);)
+					for(class9_1.anInt208 += i; class9_1.anInt208 > animation.getFrameDuration(class9_1.anInt246);)
 					{
-						class9_1.anInt208 -= animation.method258(class9_1.anInt246) + 1;
+						class9_1.anInt208 -= animation.getFrameDuration(class9_1.anInt246) + 1;
 						class9_1.anInt246++;
 						if(class9_1.anInt246 >= animation.anInt352)
 						{
@@ -9443,7 +9443,7 @@ followDistance = 1;
 		return (byteGroundArray[plane][x][y] & 4) != 0;
 	}
 
-	private int method120()
+	private int getCameraPlane()
 	{
 		int j = 3;
 		if(yCameraCurve < 310)
@@ -9525,9 +9525,9 @@ followDistance = 1;
 		return j;
 	}
 
-	private int method121()
+	private int getCameraRenderPlane()
 	{
-		int j = method42(plane, yCameraPos, xCameraPos);
+		int j = getTileHeight(plane, yCameraPos, xCameraPos);
 		if(j - zCameraPos < 800 && groundFlag(plane, xCameraPos >> 7, yCameraPos >> 7))
 			return plane;
 		else
@@ -9726,7 +9726,7 @@ followDistance = 1;
 			s = menuActionName[menuActionRow - 1];
 		if(menuActionRow > 2)
 			s = s + "@whi@ / " + (menuActionRow - 2) + " more options";
-		chatTextDrawingArea.method390(4, 0xffffff, s, loopCycle / 1000, 15);
+		chatTextDrawingArea.drawTextAlpha(4, 0xffffff, s, loopCycle / 1000, 15);
 	}
 
 	private void drawMinimap() {
@@ -9738,15 +9738,15 @@ followDistance = 1;
 			for(int i5 = 0; i5 < k2; i5++)
 				if(abyte0[i5] == 0)
 					ai[i5] = 0;
-			compass.method352(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
+			compass.drawClipped(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
 			aRSImageProducer_1165.initDrawingArea();
 			return;
 		}
 		int i = minimapInt1 + minimapInt2 & 0x7ff;
 		int j = 48 + myPlayer.x / 32;
 		int l2 = 464 - myPlayer.y / 32;
-		aClass30_Sub2_Sub1_Sub1_1263.method352(151, i, anIntArray1229, 256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
-		compass.method352(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
+		aClass30_Sub2_Sub1_Sub1_1263.drawClipped(151, i, anIntArray1229, 256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
+		compass.drawClipped(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
 		for(int j5 = 0; j5 < anInt1071; j5++) {
 			int k = (anIntArray1072[j5] * 4 + 2) - myPlayer.x / 32;
 			int i3 = (anIntArray1073[j5] * 4 + 2) - myPlayer.y / 32;
@@ -9767,7 +9767,7 @@ followDistance = 1;
 			if(npc != null && npc.isVisible()) {
 				EntityDef entityDef = npc.desc;
 				if(entityDef.childrenIDs != null)
-					entityDef = entityDef.method161();
+					entityDef = entityDef.getChildDefinition();
 				if(entityDef != null && entityDef.aBoolean87 && entityDef.aBoolean84) {
 					int i1 = npc.x / 32 - myPlayer.x / 32;
 					int k3 = npc.y / 32 - myPlayer.y / 32;
@@ -9816,20 +9816,20 @@ followDistance = 1;
 				if(class30_sub2_sub4_sub1_sub1_1 != null) {
 					int k1 = class30_sub2_sub4_sub1_sub1_1.x / 32 - myPlayer.x / 32;
 					int i4 = class30_sub2_sub4_sub1_sub1_1.y / 32 - myPlayer.y / 32;
-					method81(mapMarker, i4, k1);
+					drawMinimapEdgeSprite(mapMarker, i4, k1);
 				}
 			}
 			if(anInt855 == 2) {
 				int l1 = ((anInt934 - baseX) * 4 + 2) - myPlayer.x / 32;
 				int j4 = ((anInt935 - baseY) * 4 + 2) - myPlayer.y / 32;
-				method81(mapMarker, j4, l1);
+				drawMinimapEdgeSprite(mapMarker, j4, l1);
 			}
 			if(anInt855 == 10 && anInt933 >= 0 && anInt933 < playerArray.length) {
 				Player class30_sub2_sub4_sub1_sub2_1 = playerArray[anInt933];
 				if(class30_sub2_sub4_sub1_sub2_1 != null) {
 					int i2 = class30_sub2_sub4_sub1_sub2_1.x / 32 - myPlayer.x / 32;
 					int k4 = class30_sub2_sub4_sub1_sub2_1.y / 32 - myPlayer.y / 32;
-					method81(mapMarker, k4, i2);
+					drawMinimapEdgeSprite(mapMarker, k4, i2);
 				}
 			}
 		}
@@ -9854,14 +9854,14 @@ followDistance = 1;
 			spriteDrawY = -1;
 			return;
 		}
-		int i1 = method42(plane, l, i) - j;
+		int i1 = getTileHeight(plane, l, i) - j;
 		i -= xCameraPos;
 		i1 -= zCameraPos;
 		l -= yCameraPos;
-		int j1 = Model.modelIntArray1[yCameraCurve];
-		int k1 = Model.modelIntArray2[yCameraCurve];
-		int l1 = Model.modelIntArray1[xCameraCurve];
-		int i2 = Model.modelIntArray2[xCameraCurve];
+		int j1 = Model.SINE[yCameraCurve];
+		int k1 = Model.COSINE[yCameraCurve];
+		int l1 = Model.SINE[xCameraCurve];
+		int i2 = Model.COSINE[xCameraCurve];
 		int j2 = l * l1 + i * i2 >> 16;
 		l = l * i2 - i * l1 >> 16;
 		i = j2;
@@ -9933,33 +9933,33 @@ followDistance = 1;
 
 	}
 
-	private void method130(int j, int k, int l, int i1, int j1, int k1,
+	private void handleObjectSpawn(int j, int k, int l, int i1, int j1, int k1,
 						   int l1, int i2, int j2)
 	{
-		Class30_Sub1 class30_sub1 = null;
-		for(Class30_Sub1 class30_sub1_1 = (Class30_Sub1)aClass19_1179.reverseGetFirst(); class30_sub1_1 != null; class30_sub1_1 = (Class30_Sub1)aClass19_1179.reverseGetNext())
+		SpawnObjectNode spawnObjectNode = null;
+		for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetNext())
 		{
-			if(class30_sub1_1.anInt1295 != l1 || class30_sub1_1.anInt1297 != i2 || class30_sub1_1.anInt1298 != j1 || class30_sub1_1.anInt1296 != i1)
+			if(spawnObjectNode_1.objectPlane != l1 || spawnObjectNode_1.objectX != i2 || spawnObjectNode_1.objectY != j1 || spawnObjectNode_1.group != i1)
 				continue;
-			class30_sub1 = class30_sub1_1;
+			spawnObjectNode = spawnObjectNode_1;
 			break;
 		}
 
-		if(class30_sub1 == null)
+		if(spawnObjectNode == null)
 		{
-			class30_sub1 = new Class30_Sub1();
-			class30_sub1.anInt1295 = l1;
-			class30_sub1.anInt1296 = i1;
-			class30_sub1.anInt1297 = i2;
-			class30_sub1.anInt1298 = j1;
-			method89(class30_sub1);
-			aClass19_1179.insertHead(class30_sub1);
+			spawnObjectNode = new SpawnObjectNode();
+			spawnObjectNode.objectPlane = l1;
+			spawnObjectNode.group = i1;
+			spawnObjectNode.objectX = i2;
+			spawnObjectNode.objectY = j1;
+			updateSpawnObjectInfo(spawnObjectNode);
+			aClass19_1179.insertHead(spawnObjectNode);
 		}
-		class30_sub1.anInt1291 = k;
-		class30_sub1.anInt1293 = k1;
-		class30_sub1.anInt1292 = l;
-		class30_sub1.anInt1302 = j2;
-		class30_sub1.anInt1294 = j;
+		spawnObjectNode.objectId = k;
+		spawnObjectNode.objectOrientation = k1;
+		spawnObjectNode.objectType = l;
+		spawnObjectNode.longestDelay = j2;
+		spawnObjectNode.delay = j;
 	}
 
 	private boolean interfaceIsSelected(RSInterface class9)
@@ -10024,24 +10024,24 @@ followDistance = 1;
 		{
 			for(int i = 0; i < 256; i++)
 				if(anInt1040 > 768)
-					anIntArray850[i] = method83(anIntArray851[i], anIntArray852[i], 1024 - anInt1040);
+					anIntArray850[i] = blendColors(anIntArray851[i], anIntArray852[i], 1024 - anInt1040);
 				else
 				if(anInt1040 > 256)
 					anIntArray850[i] = anIntArray852[i];
 				else
-					anIntArray850[i] = method83(anIntArray852[i], anIntArray851[i], 256 - anInt1040);
+					anIntArray850[i] = blendColors(anIntArray852[i], anIntArray851[i], 256 - anInt1040);
 
 		} else
 		if(anInt1041 > 0)
 		{
 			for(int j = 0; j < 256; j++)
 				if(anInt1041 > 768)
-					anIntArray850[j] = method83(anIntArray851[j], anIntArray853[j], 1024 - anInt1041);
+					anIntArray850[j] = blendColors(anIntArray851[j], anIntArray853[j], 1024 - anInt1041);
 				else
 				if(anInt1041 > 256)
 					anIntArray850[j] = anIntArray853[j];
 				else
-					anIntArray850[j] = method83(anIntArray853[j], anIntArray851[j], 256 - anInt1041);
+					anIntArray850[j] = blendColors(anIntArray853[j], anIntArray851[j], 256 - anInt1041);
 
 		} else
 		{
@@ -10111,7 +10111,7 @@ followDistance = 1;
 		aRSImageProducer_1111.drawGraphics(0, super.graphics, 637);
 	}
 
-	private void method134(Stream stream)
+	private void parsePlayerRemovals(Stream stream)
 	{
 		int j = stream.readBits(8);
 		if(j < playerCount)
@@ -10134,20 +10134,20 @@ followDistance = 1;
 			if(j1 == 0)
 			{
 				playerIndices[playerCount++] = i1;
-				player.anInt1537 = loopCycle;
+				player.textColor = loopCycle;
 			} else
 			{
 				int k1 = stream.readBits(2);
 				if(k1 == 0)
 				{
 					playerIndices[playerCount++] = i1;
-					player.anInt1537 = loopCycle;
+					player.textColor = loopCycle;
 					anIntArray894[anInt893++] = i1;
 				} else
 				if(k1 == 1)
 				{
 					playerIndices[playerCount++] = i1;
-					player.anInt1537 = loopCycle;
+					player.textColor = loopCycle;
 					int l1 = stream.readBits(3);
 					player.moveInDir(false, l1);
 					int j2 = stream.readBits(1);
@@ -10157,7 +10157,7 @@ followDistance = 1;
 				if(k1 == 2)
 				{
 					playerIndices[playerCount++] = i1;
-					player.anInt1537 = loopCycle;
+					player.textColor = loopCycle;
 					int i2 = stream.readBits(3);
 					player.moveInDir(true, i2);
 					int k2 = stream.readBits(3);
@@ -10182,62 +10182,62 @@ followDistance = 1;
 		if(loginScreenState == 0)
 		{
 			int i = c1 / 2 + 80;
-			smallText.method382(0x75a9a9, c / 2, onDemandFetcher.statusString, i, true);
+			smallText.drawRightAligned(0x75a9a9, c / 2, onDemandFetcher.statusString, i, true);
 			i = c1 / 2 - 20;
-			chatTextDrawingArea.method382(0xffff00, c / 2, "Welcome to RuneScape", i, true);
+			chatTextDrawingArea.drawRightAligned(0xffff00, c / 2, "Welcome to RuneScape", i, true);
 			i += 30;
 			int l = c / 2 - 80;
 			int k1 = c1 / 2 + 20;
 			aBackground_967.drawBackground(l - 73, k1 - 20);
-			chatTextDrawingArea.method382(0xffffff, l, "New User", k1 + 5, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, l, "New User", k1 + 5, true);
 			l = c / 2 + 80;
 			aBackground_967.drawBackground(l - 73, k1 - 20);
-			chatTextDrawingArea.method382(0xffffff, l, "Existing User", k1 + 5, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, l, "Existing User", k1 + 5, true);
 		}
 		if(loginScreenState == 2)
 		{
 			int j = c1 / 2 - 40;
 			if(loginMessage1.length() > 0)
 			{
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage1, j - 15, true);
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j, true);
+				chatTextDrawingArea.drawRightAligned(0xffff00, c / 2, loginMessage1, j - 15, true);
+				chatTextDrawingArea.drawRightAligned(0xffff00, c / 2, loginMessage2, j, true);
 				j += 30;
 			} else
 			{
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j - 7, true);
+				chatTextDrawingArea.drawRightAligned(0xffff00, c / 2, loginMessage2, j - 7, true);
 				j += 30;
 			}
-			chatTextDrawingArea.method389(true, c / 2 - 90, 0xffffff, "Username: " + myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
+			chatTextDrawingArea.drawWaving(true, c / 2 - 90, 0xffffff, "Username: " + myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
 			j += 15;
-			chatTextDrawingArea.method389(true, c / 2 - 88, 0xffffff, "Password: " + TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
+			chatTextDrawingArea.drawWaving(true, c / 2 - 88, 0xffffff, "Password: " + TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
 			j += 15;
 			if(!flag)
 			{
 				int i1 = c / 2 - 80;
 				int l1 = c1 / 2 + 50;
 				aBackground_967.drawBackground(i1 - 73, l1 - 20);
-				chatTextDrawingArea.method382(0xffffff, i1, "Login", l1 + 5, true);
+				chatTextDrawingArea.drawRightAligned(0xffffff, i1, "Login", l1 + 5, true);
 				i1 = c / 2 + 80;
 				aBackground_967.drawBackground(i1 - 73, l1 - 20);
-				chatTextDrawingArea.method382(0xffffff, i1, "Cancel", l1 + 5, true);
+				chatTextDrawingArea.drawRightAligned(0xffffff, i1, "Cancel", l1 + 5, true);
 			}
 		}
 		if(loginScreenState == 3)
 		{
-						chatTextDrawingArea.method382(0xffff00, c / 2, "Create a free account", c1 / 2 - 60, true);
+						chatTextDrawingArea.drawRightAligned(0xffff00, c / 2, "Create a free account", c1 / 2 - 60, true);
 			int k = c1 / 2 - 35;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "To create a new account you need to", k, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, c / 2, "To create a new account you need to", k, true);
 			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "go back to the main RuneScape webpage", k, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, c / 2, "go back to the main RuneScape webpage", k, true);
 			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "and choose the red 'create account'", k, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, c / 2, "and choose the red 'create account'", k, true);
 			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "button at the top right of that page.", k, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, c / 2, "button at the top right of that page.", k, true);
 			k += 15;
 			int j1 = c / 2;
 			int i2 = c1 / 2 + 50;
 			aBackground_967.drawBackground(j1 - 73, i2 - 20);
-			chatTextDrawingArea.method382(0xffffff, j1, "Cancel", i2 + 5, true);
+			chatTextDrawingArea.drawRightAligned(0xffffff, j1, "Cancel", i2 + 5, true);
 		}
 		aRSImageProducer_1109.drawGraphics(171, super.graphics, 202);
 		if(welcomeScreenRaised)
@@ -10292,7 +10292,7 @@ followDistance = 1;
 		welcomeScreenRaised = true;
 	}
 
-	private void method137(Stream stream, int j)
+	private void parseGroupPacket(Stream stream, int j)
 	{
 		if(j == 84)
 		{
@@ -10339,11 +10339,11 @@ followDistance = 1;
 		}
 		if(j == 215)
 		{
-			int i1 = stream.method435();
-			int l3 = stream.method428();
+			int i1 = stream.readWordBigA();
+			int l3 = stream.readUnsignedByteSub();
 			int k6 = anInt1268 + (l3 >> 4 & 7);
 			int j9 = anInt1269 + (l3 & 7);
-			int i12 = stream.method435();
+			int i12 = stream.readWordBigA();
 			int j14 = stream.readUnsignedWord();
 			if(k6 >= 0 && j9 >= 0 && k6 < 104 && j9 < 104 && i12 != unknownInt10)
 			{
@@ -10359,7 +10359,7 @@ followDistance = 1;
 		}
 		if(j == 156)
 		{
-			int j1 = stream.method426();
+			int j1 = stream.readUnsignedByteAdd();
 			int i4 = anInt1268 + (j1 >> 4 & 7);
 			int l6 = anInt1269 + (j1 & 7);
 			int k9 = stream.readUnsignedWord();
@@ -10385,14 +10385,14 @@ followDistance = 1;
 		}
 		if(j == 160)
 		{
-			int k1 = stream.method428();
+			int k1 = stream.readUnsignedByteSub();
 			int j4 = anInt1268 + (k1 >> 4 & 7);
 			int i7 = anInt1269 + (k1 & 7);
-			int l9 = stream.method428();
+			int l9 = stream.readUnsignedByteSub();
 			int j12 = l9 >> 2;
 			int k14 = l9 & 3;
 			int j16 = anIntArray1177[j12];
-			int j17 = stream.method435();
+			int j17 = stream.readWordBigA();
 			if(j4 >= 0 && i7 >= 0 && j4 < 103 && i7 < 103)
 			{
 				int j18 = intGroundArray[plane][j4][i7];
@@ -10401,60 +10401,60 @@ followDistance = 1;
 				int k20 = intGroundArray[plane][j4][i7 + 1];
 				if(j16 == 0)
 				{
-					Object1 class10 = worldController.method296(plane, j4, i7);
+					WallObject class10 = worldController.getWallObject(plane, j4, i7);
 					if(class10 != null)
 					{
 						int k21 = class10.uid >> 14 & 0x7fff;
 						if(j12 == 2)
 						{
-							class10.aClass30_Sub2_Sub4_278 = new Animable_Sub5(k21, 4 + k14, 2, i19, l19, j18, k20, j17, false);
-							class10.aClass30_Sub2_Sub4_279 = new Animable_Sub5(k21, k14 + 1 & 3, 2, i19, l19, j18, k20, j17, false);
+							class10.renderable1 = new Animable_Sub5(k21, 4 + k14, 2, i19, l19, j18, k20, j17, false);
+							class10.renderable2 = new Animable_Sub5(k21, k14 + 1 & 3, 2, i19, l19, j18, k20, j17, false);
 						} else
 						{
-							class10.aClass30_Sub2_Sub4_278 = new Animable_Sub5(k21, k14, j12, i19, l19, j18, k20, j17, false);
+							class10.renderable1 = new Animable_Sub5(k21, k14, j12, i19, l19, j18, k20, j17, false);
 						}
 					}
 				}
 				if(j16 == 1)
 				{
-					Object2 class26 = worldController.method297(j4, i7, plane);
+					WallDecoration class26 = worldController.getWallDecoration(j4, i7, plane);
 					if(class26 != null)
-						class26.aClass30_Sub2_Sub4_504 = new Animable_Sub5(class26.uid >> 14 & 0x7fff, 0, 4, i19, l19, j18, k20, j17, false);
+						class26.renderable = new Animable_Sub5(class26.uid >> 14 & 0x7fff, 0, 4, i19, l19, j18, k20, j17, false);
 				}
 				if(j16 == 2)
 				{
-					Object5 class28 = worldController.method298(j4, i7, plane);
+					InteractiveObject class28 = worldController.getInteractiveObject(j4, i7, plane);
 					if(j12 == 11)
 						j12 = 10;
 					if(class28 != null)
-						class28.aClass30_Sub2_Sub4_521 = new Animable_Sub5(class28.uid >> 14 & 0x7fff, k14, j12, i19, l19, j18, k20, j17, false);
+						class28.renderable = new Animable_Sub5(class28.uid >> 14 & 0x7fff, k14, j12, i19, l19, j18, k20, j17, false);
 				}
 				if(j16 == 3)
 				{
-					Object3 class49 = worldController.method299(i7, j4, plane);
+					GroundDecoration class49 = worldController.getGroundDecoration(i7, j4, plane);
 					if(class49 != null)
-						class49.aClass30_Sub2_Sub4_814 = new Animable_Sub5(class49.uid >> 14 & 0x7fff, k14, 22, i19, l19, j18, k20, j17, false);
+						class49.renderable = new Animable_Sub5(class49.uid >> 14 & 0x7fff, k14, 22, i19, l19, j18, k20, j17, false);
 				}
 			}
 			return;
 		}
 		if(j == 147)
 		{
-			int l1 = stream.method428();
+			int l1 = stream.readUnsignedByteSub();
 			int k4 = anInt1268 + (l1 >> 4 & 7);
 			int j7 = anInt1269 + (l1 & 7);
 			int i10 = stream.readUnsignedWord();
-			byte byte0 = stream.method430();
-			int l14 = stream.method434();
-			byte byte1 = stream.method429();
+			byte byte0 = stream.readSubByte();
+			int l14 = stream.readWordLE();
+			byte byte1 = stream.readNegByte();
 			int k17 = stream.readUnsignedWord();
-			int k18 = stream.method428();
+			int k18 = stream.readUnsignedByteSub();
 			int j19 = k18 >> 2;
 			int i20 = k18 & 3;
 			int l20 = anIntArray1177[j19];
 			byte byte2 = stream.readSignedByte();
 			int l21 = stream.readUnsignedWord();
-			byte byte3 = stream.method429();
+			byte byte3 = stream.readNegByte();
 			Player player;
 			if(i10 == unknownInt10)
 				player = myPlayer;
@@ -10467,23 +10467,23 @@ followDistance = 1;
 				int j22 = intGroundArray[plane][k4 + 1][j7];
 				int k22 = intGroundArray[plane][k4 + 1][j7 + 1];
 				int l22 = intGroundArray[plane][k4][j7 + 1];
-				Model model = class46.method578(j19, i20, i22, j22, k22, l22, -1);
+				Model model = class46.getObjectModel(j19, i20, i22, j22, k22, l22, -1);
 				if(model != null)
 				{
-					method130(k17 + 1, -1, 0, l20, j7, 0, plane, k4, l14 + 1);
-					player.anInt1707 = l14 + loopCycle;
-					player.anInt1708 = k17 + loopCycle;
-					player.aModel_1714 = model;
-					int i23 = class46.anInt744;
-					int j23 = class46.anInt761;
+					handleObjectSpawn(k17 + 1, -1, 0, l20, j7, 0, plane, k4, l14 + 1);
+					player.attachedModelStartCycle = l14 + loopCycle;
+					player.attachedModelEndCycle = k17 + loopCycle;
+					player.attachedModel = model;
+					int i23 = class46.sizeX;
+					int j23 = class46.sizeY;
 					if(i20 == 1 || i20 == 3)
 					{
-						i23 = class46.anInt761;
-						j23 = class46.anInt744;
+						i23 = class46.sizeY;
+						j23 = class46.sizeX;
 					}
-					player.anInt1711 = k4 * 128 + i23 * 64;
-					player.anInt1713 = j7 * 128 + j23 * 64;
-					player.anInt1712 = method42(plane, player.anInt1713, player.anInt1711);
+					player.attachedModelX = k4 * 128 + i23 * 64;
+					player.attachedModelY = j7 * 128 + j23 * 64;
+					player.attachedModelOffsetY = getTileHeight(plane, player.attachedModelY, player.attachedModelX);
 					if(byte2 > byte0)
 					{
 						byte byte4 = byte2;
@@ -10505,16 +10505,16 @@ followDistance = 1;
 		}
 		if(j == 151)
 		{
-			int i2 = stream.method426();
+			int i2 = stream.readUnsignedByteAdd();
 			int l4 = anInt1268 + (i2 >> 4 & 7);
 			int k7 = anInt1269 + (i2 & 7);
-			int j10 = stream.method434();
-			int k12 = stream.method428();
+			int j10 = stream.readWordLE();
+			int k12 = stream.readUnsignedByteSub();
 			int i15 = k12 >> 2;
 			int k16 = k12 & 3;
 			int l17 = anIntArray1177[i15];
 			if(l4 >= 0 && k7 >= 0 && l4 < 104 && k7 < 104)
-				method130(-1, j10, k16, l17, k7, i15, plane, l4, 0);
+				handleObjectSpawn(-1, j10, k16, l17, k7, i15, plane, l4, 0);
 			return;
 		}
 		if(j == 4)
@@ -10529,14 +10529,14 @@ followDistance = 1;
 			{
 				i5 = i5 * 128 + 64;
 				l7 = l7 * 128 + 64;
-				Animable_Sub3 class30_sub2_sub4_sub3 = new Animable_Sub3(plane, loopCycle, j15, k10, method42(plane, l7, i5) - l12, l7, i5);
+				Animable_Sub3 class30_sub2_sub4_sub3 = new Animable_Sub3(plane, loopCycle, j15, k10, getTileHeight(plane, l7, i5) - l12, l7, i5);
 				aClass19_1056.insertHead(class30_sub2_sub4_sub3);
 			}
 			return;
 		}
 		if(j == 44)
 		{
-			int k2 = stream.method436();
+			int k2 = stream.readWordLEBigA();
 			int j5 = stream.readUnsignedWord();
 			int i8 = stream.readUnsignedByte();
 			int l10 = anInt1268 + (i8 >> 4 & 7);
@@ -10555,7 +10555,7 @@ followDistance = 1;
 		}
 		if(j == 101)
 		{
-			int l2 = stream.method427();
+			int l2 = stream.readUnsignedByteNeg();
 			int k5 = l2 >> 2;
 			int j8 = l2 & 3;
 			int i11 = anIntArray1177[k5];
@@ -10563,7 +10563,7 @@ followDistance = 1;
 			int k15 = anInt1268 + (j13 >> 4 & 7);
 			int l16 = anInt1269 + (j13 & 7);
 			if(k15 >= 0 && l16 >= 0 && k15 < 104 && l16 < 104)
-				method130(-1, -1, j8, i11, l16, k5, plane, k15, 0);
+				handleObjectSpawn(-1, -1, j8, i11, l16, k5, plane, k15, 0);
 			return;
 		}
 		if(j == 117)
@@ -10587,8 +10587,8 @@ followDistance = 1;
 				k8 = k8 * 128 + 64;
 				j11 = j11 * 128 + 64;
 				k13 = k13 * 128 + 64;
-				Animable_Sub4 class30_sub2_sub4_sub4 = new Animable_Sub4(i21, l18, k19 + loopCycle, j20 + loopCycle, j21, plane, method42(plane, k8, l5) - i18, k8, l5, l15, i17);
-				class30_sub2_sub4_sub4.method455(k19 + loopCycle, k13, method42(plane, k13, j11) - l18, j11);
+				Animable_Sub4 class30_sub2_sub4_sub4 = new Animable_Sub4(i21, l18, k19 + loopCycle, j20 + loopCycle, j21, plane, getTileHeight(plane, k8, l5) - i18, k8, l5, l15, i17);
+				class30_sub2_sub4_sub4.trackTarget(k19 + loopCycle, k13, getTileHeight(plane, k13, j11) - l18, j11);
 				aClass19_1013.insertHead(class30_sub2_sub4_sub4);
 			}
 		}
@@ -10603,7 +10603,7 @@ followDistance = 1;
 		ObjectDef.lowMem = true;
 	}
 
-	private void method139(Stream stream)
+	private void parseNPCRemovals(Stream stream)
 	{
 		stream.initBitAccess();
 		int k = stream.readBits(8);
@@ -10627,20 +10627,20 @@ followDistance = 1;
 			if(k1 == 0)
 			{
 				npcIndices[npcCount++] = j1;
-				npc.anInt1537 = loopCycle;
+				npc.textColor = loopCycle;
 			} else
 			{
 				int l1 = stream.readBits(2);
 				if(l1 == 0)
 				{
 					npcIndices[npcCount++] = j1;
-					npc.anInt1537 = loopCycle;
+					npc.textColor = loopCycle;
 					anIntArray894[anInt893++] = j1;
 				} else
 				if(l1 == 1)
 				{
 					npcIndices[npcCount++] = j1;
-					npc.anInt1537 = loopCycle;
+					npc.textColor = loopCycle;
 					int i2 = stream.readBits(3);
 					npc.moveInDir(false, i2);
 					int k2 = stream.readBits(1);
@@ -10650,7 +10650,7 @@ followDistance = 1;
 				if(l1 == 2)
 				{
 					npcIndices[npcCount++] = j1;
-					npc.anInt1537 = loopCycle;
+					npc.textColor = loopCycle;
 					int j2 = stream.readBits(3);
 					npc.moveInDir(true, j2);
 					int l2 = stream.readBits(3);
@@ -10771,8 +10771,8 @@ followDistance = 1;
 		int l = i * i + j * j;
 		if(l > 6400)
 			return;
-		int i1 = Model.modelIntArray1[k];
-		int j1 = Model.modelIntArray2[k];
+		int i1 = Model.SINE[k];
+		int j1 = Model.COSINE[k];
 		i1 = (i1 * 256) / (minimapInt3 + 256);
 		j1 = (j1 * 256) / (minimapInt3 + 256);
 		int k1 = j * i1 + i * j1 >> 16;
@@ -10784,7 +10784,7 @@ followDistance = 1;
 		}
 	}
 
-	private void method142(int i, int j, int k, int l, int i1, int j1, int k1
+	private void spawnOrRemoveObject(int i, int j, int k, int l, int i1, int j1, int k1
 	)
 	{
 		if(i1 >= 1 && i >= 1 && i1 <= 102 && i <= 102)
@@ -10793,43 +10793,43 @@ followDistance = 1;
 				return;
 			int i2 = 0;
 			if(j1 == 0)
-				i2 = worldController.method300(j, i1, i);
+				i2 = worldController.getWallObjectUID(j, i1, i);
 			if(j1 == 1)
-				i2 = worldController.method301(j, i1, i);
+				i2 = worldController.getWallDecorationUID(j, i1, i);
 			if(j1 == 2)
-				i2 = worldController.method302(j, i1, i);
+				i2 = worldController.getInteractiveObjectUID(j, i1, i);
 			if(j1 == 3)
-				i2 = worldController.method303(j, i1, i);
+				i2 = worldController.getGroundDecorationUID(j, i1, i);
 			if(i2 != 0)
 			{
-				int i3 = worldController.method304(j, i1, i, i2);
+				int i3 = worldController.getObjectConfig(j, i1, i, i2);
 				int j2 = i2 >> 14 & 0x7fff;
 				int k2 = i3 & 0x1f;
 				int l2 = i3 >> 6;
 				if(j1 == 0)
 				{
-					worldController.method291(i1, j, i, (byte)-119);
+					worldController.removeWallObject(i1, j, i, (byte)-119);
 					ObjectDef class46 = ObjectDef.forID(j2);
-					if(class46.aBoolean767)
-						aClass11Array1230[j].method215(l2, k2, class46.aBoolean757, i1, i);
+					if(class46.blocksProjectile)
+						aCollisionMapArray1230[j].removeWallFlags(l2, k2, class46.impenetrable, i1, i);
 				}
 				if(j1 == 1)
-					worldController.method292(i, j, i1);
+					worldController.removeWallDecoration(i, j, i1);
 				if(j1 == 2)
 				{
-					worldController.method293(j, i1, i);
+					worldController.removeInteractiveObjectAt(j, i1, i);
 					ObjectDef class46_1 = ObjectDef.forID(j2);
-					if(i1 + class46_1.anInt744 > 103 || i + class46_1.anInt744 > 103 || i1 + class46_1.anInt761 > 103 || i + class46_1.anInt761 > 103)
+					if(i1 + class46_1.sizeX > 103 || i + class46_1.sizeX > 103 || i1 + class46_1.sizeY > 103 || i + class46_1.sizeY > 103)
 						return;
-					if(class46_1.aBoolean767)
-						aClass11Array1230[j].method216(l2, class46_1.anInt744, i1, i, class46_1.anInt761, class46_1.aBoolean757);
+					if(class46_1.blocksProjectile)
+						aCollisionMapArray1230[j].removeObjectFlags(l2, class46_1.sizeX, i1, i, class46_1.sizeY, class46_1.impenetrable);
 				}
 				if(j1 == 3)
 				{
-					worldController.method294(j, i, i1);
+					worldController.removeGroundDecoration(j, i, i1);
 					ObjectDef class46_2 = ObjectDef.forID(j2);
-					if(class46_2.aBoolean767 && class46_2.hasActions)
-						aClass11Array1230[j].method218(i, i1);
+					if(class46_2.blocksProjectile && class46_2.hasActions)
+						aCollisionMapArray1230[j].unmarkBlocked(i, i1);
 				}
 			}
 			if(k1 >= 0)
@@ -10837,7 +10837,7 @@ followDistance = 1;
 				int j3 = j;
 				if(j3 < 3 && (byteGroundArray[1][i1][i] & 2) == 2)
 					j3++;
-				ObjectManager.method188(worldController, k, i, l, j3, aClass11Array1230[j], intGroundArray, i1, k1, j);
+				ObjectManager.placeObjectStatic(worldController, k, i, l, j3, aCollisionMapArray1230[j], intGroundArray, i1, k1, j);
 			}
 		}
 	}
@@ -10846,14 +10846,14 @@ followDistance = 1;
 	{
 		anInt839 = 0;
 		anInt893 = 0;
-		method117(stream);
-		method134(stream);
-		method91(stream, i);
-		method49(stream);
+		parseLocalPlayerMovement(stream);
+		parsePlayerRemovals(stream);
+		parseNewPlayers(stream, i);
+		parsePlayerUpdateMasks(stream);
 		for(int k = 0; k < anInt839; k++)
 		{
 			int l = anIntArray840[k];
-			if(playerArray[l].anInt1537 != loopCycle)
+			if(playerArray[l].textColor != loopCycle)
 				playerArray[l] = null;
 		}
 
@@ -10880,8 +10880,8 @@ followDistance = 1;
 		int l2 = j;
 		if(l1 != 0)
 		{
-			int i3 = Model.modelIntArray1[l1];
-			int k3 = Model.modelIntArray2[l1];
+			int i3 = Model.SINE[l1];
+			int k3 = Model.COSINE[l1];
 			int i4 = k2 * k3 - l2 * i3 >> 16;
 			l2 = k2 * i3 + l2 * k3 >> 16;
 			k2 = i4;
@@ -10900,8 +10900,8 @@ followDistance = 1;
 			  l2 = fwdbwd;
 			}
 */
-			int j3 = Model.modelIntArray1[i2];
-			int l3 = Model.modelIntArray2[i2];
+			int j3 = Model.SINE[i2];
+			int l3 = Model.COSINE[i2];
 			int j4 = l2 * j3 + j2 * l3 >> 16;
 			l2 = l2 * l3 - j2 * j3 >> 16;
 			j2 = j4;
@@ -10955,7 +10955,7 @@ followDistance = 1;
 				if(class9_2.valueIndexArray != null && class9_2.valueIndexArray[0][0] == 5) {
 					if(variousSettings[toggle] != class9_2.anIntArray212[0]) {
 						variousSettings[toggle] = class9_2.anIntArray212[0];
-						method33(toggle);
+						applyVarpSetting(toggle);
 						needDrawTabArea = true;
 					}
 				}
@@ -10966,7 +10966,7 @@ followDistance = 1;
 				RSInterface class9_3 = RSInterface.interfaceCache[button];
 				if(class9_3.valueIndexArray != null && class9_3.valueIndexArray[0][0] == 5) {
 					variousSettings[toggle] = 1 - variousSettings[toggle];
-					method33(toggle);
+					applyVarpSetting(toggle);
 					needDrawTabArea = true;
 				}
 				switch(button) {
@@ -10986,7 +10986,7 @@ followDistance = 1;
 		anIntArray1045[id] = state;
 		if(variousSettings[id] != state) {
 			variousSettings[id] = state;
-			method33(id);
+			applyVarpSetting(id);
 			needDrawTabArea = true;
 			if(dialogID != -1)
 				inputTaken = true;
@@ -11075,13 +11075,13 @@ followDistance = 1;
 					return true;
 					
 				case 176:
-					daysSinceRecovChange = inStream.method427();
-					unreadMessages = inStream.method435();
+					daysSinceRecovChange = inStream.readUnsignedByteNeg();
+					unreadMessages = inStream.readWordBigA();
 					membersInt = inStream.readUnsignedByte();
-					anInt1193 = inStream.method440();
+					anInt1193 = inStream.readDWordMixed2();
 					daysSinceLastLogin = inStream.readUnsignedWord();
 					if(anInt1193 != 0 && openInterfaceID == -1) {
-						signlink.dnslookup(TextClass.method586(anInt1193));
+						signlink.dnslookup(TextClass.intToIpAddress(anInt1193));
 						clearTopInterfaces();
 						char c = '\u028A';
 						if(daysSinceRecovChange != 201 || membersInt == 1)
@@ -11099,8 +11099,8 @@ followDistance = 1;
 					return true;
 					
 				case 64:
-					anInt1268 = inStream.method427();
-					anInt1269 = inStream.method428();
+					anInt1268 = inStream.readUnsignedByteNeg();
+					anInt1269 = inStream.readUnsignedByteSub();
 					for(int j = anInt1268; j < anInt1268 + 8; j++) {
 						for(int l9 = anInt1269; l9 < anInt1269 + 8; l9++)
 							if(groundArray[plane][j][l9] != null) {
@@ -11108,17 +11108,17 @@ followDistance = 1;
 								spawnGroundItem(j, l9);
 							}
 					}
-					for(Class30_Sub1 class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetFirst(); class30_sub1 != null; class30_sub1 = (Class30_Sub1)aClass19_1179.reverseGetNext())
-						if(class30_sub1.anInt1297 >= anInt1268 && class30_sub1.anInt1297 < anInt1268 + 8 && class30_sub1.anInt1298 >= anInt1269 && class30_sub1.anInt1298 < anInt1269 + 8 && class30_sub1.anInt1295 == plane)
-							class30_sub1.anInt1294 = 0;
+					for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
+						if(spawnObjectNode.objectX >= anInt1268 && spawnObjectNode.objectX < anInt1268 + 8 && spawnObjectNode.objectY >= anInt1269 && spawnObjectNode.objectY < anInt1269 + 8 && spawnObjectNode.objectPlane == plane)
+							spawnObjectNode.delay = 0;
 					pktType = -1;
 					return true;
 					
 				case 185:
-					int k = inStream.method436();
+					int k = inStream.readWordLEBigA();
 					RSInterface.interfaceCache[k].anInt233 = 3;
 					if(myPlayer.desc == null)
-						RSInterface.interfaceCache[k].mediaID = (myPlayer.anIntArray1700[0] << 25) + (myPlayer.anIntArray1700[4] << 20) + (myPlayer.equipment[0] << 15) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
+						RSInterface.interfaceCache[k].mediaID = (myPlayer.bodyColors[0] << 25) + (myPlayer.bodyColors[4] << 20) + (myPlayer.equipment[0] << 15) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
 					else
 						RSInterface.interfaceCache[k].mediaID = (int)(0x12345678L + myPlayer.desc.type);
 					pktType = -1;
@@ -11149,7 +11149,7 @@ followDistance = 1;
 					return true;
 					
 				case 72:
-					int i1 = inStream.method434();
+					int i1 = inStream.readWordLE();
 					RSInterface class9 = RSInterface.interfaceCache[i1];
 					for(int k15 = 0; k15 < class9.inv.length; k15++) {
 						class9.inv[k15] = -1;
@@ -11175,7 +11175,7 @@ followDistance = 1;
 					if(anInt1102 >= 100) {
 						xCameraPos = anInt1098 * 128 + 64;
 						yCameraPos = anInt1099 * 128 + 64;
-						zCameraPos = method42(plane, yCameraPos, xCameraPos) - anInt1100;
+						zCameraPos = getTileHeight(plane, yCameraPos, xCameraPos) - anInt1100;
 					}
 					pktType = -1;
 					return true;
@@ -11183,7 +11183,7 @@ followDistance = 1;
 				case 134:
 					needDrawTabArea = true;
 					int k1 = inStream.readUnsignedByte();
-					int i10 = inStream.method439();
+					int i10 = inStream.readDWordMixed1();
 					int l15 = inStream.readUnsignedByte();
 					currentExp[k1] = i10;
 					currentStats[k1] = l15;
@@ -11196,7 +11196,7 @@ followDistance = 1;
 					
 				case 71:
 					int l1 = inStream.readUnsignedWord();
-					int j10 = inStream.method426();
+					int j10 = inStream.readUnsignedByteAdd();
 					if(l1 == 65535)
 						l1 = -1;
 					tabInterfaceIDs[j10] = l1;
@@ -11206,25 +11206,25 @@ followDistance = 1;
 					return true;
 					
 				case 74:
-					int i2 = inStream.method434();
+					int i2 = inStream.readWordLE();
 					if(i2 == 65535)
 						i2 = -1;
 					if(i2 != currentSong && musicEnabled && !lowMem && prevSong == 0) {
 						nextSong = i2;
 						songChanging = true;
-						onDemandFetcher.method558(2, nextSong);
+						onDemandFetcher.requestFile(2, nextSong);
 					}
 					currentSong = i2;
 					pktType = -1;
 					return true;
 					
 				case 121:
-					int j2 = inStream.method436();
-					int k10 = inStream.method435();
+					int j2 = inStream.readWordLEBigA();
+					int k10 = inStream.readWordBigA();
 					if(musicEnabled && !lowMem) {
 						nextSong = j2;
 						songChanging = false;
-						onDemandFetcher.method558(2, nextSong);
+						onDemandFetcher.requestFile(2, nextSong);
 						prevSong = k10;
 					}
 					pktType = -1;
@@ -11237,8 +11237,8 @@ followDistance = 1;
 					
 				case 70:
 					int k2 = inStream.readSignedWord();
-					int l10 = inStream.method437();
-					int i16 = inStream.method434();
+					int l10 = inStream.readSignedWordLE();
+					int i16 = inStream.readWordLE();
 					RSInterface class9_5 = RSInterface.interfaceCache[i16];
 					class9_5.anInt263 = k2;
 					class9_5.anInt265 = l10;
@@ -11250,12 +11250,12 @@ followDistance = 1;
 					int l2 = anInt1069;
 					int i11 = anInt1070;
 					if(pktType == 73) {
-						l2 = inStream.method435();
+						l2 = inStream.readWordBigA();
 						i11 = inStream.readUnsignedWord();
 						aBoolean1159 = false;
 					}
 					if(pktType == 241) {
-						i11 = inStream.method435();
+						i11 = inStream.readWordBigA();
 						inStream.initBitAccess();
 						for(int j16 = 0; j16 < 4; j16++) {
 							for(int l20 = 0; l20 < 13; l20++) {
@@ -11309,12 +11309,12 @@ followDistance = 1;
 									anIntArray1236[k16] = -1;
 									k16++;
 								} else {
-									int k28 = anIntArray1235[k16] = onDemandFetcher.method562(0, j26, l23);
+									int k28 = anIntArray1235[k16] = onDemandFetcher.getMapFile(0, j26, l23);
 									if(k28 != -1)
-										onDemandFetcher.method558(3, k28);
-									int j30 = anIntArray1236[k16] = onDemandFetcher.method562(1, j26, l23);
+										onDemandFetcher.requestFile(3, k28);
+									int j30 = anIntArray1236[k16] = onDemandFetcher.getMapFile(1, j26, l23);
 									if(j30 != -1)
-										onDemandFetcher.method558(3, j30);
+										onDemandFetcher.requestFile(3, j30);
 									k16++;
 								}
 							}
@@ -11352,12 +11352,12 @@ followDistance = 1;
 							int i29 = anIntArray1234[l26] = ai[l26];
 							int l30 = i29 >> 8 & 0xff;
 							int l31 = i29 & 0xff;
-							int j32 = anIntArray1235[l26] = onDemandFetcher.method562(0, l31, l30);
+							int j32 = anIntArray1235[l26] = onDemandFetcher.getMapFile(0, l31, l30);
 							if(j32 != -1)
-								onDemandFetcher.method558(3, j32);
-							int i33 = anIntArray1236[l26] = onDemandFetcher.method562(1, l31, l30);
+								onDemandFetcher.requestFile(3, j32);
+							int i33 = anIntArray1236[l26] = onDemandFetcher.getMapFile(1, l31, l30);
 							if(i33 != -1)
-								onDemandFetcher.method558(3, i33);
+								onDemandFetcher.requestFile(3, i33);
 						}
 					}
 					int i17 = baseX - anInt1036;
@@ -11414,11 +11414,11 @@ followDistance = 1;
 									groundArray[k34][k33][l33] = null;
 						}
 					}
-					for(Class30_Sub1 class30_sub1_1 = (Class30_Sub1)aClass19_1179.reverseGetFirst(); class30_sub1_1 != null; class30_sub1_1 = (Class30_Sub1)aClass19_1179.reverseGetNext()) {
-						class30_sub1_1.anInt1297 -= i17;
-						class30_sub1_1.anInt1298 -= j21;
-						if(class30_sub1_1.anInt1297 < 0 || class30_sub1_1.anInt1298 < 0 || class30_sub1_1.anInt1297 >= 104 || class30_sub1_1.anInt1298 >= 104)
-							class30_sub1_1.unlink();
+					for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetNext()) {
+						spawnObjectNode_1.objectX -= i17;
+						spawnObjectNode_1.objectY -= j21;
+						if(spawnObjectNode_1.objectX < 0 || spawnObjectNode_1.objectY < 0 || spawnObjectNode_1.objectX >= 104 || spawnObjectNode_1.objectY >= 104)
+							spawnObjectNode_1.unlink();
 					}
 					if(destX != 0) {
 						destX -= i17;
@@ -11429,9 +11429,9 @@ followDistance = 1;
 					return true;
 					
 				case 208:
-					int i3 = inStream.method437();
+					int i3 = inStream.readSignedWordLE();
 					if(i3 >= 0)
-						method60(i3);
+						resetInterfaceAnim(i3);
 					anInt1018 = i3;
 					pktType = -1;
 					return true;
@@ -11442,24 +11442,24 @@ followDistance = 1;
 					return true;
 					
 				case 75:
-					int j3 = inStream.method436();
-					int j11 = inStream.method436();
+					int j3 = inStream.readWordLEBigA();
+					int j11 = inStream.readWordLEBigA();
 					RSInterface.interfaceCache[j11].anInt233 = 2;
 					RSInterface.interfaceCache[j11].mediaID = j3;
 					pktType = -1;
 					return true;
 					
 				case 114:
-					anInt1104 = inStream.method434() * 30;
+					anInt1104 = inStream.readWordLE() * 30;
 					pktType = -1;
 					return true;
 					
 				case 60:
 					anInt1269 = inStream.readUnsignedByte();
-					anInt1268 = inStream.method427();
+					anInt1268 = inStream.readUnsignedByteNeg();
 					while(inStream.currentOffset < pktSize) {
 						int k3 = inStream.readUnsignedByte();
-						method137(inStream, k3);
+						parseGroupPacket(inStream, k3);
 					}
 					pktType = -1;
 					return true;
@@ -11512,8 +11512,8 @@ case 174:
                 return true;
 					
 				case 104:
-					int j4 = inStream.method427();
-					int i12 = inStream.method426();
+					int j4 = inStream.readUnsignedByteNeg();
+					int i12 = inStream.readUnsignedByteAdd();
 					String s6 = inStream.readString();
 					if(j4 >= 1 && j4 <= 5) {
 						if(s6.equalsIgnoreCase("null"))
@@ -11682,7 +11682,7 @@ case 174:
 					return true;
 					
 				case 248:
-					int i5 = inStream.method435();
+					int i5 = inStream.readWordBigA();
 					int k12 = inStream.readUnsignedWord();
 					if(backDialogID != -1) {
 						backDialogID = -1;
@@ -11701,8 +11701,8 @@ case 174:
 					return true;
 					
 				case 79:
-					int j5 = inStream.method434();
-					int l12 = inStream.method435();
+					int j5 = inStream.readWordLE();
+					int l12 = inStream.readWordBigA();
 					RSInterface class9_3 = RSInterface.interfaceCache[j5];
 					if(class9_3 != null && class9_3.type == 0) {
 						if(l12 < 0)
@@ -11718,7 +11718,7 @@ case 174:
 					for(int k5 = 0; k5 < variousSettings.length; k5++)
 						if(variousSettings[k5] != anIntArray1045[k5]) {
 							variousSettings[k5] = anIntArray1045[k5];
-							method33(k5);
+							applyVarpSetting(k5);
 							needDrawTabArea = true;
 						}
 					pktType = -1;
@@ -11747,7 +11747,7 @@ case 174:
 						try {
 							anIntArray1240[anInt1169] = j18;
 							anInt1169 = (anInt1169 + 1) % 100;
-							String s9 = TextInput.method525(pktSize - 13, inStream);
+							String s9 = TextInput.decodeText(pktSize - 13, inStream);
 							//if(l21 != 3)
 								//s9 = Censor.doCensor(s9);
 							if(l21 == 2 || l21 == 3)
@@ -11764,13 +11764,13 @@ case 174:
 					return true;
 					
 				case 85:
-					anInt1269 = inStream.method427();
-					anInt1268 = inStream.method427();
+					anInt1269 = inStream.readUnsignedByteNeg();
+					anInt1268 = inStream.readUnsignedByteNeg();
 					pktType = -1;
 					return true;
 					
 				case 24:
-					anInt1054 = inStream.method428();
+					anInt1054 = inStream.readUnsignedByteSub();
 					if(anInt1054 == tabID) {
 						if(anInt1054 == 3)
 							tabID = 1;
@@ -11782,7 +11782,7 @@ case 174:
 					return true;
 					
 				case 246:
-					int i6 = inStream.method434();
+					int i6 = inStream.readWordLE();
 					int i13 = inStream.readUnsignedWord();
 					int k18 = inStream.readUnsignedWord();
 					if(k18 == 65535) {
@@ -11808,8 +11808,8 @@ case 174:
 					return true;
 					
 				case 142:
-					int j6 = inStream.method434();
-					method60(j6);
+					int j6 = inStream.readWordLE();
+					resetInterfaceAnim(j6);
 					if(backDialogID != -1) {
 						backDialogID = -1;
 						inputTaken = true;
@@ -11828,7 +11828,7 @@ case 174:
 					
 				case 126:
 					String text = inStream.readString();
-					int frame = inStream.method435();
+					int frame = inStream.readWordBigA();
 					if (text.startsWith("www.")) {
 						launchURL(text);
 						pktType = -1;
@@ -11859,7 +11859,7 @@ case 174:
 					return true;
 					
 				case 8:
-					int k6 = inStream.method436();
+					int k6 = inStream.readWordLEBigA();
 					int l13 = inStream.readUnsignedWord();
 					RSInterface.interfaceCache[k6].anInt233 = 1;
 					RSInterface.interfaceCache[k6].mediaID = l13;
@@ -11867,8 +11867,8 @@ case 174:
 					return true;
 					
 				case 122:
-					int l6 = inStream.method436();
-					int i14 = inStream.method436();
+					int l6 = inStream.readWordLEBigA();
+					int i14 = inStream.readWordLEBigA();
 					int i19 = i14 >> 10 & 0x1f;
 					int i22 = i14 >> 5 & 0x1f;
 					int l24 = i14 & 0x1f;
@@ -11884,8 +11884,8 @@ case 174:
 					for(int j22 = 0; j22 < j19; j22++) {
 						int i25 = inStream.readUnsignedByte();
 						if(i25 == 255)
-							i25 = inStream.method440();
-						class9_1.inv[j22] = inStream.method436();
+							i25 = inStream.readDWordMixed2();
+						class9_1.inv[j22] = inStream.readWordLEBigA();
 						class9_1.invStackSizes[j22] = i25;
 					}
 					for(int j25 = j19; j25 < class9_1.inv.length; j25++) {
@@ -11896,10 +11896,10 @@ case 174:
 					return true;
 					
 				case 230:
-					int j7 = inStream.method435();
+					int j7 = inStream.readWordBigA();
 					int j14 = inStream.readUnsignedWord();
 					int k19 = inStream.readUnsignedWord();
-					int k22 = inStream.method436();
+					int k22 = inStream.readWordLEBigA();
 					RSInterface.interfaceCache[j14].modelRotation1 = k19;
 					RSInterface.interfaceCache[j14].modelRotation2 = k22;
 					RSInterface.interfaceCache[j14].modelZoom = j7;
@@ -11922,7 +11922,7 @@ case 174:
 					if(anInt999 >= 100) {
 						int k7 = anInt995 * 128 + 64;
 						int k14 = anInt996 * 128 + 64;
-						int i20 = method42(plane, k14, k7) - anInt997;
+						int i20 = getTileHeight(plane, k14, k7) - anInt997;
 						int l22 = k7 - xCameraPos;
 						int k25 = i20 - zCameraPos;
 						int j28 = k14 - yCameraPos;
@@ -11938,8 +11938,8 @@ case 174:
 					return true;
 					
 				case 249:
-					anInt1046 = inStream.method426();
-					unknownInt10 = inStream.method436();
+					anInt1046 = inStream.readUnsignedByteAdd();
+					unknownInt10 = inStream.readWordLEBigA();
 					pktType = -1;
 					return true;
 					
@@ -11966,7 +11966,7 @@ case 174:
 					
 				case 97:
 					int l7 = inStream.readUnsignedWord();
-					method60(l7);
+					resetInterfaceAnim(l7);
 					if(invOverlayInterfaceID != -1) {
 						invOverlayInterfaceID = -1;
 						needDrawTabArea = true;
@@ -11986,19 +11986,19 @@ case 174:
 					return true;
 					
 				case 218:
-					int i8 = inStream.method438();
+					int i8 = inStream.readSignedWordLEA();
 					dialogID = i8;
 					inputTaken = true;
 					pktType = -1;
 					return true;
 					
 				case 87:
-					int j8 = inStream.method434();
-					int l14 = inStream.method439();
+					int j8 = inStream.readWordLE();
+					int l14 = inStream.readDWordMixed1();
 					anIntArray1045[j8] = l14;
 					if(variousSettings[j8] != l14) {
 						variousSettings[j8] = l14;
-						method33(j8);
+						applyVarpSetting(j8);
 						needDrawTabArea = true;
 						if(dialogID != -1)
 							inputTaken = true;
@@ -12007,12 +12007,12 @@ case 174:
 					return true;
 					
 				case 36:
-					int k8 = inStream.method434();
+					int k8 = inStream.readWordLE();
 					byte byte0 = inStream.readSignedByte();
 					anIntArray1045[k8] = byte0;
 					if(variousSettings[k8] != byte0) {
 						variousSettings[k8] = byte0;
-						method33(k8);
+						applyVarpSetting(k8);
 						needDrawTabArea = true;
 						if(dialogID != -1)
 							inputTaken = true;
@@ -12061,7 +12061,7 @@ case 174:
 					int i9 = inStream.readUnsignedWord();
 					RSInterface class9_2 = RSInterface.interfaceCache[i9];
 					while(inStream.currentOffset < pktSize) {
-						int j20 = inStream.method422();
+						int j20 = inStream.readSmart();
 						int i23 = inStream.readUnsignedWord();
 						int l25 = inStream.readUnsignedByte();
 						if(l25 == 255)
@@ -12085,20 +12085,20 @@ case 174:
 				case 156:
 				case 160:
 				case 215:
-					method137(inStream, pktType);
+					parseGroupPacket(inStream, pktType);
 					pktType = -1;
 					return true;
 					
 				case 106:
-					tabID = inStream.method427();
+					tabID = inStream.readUnsignedByteNeg();
 					needDrawTabArea = true;
 					tabAreaAltered = true;
 					pktType = -1;
 					return true;
 					
 				case 164:
-					int j9 = inStream.method434();
-					method60(j9);
+					int j9 = inStream.readWordLE();
+					resetInterfaceAnim(j9);
 					if(invOverlayInterfaceID != -1) {
 						invOverlayInterfaceID = -1;
 						needDrawTabArea = true;
@@ -12127,14 +12127,14 @@ case 174:
 		return true;
 	}
 
-	private void method146() {
+	private void processSceneEntities() {
 		anInt1265++;
-		method47(true);
-		method26(true);
-		method47(false);
-		method26(false);
-		method55();
-		method104();
+		renderPlayersOnScene(true);
+		renderNPCsOnScene(true);
+		renderPlayersOnScene(false);
+		renderNPCsOnScene(false);
+		processProjectiles();
+		processStationaryGfx();
 		if(!aBoolean1160) {
 			int i = anInt1184;
 			if(anInt984 / 256 > i)
@@ -12142,13 +12142,13 @@ case 174:
 			if(aBooleanArray876[4] && anIntArray1203[4] + 128 > i)
 				i = anIntArray1203[4] + 128;
 			int k = minimapInt1 + anInt896 & 0x7ff;
-			setCameraPos(600 + i * 3, i, anInt1014, method42(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
+			setCameraPos(600 + i * 3, i, anInt1014, getTileHeight(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
 		}
 		int j;
 		if(!aBoolean1160)
-			j = method120();
+			j = getCameraPlane();
 		else
-			j = method121();
+			j = getCameraRenderPlane();
 		int l = xCameraPos;
 		int i1 = zCameraPos;
 		int j1 = yCameraPos;
@@ -12174,16 +12174,16 @@ case 174:
 				}
 			}
 		int k2 = Texture.anInt1481;
-		Model.aBoolean1684 = true;
-		Model.anInt1687 = 0;
-		Model.anInt1685 = super.mouseX - 4;
-		Model.anInt1686 = super.mouseY - 4;
+		Model.mousePickingEnabled = true;
+		Model.mousePickCount = 0;
+		Model.mousePickX = super.mouseX - 4;
+		Model.mousePickY = super.mouseY - 4;
 		DrawingArea.setAllPixelsToZero();
-		worldController.method313(xCameraPos, yCameraPos, xCameraCurve, zCameraPos, j, yCameraCurve);
+		worldController.renderScene(xCameraPos, yCameraPos, xCameraCurve, zCameraPos, j, yCameraCurve);
 		worldController.clearObj5Cache();
 		updateEntities();
 		drawHeadIcon();
-		method37(k2);
+		animateTexture(k2);
 		draw3dScreen();
 		aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
 		xCameraPos = l;
@@ -12220,19 +12220,19 @@ case 174:
 		hitPointsFill.drawSprite(163, 16);
 		//Draws current HP text 
 		if(health > 100) {
-			smallText.method382(65280, 176, cHP, 34, true);
+			smallText.drawRightAligned(65280, 176, cHP, 34, true);
 		}
 		if(health <= 100 && health >= 75) {
-			smallText.method382(65280, 176, cHP, 34, true);
+			smallText.drawRightAligned(65280, 176, cHP, 34, true);
 		}
 		else if(health <= 74 && health >= 50) {
-			smallText.method382(0xffff00, 176, cHP, 34, true);
+			smallText.drawRightAligned(0xffff00, 176, cHP, 34, true);
 		}
 		else if(health <= 49 && health >= 25) {
-			smallText.method382(0xfca607, 176, cHP, 34, true);
+			smallText.drawRightAligned(0xfca607, 176, cHP, 34, true);
 		}
 		else if(health <= 24 && health >= 0) {
-			smallText.method382(0xf50d0d, 176, cHP, 34, true);
+			smallText.drawRightAligned(0xf50d0d, 176, cHP, 34, true);
 		}
 		// Draws inside orb sprites 
 	}
@@ -12254,16 +12254,16 @@ case 174:
 		prayerFill.drawSprite(174, 52);
 		/* Draws current HP text */
 		if(prayer <= 100 && prayer >= 75) {
-			smallText.method382(65280, 187, cP, 71, true);
+			smallText.drawRightAligned(65280, 187, cP, 71, true);
 		}
 		else if(prayer <= 74 && prayer >= 50) {
-			smallText.method382(0xffff00, 187, cP, 71, true);
+			smallText.drawRightAligned(0xffff00, 187, cP, 71, true);
 		}
 		else if(prayer <= 49 && prayer >= 25) {
-			smallText.method382(0xfca607, 187, cP, 71, true);
+			smallText.drawRightAligned(0xfca607, 187, cP, 71, true);
 		}
 		else if(prayer <= 24 && prayer >= 0) {
-			smallText.method382(0xf50d0d, 187, cP, 71, true);
+			smallText.drawRightAligned(0xf50d0d, 187, cP, 71, true);
 		}
 		/* Draws inside orb sprites */
 	}
@@ -12432,7 +12432,7 @@ case 174:
 		inputTaken = false;
 		songChanging = true;
 		anIntArray1229 = new int[151];
-		aClass11Array1230 = new Class11[4];
+		aCollisionMapArray1230 = new CollisionMap[4];
 		aBoolean1233 = false;
 		anIntArray1240 = new int[100];
 		anIntArray1241 = new int[50];
@@ -12858,7 +12858,7 @@ case 174:
 	private int nextSong;
 	private boolean songChanging;
 	private final int[] anIntArray1229;
-	private Class11[] aClass11Array1230;
+	private CollisionMap[] aCollisionMapArray1230;
 	public static int anIntArray1232[];
 	private boolean aBoolean1233;
 	private int[] anIntArray1234;

@@ -23,41 +23,41 @@ final class Animable_Sub3 extends Animable {
 		if(model == null)
 			return null;
 		int j = aSpotAnim_1568.aAnimation_407.anIntArray353[anInt1569];
-		Model model_1 = new Model(true, Class36.method532(j), false, model);
+		Model model_1 = new Model(true, AnimFrame.isFrameLoaded(j), false, model);
 		if(!aBoolean1567)
 		{
-			model_1.method469();
-			model_1.method470(j);
-			model_1.anIntArrayArray1658 = null;
-			model_1.anIntArrayArray1657 = null;
+			model_1.buildLabelGroups();
+			model_1.applyTransform(j);
+			model_1.labelGroupsUnused = null;
+			model_1.labelGroups = null;
 		}
 		if(aSpotAnim_1568.anInt410 != 128 || aSpotAnim_1568.anInt411 != 128)
-			model_1.method478(aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt411);
+			model_1.scale(aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt411);
 		if(aSpotAnim_1568.anInt412 != 0)
 		{
 			if(aSpotAnim_1568.anInt412 == 90)
-				model_1.method473();
+				model_1.rotateY90();
 			if(aSpotAnim_1568.anInt412 == 180)
 			{
-				model_1.method473();
-				model_1.method473();
+				model_1.rotateY90();
+				model_1.rotateY90();
 			}
 			if(aSpotAnim_1568.anInt412 == 270)
 			{
-				model_1.method473();
-				model_1.method473();
-				model_1.method473();
+				model_1.rotateY90();
+				model_1.rotateY90();
+				model_1.rotateY90();
 			}
 		}
-		model_1.method479(64 + aSpotAnim_1568.anInt413, 850 + aSpotAnim_1568.anInt414, -30, -50, -30, true);
+		model_1.calculateLighting(64 + aSpotAnim_1568.anInt413, 850 + aSpotAnim_1568.anInt414, -30, -50, -30, true);
 		return model_1;
 	}
 
-	public void method454(int i)
+	public void advanceSpotAnimFrame(int i)
 	{
-		for(anInt1570 += i; anInt1570 > aSpotAnim_1568.aAnimation_407.method258(anInt1569);)
+		for(anInt1570 += i; anInt1570 > aSpotAnim_1568.aAnimation_407.getFrameDuration(anInt1569);)
 		{
-			anInt1570 -= aSpotAnim_1568.aAnimation_407.method258(anInt1569) + 1;
+			anInt1570 -= aSpotAnim_1568.aAnimation_407.getFrameDuration(anInt1569) + 1;
 			anInt1569++;
 			if(anInt1569 >= aSpotAnim_1568.aAnimation_407.anInt352 && (anInt1569 < 0 || anInt1569 >= aSpotAnim_1568.aAnimation_407.anInt352))
 			{

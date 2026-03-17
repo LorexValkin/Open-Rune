@@ -21,28 +21,28 @@ public class Entity extends Animable {
 				{
 					smallX[i1] = smallX[i1 - 1];
 					smallY[i1] = smallY[i1 - 1];
-					aBooleanArray1553[i1] = aBooleanArray1553[i1 - 1];
+					pathRunning[i1] = pathRunning[i1 - 1];
 				}
 
 				smallX[0] = i;
 				smallY[0] = j;
-				aBooleanArray1553[0] = false;
+				pathRunning[0] = false;
 				return;
 			}
 		}
 		smallXYIndex = 0;
-		anInt1542 = 0;
-		anInt1503 = 0;
+		pathRemainder = 0;
+		stepDelayCounter = 0;
 		smallX[0] = i;
 		smallY[0] = j;
-		x = smallX[0] * 128 + anInt1540 * 64;
-		y = smallY[0] * 128 + anInt1540 * 64;
+		x = smallX[0] * 128 + tileSize * 64;
+		y = smallY[0] * 128 + tileSize * 64;
 	}
 
-	public final void method446()
+	public final void resetPath()
 	{
 		smallXYIndex = 0;
-		anInt1542 = 0;
+		pathRemainder = 0;
 	}
 
 	public final void updateHitData(int j, int k, int l)
@@ -100,11 +100,11 @@ public class Entity extends Animable {
 		{
 			smallX[l] = smallX[l - 1];
 			smallY[l] = smallY[l - 1];
-			aBooleanArray1553[l] = aBooleanArray1553[l - 1];
+			pathRunning[l] = pathRunning[l - 1];
 		}
 			smallX[0] = j;
 			smallY[0] = k;
-			aBooleanArray1553[0] = flag;
+			pathRunning[0] = flag;
 	}
 
 	public int entScreenX;
@@ -120,81 +120,81 @@ public class Entity extends Animable {
 		smallX = new int[10];
 		smallY = new int[10];
 		interactingEntity = -1;
-		anInt1504 = 32;
-		anInt1505 = -1;
+		turnSpeed = 32;
+		walkAnimId = -1;
 		height = 200;
-		anInt1511 = -1;
-		anInt1512 = -1;
+		standAnimId = -1;
+		turnAnimId = -1;
 		hitArray = new int[4];
 		hitMarkTypes = new int[4];
 		hitsLoopCycle = new int[4];
-		anInt1517 = -1;
-		anInt1520 = -1;
+		movementAnimId = -1;
+		spotAnimId = -1;
 		anim = -1;
 		loopCycleStatus = -1000;
 		textCycle = 100;
-		anInt1540 = 1;
-		aBoolean1541 = false;
-		aBooleanArray1553 = new boolean[10];
-		anInt1554 = -1;
-		anInt1555 = -1;
-		anInt1556 = -1;
-		anInt1557 = -1;
+		tileSize = 1;
+		animStretches = false;
+		pathRunning = new boolean[10];
+		walkBackAnimId = -1;
+		walkLeftAnimId = -1;
+		walkRightAnimId = -1;
+		runAnimId = -1;
 	}
 
 	public final int[] smallX;
 	public final int[] smallY;
 	public int interactingEntity;
-	int anInt1503;
-	int anInt1504;
-	int anInt1505;
+	int stepDelayCounter;
+	int turnSpeed;
+	int walkAnimId;
 	public String textSpoken;
 	public int height;
 	public int turnDirection;
-	int anInt1511;
-	int anInt1512;
-	int anInt1513;
+	int standAnimId;
+	int turnAnimId;
+	int turnAroundAnimId;
 	final int[] hitArray;
 	final int[] hitMarkTypes;
 	final int[] hitsLoopCycle;
-	int anInt1517;
-	int anInt1518;
-	int anInt1519;
-	int anInt1520;
-	int anInt1521;
-	int anInt1522;
-	int anInt1523;
-	int anInt1524;
+	int movementAnimId;
+	int movementAnimFrame;
+	int movementAnimCycle;
+	int spotAnimId;
+	int spotAnimFrame;
+	int spotAnimCycle;
+	int spotAnimDelay;
+	int spotAnimHeight;
 	int smallXYIndex;
 	public int anim;
-	int anInt1527;
-	int anInt1528;
-	int anInt1529;
-	int anInt1530;
-	int anInt1531;
+	int animFrame;
+	int animCycle;
+	int animDelay;
+	int animFrameCount;
+	int animResetCycle;
 	public int loopCycleStatus;
 	public int currentHealth;
 	public int maxHealth;
 	int textCycle;
-	int anInt1537;
-	int anInt1538;
-	int anInt1539;
-	int anInt1540;
-	boolean aBoolean1541;
-	int anInt1542;
-	int anInt1543;
-	int anInt1544;
-	int anInt1545;
-	int anInt1546;
-	int anInt1547;
-	int anInt1548;
-	int anInt1549;
+	int textColor;
+	int textEffect;
+	int textAlpha;
+	int tileSize;
+	boolean animStretches;
+	int pathRemainder;
+	int forceMoveStartX;
+	int forceMoveEndX;
+	int forceMoveStartY;
+	int forceMoveEndY;
+	int forceMoveEndCycle;
+	int forceMoveStartCycle;
+	int forceMoveDirection;
 	public int x;
 	public int y;
-	int anInt1552;
-	final boolean[] aBooleanArray1553;
-	int anInt1554;
-	int anInt1555;
-	int anInt1556;
-	int anInt1557;
+	int faceAngle;
+	final boolean[] pathRunning;
+	int walkBackAnimId;
+	int walkLeftAnimId;
+	int walkRightAnimId;
+	int runAnimId;
 }

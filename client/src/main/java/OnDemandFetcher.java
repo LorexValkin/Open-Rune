@@ -85,7 +85,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 			if(expectedSize + completedSize >= abyte0.length && current != null)
 			{
 				if(clientInstance.decompressors[0] != null)
-				clientInstance.decompressors[current.dataType + 1].method234(abyte0.length, abyte0, current.ID);
+				clientInstance.decompressors[current.dataType + 1].readCacheData(abyte0.length, abyte0, current.ID);
 				if(!current.incomplete && current.dataType == 3)
 				{
 				current.incomplete = true;
@@ -198,14 +198,14 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	running = false;
     }
 
-    public void method554(boolean flag)
+    public void prefetchMaps(boolean flag)
     {
 	int j = mapIndices1.length;
 	for(int k = 0; k < j; k++)
 	    if(flag || mapIndices4[k] != 0)
 	    {
-		method563((byte)2, 3, mapIndices3[k]);
-		method563((byte)2, 3, mapIndices2[k]);
+		requestArchive((byte)2, 3, mapIndices3[k]);
+		requestArchive((byte)2, 3, mapIndices2[k]);
 	    }
 
     }
@@ -267,7 +267,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	return anIntArray1360.length;
     }
 
-    public void method558(int i, int j)
+    public void requestFile(int i, int j)
     {
 	if(i < 0 || i > versions.length || j < 0 || j > versions[i].length)
 	    return;
@@ -321,7 +321,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 		    handleFailed();
 		    if(uncompletedCount == 0 && j >= 5)
 			break;
-		    method568();
+		    getProgress();
 		    if(inputStream != null)
 			readData();
 		}
@@ -401,7 +401,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	}
     }
 
-    public void method560(int i, int j)
+    public void prefetchFile(int i, int j)
     {
 	if(clientInstance.decompressors[0] == null)
 	    return;
@@ -460,7 +460,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	return onDemandData;
     }
 
-    public int method562(int i, int k, int l)
+    public int getMapFile(int i, int k, int l)
     {
 	int i1 = (l << 8) + k;
 	for(int j1 = 0; j1 < mapIndices1.length; j1++)
@@ -472,12 +472,12 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	return -1;
     }
 
-    public void method548(int i)
+    public void requestModel(int i)
     {
-	method558(0, i);
+	requestFile(0, i);
     }
 
-    public void method563(byte byte0, int i, int j)
+    public void requestArchive(byte byte0, int i, int j)
     {
 	if(clientInstance.decompressors[0] == null)
 	    return;
@@ -492,7 +492,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	totalFiles++;
     }
 
-    public boolean method564(int i)
+    public boolean isMapObjectFile(int i)
     {
 	for(int k = 0; k < mapIndices1.length; k++)
 	    if(mapIndices3[k] == i)
@@ -525,7 +525,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	}
     }
 
-    public void method566()
+    public void clearQueue()
     {
 	synchronized(aClass19_1344)
 	{
@@ -566,7 +566,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	}
     }
 
-    private void method568()
+    private void getProgress()
     {
 	while(uncompletedCount == 0 && completedCount < 10)
 	{
@@ -626,7 +626,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 	}
     }
 
-    public boolean method569(int i)
+    public boolean isFileReady(int i)
     {
 	return anIntArray1348[i] == 1;
     }

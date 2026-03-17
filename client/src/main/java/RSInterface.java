@@ -101,7 +101,7 @@ public final class RSInterface {
 						String s1 = stream.readString();
 						if (streamLoader_1 != null && s1.length() > 0) {
 							int i5 = s1.lastIndexOf(",");
-							rsInterface.sprites[j2] = method207(Integer.parseInt(s1.substring(i5 + 1)), streamLoader_1,
+							rsInterface.sprites[j2] = loadSprite(Integer.parseInt(s1.substring(i5 + 1)), streamLoader_1,
 									s1.substring(0, i5));
 						}
 					}
@@ -142,13 +142,13 @@ public final class RSInterface {
 				String s = stream.readString();
 				if (streamLoader_1 != null && s.length() > 0) {
 					int i4 = s.lastIndexOf(",");
-					rsInterface.sprite1 = method207(Integer.parseInt(s.substring(i4 + 1)), streamLoader_1,
+					rsInterface.sprite1 = loadSprite(Integer.parseInt(s.substring(i4 + 1)), streamLoader_1,
 							s.substring(0, i4));
 				}
 				s = stream.readString();
 				if (streamLoader_1 != null && s.length() > 0) {
 					int j4 = s.lastIndexOf(",");
-					rsInterface.sprite2 = method207(Integer.parseInt(s.substring(j4 + 1)), streamLoader_1,
+					rsInterface.sprite2 = loadSprite(Integer.parseInt(s.substring(j4 + 1)), streamLoader_1,
 							s.substring(0, j4));
 				}
 			}
@@ -222,7 +222,7 @@ public final class RSInterface {
 			}
 		}
 		//TODO IMPORT MARKER
-		aClass44 = streamLoader;
+		aRotationUtil4 = streamLoader;
 		prayerTab(textDrawingAreas);
 		emoteTab();
 		optionTab(textDrawingAreas);
@@ -391,8 +391,8 @@ public final class RSInterface {
 		DrawingArea.drawPixels(1, yPos + 69, xPos, 0x2E2B23, 175); // Top line
 
 		/// Black Box\\\
-		DrawingArea.method335(0x000000, yPos, 174, 68, 220, xPos); // Yes
-																	// method335
+		DrawingArea.fillRect(0x000000, yPos, 174, 68, 220, xPos); // Yes
+																	// fillRect
 																	// is
 																	// galkons
 																	// opacity
@@ -848,7 +848,7 @@ public final class RSInterface {
 	}
 
 	private static Sprite CustomSpriteLoader(int id, String s) {
-		long l = (TextClass.method585(s) << 8) + (long) id;
+		long l = (TextClass.stringToHash(s) << 8) + (long) id;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null) {
 			return sprite;
@@ -895,8 +895,8 @@ public final class RSInterface {
 
 	public static void addCacheSprite(int id, int sprite1, int sprite2, String sprites) {
 		RSInterface rsi = interfaceCache[id] = new RSInterface();
-		rsi.sprite1 = method207(sprite1, aClass44, sprites);
-		rsi.sprite2 = method207(sprite2, aClass44, sprites);
+		rsi.sprite1 = loadSprite(sprite1, aRotationUtil4, sprites);
+		rsi.sprite2 = loadSprite(sprite2, aRotationUtil4, sprites);
 		rsi.parentID = id;
 		rsi.id = id;
 		rsi.type = 5;
@@ -1774,7 +1774,7 @@ public final class RSInterface {
 	}
 
 	private static Sprite imageLoader(int i, String s) {
-		long l = (TextClass.method585(s) << 8) + (long) i;
+		long l = (TextClass.stringToHash(s) << 8) + (long) i;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null)
 			return sprite;
@@ -1799,18 +1799,18 @@ public final class RSInterface {
 		childY = new int[t];
 	}
 
-	private Model method206(int i, int j) {
+	private Model getCachedModel(int i, int j) {
 		Model model = (Model) aMRUNodes_264.insertFromCache((i << 16) + j);
 		if (model != null)
 			return model;
 		if (i == 1)
-			model = Model.method462(j);
+			model = Model.getModel(j);
 		if (i == 2)
-			model = EntityDef.forID(j).method160();
+			model = EntityDef.forID(j).getHeadModel();
 		if (i == 3)
-			model = client.myPlayer.method453();
+			model = client.myPlayer.getChatHeadModel();
 		if (i == 4)
-			model = ItemDef.forID(j).method202(50);
+			model = ItemDef.forID(j).getInventoryModel(50);
 		if (i == 5)
 			model = null;
 		if (model != null)
@@ -1818,8 +1818,8 @@ public final class RSInterface {
 		return model;
 	}
 
-	private static Sprite method207(int i, StreamLoader streamLoader, String s) {
-		long l = (TextClass.method585(s) << 8) + (long) i;
+	private static Sprite loadSprite(int i, StreamLoader streamLoader, String s) {
+		long l = (TextClass.stringToHash(s) << 8) + (long) i;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null)
 			return sprite;
@@ -1832,7 +1832,7 @@ public final class RSInterface {
 		return sprite;
 	}
 
-	public static void method208(boolean flag, Model model) {
+	public static void clearModelCache(boolean flag, Model model) {
 		int i = 0;// was parameter
 		int j = 5;// was parameter
 		if (flag)
@@ -1842,31 +1842,31 @@ public final class RSInterface {
 			aMRUNodes_264.removeFromCache(model, (j << 16) + i);
 	}
 
-	public Model method209(int j, int k, boolean flag) {
+	public Model getWidgetModel(int j, int k, boolean flag) {
 		Model model;
 		if (flag)
-			model = method206(anInt255, anInt256);
+			model = getCachedModel(anInt255, anInt256);
 		else
-			model = method206(anInt233, mediaID);
+			model = getCachedModel(anInt233, mediaID);
 		if (model == null)
 			return null;
-		if (k == -1 && j == -1 && model.anIntArray1640 == null)
+		if (k == -1 && j == -1 && model.faceColors == null)
 			return model;
-		Model model_1 = new Model(true, Class36.method532(k) & Class36.method532(j), false, model);
+		Model model_1 = new Model(true, AnimFrame.isFrameLoaded(k) & AnimFrame.isFrameLoaded(j), false, model);
 		if (k != -1 || j != -1)
-			model_1.method469();
+			model_1.buildLabelGroups();
 		if (k != -1)
-			model_1.method470(k);
+			model_1.applyTransform(k);
 		if (j != -1)
-			model_1.method470(j);
-		model_1.method479(64, 768, -50, -10, -50, true);
+			model_1.applyTransform(j);
+		model_1.calculateLighting(64, 768, -50, -10, -50, true);
 		return model_1;
 	}
 
 	public RSInterface() {
 	}
 
-	public static StreamLoader aClass44;
+	public static StreamLoader aRotationUtil4;
 	public boolean drawsTransparent;
 	public Sprite sprite1;
 	public int anInt208;
@@ -2039,7 +2039,7 @@ public final class RSInterface {
 	}
 
 	private static Sprite LoadSprite(int i, String s) {
-		long l = (TextClass.method585(s) << 8) + (long) i;
+		long l = (TextClass.stringToHash(s) << 8) + (long) i;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null) {
 			return sprite;

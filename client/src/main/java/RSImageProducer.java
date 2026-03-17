@@ -16,11 +16,11 @@ final class RSImageProducer
 		anIntArray315 = new int[i * j];
 		aColorModel318 = new DirectColorModel(32, 0xff0000, 65280, 255);
 		anImage320 = component.createImage(this);
-		method239();
+		flushPixels();
 		component.prepareImage(anImage320, this);
-		method239();
+		flushPixels();
 		component.prepareImage(anImage320, this);
-		method239();
+		flushPixels();
 		component.prepareImage(anImage320, this);
 		initDrawingArea();
 	}
@@ -32,7 +32,7 @@ final class RSImageProducer
 
 	public void drawGraphics(int i, Graphics g, int k)
 	{
-		method239();
+		flushPixels();
 		g.drawImage(anImage320, k, i, this);
 	}
 
@@ -66,7 +66,7 @@ final class RSImageProducer
 		System.out.println("TDLR");
 	}
 
-	private synchronized void method239()
+	private synchronized void flushPixels()
 	{
 		if(anImageConsumer319 != null)
 		{

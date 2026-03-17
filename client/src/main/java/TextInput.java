@@ -4,7 +4,7 @@
 
 final class TextInput {
 
-	public static String method525(int i, Stream stream)
+	public static String decodeText(int i, Stream stream)
 	{
 		int j = 0;
 		int k = -1;
@@ -52,7 +52,7 @@ final class TextInput {
 		return new String(aCharArray631, 0, j);
 	}
 
-	public static void method526(String s, Stream stream)
+	public static void encodeText(String s, Stream stream)
 	{
 		if(s.length() > 80)
 			s = s.substring(0, 80);
@@ -96,10 +96,10 @@ final class TextInput {
 	public static String processText(String s)
 	{
 		stream.currentOffset = 0;
-		method526(s, stream);
+		encodeText(s, stream);
 		int j = stream.currentOffset;
 		stream.currentOffset = 0;
-		String s1 = method525(j, stream);
+		String s1 = decodeText(j, stream);
 		return s1;
 	}
 

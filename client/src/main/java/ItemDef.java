@@ -10,7 +10,7 @@ public final class ItemDef {
 		stream = null;
 	}
 
-	public boolean method192(int j) {
+	public boolean isDialogueModelReady(int j) {
 		int k = anInt175;
 		int l = anInt166;
 		if(j == 1)
@@ -21,9 +21,9 @@ public final class ItemDef {
 		if(k == -1)
 			return true;
 		boolean flag = true;
-		if(!Model.method463(k))
+		if(!Model.isModelLoaded(k))
 			flag = false;
-		if(l != -1 && !Model.method463(l))
+		if(l != -1 && !Model.isModelLoaded(l))
 			flag = false;
 		return flag;
 	}
@@ -86,7 +86,7 @@ public final class ItemDef {
 		dumpPrices();
 	}
 
-	public Model method194(int j) {
+	public Model getDialogueModel(int j) {
 		int k = anInt175;
 		int l = anInt166;
 		if(j == 1) {
@@ -95,9 +95,9 @@ public final class ItemDef {
 		}
 		if(k == -1)
 			return null;
-		Model model = Model.method462(k);
+		Model model = Model.getModel(k);
 		if(l != -1) {
-			Model model_1 = Model.method462(l);
+			Model model_1 = Model.getModel(l);
 			Model aclass30_sub2_sub4_sub6s[] = {
 					model, model_1
 			};
@@ -105,13 +105,13 @@ public final class ItemDef {
 		}
 	   if (originalModelColors != null) {
 			for (int i1 = 0; i1 < originalModelColors.length; i1++)
-				model.method476(originalModelColors[i1], modifiedModelColors[i1]);
+				model.replaceColor(originalModelColors[i1], modifiedModelColors[i1]);
 
 		}
 		return model;
 	}
 
-	public boolean method195(int j) {
+	public boolean isHeadModelReady(int j) {
 		int k = maleEquip1;
 		int l = maleEquip2;
 		int i1 = anInt185;
@@ -123,16 +123,16 @@ public final class ItemDef {
 		if(k == -1)
 			return true;
 		boolean flag = true;
-		if(!Model.method463(k))
+		if(!Model.isModelLoaded(k))
 			flag = false;
-		if(l != -1 && !Model.method463(l))
+		if(l != -1 && !Model.isModelLoaded(l))
 			flag = false;
-		if(i1 != -1 && !Model.method463(i1))
+		if(i1 != -1 && !Model.isModelLoaded(i1))
 			flag = false;
 		return flag;
 	}
 
-	public Model method196(int i) {
+	public Model getHeadModelItem(int i) {
 		int j = maleEquip1;
 		int k = maleEquip2;
 		int l = anInt185;
@@ -143,29 +143,29 @@ public final class ItemDef {
 		}
 		if(j == -1)
 			return null;
-		Model model = Model.method462(j);
+		Model model = Model.getModel(j);
 		if(k != -1)
 			if(l != -1) {
-				Model model_1 = Model.method462(k);
-				Model model_3 = Model.method462(l);
+				Model model_1 = Model.getModel(k);
+				Model model_3 = Model.getModel(l);
 				Model aclass30_sub2_sub4_sub6_1s[] = {
 						model, model_1, model_3
 				};
 				model = new Model(3, aclass30_sub2_sub4_sub6_1s);
 			} else {
-				Model model_2 = Model.method462(k);
+				Model model_2 = Model.getModel(k);
 				Model aclass30_sub2_sub4_sub6s[] = {
 						model, model_2
 				};
 				model = new Model(2, aclass30_sub2_sub4_sub6s);
 			}
 		if(i == 0 && aByte205 != 0)
-			model.method475(0, aByte205, 0);
+			model.translate(0, aByte205, 0);
 		if(i == 1 && aByte154 != 0)
-			model.method475(0, aByte154, 0);
+			model.translate(0, aByte154, 0);
 		if (originalModelColors != null) {
 			for (int i1 = 0; i1 < originalModelColors.length; i1++)
-				model.method476(originalModelColors[i1], modifiedModelColors[i1]);
+				model.replaceColor(originalModelColors[i1], modifiedModelColors[i1]);
 
 		}
 		return model;
@@ -1169,7 +1169,7 @@ public final class ItemDef {
 			if(i1 != -1)
 				itemDef = forID(i1);
 		}
-		Model model = itemDef.method201(1);
+		Model model = itemDef.getEquipModel(1);
 		if(model == null)
 			return null;
 		Sprite sprite = null;
@@ -1192,7 +1192,7 @@ public final class ItemDef {
 		Texture.aBoolean1464 = false;
 		DrawingArea.initDrawingArea(32, 32, sprite2.myPixels);
 		DrawingArea.drawPixels(32, 0, 0, 0, 32);
-		Texture.method364();
+		Texture.initScanlines();
 		int k3 = itemDef.modelZoom;
 		if(k == -1)
 			k3 = (int)((double)k3 * 1.5D);
@@ -1200,7 +1200,7 @@ public final class ItemDef {
 			k3 = (int)((double)k3 * 1.04D);
 		int l3 = Texture.anIntArray1470[itemDef.modelRotation1] * k3 >> 16;
 		int i4 = Texture.anIntArray1471[itemDef.modelRotation1] * k3 >> 16;
-		model.method482(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
+		model.renderModel2D(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
 		for(int i5 = 31; i5 >= 0; i5--) {
 			for(int j4 = 31; j4 >= 0; j4--)
 				if(sprite2.myPixels[i5 + j4 * 32] == 0)
@@ -1258,49 +1258,49 @@ public final class ItemDef {
 		return sprite2;
 	}
 
-	public Model method201(int i) {
+	public Model getEquipModel(int i) {
 		if(stackIDs != null && i > 1) {
 			int j = -1;
 			for(int k = 0; k < 10; k++)
 				if(i >= stackAmounts[k] && stackAmounts[k] != 0)
 					j = stackIDs[k];
 			if(j != -1)
-				return forID(j).method201(1);
+				return forID(j).getEquipModel(1);
 		}
 		Model model = (Model) mruNodes2.insertFromCache(id);
 		if(model != null)
 			return model;
-		model = Model.method462(modelID);
+		model = Model.getModel(modelID);
 		if(model == null)
 			return null;
 		if(anInt167 != 128 || anInt192 != 128 || anInt191 != 128)
-			model.method478(anInt167, anInt191, anInt192);
+			model.scale(anInt167, anInt191, anInt192);
 		if (originalModelColors != null) {
 			for (int l = 0; l < originalModelColors.length; l++)
-				model.method476(originalModelColors[l], modifiedModelColors[l]);
+				model.replaceColor(originalModelColors[l], modifiedModelColors[l]);
 
 		}
-		model.method479(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
-		model.aBoolean1659 = true;
+		model.calculateLighting(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
+		model.singleTile = true;
 		mruNodes2.removeFromCache(model, id);
 		return model;
 	}
 
-	public Model method202(int i) {
+	public Model getInventoryModel(int i) {
 		if(stackIDs != null && i > 1) {
 			int j = -1;
 			for(int k = 0; k < 10; k++)
 				if(i >= stackAmounts[k] && stackAmounts[k] != 0)
 					j = stackIDs[k];
 			if(j != -1)
-				return forID(j).method202(1);
+				return forID(j).getInventoryModel(1);
 		}
-		Model model = Model.method462(modelID);
+		Model model = Model.getModel(modelID);
 		if(model == null)
 			return null;
 		if (originalModelColors != null) {
 			for (int l = 0; l < originalModelColors.length; l++)
-				model.method476(originalModelColors[l], modifiedModelColors[l]);
+				model.replaceColor(originalModelColors[l], modifiedModelColors[l]);
 
 		}
 		return model;

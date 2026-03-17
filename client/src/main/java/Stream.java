@@ -47,7 +47,7 @@ public final class Stream extends NodeSub {
 		buffer[currentOffset++] = (byte)i;
 	}
 
-	public void method400(int i) {
+	public void writeWordLE(int i) {
 		buffer[currentOffset++] = (byte)i;
 		buffer[currentOffset++] = (byte)(i >> 8);
 	}
@@ -65,7 +65,7 @@ public final class Stream extends NodeSub {
 		buffer[currentOffset++] = (byte)i;
 	}
 
-	public void method403(int j) {
+	public void writeDWordLE(int j) {
 		buffer[currentOffset++] = (byte)j;
 		buffer[currentOffset++] = (byte)(j >> 8);
 		buffer[currentOffset++] = (byte)(j >> 16);
@@ -185,7 +185,7 @@ public final class Stream extends NodeSub {
 		currentOffset = (bitPosition + 7) / 8;
 	}
 
-	public int method421() {
+	public int readSmartSigned() {
 		int i = buffer[currentOffset] & 0xff;
 		if(i < 128)
 			return readUnsignedByte() - 64;
@@ -193,7 +193,7 @@ public final class Stream extends NodeSub {
 			return readUnsignedWord() - 49152;
 	}
 
-	public int method422() {
+	public int readSmart() {
 		int i = buffer[currentOffset] & 0xff;
 		if(i < 128)
 			return readUnsignedByte();
@@ -214,65 +214,65 @@ public final class Stream extends NodeSub {
 		writeBytes(abyte1, abyte1.length, 0);
 	}
 
-	public void method424(int i) {
+	public void writeNegByte(int i) {
 		buffer[currentOffset++] = (byte)(-i);
 	}
 
-	public void method425(int j) {
+	public void write128MinusByte(int j) {
 		buffer[currentOffset++] = (byte)(128 - j);
 	}
 
-	public int method426() {
+	public int readUnsignedByteAdd() {
 			return buffer[currentOffset++] - 128 & 0xff;
 	}
 
-	public int method427() {
+	public int readUnsignedByteNeg() {
 		return -buffer[currentOffset++] & 0xff;
 	}
 
-	public int method428() {
+	public int readUnsignedByteSub() {
 		return 128 - buffer[currentOffset++] & 0xff;
 	}
 
-	public byte method429() {
+	public byte readNegByte() {
 			return (byte)(-buffer[currentOffset++]);
 	}
 
-	public byte method430() {
+	public byte readSubByte() {
 		return (byte)(128 - buffer[currentOffset++]);
 	}
 
-	public void method431(int i) {
+	public void writeWordLEA(int i) {
 		buffer[currentOffset++] = (byte)i;
 		buffer[currentOffset++] = (byte)(i >> 8);
 	}
 
-	public void method432(int j) {
+	public void writeWordBigA(int j) {
 		buffer[currentOffset++] = (byte)(j >> 8);
 		buffer[currentOffset++] = (byte)(j + 128);
 	}
 
-	public void method433(int j) {
+	public void writeWordLEBigA(int j) {
 		buffer[currentOffset++] = (byte)(j + 128);
 		buffer[currentOffset++] = (byte)(j >> 8);
 	}
 
-	public int method434() {
+	public int readWordLE() {
 		currentOffset += 2;
 			return ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] & 0xff);
 	}
 
-	public int method435() {
+	public int readWordBigA() {
 		currentOffset += 2;
 		return ((buffer[currentOffset - 2] & 0xff) << 8) + (buffer[currentOffset - 1] - 128 & 0xff);
 	}
 
-	public int method436() {
+	public int readWordLEBigA() {
 		currentOffset += 2;
 		return ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] - 128 & 0xff);
 	}
 
-	public int method437() {
+	public int readSignedWordLE() {
 		currentOffset += 2;
 		int j = ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] & 0xff);
 		if(j > 32767)
@@ -280,7 +280,7 @@ public final class Stream extends NodeSub {
 		return j;
 	}
 
-	public int method438() {
+	public int readSignedWordLEA() {
 		currentOffset += 2;
 		int j = ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] - 128 & 0xff);
 		if(j > 32767)
@@ -288,23 +288,23 @@ public final class Stream extends NodeSub {
 		return j;
 	}
 
-	public int method439() {
+	public int readDWordMixed1() {
 			currentOffset += 4;
 			return ((buffer[currentOffset - 2] & 0xff) << 24) + ((buffer[currentOffset - 1] & 0xff) << 16) + ((buffer[currentOffset - 4] & 0xff) << 8) + (buffer[currentOffset - 3] & 0xff);
 	}
 
-	public int method440() {
+	public int readDWordMixed2() {
 		currentOffset += 4;
 		return ((buffer[currentOffset - 3] & 0xff) << 24) + ((buffer[currentOffset - 4] & 0xff) << 16) + ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] & 0xff);
 	}
 
-	public void method441(int i, byte abyte0[], int j) {
+	public void writeBytesReverse128(int i, byte abyte0[], int j) {
 		for(int k = (i + j) - 1; k >= i; k--)
 			buffer[currentOffset++] = (byte)(abyte0[k] + 128);
 
 	}
 
-	public void method442(int i, int j, byte abyte0[]) {
+	public void readBytesReverse(int i, int j, byte abyte0[]) {
 		for(int k = (j + i) - 1; k >= j; k--)
 			abyte0[k] = buffer[currentOffset++];
 

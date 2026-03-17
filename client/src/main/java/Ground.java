@@ -7,34 +7,34 @@ public final class Ground extends Node {
 
 	public Ground(int i, int j, int k)
 	{
-		obj5Array = new Object5[5];
-		anIntArray1319 = new int[5];
-		anInt1310 = anInt1307 = i;
-		anInt1308 = j;
-		anInt1309 = k;
+		obj5Array = new InteractiveObject[5];
+		obj5UIDs = new int[5];
+		originalPlane = plane = i;
+		tileX = j;
+		tileY = k;
 	}
 
-	int anInt1307;
-	final int anInt1308;
-	final int anInt1309;
-	final int anInt1310;
-	public Class43 aClass43_1311;
-	public Class40 aClass40_1312;
-	public Object1 obj1;
-	public Object2 obj2;
-	public Object3 obj3;
-	public Object4 obj4;
-	int anInt1317;
-	public final Object5[] obj5Array;
-	final int[] anIntArray1319;
-	int anInt1320;
-	int anInt1321;
-	boolean aBoolean1322;
-	boolean aBoolean1323;
-	boolean aBoolean1324;
-	int anInt1325;
-	int anInt1326;
-	int anInt1327;
-	int anInt1328;
-	public Ground aClass30_Sub3_1329;
+	int plane;
+	final int tileX;
+	final int tileY;
+	final int originalPlane;
+	public PlainTile plainTile;
+	public ShapedTile shapedTile;
+	public WallObject obj1;
+	public WallDecoration obj2;
+	public GroundDecoration obj3;
+	public GroundItemPile obj4;
+	int obj5Count;
+	public final InteractiveObject[] obj5Array;
+	final int[] obj5UIDs;
+	int wallCullDirection;
+	int logicHeight;
+	boolean visible;
+	boolean rendered;
+	boolean hasObjects;
+	int wallCullPlane0;
+	int wallCullPlane1;
+	int wallCullPlane2;
+	int wallCullPlane3;
+	public Ground bridge;
 }

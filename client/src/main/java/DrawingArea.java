@@ -49,7 +49,7 @@ public class DrawingArea extends NodeSub {
 
 	}
 
-	public static void method335(int i, int j, int k, int l, int i1, int k1)
+	public static void fillRect(int i, int j, int k, int l, int i1, int k1)
 	{
 		if(k1 < topX)
 		{
@@ -116,24 +116,24 @@ public class DrawingArea extends NodeSub {
 
 	public static void fillPixels(int i, int j, int k, int l, int i1)
 	{
-		method339(i1, l, j, i);
-		method339((i1 + k) - 1, l, j, i);
-		method341(i1, l, k, i);
-		method341(i1, l, k, (i + j) - 1);
+		drawVerticalLine(i1, l, j, i);
+		drawVerticalLine((i1 + k) - 1, l, j, i);
+		drawHorizontalLine(i1, l, k, i);
+		drawHorizontalLine(i1, l, k, (i + j) - 1);
 	}
 
-	public static void method338(int i, int j, int k, int l, int i1, int j1)
+	public static void drawRect(int i, int j, int k, int l, int i1, int j1)
 	{
-		method340(l, i1, i, k, j1);
-		method340(l, i1, (i + j) - 1, k, j1);
+		drawVerticalLineAlpha(l, i1, i, k, j1);
+		drawVerticalLineAlpha(l, i1, (i + j) - 1, k, j1);
 		if(j >= 3)
 		{
-			method342(l, j1, k, i + 1, j - 2);
-			method342(l, (j1 + i1) - 1, k, i + 1, j - 2);
+			drawHorizontalLineAlpha(l, j1, k, i + 1, j - 2);
+			drawHorizontalLineAlpha(l, (j1 + i1) - 1, k, i + 1, j - 2);
 		}
 	}
 
-	public static void method339(int i, int j, int k, int l)
+	public static void drawVerticalLine(int i, int j, int k, int l)
 	{
 		if(i < topY || i >= bottomY)
 			return;
@@ -150,7 +150,7 @@ public class DrawingArea extends NodeSub {
 
 	}
 
-	private static void method340(int i, int j, int k, int l, int i1)
+	private static void drawVerticalLineAlpha(int i, int j, int k, int l, int i1)
 	{
 		if(k < topY || k >= bottomY)
 			return;
@@ -177,7 +177,7 @@ public class DrawingArea extends NodeSub {
 
 	}
 
-	public static void method341(int i, int j, int k, int l)
+	public static void drawHorizontalLine(int i, int j, int k, int l)
 	{
 		if(l < topX || l >= bottomX)
 			return;
@@ -194,7 +194,7 @@ public class DrawingArea extends NodeSub {
 
 	}
 
-	private static void method342(int i, int j, int k, int l, int i1) {
+	private static void drawHorizontalLineAlpha(int i, int j, int k, int l, int i1) {
 		if(j < topX || j >= bottomX)
 			return;
 		if(l < topY) {

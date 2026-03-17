@@ -153,11 +153,11 @@ public final class Sprite extends DrawingArea {
 		setTransparency(255, 0, 255);
 	}
 
-	public void method343() {
+	public void drawInverse() {
 		DrawingArea.initDrawingArea(myHeight, myWidth, myPixels);
 	}
 
-	public void method344(int i, int j, int k) {
+	public void drawShadowed(int i, int j, int k) {
 		for (int i1 = 0; i1 < myPixels.length; i1++) {
 			int j1 = myPixels[i1];
 			if (j1 != 0) {
@@ -185,7 +185,7 @@ public final class Sprite extends DrawingArea {
 
 	}
 
-	public void method345() {
+	public void drawCentered() {
 		int ai[] = new int[anInt1444 * anInt1445];
 		for (int j = 0; j < myHeight; j++) {
 			System.arraycopy(myPixels, j * myWidth, ai, j + anInt1443 * anInt1444 + anInt1442, myWidth);
@@ -198,7 +198,7 @@ public final class Sprite extends DrawingArea {
 		anInt1443 = 0;
 	}
 
-	public void method346(int i, int j) {
+	public void drawTransparent(int i, int j) {
 		i += anInt1442;
 		j += anInt1443;
 		int l = i + j * DrawingArea.width;
@@ -233,11 +233,11 @@ public final class Sprite extends DrawingArea {
 		}
 		if (k1 <= 0 || j1 <= 0) {
 		} else {
-			method347(l, k1, j1, i2, i1, l1, myPixels, DrawingArea.pixels);
+			drawTransparentPixels(l, k1, j1, i2, i1, l1, myPixels, DrawingArea.pixels);
 		}
 	}
 
-	private void method347(int i, int j, int k, int l, int i1, int k1, int ai[], int ai1[]) {
+	private void drawTransparentPixels(int i, int j, int k, int l, int i1, int k1, int ai[], int ai1[]) {
 		int l1 = -(j >> 2);
 		j = -(j & 3);
 		for (int i2 = -k; i2 < 0; i2++) {
@@ -291,7 +291,7 @@ public final class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			drawPixelsAlpha(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 
@@ -329,7 +329,7 @@ public final class Sprite extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method349(DrawingArea.pixels, myPixels, i1, l, k1, j1, l1, i2);
+			drawPixels(DrawingArea.pixels, myPixels, i1, l, k1, j1, l1, i2);
 		}
 	}
 
@@ -401,7 +401,7 @@ public final class Sprite extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method349(DrawingArea.pixels, tempArray, i1, l, k1, j1, l1, i2);
+			drawPixels(DrawingArea.pixels, tempArray, i1, l, k1, j1, l1, i2);
 		}
 	}
 
@@ -440,11 +440,11 @@ public final class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			drawPixelsAlpha(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 
-	private void method349(int ai[], int ai1[], int j, int k, int l, int i1, int j1, int k1) {
+	private void drawPixels(int ai[], int ai1[], int j, int k, int l, int i1, int j1, int k1) {
 		int i;// was parameter
 		int l1 = -(l >> 2);
 		l = -(l & 3);
@@ -489,7 +489,7 @@ public final class Sprite extends DrawingArea {
 		}
 	}
 
-	private void method351(int i, int j, int ai[], int ai1[], int l, int i1, int j1, int k1, int l1) {
+	private void drawPixelsAlpha(int i, int j, int ai[], int ai1[], int l, int i1, int j1, int k1, int l1) {
 		int k;// was parameter
 		int j2 = 256 - k1;
 		for (int k2 = -i1; k2 < 0; k2++) {
@@ -509,7 +509,7 @@ public final class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method352(int i, int j, int ai[], int k, int ai1[], int i1, int j1, int k1, int l1, int i2) {
+	public void drawClipped(int i, int j, int ai[], int k, int ai1[], int i1, int j1, int k1, int l1, int i2) {
 		try {
 			int j2 = -l1 / 2;
 			int k2 = -i / 2;
@@ -563,7 +563,7 @@ public final class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method353(int i, double d, int l1) {
+	public void drawRotated(int i, double d, int l1) {
 		// all of the following were parameters
 		int j = 15;
 		int k = 20;
@@ -604,7 +604,7 @@ public final class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method354(Background background, int i, int j) {
+	public void drawToBackground(Background background, int i, int j) {
 		j += anInt1442;
 		i += anInt1443;
 		int k = j + i * DrawingArea.width;
@@ -638,11 +638,11 @@ public final class Sprite extends DrawingArea {
 			k1 += k2;
 		}
 		if (!(j1 <= 0 || i1 <= 0)) {
-			method355(myPixels, j1, background.aByteArray1450, i1, DrawingArea.pixels, 0, k1, k, l1, l);
+			drawToBgAlpha(myPixels, j1, background.aByteArray1450, i1, DrawingArea.pixels, 0, k1, k, l1, l);
 		}
 	}
 
-	private void method355(int ai[], int i, byte abyte0[], int j, int ai1[], int k, int l, int i1, int j1, int k1) {
+	private void drawToBgAlpha(int ai[], int i, byte abyte0[], int j, int ai1[], int k, int l, int i1, int j1, int k1) {
 		int l1 = -(i >> 2);
 		i = -(i & 3);
 		for (int j2 = -j; j2 < 0; j2++) {

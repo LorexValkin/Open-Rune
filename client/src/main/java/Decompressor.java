@@ -64,14 +64,14 @@ final class Decompressor {
 		}
 	}
 
-	public synchronized boolean method234(int i, byte abyte0[], int j) {
-		boolean flag = method235(true, j, i, abyte0);
+	public synchronized boolean readCacheData(int i, byte abyte0[], int j) {
+		boolean flag = writeCacheData(true, j, i, abyte0);
 		if(!flag)
-			flag = method235(false, j, i, abyte0);
+			flag = writeCacheData(false, j, i, abyte0);
 		return flag;
 	}
 
-	private synchronized boolean method235(boolean flag, int j, int k, byte abyte0[]) {
+	private synchronized boolean writeCacheData(boolean flag, int j, int k, byte abyte0[]) {
 		try {
 			int l;
 			if(flag) {

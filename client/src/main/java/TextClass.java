@@ -52,7 +52,7 @@ final class TextClass {
 		throw new RuntimeException();
 	}
 
-	public static long method585(String s)
+	public static long stringToHash(String s)
 	{
 		s = s.toUpperCase();
 		long l = 0L;
@@ -64,7 +64,7 @@ final class TextClass {
 		return l;
 	}
 
-	public static String method586(int i)
+	public static String intToIpAddress(int i)
 	{
 			return (i >> 24 & 0xff) + "." + (i >> 16 & 0xff) + "." + (i >> 8 & 0xff) + "." + (i & 0xff);
 	}

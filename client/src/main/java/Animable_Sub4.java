@@ -4,7 +4,7 @@
 
 final class Animable_Sub4 extends Animable {
 
-	public void method455(int i, int j, int k, int l)
+	public void trackTarget(int i, int j, int k, int l)
 	{
 		if(!aBoolean1579)
 		{
@@ -32,18 +32,18 @@ final class Animable_Sub4 extends Animable {
 		int j = -1;
 		if(aSpotAnim_1592.aAnimation_407 != null)
 			j = aSpotAnim_1592.aAnimation_407.anIntArray353[anInt1593];
-		Model model_1 = new Model(true, Class36.method532(j), false, model);
+		Model model_1 = new Model(true, AnimFrame.isFrameLoaded(j), false, model);
 		if(j != -1)
 		{
-			model_1.method469();
-			model_1.method470(j);
-			model_1.anIntArrayArray1658 = null;
-			model_1.anIntArrayArray1657 = null;
+			model_1.buildLabelGroups();
+			model_1.applyTransform(j);
+			model_1.labelGroupsUnused = null;
+			model_1.labelGroups = null;
 		}
 		if(aSpotAnim_1592.anInt410 != 128 || aSpotAnim_1592.anInt411 != 128)
-			model_1.method478(aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt411);
-		model_1.method474(anInt1596);
-		model_1.method479(64 + aSpotAnim_1592.anInt413, 850 + aSpotAnim_1592.anInt414, -30, -50, -30, true);
+			model_1.scale(aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt411);
+		model_1.rotateX(anInt1596);
+		model_1.calculateLighting(64 + aSpotAnim_1592.anInt413, 850 + aSpotAnim_1592.anInt414, -30, -50, -30, true);
 			return model_1;
 	}
 
@@ -65,7 +65,7 @@ final class Animable_Sub4 extends Animable {
 		aBoolean1579 = false;
 	}
 
-	public void method456(int i)
+	public void advanceProjectile(int i)
 	{
 		aBoolean1579 = true;
 		aDouble1585 += aDouble1574 * (double)i;
@@ -75,9 +75,9 @@ final class Animable_Sub4 extends Animable {
 		anInt1595 = (int)(Math.atan2(aDouble1574, aDouble1575) * 325.94900000000001D) + 1024 & 0x7ff;
 		anInt1596 = (int)(Math.atan2(aDouble1577, aDouble1576) * 325.94900000000001D) & 0x7ff;
 		if(aSpotAnim_1592.aAnimation_407 != null)
-			for(anInt1594 += i; anInt1594 > aSpotAnim_1592.aAnimation_407.method258(anInt1593);)
+			for(anInt1594 += i; anInt1594 > aSpotAnim_1592.aAnimation_407.getFrameDuration(anInt1593);)
 			{
-				anInt1594 -= aSpotAnim_1592.aAnimation_407.method258(anInt1593) + 1;
+				anInt1594 -= aSpotAnim_1592.aAnimation_407.getFrameDuration(anInt1593) + 1;
 				anInt1593++;
 				if(anInt1593 >= aSpotAnim_1592.aAnimation_407.anInt352)
 					anInt1593 = 0;

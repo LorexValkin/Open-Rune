@@ -12,9 +12,9 @@ final class Animable_Sub5 extends Animable {
 			int k = client.loopCycle - anInt1608;
 			if(k > 100 && aAnimation_1607.anInt356 > 0)
 				k = 100;
-			while(k > aAnimation_1607.method258(anInt1599))
+			while(k > aAnimation_1607.getFrameDuration(anInt1599))
 			{
-				k -= aAnimation_1607.method258(anInt1599);
+				k -= aAnimation_1607.getFrameDuration(anInt1599);
 				anInt1599++;
 				if(anInt1599 < aAnimation_1607.anInt352)
 					continue;
@@ -30,7 +30,7 @@ final class Animable_Sub5 extends Animable {
 		}
 		ObjectDef class46;
 		if(anIntArray1600 != null)
-			class46 = method457();
+			class46 = getChildObjectDef();
 		else
 			class46 = ObjectDef.forID(anInt1610);
 		if(class46 == null)
@@ -38,11 +38,11 @@ final class Animable_Sub5 extends Animable {
 			return null;
 		} else
 		{
-			return class46.method578(anInt1611, anInt1612, anInt1603, anInt1604, anInt1605, anInt1606, j);
+			return class46.getObjectModel(anInt1611, anInt1612, anInt1603, anInt1604, anInt1605, anInt1606, j);
 		}
 	}
 
-	private ObjectDef method457()
+	private ObjectDef getChildObjectDef()
 	{
 		int i = -1;
 		if(anInt1601 != -1)
@@ -80,12 +80,12 @@ final class Animable_Sub5 extends Animable {
 			if(flag && aAnimation_1607.anInt356 != -1)
 			{
 				anInt1599 = (int)(Math.random() * (double) aAnimation_1607.anInt352);
-				anInt1608 -= (int)(Math.random() * (double) aAnimation_1607.method258(anInt1599));
+				anInt1608 -= (int)(Math.random() * (double) aAnimation_1607.getFrameDuration(anInt1599));
 			}
 		}
 		ObjectDef class46 = ObjectDef.forID(anInt1610);
-		anInt1601 = class46.anInt774;
-		anInt1602 = class46.anInt749;
+		anInt1601 = class46.varbitId;
+		anInt1602 = class46.settingId;
 		anIntArray1600 = class46.childrenIDs;
 	}
 

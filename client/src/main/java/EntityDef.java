@@ -526,28 +526,28 @@ public final class EntityDef {
 	
 	}
 
-	public Model method160()
+	public Model getHeadModel()
 	{
 		if(childrenIDs != null)
 		{
-			EntityDef entityDef = method161();
+			EntityDef entityDef = getChildDefinition();
 			if(entityDef == null)
 				return null;
 			else
-				return entityDef.method160();
+				return entityDef.getHeadModel();
 		}
 		if(anIntArray73 == null)
 			return null;
 		boolean flag1 = false;
 		for(int i = 0; i < anIntArray73.length; i++)
-			if(!Model.method463(anIntArray73[i]))
+			if(!Model.isModelLoaded(anIntArray73[i]))
 				flag1 = true;
 
 		if(flag1)
 			return null;
 		Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray73.length];
 		for(int j = 0; j < anIntArray73.length; j++)
-			aclass30_sub2_sub4_sub6s[j] = Model.method462(anIntArray73[j]);
+			aclass30_sub2_sub4_sub6s[j] = Model.getModel(anIntArray73[j]);
 
 		Model model;
 		if(aclass30_sub2_sub4_sub6s.length == 1)
@@ -557,13 +557,13 @@ public final class EntityDef {
 		if(originalModelColors != null)
 		{
 			for(int k = 0; k < originalModelColors.length; k++)
-				model.method476(originalModelColors[k], modifiedModelColors[k]);
+				model.replaceColor(originalModelColors[k], modifiedModelColors[k]);
 
 		}
 		return model;
 	}
 
-	public EntityDef method161()
+	public EntityDef getChildDefinition()
 	{
 		int j = -1;
 		if(anInt57 != -1)
@@ -607,29 +607,29 @@ public final class EntityDef {
 		stream = null;
 	}
 
-	public Model method164(int j, int k, int ai[])
+	public Model getAnimatedModel(int j, int k, int ai[])
 	{
 		if(childrenIDs != null)
 		{
-			EntityDef entityDef = method161();
+			EntityDef entityDef = getChildDefinition();
 			if(entityDef == null)
 				return null;
 			else
-				return entityDef.method164(j, k, ai);
+				return entityDef.getAnimatedModel(j, k, ai);
 		}
 		Model model = (Model) mruNodes.insertFromCache(type);
 		if(model == null)
 		{
 			boolean flag = false;
 			for(int i1 = 0; i1 < models.length; i1++)
-				if(!Model.method463(models[i1]))
+				if(!Model.isModelLoaded(models[i1]))
 					flag = true;
 
 			if(flag)
 				return null;
 			Model aclass30_sub2_sub4_sub6s[] = new Model[models.length];
 			for(int j1 = 0; j1 < models.length; j1++)
-				aclass30_sub2_sub4_sub6s[j1] = Model.method462(models[j1]);
+				aclass30_sub2_sub4_sub6s[j1] = Model.getModel(models[j1]);
 
 			if(aclass30_sub2_sub4_sub6s.length == 1)
 				model = aclass30_sub2_sub4_sub6s[0];
@@ -638,27 +638,27 @@ public final class EntityDef {
 			if(originalModelColors != null)
 			{
 				for(int k1 = 0; k1 < originalModelColors.length; k1++)
-					model.method476(originalModelColors[k1], modifiedModelColors[k1]);
+					model.replaceColor(originalModelColors[k1], modifiedModelColors[k1]);
 
 			}
-			model.method469();
-			model.method479(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
+			model.buildLabelGroups();
+			model.calculateLighting(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
 			mruNodes.removeFromCache(model, type);
 		}
-		Model model_1 = Model.aModel_1621;
-		model_1.method464(model, Class36.method532(k) & Class36.method532(j));
+		Model model_1 = Model.sharedModel;
+		model_1.copyAnimated(model, AnimFrame.isFrameLoaded(k) & AnimFrame.isFrameLoaded(j));
 		if(k != -1 && j != -1)
-			model_1.method471(ai, j, k);
+			model_1.recolorAll(ai, j, k);
 		else
 		if(k != -1)
-			model_1.method470(k);
+			model_1.applyTransform(k);
 		if(anInt91 != 128 || anInt86 != 128)
-			model_1.method478(anInt91, anInt91, anInt86);
-		model_1.method466();
-		model_1.anIntArrayArray1658 = null;
-		model_1.anIntArrayArray1657 = null;
+			model_1.scale(anInt91, anInt91, anInt86);
+		model_1.calculateBounds();
+		model_1.labelGroupsUnused = null;
+		model_1.labelGroups = null;
 		if(aByte68 == 1)
-			model_1.aBoolean1659 = true;
+			model_1.singleTile = true;
 		return model_1;
 	}
 

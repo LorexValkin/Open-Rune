@@ -148,7 +148,7 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 		}
 	}
 
-	final void method4(int i)
+	final void initDrawingArea(int i)
 	{
 			delayTime = 1000 / i;
 	}
