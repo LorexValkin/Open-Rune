@@ -28,6 +28,7 @@ object CollisionFlag {
 
     // === Full tile blockage (objects, solid deco) ===
     const val OBJECT_TILE        = 0x100
+    const val OBJECT_BLOCK       = 0x200000  // Standard 317 full-object block flag
     const val FLOOR_DECO         = 0x40000
 
     // === Projectile versions (ranged/magic can fly over low walls but not full objects) ===
@@ -42,15 +43,15 @@ object CollisionFlag {
     const val PROJECTILE_FULL        = 0x20000
 
     // === Combined masks for movement checks ===
-    const val BLOCK_NORTH = WALL_NORTH or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_EAST  = WALL_EAST or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_SOUTH = WALL_SOUTH or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_WEST  = WALL_WEST or OBJECT_TILE or FLOOR_DECO
+    const val BLOCK_NORTH = WALL_NORTH or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_EAST  = WALL_EAST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_SOUTH = WALL_SOUTH or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_WEST  = WALL_WEST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
 
-    const val BLOCK_NORTH_EAST = WALL_NORTH_EAST or WALL_NORTH or WALL_EAST or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_SOUTH_EAST = WALL_SOUTH_EAST or WALL_SOUTH or WALL_EAST or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_SOUTH_WEST = WALL_SOUTH_WEST or WALL_SOUTH or WALL_WEST or OBJECT_TILE or FLOOR_DECO
-    const val BLOCK_NORTH_WEST = WALL_NORTH_WEST or WALL_NORTH or WALL_WEST or OBJECT_TILE or FLOOR_DECO
+    const val BLOCK_NORTH_EAST = WALL_NORTH_EAST or WALL_NORTH or WALL_EAST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_SOUTH_EAST = WALL_SOUTH_EAST or WALL_SOUTH or WALL_EAST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_SOUTH_WEST = WALL_SOUTH_WEST or WALL_SOUTH or WALL_WEST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
+    const val BLOCK_NORTH_WEST = WALL_NORTH_WEST or WALL_NORTH or WALL_WEST or OBJECT_TILE or OBJECT_BLOCK or FLOOR_DECO
 
     /** Check if a flag mask blocks movement in the given direction. */
     fun isBlocked(flags: Int, direction: Direction): Boolean {
@@ -382,7 +383,7 @@ class CollisionMap {
         if (!solid) return
         for (dx in 0 until sizeX) {
             for (dy in 0 until sizeY) {
-                addFlag(x + dx, y + dy, height, CollisionFlag.OBJECT_TILE)
+                addFlag(x + dx, y + dy, height, CollisionFlag.OBJECT_TILE or CollisionFlag.OBJECT_BLOCK)
             }
         }
     }
@@ -393,7 +394,7 @@ class CollisionMap {
     fun removeObject(x: Int, y: Int, height: Int, sizeX: Int, sizeY: Int) {
         for (dx in 0 until sizeX) {
             for (dy in 0 until sizeY) {
-                removeFlag(x + dx, y + dy, height, CollisionFlag.OBJECT_TILE)
+                removeFlag(x + dx, y + dy, height, CollisionFlag.OBJECT_TILE or CollisionFlag.OBJECT_BLOCK)
             }
         }
     }
