@@ -5286,7 +5286,11 @@ followDistance = 1;
 							clientData = true;
 						if(inputString.equals("::dataoff"))
 							clientData = false;
-						if(inputString.equals("::fixed")) {
+						if(inputString.equals("::zoomreset")) {
+					cameraZoom = 0;
+					pushMessage("Camera zoom reset.", 0, "");
+				}
+				if(inputString.equals("::fixed")) {
 					toggleSize(0);
 					pushMessage("Switched to fixed mode.", 0, "");
 				}
@@ -12149,6 +12153,7 @@ case 174:
 	}
 
 	private void processSceneEntities() {
+		processMiddleMouseDrag();
 		hintIconY++;
 		renderPlayersOnScene(true);
 		renderNPCsOnScene(true);
@@ -12163,7 +12168,7 @@ case 174:
 			if(sidebarFlashing[4] && tabAreaX[4] + 128 > i)
 				i = tabAreaX[4] + 128;
 			int k = minimapInt1 + lastItemSelectedInterface & 0x7ff;
-			setCameraPos(600 + i * 3, i, cameraSmoothedX, getTileHeight(plane, myPlayer.y, myPlayer.x) - 50, k, cameraSmoothedY);
+			setCameraPos(600 + i * 3 + cameraZoom, i, cameraSmoothedX, getTileHeight(plane, myPlayer.y, myPlayer.x) - 50, k, cameraSmoothedY);
 		}
 		int j;
 		if(!aBoolean1160)
@@ -12955,6 +12960,10 @@ case 174:
 	public int gameAreaHeight = 334;
 	public static java.awt.Container outerFrame; // set by Jframe.java
 	public static client instance;
+	public static int cameraZoom = 0;
+	private static final int CAMERA_ZOOM_MIN = -300;
+	private static final int CAMERA_ZOOM_MAX = 600;
+	private static final int CAMERA_ZOOM_STEP = 40;
 	// --- Resize methods (Phase A-2) ---
 
 	public void checkSize() {
@@ -13033,6 +13042,83 @@ case 174:
 		super.graphics = getGameComponent().getGraphics();
 
 		updateGameArea();
+	}
+
+	/**
+	 * Process middle mouse drag for camera rotation.
+	 * Called each frame from processSceneEntities.
+	 * Horizontal drag = yaw (minimapInt1), Vertical drag = pitch (selectedArea).
+	 */
+	private void processMiddleMouseDrag() {
+		if (super.middleMouseDown) {
+			int dx = super.middleMouseDragX - super.middleMouseStartX;
+			int dy = super.middleMouseDragY - super.middleMouseStartY;
+			// Apply rotation and reset start position for continuous drag
+			minimapInt1 = minimapInt1 - dx & 0x7ff;
+			selectedArea += dy;
+			if (selectedArea < 128)
+				selectedArea = 128;
+			if (selectedArea > 383)
+				selectedArea = 383;
+			super.middleMouseStartX = super.middleMouseDragX;
+			super.middleMouseStartY = super.middleMouseDragY;
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
+		int rotation = e.getWheelRotation();
+		int mx = super.mouseX;
+		int my = super.mouseY;
+
+		// Chat area scroll
+		boolean overChat;
+		if (clientSize == 0) {
+			overChat = mx > 0 && mx < 519 && my > 338 && my < 503;
+		} else {
+			overChat = mx > 0 && mx < 519 && my > clientHeight - 165 && my < clientHeight;
+		}
+		if (overChat) {
+			int scroll = rotation * 30;
+			chatScrollAmount += scroll;
+			if (chatScrollAmount < 0)
+				chatScrollAmount = 0;
+			if (chatScrollAmount > chatFilterScrollMax - 110)
+				chatScrollAmount = chatFilterScrollMax - 110;
+			if (chatScrollAmount < 0)
+				chatScrollAmount = 0;
+			inputTaken = true;
+			return;
+		}
+
+		// Minimap area — ignore scroll
+		boolean overMinimap;
+		if (clientSize == 0) {
+			overMinimap = mx > 519 && my < 168;
+		} else {
+			overMinimap = mx > clientWidth - 246 && my < 168;
+		}
+		if (overMinimap) {
+			return;
+		}
+
+		// Tab area — ignore scroll (could add interface scroll later)
+		boolean overTab;
+		if (clientSize == 0) {
+			overTab = mx > 519 && my > 168;
+		} else {
+			overTab = mx > clientWidth - 246 && my > clientHeight - 335;
+		}
+		if (overTab) {
+			return;
+		}
+
+		// Otherwise — camera zoom
+		cameraZoom -= rotation * CAMERA_ZOOM_STEP;
+		if (cameraZoom < CAMERA_ZOOM_MIN)
+			cameraZoom = CAMERA_ZOOM_MIN;
+		if (cameraZoom > CAMERA_ZOOM_MAX)
+			cameraZoom = CAMERA_ZOOM_MAX;
 	}
 
 	public boolean isFixed() {

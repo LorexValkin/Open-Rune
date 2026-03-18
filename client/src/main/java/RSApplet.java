@@ -203,10 +203,18 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
         int x = e.getX() - getInsetX();
         int y = e.getY() - getInsetY();
         idleTime = 0;
-        clickX = x;
-        clickY = y;
         clickTime = System.currentTimeMillis();
         getGameComponent().requestFocusInWindow();
+        if (javax.swing.SwingUtilities.isMiddleMouseButton(e)) {
+            middleMouseDown = true;
+            middleMouseStartX = x;
+            middleMouseStartY = y;
+            middleMouseDragX = x;
+            middleMouseDragY = y;
+            return;
+        }
+        clickX = x;
+        clickY = y;
         if (javax.swing.SwingUtilities.isRightMouseButton(e)) {
             clickMode1 = 2;
             clickMode2 = 2;
@@ -218,6 +226,10 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 
     public final void mouseReleased(MouseEvent e) {
         idleTime = 0;
+        if (javax.swing.SwingUtilities.isMiddleMouseButton(e)) {
+            middleMouseDown = false;
+            return;
+        }
         clickMode2 = 0;
     }
 
@@ -234,6 +246,11 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
         int x = e.getX() - getInsetX();
         int y = e.getY() - getInsetY();
         idleTime = 0;
+        if (middleMouseDown) {
+            middleMouseDragX = x;
+            middleMouseDragY = y;
+            return;
+        }
         mouseX = x;
         mouseY = y;
     }
@@ -468,4 +485,11 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
     private int readIndex;
     private int writeIndex;
     public static int debugFlags;
+
+    // Middle mouse drag for camera rotation
+    public boolean middleMouseDown;
+    public int middleMouseStartX;
+    public int middleMouseStartY;
+    public int middleMouseDragX;
+    public int middleMouseDragY;
 }
