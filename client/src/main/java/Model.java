@@ -569,10 +569,10 @@ public final class Model extends Animable {
 			} else {
 				System.arraycopy(model.faceRenderType, 0, faceRenderType, 0, faceCount);
 			}
-			super.aVertexNormalArray1425 = new VertexNormal[vertexCount];
+			super.vertexNormals = new VertexNormal[vertexCount];
 			for(int j1 = 0; j1 < vertexCount; j1++) {
-				VertexNormal vertexNormal = super.aVertexNormalArray1425[j1] = new VertexNormal();
-				VertexNormal vertexNormal_1 = model.aVertexNormalArray1425[j1];
+				VertexNormal vertexNormal = super.vertexNormals[j1] = new VertexNormal();
+				VertexNormal vertexNormal_1 = model.vertexNormals[j1];
 				vertexNormal.x = vertexNormal_1.x;
 				vertexNormal.y = vertexNormal_1.y;
 				vertexNormal.z = vertexNormal_1.z;
@@ -1032,10 +1032,10 @@ public final class Model extends Animable {
 			faceColorB = new int[faceCount];
 			faceColorC = new int[faceCount];
 		}
-		if(super.aVertexNormalArray1425 == null) {
-			super.aVertexNormalArray1425 = new VertexNormal[vertexCount];
+		if(super.vertexNormals == null) {
+			super.vertexNormals = new VertexNormal[vertexCount];
 			for(int l1 = 0; l1 < vertexCount; l1++)
-				super.aVertexNormalArray1425[l1] = new VertexNormal();
+				super.vertexNormals[l1] = new VertexNormal();
 		}
 		for(int i2 = 0; i2 < faceCount; i2++) {
 			int j2 = faceVertexA[i2];
@@ -1061,17 +1061,17 @@ public final class Model extends Animable {
 			i5 = (i5 * 256) / k5;
 			j5 = (j5 * 256) / k5;
 			if(faceRenderType == null || (faceRenderType[i2] & 1) == 0) {
-				VertexNormal vertexNormal_2 = super.aVertexNormalArray1425[j2];
+				VertexNormal vertexNormal_2 = super.vertexNormals[j2];
 				vertexNormal_2.x += l4;
 				vertexNormal_2.y += i5;
 				vertexNormal_2.z += j5;
 				vertexNormal_2.magnitude++;
-				vertexNormal_2 = super.aVertexNormalArray1425[l2];
+				vertexNormal_2 = super.vertexNormals[l2];
 				vertexNormal_2.x += l4;
 				vertexNormal_2.y += i5;
 				vertexNormal_2.z += j5;
 				vertexNormal_2.magnitude++;
-				vertexNormal_2 = super.aVertexNormalArray1425[i3];
+				vertexNormal_2 = super.vertexNormals[i3];
 				vertexNormal_2.x += l4;
 				vertexNormal_2.y += i5;
 				vertexNormal_2.z += j5;
@@ -1086,7 +1086,7 @@ public final class Model extends Animable {
 		} else {
 			mergedNormals = new VertexNormal[vertexCount];
 			for(int k2 = 0; k2 < vertexCount; k2++) {
-				VertexNormal vertexNormal = super.aVertexNormalArray1425[k2];
+				VertexNormal vertexNormal = super.vertexNormals[k2];
 				VertexNormal vertexNormal_1 = mergedNormals[k2] = new VertexNormal();
 				vertexNormal_1.x = vertexNormal.x;
 				vertexNormal_1.y = vertexNormal.y;
@@ -1108,30 +1108,30 @@ public final class Model extends Animable {
 			int j2 = faceVertexC[j1];
 			if(faceRenderType == null) {
 				int i3 = faceColors[j1];
-				VertexNormal vertexNormal = super.aVertexNormalArray1425[k1];
+				VertexNormal vertexNormal = super.vertexNormals[k1];
 				int k2 = i + (k * vertexNormal.x + l * vertexNormal.y + i1 * vertexNormal.z) / (j * vertexNormal.magnitude);
 				faceColorA[j1] = hslToRgb(i3, k2, 0);
-				vertexNormal = super.aVertexNormalArray1425[i2];
+				vertexNormal = super.vertexNormals[i2];
 				k2 = i + (k * vertexNormal.x + l * vertexNormal.y + i1 * vertexNormal.z) / (j * vertexNormal.magnitude);
 				faceColorB[j1] = hslToRgb(i3, k2, 0);
-				vertexNormal = super.aVertexNormalArray1425[j2];
+				vertexNormal = super.vertexNormals[j2];
 				k2 = i + (k * vertexNormal.x + l * vertexNormal.y + i1 * vertexNormal.z) / (j * vertexNormal.magnitude);
 				faceColorC[j1] = hslToRgb(i3, k2, 0);
 			} else if((faceRenderType[j1] & 1) == 0) {
 				int j3 = faceColors[j1];
 				int k3 = faceRenderType[j1];
-				VertexNormal vertexNormal_1 = super.aVertexNormalArray1425[k1];
+				VertexNormal vertexNormal_1 = super.vertexNormals[k1];
 				int l2 = i + (k * vertexNormal_1.x + l * vertexNormal_1.y + i1 * vertexNormal_1.z) / (j * vertexNormal_1.magnitude);
 				faceColorA[j1] = hslToRgb(j3, l2, k3);
-				vertexNormal_1 = super.aVertexNormalArray1425[i2];
+				vertexNormal_1 = super.vertexNormals[i2];
 				l2 = i + (k * vertexNormal_1.x + l * vertexNormal_1.y + i1 * vertexNormal_1.z) / (j * vertexNormal_1.magnitude);
 				faceColorB[j1] = hslToRgb(j3, l2, k3);
-				vertexNormal_1 = super.aVertexNormalArray1425[j2];
+				vertexNormal_1 = super.vertexNormals[j2];
 				l2 = i + (k * vertexNormal_1.x + l * vertexNormal_1.y + i1 * vertexNormal_1.z) / (j * vertexNormal_1.magnitude);
 				faceColorC[j1] = hslToRgb(j3, l2, k3);
 			}
 		}
-		super.aVertexNormalArray1425 = null;
+		super.vertexNormals = null;
 		mergedNormals = null;
 		vertexLabels = null;
 		faceLabels = null;
@@ -1230,11 +1230,11 @@ public final class Model extends Animable {
 		int i4 = k1 * k - j2 * j >> 16;
 		int j4 = boundsXZRadius * j >> 16;
 		int k4 = i4 + j4 << 9;
-		if(k4 / i3 <= -DrawingArea.anInt1387)
+		if(k4 / i3 <= -DrawingArea.bottomY)
 			return;
 		int l4 = j4 + (super.modelHeight * k >> 16);
 		int i5 = i4 - l4 << 9;
-		if(i5 / i3 >= DrawingArea.anInt1387)
+		if(i5 / i3 >= DrawingArea.bottomY)
 			return;
 		int j5 = l2 + (super.modelHeight * j >> 16);
 		boolean flag = false;
@@ -1468,11 +1468,11 @@ public final class Model extends Animable {
 		int j = faceVertexA[i];
 		int k = faceVertexB[i];
 		int l = faceVertexC[i];
-		Texture.aBoolean1462 = faceNearClipped[i];
+		Texture.opaque = faceNearClipped[i];
 		if(faceAlphas == null)
-			Texture.anInt1465 = 0;
+			Texture.textureCycle = 0;
 		else
-			Texture.anInt1465 = faceAlphas[i];
+			Texture.textureCycle = faceAlphas[i];
 		int i1;
 		if(faceRenderType == null)
 			i1 = 0;
@@ -1583,10 +1583,10 @@ public final class Model extends Animable {
 		int j7 = tmpFaceB[1];
 		int k7 = tmpFaceB[2];
 		if((j3 - j4) * (k7 - j7) - (i7 - j7) * (j5 - j4) > 0) {
-			Texture.aBoolean1462 = false;
+			Texture.opaque = false;
 			if(l == 3) {
 				if(j3 < 0 || j4 < 0 || j5 < 0 || j3 > DrawingArea.centerX || j4 > DrawingArea.centerX || j5 > DrawingArea.centerX)
-					Texture.aBoolean1462 = true;
+					Texture.opaque = true;
 				int l7;
 				if(faceRenderType == null)
 					l7 = 0;
@@ -1612,7 +1612,7 @@ public final class Model extends Animable {
 			}
 			if(l == 4) {
 				if(j3 < 0 || j4 < 0 || j5 < 0 || j3 > DrawingArea.centerX || j4 > DrawingArea.centerX || j5 > DrawingArea.centerX || tmpFaceA[3] < 0 || tmpFaceA[3] > DrawingArea.centerX)
-					Texture.aBoolean1462 = true;
+					Texture.opaque = true;
 				int i8;
 				if(faceRenderType == null)
 					i8 = 0;
@@ -1732,9 +1732,9 @@ public final class Model extends Animable {
 	private static int[] LIGHT_DECAY;
 
 	static {
-		SINE = Texture.anIntArray1470;
-		COSINE = Texture.anIntArray1471;
-		HSL_TO_RGB = Texture.anIntArray1482;
-		LIGHT_DECAY = Texture.anIntArray1469;
+		SINE = Texture.SINE;
+		COSINE = Texture.COSINE;
+		HSL_TO_RGB = Texture.HSL_TO_RGB;
+		LIGHT_DECAY = Texture.lightDecay;
 	}
 }

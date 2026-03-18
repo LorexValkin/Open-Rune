@@ -11,12 +11,12 @@ public final class ItemDef {
 	}
 
 	public boolean isDialogueModelReady(int j) {
-		int k = anInt175;
-		int l = anInt166;
+		int k = maleDialogueModel;
+		int l = femaleDialogueHatModel;
 		if(j == 1)
 		{
-			k = anInt197;
-			l = anInt173;
+			k = notedItemId;
+			l = noteInfoId;
 		}
 		if(k == -1)
 			return true;
@@ -87,11 +87,11 @@ public final class ItemDef {
 	}
 
 	public Model getDialogueModel(int j) {
-		int k = anInt175;
-		int l = anInt166;
+		int k = maleDialogueModel;
+		int l = femaleDialogueHatModel;
 		if(j == 1) {
-			k = anInt197;
-			l = anInt173;
+			k = notedItemId;
+			l = noteInfoId;
 		}
 		if(k == -1)
 			return null;
@@ -114,11 +114,11 @@ public final class ItemDef {
 	public boolean isHeadModelReady(int j) {
 		int k = maleEquip1;
 		int l = maleEquip2;
-		int i1 = anInt185;
+		int i1 = maleEquipYOffset;
 		if(j == 1) {
 			k = femaleEquip1;
 			l = femaleEquip2;
-			i1 = anInt162;
+			i1 = femaleDialogueModel;
 		}
 		if(k == -1)
 			return true;
@@ -135,11 +135,11 @@ public final class ItemDef {
 	public Model getHeadModelItem(int i) {
 		int j = maleEquip1;
 		int k = maleEquip2;
-		int l = anInt185;
+		int l = maleEquipYOffset;
 		if(i == 1) {
 			j = femaleEquip1;
 			k = femaleEquip2;
-			l = anInt162;
+			l = femaleDialogueModel;
 		}
 		if(j == -1)
 			return null;
@@ -159,10 +159,10 @@ public final class ItemDef {
 				};
 				model = new Model(2, aclass30_sub2_sub4_sub6s);
 			}
-		if(i == 0 && aByte205 != 0)
-			model.translate(0, aByte205, 0);
-		if(i == 1 && aByte154 != 0)
-			model.translate(0, aByte154, 0);
+		if(i == 0 && maleEquipYOffset2 != 0)
+			model.translate(0, maleEquipYOffset2, 0);
+		if(i == 1 && femaleEquipYOffset != 0)
+			model.translate(0, femaleEquipYOffset, 0);
 		if (originalModelColors != null) {
 			for (int i1 = 0; i1 < originalModelColors.length; i1++)
 				model.replaceColor(originalModelColors[i1], modifiedModelColors[i1]);
@@ -181,7 +181,7 @@ public final class ItemDef {
 		modelZoom = 2000;
 		modelRotation1 = 0;
 		modelRotation2 = 0;
-		anInt204 = 0;
+		ambient2 = 0;
 		modelOffset1 = 0;
 		modelOffset2 = 0;
 		stackable = false;
@@ -191,25 +191,25 @@ public final class ItemDef {
 		actions = null;
 		maleEquip1 = -1;
 		maleEquip2 = -1;
-		aByte205 = 0;
+		maleEquipYOffset2 = 0;
 		femaleEquip1 = -1;
 		femaleEquip2 = -1;
-		aByte154 = 0;
-		anInt185 = -1;
-		anInt162 = -1;
-		anInt175 = -1;
-		anInt166 = -1;
-		anInt197 = -1;
-		anInt173 = -1;
+		femaleEquipYOffset = 0;
+		maleEquipYOffset = -1;
+		femaleDialogueModel = -1;
+		maleDialogueModel = -1;
+		femaleDialogueHatModel = -1;
+		notedItemId = -1;
+		noteInfoId = -1;
 		stackIDs = null;
 		stackAmounts = null;
 		certID = -1;
 		certTemplateID = -1;
-		anInt167 = 128;
-		anInt192 = 128;
-		anInt191 = 128;
-		anInt196 = 0;
-		anInt184 = 0;
+		resizeX = 128;
+		resizeY = 128;
+		resizeZ = 128;
+		lightMagnitude = 0;
+		lightIntensity = 0;
 		team = 0;
 	}
 
@@ -250,10 +250,10 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35085;
 			itemDef.modelID = 35084;
 			itemDef.name = "Chaotic rapier";
-			itemDef.aByte205 = -12;
-			itemDef.aByte154 = -12;
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.maleEquipYOffset2 = -12;
+			itemDef.femaleEquipYOffset = -12;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A razor-sharp rapier. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15038:
@@ -268,8 +268,8 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35087;
 			itemDef.modelID = 35086;
 			itemDef.name = "Chaotic longsword";
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A dangerously-sharp longsword. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15039:
@@ -284,8 +284,8 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35089;
 			itemDef.modelID = 35088;
 			itemDef.name = "Chaotic maul";
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A dangerously-blunt maul. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15040:
@@ -300,10 +300,10 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35091;
 			itemDef.modelID = 35090;
 			itemDef.name = "Chaotic staff";
-			itemDef.aByte205 = -10;
-			itemDef.aByte154 = -10;
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.maleEquipYOffset2 = -10;
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A staff used by the greatest of wizards. (It doesnt look in good condition.)".getBytes();
 		break;		
 		case 13887:
@@ -316,7 +316,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2;
 			itemDef.modelOffset2 = 5;
 			itemDef.modelOffset1 = 4;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42624;
 			itemDef.femaleEquip1 = 42644;
 			itemDef.description = "Vesta's chainbody, a reward from PVP.".getBytes();
@@ -332,7 +332,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 1;
 			itemDef.modelOffset2 = 11;
 			itemDef.modelOffset1 = -3;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42633;
 			itemDef.femaleEquip1 = 42647;
 			itemDef.description = "Vesta's plateskirt, a reward from PVP.".getBytes();
@@ -347,7 +347,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 1985;
 			itemDef.modelOffset2 = 0;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42615;
 			itemDef.femaleEquip1 = 42615;
 			itemDef.description = "Vesta's longsword, a reward from PVP.".getBytes();
@@ -363,7 +363,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 15;
 			itemDef.modelOffset2 = 5;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42614;
 			itemDef.femaleEquip1 = 42614;
 			itemDef.description = "Vesta's spear, a reward from PVP.".getBytes();
@@ -379,7 +379,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 0;
 			itemDef.modelOffset2 = -7;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42627;
 			itemDef.femaleEquip1 = 42642;
 			itemDef.description = "Zuriel's robe top, a reward from PVP.".getBytes();
@@ -394,7 +394,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 0;
 			itemDef.modelOffset2 = -9;
 			itemDef.modelOffset1 = 2;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42634;
 			itemDef.femaleEquip1 = 42645;
 			itemDef.description = "Zuriel's robe bottom, a reward from PVP.".getBytes();
@@ -409,7 +409,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 0;
 			itemDef.modelOffset2 = 1;
 			itemDef.modelOffset1 = 1;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42638;
 			itemDef.femaleEquip1 = 42653;
 			itemDef.description = "Zuriel's hood, a reward from PVP.".getBytes();
@@ -424,7 +424,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 3;
 			itemDef.modelOffset2 = 0;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42617;
 			itemDef.femaleEquip1 = 42617;
 			itemDef.description = "Zuriel's staff, a reward from PVP.".getBytes();
@@ -439,7 +439,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2047;
 			itemDef.modelOffset2 = 39;
 			itemDef.modelOffset1 = -2;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42625;
 			itemDef.femaleEquip1 = 42641;
 			itemDef.description = "Statius's platebody, a reward from PVP.".getBytes();
@@ -454,7 +454,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2046;
 			itemDef.modelOffset2 = -11;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42632;
 			itemDef.femaleEquip1 = 42649;
 			itemDef.description = "Statius's platelegs, a reward from PVP.".getBytes();
@@ -470,7 +470,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2039;
 			itemDef.modelOffset2 = -7;
 			itemDef.modelOffset1 = 2;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42639;
 			itemDef.femaleEquip1 = 42655;
 			itemDef.description = "Statius's full helm, a reward from PVP.".getBytes();
@@ -485,7 +485,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 27;
 			itemDef.modelOffset2 = 6;
 			itemDef.modelOffset1 = 7;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42623;
 			itemDef.femaleEquip1 = 42623;
 			itemDef.description = "Statius's warhammer, a reward from PVP.".getBytes();
@@ -500,7 +500,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2;
 			itemDef.modelOffset2 = 5;
 			itemDef.modelOffset1 = 4;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42626;
 			itemDef.femaleEquip1 = 42643;
 			itemDef.description = "Morrigan's leather body, a reward from PVP.".getBytes();
@@ -516,7 +516,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 1;
 			itemDef.modelOffset2 = 11;
 			itemDef.modelOffset1 = -3;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42631;
 			itemDef.femaleEquip1 = 42646;
 			itemDef.description = "Morrigan's leather chaps, a reward from PVP.".getBytes();
@@ -532,7 +532,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 5;
 			itemDef.modelOffset2 = 6;
 			itemDef.modelOffset1 = -3;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42636;
 			itemDef.femaleEquip1 = 42652;
 			itemDef.description = "Morrigan's coif, a reward from PVP.".getBytes();
@@ -547,7 +547,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2009;
 			itemDef.modelOffset2 = 0;
 			itemDef.modelOffset1 = 0;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42613;
 			itemDef.femaleEquip1 = 42613;
 			itemDef.description = "Morrigan's javelin, a reward from PVP.".getBytes();
@@ -562,7 +562,7 @@ public final class ItemDef {
 			itemDef.modelRotation2 = 2024;
 			itemDef.modelOffset2 = 4;
 			itemDef.modelOffset1 = -5;
-			itemDef.anInt204 = 0;
+			itemDef.ambient2 = 0;
 			itemDef.maleEquip1 = 42611;
 			itemDef.femaleEquip1 = 42611;
 			itemDef.description = "Morrigan's throwing axe, a reward from PVP.".getBytes();
@@ -578,10 +578,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;//model offset 2
 			itemDef.maleEquip1 = 40944;//male wield ModelId
 			itemDef.femaleEquip1 = 40944;//female wield ModelId
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Arcane spirit shield";//name
 			itemDef.description = "It's a Arcane spirit shield.".getBytes();//name
 		break;
@@ -596,10 +596,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;
 			itemDef.maleEquip1 = 40940;
 			itemDef.femaleEquip1 = 40940;
-			itemDef.anInt188 = -1;
-			itemDef.anInt164 = -1;
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;
+			itemDef.maleDialogueHatModel = -1;
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Spectral spirit shield";
 			itemDef.description = "It's a Spectral spirit shield.".getBytes();
 		break;
@@ -614,10 +614,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;//model offset 2
 			itemDef.maleEquip1 = 40939;//male wield ModelId
 			itemDef.femaleEquip1 = 40939;//female wield ModelId
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Divine spirit shield";//name
 			itemDef.description = "It's a Divine spirit shield.".getBytes();//name
 		break;
@@ -632,10 +632,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;//model offset 2
 			itemDef.maleEquip1 = 40943;//male wield ModelId
 			itemDef.femaleEquip1 = 40943;//female wield ModelId
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Spirit shield";//name
 			itemDef.description = "It's a Spirit shield.".getBytes();//name
 		break;
@@ -650,10 +650,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;
 			itemDef.maleEquip1 = 40941;
 			itemDef.femaleEquip1 = 40941;
-			itemDef.anInt188 = -1;
-			itemDef.anInt164 = -1;
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;
+			itemDef.maleDialogueHatModel = -1;
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Blessed spirit shield";
 			itemDef.description = "It's a Blessed spirit shield.".getBytes();
 		break;
@@ -668,10 +668,10 @@ public final class ItemDef {
 			itemDef.modelOffset2 = 4;
 			itemDef.maleEquip1 = 40942;
 			itemDef.femaleEquip1 = 40942;
-			itemDef.anInt188 = -1;
-			itemDef.anInt164 = -1;
-			itemDef.aByte154 = -10;
-			itemDef.aByte205 = -10;
+			itemDef.modelPositionX = -1;
+			itemDef.maleDialogueHatModel = -1;
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.maleEquipYOffset2 = -10;
 			itemDef.name = "Elysian spirit shield";
 			itemDef.description = "It's an Elysian spirit shield.".getBytes();
 		break;
@@ -1005,7 +1005,7 @@ public final class ItemDef {
                 	itemDef.actions[1] = "Wield";
                 	itemDef.modelID = 44590;
                 	itemDef.maleEquip1 = 43660;//anInt165
-                	itemDef.femaleEquip1 = 43660;//anInt200
+                	itemDef.femaleEquip1 = 43660;//modelPositionY
                 	itemDef.modelZoom = 789;
                 	itemDef.modelRotation1 = 240;
                 	itemDef.modelRotation2 = 60;
@@ -1026,10 +1026,10 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35085;
 			itemDef.modelID = 35084;
 			itemDef.name = "Chaotic rapier";
-			itemDef.aByte205 = -12;
-			itemDef.aByte154 = -12;
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.maleEquipYOffset2 = -12;
+			itemDef.femaleEquipYOffset = -12;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A razor-sharp rapier. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15038:
@@ -1044,8 +1044,8 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35087;
 			itemDef.modelID = 35086;
 			itemDef.name = "Chaotic longsword";
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A dangerously-sharp longsword. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15039:
@@ -1060,8 +1060,8 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 56294;
 			itemDef.modelID = 54494;
 			itemDef.name = "Chaotic maul";
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A dangerously-blunt maul. (It doesnt look in good condition.)".getBytes();
 		break;
 		case 15040:
@@ -1076,10 +1076,10 @@ public final class ItemDef {
 			itemDef.maleEquip1 = 35091;
 			itemDef.modelID = 35090;
 			itemDef.name = "Chaotic staff";
-			itemDef.aByte205 = -10;
-			itemDef.aByte154 = -10;
-			itemDef.anInt188 = -1;//female sleeve
-			itemDef.anInt164 = -1;//male sleeve
+			itemDef.maleEquipYOffset2 = -10;
+			itemDef.femaleEquipYOffset = -10;
+			itemDef.modelPositionX = -1;//female sleeve
+			itemDef.maleDialogueHatModel = -1;//male sleeve
 			itemDef.description = "A staff used by the greatest of wizards. (It doesnt look in good condition.)".getBytes();
 		break;*/
 				
@@ -1131,7 +1131,7 @@ public final class ItemDef {
 		modelZoom = itemDef.modelZoom;
 		modelRotation1 = itemDef.modelRotation1;
 		modelRotation2 = itemDef.modelRotation2;
-		anInt204 = itemDef.anInt204;
+		ambient2 = itemDef.ambient2;
 		modelOffset1 = itemDef.modelOffset1;
 		modelOffset2 = itemDef.modelOffset2;
 		originalModelColors = itemDef.originalModelColors;
@@ -1181,7 +1181,7 @@ public final class ItemDef {
 		Sprite sprite2 = new Sprite(32, 32);
 		int k1 = Texture.textureInt1;
 		int l1 = Texture.textureInt2;
-		int ai[] = Texture.anIntArray1472;
+		int ai[] = Texture.scanlineOffset;
 		int ai1[] = DrawingArea.pixels;
 		int i2 = DrawingArea.width;
 		int j2 = DrawingArea.height;
@@ -1189,7 +1189,7 @@ public final class ItemDef {
 		int l2 = DrawingArea.bottomX;
 		int i3 = DrawingArea.topY;
 		int j3 = DrawingArea.bottomY;
-		Texture.aBoolean1464 = false;
+		Texture.textureMipmap = false;
 		DrawingArea.initDrawingArea(32, 32, sprite2.myPixels);
 		DrawingArea.drawPixels(32, 0, 0, 0, 32);
 		Texture.initScanlines();
@@ -1198,9 +1198,9 @@ public final class ItemDef {
 			k3 = (int)((double)k3 * 1.5D);
 		if(k > 0)
 			k3 = (int)((double)k3 * 1.04D);
-		int l3 = Texture.anIntArray1470[itemDef.modelRotation1] * k3 >> 16;
-		int i4 = Texture.anIntArray1471[itemDef.modelRotation1] * k3 >> 16;
-		model.renderModel2D(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
+		int l3 = Texture.SINE[itemDef.modelRotation1] * k3 >> 16;
+		int i4 = Texture.COSINE[itemDef.modelRotation1] * k3 >> 16;
+		model.renderModel2D(itemDef.modelRotation2, itemDef.ambient2, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
 		for(int i5 = 31; i5 >= 0; i5--) {
 			for(int j4 = 31; j4 >= 0; j4--)
 				if(sprite2.myPixels[i5 + j4 * 32] == 0)
@@ -1248,8 +1248,8 @@ public final class ItemDef {
 		DrawingArea.setDrawingArea(j3, k2, l2, i3);
 		Texture.textureInt1 = k1;
 		Texture.textureInt2 = l1;
-		Texture.anIntArray1472 = ai;
-		Texture.aBoolean1464 = true;
+		Texture.scanlineOffset = ai;
+		Texture.textureMipmap = true;
 		if(itemDef.stackable)
 			sprite2.anInt1444 = 33;
 		else
@@ -1273,14 +1273,14 @@ public final class ItemDef {
 		model = Model.getModel(modelID);
 		if(model == null)
 			return null;
-		if(anInt167 != 128 || anInt192 != 128 || anInt191 != 128)
-			model.scale(anInt167, anInt191, anInt192);
+		if(resizeX != 128 || resizeY != 128 || resizeZ != 128)
+			model.scale(resizeX, resizeZ, resizeY);
 		if (originalModelColors != null) {
 			for (int l = 0; l < originalModelColors.length; l++)
 				model.replaceColor(originalModelColors[l], modifiedModelColors[l]);
 
 		}
-		model.calculateLighting(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
+		model.calculateLighting(64 + lightMagnitude, 768 + lightIntensity, -50, -10, -50, true);
 		model.singleTile = true;
 		mruNodes2.removeFromCache(model, id);
 		return model;
@@ -1341,12 +1341,12 @@ public final class ItemDef {
 				membersObject = true;
 			else if(i == 23) {
 				maleEquip1 = stream.readUnsignedWord();
-				aByte205 = stream.readSignedByte();
+				maleEquipYOffset2 = stream.readSignedByte();
 			} else if(i == 24)
 				maleEquip2 = stream.readUnsignedWord();
 			else if(i == 25) {
 				femaleEquip1 = stream.readUnsignedWord();
-				aByte154 = stream.readSignedByte();
+				femaleEquipYOffset = stream.readSignedByte();
 			} else if(i == 26)
 				femaleEquip2 = stream.readUnsignedWord();
 			else if(i >= 30 && i < 35) {
@@ -1368,19 +1368,19 @@ public final class ItemDef {
 					modifiedModelColors[k] = stream.readUnsignedWord();
 				}
 			} else if(i == 78)
-				anInt185 = stream.readUnsignedWord();
+				maleEquipYOffset = stream.readUnsignedWord();
 			else if(i == 79)
-				anInt162 = stream.readUnsignedWord();
+				femaleDialogueModel = stream.readUnsignedWord();
 			else if(i == 90)
-				anInt175 = stream.readUnsignedWord();
+				maleDialogueModel = stream.readUnsignedWord();
 			else if(i == 91)
-				anInt197 = stream.readUnsignedWord();
+				notedItemId = stream.readUnsignedWord();
 			else if(i == 92)
-				anInt166 = stream.readUnsignedWord();
+				femaleDialogueHatModel = stream.readUnsignedWord();
 			else if(i == 93)
-				anInt173 = stream.readUnsignedWord();
+				noteInfoId = stream.readUnsignedWord();
 			else if(i == 95)
-				anInt204 = stream.readUnsignedWord();
+				ambient2 = stream.readUnsignedWord();
 			else if(i == 97)
 				certID = stream.readUnsignedWord();
 			else if(i == 98)
@@ -1393,15 +1393,15 @@ public final class ItemDef {
 				stackIDs[i - 100] = stream.readUnsignedWord();
 				stackAmounts[i - 100] = stream.readUnsignedWord();
 			} else if(i == 110)
-				anInt167 = stream.readUnsignedWord();
+				resizeX = stream.readUnsignedWord();
 			else if(i == 111)
-				anInt192 = stream.readUnsignedWord();
+				resizeY = stream.readUnsignedWord();
 			else if(i == 112)
-				anInt191 = stream.readUnsignedWord();
+				resizeZ = stream.readUnsignedWord();
 			else if(i == 113)
-				anInt196 = stream.readSignedByte();
+				lightMagnitude = stream.readSignedByte();
 			else if(i == 114)
-				anInt184 = stream.readSignedByte() * 5;
+				lightIntensity = stream.readSignedByte() * 5;
 			else if(i == 115)
 				team = stream.readUnsignedByte();
 		} while(true);
@@ -1411,7 +1411,7 @@ public final class ItemDef {
 		id = -1;
 	}
 
-	public byte aByte154;
+	public byte femaleEquipYOffset;
 	public int value;
 	public int[] modifiedModelColors;
 	public int id;
@@ -1419,19 +1419,19 @@ public final class ItemDef {
 	public static MRUNodes mruNodes2 = new MRUNodes(50);
 	public int[] originalModelColors;
 	public boolean membersObject;
-	public int anInt162;
+	public int femaleDialogueModel;
 	public int certTemplateID;
 	public int femaleEquip2;
 	public int maleEquip1;
-	public int anInt166;
-	public int anInt167;
+	public int femaleDialogueHatModel;
+	public int resizeX;
 	public String groundActions[];
 	public int modelOffset1;
 	public String name;
 	public static ItemDef[] cache;
-	public int anInt173;
+	public int noteInfoId;
 	public int modelID;
-	public int anInt175;
+	public int maleDialogueModel;
 	public boolean stackable;
 	public byte description[];
 	public int certID;
@@ -1439,26 +1439,26 @@ public final class ItemDef {
 	public int modelZoom;
 	public static boolean isMembers = true;
 	public static Stream stream;
-	public int anInt184;
-	public int anInt185;
+	public int lightIntensity;
+	public int maleEquipYOffset;
 	public int maleEquip2;
 	public String actions[];
 	public int modelRotation1;
-	public int anInt191;
-	public int anInt192;
+	public int resizeZ;
+	public int resizeY;
 	public int[] stackIDs;
 	public int modelOffset2;
 	public static int[] streamIndices;
-	public int anInt196;
-	public int anInt197;
+	public int lightMagnitude;
+	public int notedItemId;
 	public int modelRotation2;
 	public int femaleEquip1;
 	public int[] stackAmounts;
 	public int team;
 	public static int totalItems;
-	public int anInt204;
-	public byte aByte205;
-	public int anInt164;
-	public int anInt199;
-	public int anInt188;
+	public int ambient2;
+	public byte maleEquipYOffset2;
+	public int maleDialogueHatModel;
+	public int modelPositionZ;
+	public int modelPositionX;
 }

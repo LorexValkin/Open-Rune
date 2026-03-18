@@ -587,10 +587,10 @@ final class WorldController {
 					if(class30_sub3 != null)
 					{
 						WallObject class10 = class30_sub3.obj1;
-						if(class10 != null && class10.renderable1 != null && class10.renderable1.aVertexNormalArray1425 != null)
+						if(class10 != null && class10.renderable1 != null && class10.renderable1.vertexNormals != null)
 						{
 							applyObjectLighting(l1, 1, 1, i2, j2, (Model)class10.renderable1);
-							if(class10.renderable2 != null && class10.renderable2.aVertexNormalArray1425 != null)
+							if(class10.renderable2 != null && class10.renderable2.vertexNormals != null)
 							{
 								applyObjectLighting(l1, 1, 1, i2, j2, (Model)class10.renderable2);
 								mergeNormals((Model)class10.renderable1, (Model)class10.renderable2, 0, 0, 0, false);
@@ -601,7 +601,7 @@ final class WorldController {
 						for(int k2 = 0; k2 < class30_sub3.obj5Count; k2++)
 						{
 							InteractiveObject class28 = class30_sub3.obj5Array[k2];
-							if(class28 != null && class28.renderable != null && class28.renderable.aVertexNormalArray1425 != null)
+							if(class28 != null && class28.renderable != null && class28.renderable.vertexNormals != null)
 							{
 								applyObjectLighting(l1, (class28.tileRight - class28.tileLeft) + 1, (class28.tileBottom - class28.tileTop) + 1, i2, j2, (Model)class28.renderable);
 								((Model)class28.renderable).calculateLightingMerged(j, k1, k, i, i1);
@@ -609,7 +609,7 @@ final class WorldController {
 						}
 
 						GroundDecoration class49 = class30_sub3.obj3;
-						if(class49 != null && class49.renderable.aVertexNormalArray1425 != null)
+						if(class49 != null && class49.renderable.vertexNormals != null)
 						{
 							applyGroundDecoLighting(i2, l1, (Model)class49.renderable, j2);
 							((Model)class49.renderable).calculateLightingMerged(j, k1, k, i, i1);
@@ -628,25 +628,25 @@ final class WorldController {
 		if(i < mapSizeX)
 		{
 			Ground class30_sub3 = groundArray[j][i + 1][k];
-			if(class30_sub3 != null && class30_sub3.obj3 != null && class30_sub3.obj3.renderable.aVertexNormalArray1425 != null)
+			if(class30_sub3 != null && class30_sub3.obj3 != null && class30_sub3.obj3.renderable.vertexNormals != null)
 				mergeNormals(model, (Model)class30_sub3.obj3.renderable, 128, 0, 0, true);
 		}
 		if(k < mapSizeX)
 		{
 			Ground class30_sub3_1 = groundArray[j][i][k + 1];
-			if(class30_sub3_1 != null && class30_sub3_1.obj3 != null && class30_sub3_1.obj3.renderable.aVertexNormalArray1425 != null)
+			if(class30_sub3_1 != null && class30_sub3_1.obj3 != null && class30_sub3_1.obj3.renderable.vertexNormals != null)
 				mergeNormals(model, (Model)class30_sub3_1.obj3.renderable, 0, 0, 128, true);
 		}
 		if(i < mapSizeX && k < mapSizeY)
 		{
 			Ground class30_sub3_2 = groundArray[j][i + 1][k + 1];
-			if(class30_sub3_2 != null && class30_sub3_2.obj3 != null && class30_sub3_2.obj3.renderable.aVertexNormalArray1425 != null)
+			if(class30_sub3_2 != null && class30_sub3_2.obj3 != null && class30_sub3_2.obj3.renderable.vertexNormals != null)
 				mergeNormals(model, (Model)class30_sub3_2.obj3.renderable, 128, 0, 128, true);
 		}
 		if(i < mapSizeX && k > 0)
 		{
 			Ground class30_sub3_3 = groundArray[j][i + 1][k - 1];
-			if(class30_sub3_3 != null && class30_sub3_3.obj3 != null && class30_sub3_3.obj3.renderable.aVertexNormalArray1425 != null)
+			if(class30_sub3_3 != null && class30_sub3_3.obj3 != null && class30_sub3_3.obj3.renderable.vertexNormals != null)
 				mergeNormals(model, (Model)class30_sub3_3.obj3.renderable, 128, 0, -128, true);
 		}
 	}
@@ -672,14 +672,14 @@ final class WorldController {
 								{
 									int i3 = (tileHeightMap[j2][k2][l2] + tileHeightMap[j2][k2 + 1][l2] + tileHeightMap[j2][k2][l2 + 1] + tileHeightMap[j2][k2 + 1][l2 + 1]) / 4 - (tileHeightMap[i][l][i1] + tileHeightMap[i][l + 1][i1] + tileHeightMap[i][l][i1 + 1] + tileHeightMap[i][l + 1][i1 + 1]) / 4;
 									WallObject class10 = class30_sub3.obj1;
-									if(class10 != null && class10.renderable1 != null && class10.renderable1.aVertexNormalArray1425 != null)
+									if(class10 != null && class10.renderable1 != null && class10.renderable1.vertexNormals != null)
 										mergeNormals(model, (Model)class10.renderable1, (k2 - l) * 128 + (1 - j) * 64, i3, (l2 - i1) * 128 + (1 - k) * 64, flag);
-									if(class10 != null && class10.renderable2 != null && class10.renderable2.aVertexNormalArray1425 != null)
+									if(class10 != null && class10.renderable2 != null && class10.renderable2.vertexNormals != null)
 										mergeNormals(model, (Model)class10.renderable2, (k2 - l) * 128 + (1 - j) * 64, i3, (l2 - i1) * 128 + (1 - k) * 64, flag);
 									for(int j3 = 0; j3 < class30_sub3.obj5Count; j3++)
 									{
 										InteractiveObject class28 = class30_sub3.obj5Array[j3];
-										if(class28 != null && class28.renderable != null && class28.renderable.aVertexNormalArray1425 != null)
+										if(class28 != null && class28.renderable != null && class28.renderable.vertexNormals != null)
 										{
 											int k3 = (class28.tileRight - class28.tileLeft) + 1;
 											int l3 = (class28.tileBottom - class28.tileTop) + 1;
@@ -706,7 +706,7 @@ final class WorldController {
 		int i1 = model_1.vertexCount;
 		for(int j1 = 0; j1 < model.vertexCount; j1++)
 		{
-			VertexNormal vertexNormal = model.aVertexNormalArray1425[j1];
+			VertexNormal vertexNormal = model.vertexNormals[j1];
 			VertexNormal vertexNormal_1 = model.mergedNormals[j1];
 			if(vertexNormal_1.magnitude != 0)
 			{
@@ -721,7 +721,7 @@ final class WorldController {
 						{
 							for(int l2 = 0; l2 < i1; l2++)
 							{
-								VertexNormal vertexNormal_2 = model_1.aVertexNormalArray1425[l2];
+								VertexNormal vertexNormal_2 = model_1.vertexNormals[l2];
 								VertexNormal vertexNormal_3 = model_1.mergedNormals[l2];
 								if(j2 == ai[l2] && k2 == model_1.vertexZ[l2] && i2 == model_1.vertexY[l2] && vertexNormal_3.magnitude != 0)
 								{
@@ -1627,10 +1627,10 @@ label0:
 		int j6 = Texture.textureInt2 + (j4 << 9) / k3;
 		int k6 = Texture.textureInt1 + (l1 << 9) / j3;
 		int l6 = Texture.textureInt2 + (k4 << 9) / j3;
-		Texture.anInt1465 = 0;
+		Texture.textureCycle = 0;
 		if((i6 - k6) * (l5 - l6) - (j6 - l6) * (k5 - k6) > 0)
 		{
-			Texture.aBoolean1462 = i6 < 0 || k6 < 0 || k5 < 0 || i6 > DrawingArea.centerX || k6 > DrawingArea.centerX || k5 > DrawingArea.centerX;
+			Texture.opaque = i6 < 0 || k6 < 0 || k5 < 0 || i6 > DrawingArea.centerX || k6 > DrawingArea.centerX || k5 > DrawingArea.centerX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j6, l6, l5, i6, k6, k5))
 			{
 				anInt470 = j1;
@@ -1655,7 +1655,7 @@ label0:
 		}
 		if((i5 - k5) * (l6 - l5) - (j5 - l5) * (k6 - k5) > 0)
 		{
-			Texture.aBoolean1462 = i5 < 0 || k5 < 0 || k6 < 0 || i5 > DrawingArea.centerX || k5 > DrawingArea.centerX || k6 > DrawingArea.centerX;
+			Texture.opaque = i5 < 0 || k5 < 0 || k6 < 0 || i5 > DrawingArea.centerX || k5 > DrawingArea.centerX || k6 > DrawingArea.centerX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j5, l5, l6, i5, k5, k6))
 			{
 				anInt470 = j1;
@@ -1707,7 +1707,7 @@ label0:
 			ShapedTile.tmpScreenY[l1] = Texture.textureInt2 + (k2 << 9) / i3;
 		}
 
-		Texture.anInt1465 = 0;
+		Texture.textureCycle = 0;
 		k1 = shapedTile.triangleVertexA.length;
 		for(int j2 = 0; j2 < k1; j2++)
 		{
@@ -1722,7 +1722,7 @@ label0:
 			int j5 = ShapedTile.tmpScreenY[l3];
 			if((i4 - j4) * (j5 - i5) - (l4 - i5) * (k4 - j4) > 0)
 			{
-				Texture.aBoolean1462 = i4 < 0 || j4 < 0 || k4 < 0 || i4 > DrawingArea.centerX || j4 > DrawingArea.centerX || k4 > DrawingArea.centerX;
+				Texture.opaque = i4 < 0 || j4 < 0 || k4 < 0 || i4 > DrawingArea.centerX || j4 > DrawingArea.centerX || k4 > DrawingArea.centerX;
 				if(clickPending && frustumContains(clickScreenY, clickScreenX, l4, i5, j5, i4, j4, k4))
 				{
 					anInt470 = i;

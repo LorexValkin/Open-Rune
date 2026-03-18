@@ -6,32 +6,32 @@ final class Animable_Sub4 extends Animable {
 
 	public void trackTarget(int i, int j, int k, int l)
 	{
-		if(!aBoolean1579)
+		if(!moving)
 		{
-			double d = l - anInt1580;
-			double d2 = j - anInt1581;
+			double d = l - startX;
+			double d2 = j - startY;
 			double d3 = Math.sqrt(d * d + d2 * d2);
-			aDouble1585 = (double)anInt1580 + (d * (double)anInt1589) / d3;
-			aDouble1586 = (double)anInt1581 + (d2 * (double)anInt1589) / d3;
-			aDouble1587 = anInt1582;
+			currentX = (double)startX + (d * (double)startSpeed) / d3;
+			currentY = (double)startY + (d2 * (double)startSpeed) / d3;
+			currentZ = startZ;
 		}
-		double d1 = (anInt1572 + 1) - i;
-		aDouble1574 = ((double)l - aDouble1585) / d1;
-		aDouble1575 = ((double)j - aDouble1586) / d1;
-		aDouble1576 = Math.sqrt(aDouble1574 * aDouble1574 + aDouble1575 * aDouble1575);
-		if(!aBoolean1579)
-			aDouble1577 = -aDouble1576 * Math.tan((double)anInt1588 * 0.02454369D);
-		aDouble1578 = (2D * ((double)k - aDouble1587 - aDouble1577 * d1)) / (d1 * d1);
+		double d1 = (endCycle + 1) - i;
+		velocityX = ((double)l - currentX) / d1;
+		velocityY = ((double)j - currentY) / d1;
+		velocityXY = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+		if(!moving)
+			velocityZ = -velocityXY * Math.tan((double)slopeAngle * 0.02454369D);
+		accelerationZ = (2D * ((double)k - currentZ - velocityZ * d1)) / (d1 * d1);
 	}
 
 	public Model getRotatedModel()
 	{
-		Model model = aSpotAnim_1592.getModel();
+		Model model = spotAnim.getModel();
 		if(model == null)
 			return null;
 		int j = -1;
-		if(aSpotAnim_1592.aAnimation_407 != null)
-			j = aSpotAnim_1592.aAnimation_407.anIntArray353[anInt1593];
+		if(spotAnim.animation != null)
+			j = spotAnim.animation.frameIds[animFrame];
 		Model model_1 = new Model(true, AnimFrame.isFrameLoaded(j), false, model);
 		if(j != -1)
 		{
@@ -40,73 +40,73 @@ final class Animable_Sub4 extends Animable {
 			model_1.labelGroupsUnused = null;
 			model_1.labelGroups = null;
 		}
-		if(aSpotAnim_1592.anInt410 != 128 || aSpotAnim_1592.anInt411 != 128)
-			model_1.scale(aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt411);
-		model_1.rotateX(anInt1596);
-		model_1.calculateLighting(64 + aSpotAnim_1592.anInt413, 850 + aSpotAnim_1592.anInt414, -30, -50, -30, true);
+		if(spotAnim.scaleXY != 128 || spotAnim.scaleZ != 128)
+			model_1.scale(spotAnim.scaleXY, spotAnim.scaleXY, spotAnim.scaleZ);
+		model_1.rotateX(pitchAngle);
+		model_1.calculateLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
 			return model_1;
 	}
 
 	public Animable_Sub4(int i, int j, int l, int i1, int j1, int k1,
 						 int l1, int i2, int j2, int k2, int l2)
 	{
-		aBoolean1579 = false;
-		aSpotAnim_1592 = SpotAnim.cache[l2];
-		anInt1597 = k1;
-		anInt1580 = j2;
-		anInt1581 = i2;
-		anInt1582 = l1;
-		anInt1571 = l;
-		anInt1572 = i1;
-		anInt1588 = i;
-		anInt1589 = j1;
-		anInt1590 = k2;
-		anInt1583 = j;
-		aBoolean1579 = false;
+		moving = false;
+		spotAnim = SpotAnim.cache[l2];
+		sourceEntityIndex = k1;
+		startX = j2;
+		startY = i2;
+		startZ = l1;
+		startCycle = l;
+		endCycle = i1;
+		slopeAngle = i;
+		startSpeed = j1;
+		targetLocSize = k2;
+		targetEntityIndex = j;
+		moving = false;
 	}
 
 	public void advanceProjectile(int i)
 	{
-		aBoolean1579 = true;
-		aDouble1585 += aDouble1574 * (double)i;
-		aDouble1586 += aDouble1575 * (double)i;
-		aDouble1587 += aDouble1577 * (double)i + 0.5D * aDouble1578 * (double)i * (double)i;
-		aDouble1577 += aDouble1578 * (double)i;
-		anInt1595 = (int)(Math.atan2(aDouble1574, aDouble1575) * 325.94900000000001D) + 1024 & 0x7ff;
-		anInt1596 = (int)(Math.atan2(aDouble1577, aDouble1576) * 325.94900000000001D) & 0x7ff;
-		if(aSpotAnim_1592.aAnimation_407 != null)
-			for(anInt1594 += i; anInt1594 > aSpotAnim_1592.aAnimation_407.getFrameDuration(anInt1593);)
+		moving = true;
+		currentX += velocityX * (double)i;
+		currentY += velocityY * (double)i;
+		currentZ += velocityZ * (double)i + 0.5D * accelerationZ * (double)i * (double)i;
+		velocityZ += accelerationZ * (double)i;
+		yawAngle = (int)(Math.atan2(velocityX, velocityY) * 325.94900000000001D) + 1024 & 0x7ff;
+		pitchAngle = (int)(Math.atan2(velocityZ, velocityXY) * 325.94900000000001D) & 0x7ff;
+		if(spotAnim.animation != null)
+			for(animCycle += i; animCycle > spotAnim.animation.getFrameDuration(animFrame);)
 			{
-				anInt1594 -= aSpotAnim_1592.aAnimation_407.getFrameDuration(anInt1593) + 1;
-				anInt1593++;
-				if(anInt1593 >= aSpotAnim_1592.aAnimation_407.anInt352)
-					anInt1593 = 0;
+				animCycle -= spotAnim.animation.getFrameDuration(animFrame) + 1;
+				animFrame++;
+				if(animFrame >= spotAnim.animation.frameCount)
+					animFrame = 0;
 			}
 
 	}
 
-	public final int anInt1571;
-	public final int anInt1572;
-	private double aDouble1574;
-	private double aDouble1575;
-	private double aDouble1576;
-	private double aDouble1577;
-	private double aDouble1578;
-	private boolean aBoolean1579;
-	private final int anInt1580;
-	private final int anInt1581;
-	private final int anInt1582;
-	public final int anInt1583;
-	public double aDouble1585;
-	public double aDouble1586;
-	public double aDouble1587;
-	private final int anInt1588;
-	private final int anInt1589;
-	public final int anInt1590;
-	private final SpotAnim aSpotAnim_1592;
-	private int anInt1593;
-	private int anInt1594;
-	public int anInt1595;
-	private int anInt1596;
-	public final int anInt1597;
+	public final int startCycle;
+	public final int endCycle;
+	private double velocityX;
+	private double velocityY;
+	private double velocityXY;
+	private double velocityZ;
+	private double accelerationZ;
+	private boolean moving;
+	private final int startX;
+	private final int startY;
+	private final int startZ;
+	public final int targetEntityIndex;
+	public double currentX;
+	public double currentY;
+	public double currentZ;
+	private final int slopeAngle;
+	private final int startSpeed;
+	public final int targetLocSize;
+	private final SpotAnim spotAnim;
+	private int animFrame;
+	private int animCycle;
+	public int yawAngle;
+	private int pitchAngle;
+	public final int sourceEntityIndex;
 }

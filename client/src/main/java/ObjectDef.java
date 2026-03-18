@@ -154,9 +154,9 @@ public final class ObjectDef {
 		if(varbitId != -1)
 		{
 			VarBit varBit = VarBit.cache[varbitId];
-			int j = varBit.anInt648;
-			int k = varBit.anInt649;
-			int l = varBit.anInt650;
+			int j = varBit.settingIndex;
+			int k = varBit.lowBit;
+			int l = varBit.highBit;
 			int i1 = client.anIntArray1232[l - k];
 			i = clientInstance.variousSettings[j] >> k & i1;
 		} else

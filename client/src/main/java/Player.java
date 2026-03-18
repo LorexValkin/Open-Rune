@@ -23,12 +23,12 @@ public final class Player extends Entity {
 				Model model_3 = new Model(true, AnimFrame.isFrameLoaded(super.spotAnimFrame), false, model_2);
 				model_3.translate(0, -super.spotAnimHeight, 0);
 				model_3.buildLabelGroups();
-				model_3.applyTransform(spotAnim.aAnimation_407.anIntArray353[super.spotAnimFrame]);
+				model_3.applyTransform(spotAnim.animation.frameIds[super.spotAnimFrame]);
 				model_3.labelGroupsUnused = null;
 				model_3.labelGroups = null;
-				if(spotAnim.anInt410 != 128 || spotAnim.anInt411 != 128)
-					model_3.scale(spotAnim.anInt410, spotAnim.anInt410, spotAnim.anInt411);
-				model_3.calculateLighting(64 + spotAnim.anInt413, 850 + spotAnim.anInt414, -30, -50, -30, true);
+				if(spotAnim.scaleXY != 128 || spotAnim.scaleZ != 128)
+					model_3.scale(spotAnim.scaleXY, spotAnim.scaleXY, spotAnim.scaleZ);
+				model_3.calculateLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
 				Model aclass30_sub2_sub4_sub6_1s[] = {
 						model, model_3
 				};
@@ -174,10 +174,10 @@ public final class Player extends Entity {
 		{
 			int j = -1;
 			if(super.anim >= 0 && super.animDelay == 0)
-				j = Animation.anims[super.anim].anIntArray353[super.animFrame];
+				j = Animation.anims[super.anim].frameIds[super.animFrame];
 			else
 			if(super.movementAnimId >= 0)
-				j = Animation.anims[super.movementAnimId].anIntArray353[super.movementAnimFrame];
+				j = Animation.anims[super.movementAnimId].frameIds[super.movementAnimFrame];
 			Model model = desc.getAnimatedModel(-1, j, null);
 			return model;
 		}
@@ -189,22 +189,22 @@ public final class Player extends Entity {
 		if(super.anim >= 0 && super.animDelay == 0)
 		{
 			Animation animation = Animation.anims[super.anim];
-			k = animation.anIntArray353[super.animFrame];
+			k = animation.frameIds[super.animFrame];
 			if(super.movementAnimId >= 0 && super.movementAnimId != super.standAnimId)
-				i1 = Animation.anims[super.movementAnimId].anIntArray353[super.movementAnimFrame];
-			if(animation.anInt360 >= 0)
+				i1 = Animation.anims[super.movementAnimId].frameIds[super.movementAnimFrame];
+			if(animation.rightHandItem >= 0)
 			{
-				j1 = animation.anInt360;
+				j1 = animation.rightHandItem;
 				l += j1 - equipment[5] << 40;
 			}
-			if(animation.anInt361 >= 0)
+			if(animation.leftHandItem >= 0)
 			{
-				k1 = animation.anInt361;
+				k1 = animation.leftHandItem;
 				l += k1 - equipment[3] << 48;
 			}
 		} else
 		if(super.movementAnimId >= 0)
-			k = Animation.anims[super.movementAnimId].anIntArray353[super.movementAnimFrame];
+			k = Animation.anims[super.movementAnimId].frameIds[super.movementAnimFrame];
 		Model model_1 = (Model) mruNodes.insertFromCache(l);
 		if(model_1 == null)
 		{
@@ -274,7 +274,7 @@ public final class Player extends Entity {
 		Model model_2 = Model.sharedModel;
 		model_2.copyAnimated(model_1, AnimFrame.isFrameLoaded(k) & AnimFrame.isFrameLoaded(i1));
 		if(k != -1 && i1 != -1)
-			model_2.recolorAll(Animation.anims[super.anim].anIntArray357, i1, k);
+			model_2.recolorAll(Animation.anims[super.anim].interleaveOrder, i1, k);
 		else
 		if(k != -1)
 			model_2.applyTransform(k);

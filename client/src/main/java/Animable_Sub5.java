@@ -7,100 +7,100 @@ final class Animable_Sub5 extends Animable {
 	public Model getRotatedModel()
 	{
 		int j = -1;
-		if(aAnimation_1607 != null)
+		if(animation != null)
 		{
-			int k = client.loopCycle - anInt1608;
-			if(k > 100 && aAnimation_1607.anInt356 > 0)
+			int k = client.loopCycle - animStartCycle;
+			if(k > 100 && animation.loopOffset > 0)
 				k = 100;
-			while(k > aAnimation_1607.getFrameDuration(anInt1599))
+			while(k > animation.getFrameDuration(animFrame))
 			{
-				k -= aAnimation_1607.getFrameDuration(anInt1599);
-				anInt1599++;
-				if(anInt1599 < aAnimation_1607.anInt352)
+				k -= animation.getFrameDuration(animFrame);
+				animFrame++;
+				if(animFrame < animation.frameCount)
 					continue;
-				anInt1599 -= aAnimation_1607.anInt356;
-				if(anInt1599 >= 0 && anInt1599 < aAnimation_1607.anInt352)
+				animFrame -= animation.loopOffset;
+				if(animFrame >= 0 && animFrame < animation.frameCount)
 					continue;
-				aAnimation_1607 = null;
+				animation = null;
 				break;
 			}
-			anInt1608 = client.loopCycle - k;
-			if(aAnimation_1607 != null)
-				j = aAnimation_1607.anIntArray353[anInt1599];
+			animStartCycle = client.loopCycle - k;
+			if(animation != null)
+				j = animation.frameIds[animFrame];
 		}
 		ObjectDef class46;
-		if(anIntArray1600 != null)
+		if(childrenIDs != null)
 			class46 = getChildObjectDef();
 		else
-			class46 = ObjectDef.forID(anInt1610);
+			class46 = ObjectDef.forID(objectId);
 		if(class46 == null)
 		{
 			return null;
 		} else
 		{
-			return class46.getObjectModel(anInt1611, anInt1612, anInt1603, anInt1604, anInt1605, anInt1606, j);
+			return class46.getObjectModel(objectType, objectFace, southWestX, southWestY, northEastX, northEastY, j);
 		}
 	}
 
 	private ObjectDef getChildObjectDef()
 	{
 		int i = -1;
-		if(anInt1601 != -1)
+		if(varbitId != -1)
 		{
-			VarBit varBit = VarBit.cache[anInt1601];
-			int k = varBit.anInt648;
-			int l = varBit.anInt649;
-			int i1 = varBit.anInt650;
+			VarBit varBit = VarBit.cache[varbitId];
+			int k = varBit.settingIndex;
+			int l = varBit.lowBit;
+			int i1 = varBit.highBit;
 			int j1 = client.anIntArray1232[i1 - l];
 			i = clientInstance.variousSettings[k] >> l & j1;
 		} else
-		if(anInt1602 != -1)
-			i = clientInstance.variousSettings[anInt1602];
-		if(i < 0 || i >= anIntArray1600.length || anIntArray1600[i] == -1)
+		if(settingId != -1)
+			i = clientInstance.variousSettings[settingId];
+		if(i < 0 || i >= childrenIDs.length || childrenIDs[i] == -1)
 			return null;
 		else
-			return ObjectDef.forID(anIntArray1600[i]);
+			return ObjectDef.forID(childrenIDs[i]);
 	}
 
 	public Animable_Sub5(int i, int j, int k, int l, int i1, int j1,
 						 int k1, int l1, boolean flag)
 	{
-		anInt1610 = i;
-		anInt1611 = k;
-		anInt1612 = j;
-		anInt1603 = j1;
-		anInt1604 = l;
-		anInt1605 = i1;
-		anInt1606 = k1;
+		objectId = i;
+		objectType = k;
+		objectFace = j;
+		southWestX = j1;
+		southWestY = l;
+		northEastX = i1;
+		northEastY = k1;
 		if(l1 != -1)
 		{
-			aAnimation_1607 = Animation.anims[l1];
-			anInt1599 = 0;
-			anInt1608 = client.loopCycle;
-			if(flag && aAnimation_1607.anInt356 != -1)
+			animation = Animation.anims[l1];
+			animFrame = 0;
+			animStartCycle = client.loopCycle;
+			if(flag && animation.loopOffset != -1)
 			{
-				anInt1599 = (int)(Math.random() * (double) aAnimation_1607.anInt352);
-				anInt1608 -= (int)(Math.random() * (double) aAnimation_1607.getFrameDuration(anInt1599));
+				animFrame = (int)(Math.random() * (double) animation.frameCount);
+				animStartCycle -= (int)(Math.random() * (double) animation.getFrameDuration(animFrame));
 			}
 		}
-		ObjectDef class46 = ObjectDef.forID(anInt1610);
-		anInt1601 = class46.varbitId;
-		anInt1602 = class46.settingId;
-		anIntArray1600 = class46.childrenIDs;
+		ObjectDef class46 = ObjectDef.forID(objectId);
+		varbitId = class46.varbitId;
+		settingId = class46.settingId;
+		childrenIDs = class46.childrenIDs;
 	}
 
-	private int anInt1599;
-	private final int[] anIntArray1600;
-	private final int anInt1601;
-	private final int anInt1602;
-	private final int anInt1603;
-	private final int anInt1604;
-	private final int anInt1605;
-	private final int anInt1606;
-	private Animation aAnimation_1607;
-	private int anInt1608;
+	private int animFrame;
+	private final int[] childrenIDs;
+	private final int varbitId;
+	private final int settingId;
+	private final int southWestX;
+	private final int southWestY;
+	private final int northEastX;
+	private final int northEastY;
+	private Animation animation;
+	private int animStartCycle;
 	public static client clientInstance;
-	private final int anInt1610;
-	private final int anInt1611;
-	private final int anInt1612;
+	private final int objectId;
+	private final int objectType;
+	private final int objectFace;
 }

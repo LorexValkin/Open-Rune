@@ -7,7 +7,7 @@ public class Entity extends Animable {
 
 	public final void setPos(int i, int j, boolean flag)
 	{
-		if(anim != -1 && Animation.anims[anim].anInt364 == 1)
+		if(anim != -1 && Animation.anims[anim].walkMerge == 1)
 			anim = -1;
 		if(!flag)
 		{
@@ -92,7 +92,7 @@ public class Entity extends Animable {
 			j++;
 			k--;
 		}
-		if(anim != -1 && Animation.anims[anim].anInt364 == 1)
+		if(anim != -1 && Animation.anims[anim].walkMerge == 1)
 			anim = -1;
 		if(smallXYIndex < 9)
 			smallXYIndex++;

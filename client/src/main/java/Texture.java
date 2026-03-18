@@ -3,138 +3,138 @@ final class Texture extends DrawingArea {
 	public static boolean smoothShading = true;
 
 	public static void nullLoader() {
-		anIntArray1468 = null;
-		anIntArray1468 = null;
-		anIntArray1470 = null;
-		anIntArray1471 = null;
-		anIntArray1472 = null;
-		aBackgroundArray1474s = null;
-		aBooleanArray1475 = null;
-		anIntArray1476 = null;
-		anIntArrayArray1478 = null;
-		anIntArrayArray1479 = null;
-		anIntArray1480 = null;
-		anIntArray1482 = null;
-		anIntArrayArray1483 = null;
+		reciprocal = null;
+		reciprocal = null;
+		SINE = null;
+		COSINE = null;
+		scanlineOffset = null;
+		textures = null;
+		textureLoaded = null;
+		averageTextureColor = null;
+		texturePixelCache = null;
+		textureLastUsed = null;
+		textureLastCycle = null;
+		HSL_TO_RGB = null;
+		texturePixels = null;
 	}
 
 	public static void initScanlines() {
-		anIntArray1472 = new int[DrawingArea.height];
+		scanlineOffset = new int[DrawingArea.height];
 		for (int j = 0; j < DrawingArea.height; j++)
-			anIntArray1472[j] = DrawingArea.width * j;
+			scanlineOffset[j] = DrawingArea.width * j;
 
 		textureInt1 = DrawingArea.width / 2;
 		textureInt2 = DrawingArea.height / 2;
 	}
 
 	public static void setViewport(int j, int k) {
-		anIntArray1472 = new int[k];
+		scanlineOffset = new int[k];
 		for (int l = 0; l < k; l++)
-			anIntArray1472[l] = j * l;
+			scanlineOffset[l] = j * l;
 
 		textureInt1 = j / 2;
 		textureInt2 = k / 2;
 	}
 
 	public static void clearDepthBuffer() {
-		anIntArrayArray1478 = null;
+		texturePixelCache = null;
 		for (int j = 0; j < 50; j++)
-			anIntArrayArray1479[j] = null;
+			textureLastUsed[j] = null;
 
 	}
 
 	public static void initTextureCache() {
-		if (anIntArrayArray1478 == null) {
-			anInt1477 = 20;// was parameter
+		if (texturePixelCache == null) {
+			texturePoolSize = 20;// was parameter
 			if (lowMem)
-				anIntArrayArray1478 = new int[anInt1477][16384];
+				texturePixelCache = new int[texturePoolSize][16384];
 			else
-				anIntArrayArray1478 = new int[anInt1477][0x10000];
+				texturePixelCache = new int[texturePoolSize][0x10000];
 			for (int k = 0; k < 50; k++)
-				anIntArrayArray1479[k] = null;
+				textureLastUsed[k] = null;
 
 		}
 	}
 
 	public static void loadTextures(StreamLoader streamLoader) {
-		anInt1473 = 0;
+		textureCount = 0;
 		for (int j = 0; j < 50; j++)
 			try {
-				aBackgroundArray1474s[j] = new Background(streamLoader, String.valueOf(j), 0);
-				if (lowMem && aBackgroundArray1474s[j].anInt1456 == 128)
-					aBackgroundArray1474s[j].readSprite();
+				textures[j] = new Background(streamLoader, String.valueOf(j), 0);
+				if (lowMem && textures[j].textureWidth == 128)
+					textures[j].readSprite();
 				else
-					aBackgroundArray1474s[j].flipHorizontally();
-				anInt1473++;
+					textures[j].flipHorizontally();
+				textureCount++;
 			} catch (Exception _ex) {
 			}
 
 	}
 
 	public static int getAverageTextureColor(int i) {
-		if (anIntArray1476[i] != 0)
-			return anIntArray1476[i];
+		if (averageTextureColor[i] != 0)
+			return averageTextureColor[i];
 		int k = 0;
 		int l = 0;
 		int i1 = 0;
-		int j1 = anIntArrayArray1483[i].length;
+		int j1 = texturePixels[i].length;
 		for (int k1 = 0; k1 < j1; k1++) {
-			k += anIntArrayArray1483[i][k1] >> 16 & 0xff;
-			l += anIntArrayArray1483[i][k1] >> 8 & 0xff;
-			i1 += anIntArrayArray1483[i][k1] & 0xff;
+			k += texturePixels[i][k1] >> 16 & 0xff;
+			l += texturePixels[i][k1] >> 8 & 0xff;
+			i1 += texturePixels[i][k1] & 0xff;
 		}
 
 		int l1 = (k / j1 << 16) + (l / j1 << 8) + i1 / j1;
 		l1 = adjustBrightness(l1, 1.3999999999999999D);
 		if (l1 == 0)
 			l1 = 1;
-		anIntArray1476[i] = l1;
+		averageTextureColor[i] = l1;
 		return l1;
 	}
 
 	public static void setTextureActive(int i) {
-		if (anIntArrayArray1479[i] == null)
+		if (textureLastUsed[i] == null)
 			return;
-		anIntArrayArray1478[anInt1477++] = anIntArrayArray1479[i];
-		anIntArrayArray1479[i] = null;
+		texturePixelCache[texturePoolSize++] = textureLastUsed[i];
+		textureLastUsed[i] = null;
 	}
 
 	private static int[] getTexturePixels(int i) {
-		anIntArray1480[i] = anInt1481++;
-		if (anIntArrayArray1479[i] != null)
-			return anIntArrayArray1479[i];
+		textureLastCycle[i] = textureCycleCounter++;
+		if (textureLastUsed[i] != null)
+			return textureLastUsed[i];
 		int ai[];
-		if (anInt1477 > 0) {
-			ai = anIntArrayArray1478[--anInt1477];
-			anIntArrayArray1478[anInt1477] = null;
+		if (texturePoolSize > 0) {
+			ai = texturePixelCache[--texturePoolSize];
+			texturePixelCache[texturePoolSize] = null;
 		} else {
 			int j = 0;
 			int k = -1;
-			for (int l = 0; l < anInt1473; l++)
-				if (anIntArrayArray1479[l] != null && (anIntArray1480[l] < j || k == -1)) {
-					j = anIntArray1480[l];
+			for (int l = 0; l < textureCount; l++)
+				if (textureLastUsed[l] != null && (textureLastCycle[l] < j || k == -1)) {
+					j = textureLastCycle[l];
 					k = l;
 				}
 
-			ai = anIntArrayArray1479[k];
-			anIntArrayArray1479[k] = null;
+			ai = textureLastUsed[k];
+			textureLastUsed[k] = null;
 		}
-		anIntArrayArray1479[i] = ai;
-		Background background = aBackgroundArray1474s[i];
-		int ai1[] = anIntArrayArray1483[i];
+		textureLastUsed[i] = ai;
+		Background background = textures[i];
+		int ai1[] = texturePixels[i];
 		if (lowMem) {
-			aBooleanArray1475[i] = false;
+			textureLoaded[i] = false;
 			for (int i1 = 0; i1 < 4096; i1++) {
 				int i2 = ai[i1] = ai1[background.aByteArray1450[i1]] & 0xf8f8ff;
 				if (i2 == 0)
-					aBooleanArray1475[i] = true;
+					textureLoaded[i] = true;
 				ai[4096 + i1] = i2 - (i2 >>> 3) & 0xf8f8ff;
 				ai[8192 + i1] = i2 - (i2 >>> 2) & 0xf8f8ff;
 				ai[12288 + i1] = i2 - (i2 >>> 2) - (i2 >>> 3) & 0xf8f8ff;
 			}
 
 		} else {
-			if (background.anInt1452 == 64) {
+			if (background.width == 64) {
 				for (int j1 = 0; j1 < 128; j1++) {
 					for (int j2 = 0; j2 < 128; j2++)
 						ai[j2 + (j1 << 7)] = ai1[background.aByteArray1450[(j2 >> 1) + ((j1 >> 1) << 6)]];
@@ -146,12 +146,12 @@ final class Texture extends DrawingArea {
 					ai[k1] = ai1[background.aByteArray1450[k1]];
 
 			}
-			aBooleanArray1475[i] = false;
+			textureLoaded[i] = false;
 			for (int l1 = 0; l1 < 16384; l1++) {
 				ai[l1] &= 0xf8f8ff;
 				int k2 = ai[l1];
 				if (k2 == 0)
-					aBooleanArray1475[i] = true;
+					textureLoaded[i] = true;
 				ai[16384 + l1] = k2 - (k2 >>> 3) & 0xf8f8ff;
 				ai[32768 + l1] = k2 - (k2 >>> 2) & 0xf8f8ff;
 				ai[49152 + l1] = k2 - (k2 >>> 2) - (k2 >>> 3) & 0xf8f8ff;
@@ -218,19 +218,19 @@ final class Texture extends DrawingArea {
 				k2 = adjustBrightness(k2, d);
 				if (k2 == 0)
 					k2 = 1;
-				anIntArray1482[j++] = k2;
+				HSL_TO_RGB[j++] = k2;
 			}
 
 		}
 
 		for (int l = 0; l < 50; l++)
-			if (aBackgroundArray1474s[l] != null) {
-				int ai[] = aBackgroundArray1474s[l].anIntArray1451;
-				anIntArrayArray1483[l] = new int[ai.length];
+			if (textures[l] != null) {
+				int ai[] = textures[l].pixels;
+				texturePixels[l] = new int[ai.length];
 				for (int j1 = 0; j1 < ai.length; j1++) {
-					anIntArrayArray1483[l][j1] = adjustBrightness(ai[j1], d);
-					if ((anIntArrayArray1483[l][j1] & 0xf8f8ff) == 0 && j1 != 0)
-						anIntArrayArray1483[l][j1] = 1;
+					texturePixels[l][j1] = adjustBrightness(ai[j1], d);
+					if ((texturePixels[l][j1] & 0xf8f8ff) == 0 && j1 != 0)
+						texturePixels[l][j1] = 1;
 				}
 
 			}
@@ -254,7 +254,7 @@ final class Texture extends DrawingArea {
 	}
 
 	public static void drawGouraudTriangle(int y1, int y2, int y3, int x1, int x2, int x3, int hsl1, int hsl2, int hsl3) {
-		if (smoothShading && aBoolean1464) {
+		if (smoothShading && textureMipmap) {
 			drawHDGouraudTriangle(y1, y2, y3, x1, x2, x3, hsl1, hsl2, hsl3);
 		} else {
 			drawLDGouraudTriangle(y1, y2, y3, x1, x2, x3, hsl1, hsl2, hsl3);
@@ -308,7 +308,7 @@ final class Texture extends DrawingArea {
 				if (y1 != y2 && j3 < j2 || y1 == y2 && j3 > l2) {
 					y3 -= y2;
 					y2 -= y1;
-					for (y1 = anIntArray1472[y1]; --y2 >= 0; y1 += DrawingArea.width) {
+					for (y1 = scanlineOffset[y1]; --y2 >= 0; y1 += DrawingArea.width) {
 						drawLDGouraudScanline(DrawingArea.pixels, y1, x3 >> 16, x1 >> 16, hsl3 >> 7, hsl1 >> 7);
 						x3 += j3;
 						x1 += j2;
@@ -328,7 +328,7 @@ final class Texture extends DrawingArea {
 				}
 				y3 -= y2;
 				y2 -= y1;
-				for (y1 = anIntArray1472[y1]; --y2 >= 0; y1 += DrawingArea.width) {
+				for (y1 = scanlineOffset[y1]; --y2 >= 0; y1 += DrawingArea.width) {
 					drawLDGouraudScanline(DrawingArea.pixels, y1, x1 >> 16, x3 >> 16, hsl1 >> 7, hsl3 >> 7);
 					x3 += j3;
 					x1 += j2;
@@ -365,7 +365,7 @@ final class Texture extends DrawingArea {
 			if (y1 != y3 && j3 < j2 || y1 == y3 && l2 > j2) {
 				y2 -= y3;
 				y3 -= y1;
-				for (y1 = anIntArray1472[y1]; --y3 >= 0; y1 += DrawingArea.width) {
+				for (y1 = scanlineOffset[y1]; --y3 >= 0; y1 += DrawingArea.width) {
 					drawLDGouraudScanline(DrawingArea.pixels, y1, x2 >> 16, x1 >> 16, hsl2 >> 7, hsl1 >> 7);
 					x2 += j3;
 					x1 += j2;
@@ -385,7 +385,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y3;
 			y3 -= y1;
-			for (y1 = anIntArray1472[y1]; --y3 >= 0; y1 += DrawingArea.width) {
+			for (y1 = scanlineOffset[y1]; --y3 >= 0; y1 += DrawingArea.width) {
 				drawLDGouraudScanline(DrawingArea.pixels, y1, x1 >> 16, x2 >> 16, hsl1 >> 7, hsl2 >> 7);
 				x2 += j3;
 				x1 += j2;
@@ -430,7 +430,7 @@ final class Texture extends DrawingArea {
 				if (y2 != y3 && j2 < l2 || y2 == y3 && j2 > j3) {
 					y1 -= y3;
 					y3 -= y2;
-					for (y2 = anIntArray1472[y2]; --y3 >= 0; y2 += DrawingArea.width) {
+					for (y2 = scanlineOffset[y2]; --y3 >= 0; y2 += DrawingArea.width) {
 						drawLDGouraudScanline(DrawingArea.pixels, y2, x1 >> 16, x2 >> 16, hsl1 >> 7, hsl2 >> 7);
 						x1 += j2;
 						x2 += l2;
@@ -450,7 +450,7 @@ final class Texture extends DrawingArea {
 				}
 				y1 -= y3;
 				y3 -= y2;
-				for (y2 = anIntArray1472[y2]; --y3 >= 0; y2 += DrawingArea.width) {
+				for (y2 = scanlineOffset[y2]; --y3 >= 0; y2 += DrawingArea.width) {
 					drawLDGouraudScanline(DrawingArea.pixels, y2, x2 >> 16, x1 >> 16, hsl2 >> 7, hsl1 >> 7);
 					x1 += j2;
 					x2 += l2;
@@ -487,7 +487,7 @@ final class Texture extends DrawingArea {
 			if (j2 < l2) {
 				y3 -= y1;
 				y1 -= y2;
-				for (y2 = anIntArray1472[y2]; --y1 >= 0; y2 += DrawingArea.width) {
+				for (y2 = scanlineOffset[y2]; --y1 >= 0; y2 += DrawingArea.width) {
 					drawLDGouraudScanline(DrawingArea.pixels, y2, x3 >> 16, x2 >> 16, hsl3 >> 7, hsl2 >> 7);
 					x3 += j2;
 					x2 += l2;
@@ -507,7 +507,7 @@ final class Texture extends DrawingArea {
 			}
 			y3 -= y1;
 			y1 -= y2;
-			for (y2 = anIntArray1472[y2]; --y1 >= 0; y2 += DrawingArea.width) {
+			for (y2 = scanlineOffset[y2]; --y1 >= 0; y2 += DrawingArea.width) {
 				drawLDGouraudScanline(DrawingArea.pixels, y2, x2 >> 16, x3 >> 16, hsl2 >> 7, hsl3 >> 7);
 				x3 += j2;
 				x2 += l2;
@@ -551,7 +551,7 @@ final class Texture extends DrawingArea {
 			if (l2 < j3) {
 				y2 -= y1;
 				y1 -= y3;
-				for (y3 = anIntArray1472[y3]; --y1 >= 0; y3 += DrawingArea.width) {
+				for (y3 = scanlineOffset[y3]; --y1 >= 0; y3 += DrawingArea.width) {
 					drawLDGouraudScanline(DrawingArea.pixels, y3, x2 >> 16, x3 >> 16, hsl2 >> 7, hsl3 >> 7);
 					x2 += l2;
 					x3 += j3;
@@ -571,7 +571,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y1;
 			y1 -= y3;
-			for (y3 = anIntArray1472[y3]; --y1 >= 0; y3 += DrawingArea.width) {
+			for (y3 = scanlineOffset[y3]; --y1 >= 0; y3 += DrawingArea.width) {
 				drawLDGouraudScanline(DrawingArea.pixels, y3, x3 >> 16, x2 >> 16, hsl3 >> 7, hsl2 >> 7);
 				x2 += l2;
 				x3 += j3;
@@ -608,7 +608,7 @@ final class Texture extends DrawingArea {
 		if (l2 < j3) {
 			y1 -= y2;
 			y2 -= y3;
-			for (y3 = anIntArray1472[y3]; --y2 >= 0; y3 += DrawingArea.width) {
+			for (y3 = scanlineOffset[y3]; --y2 >= 0; y3 += DrawingArea.width) {
 				drawLDGouraudScanline(DrawingArea.pixels, y3, x1 >> 16, x3 >> 16, hsl1 >> 7, hsl3 >> 7);
 				x1 += l2;
 				x3 += j3;
@@ -628,7 +628,7 @@ final class Texture extends DrawingArea {
 		}
 		y1 -= y2;
 		y2 -= y3;
-		for (y3 = anIntArray1472[y3]; --y2 >= 0; y3 += DrawingArea.width) {
+		for (y3 = scanlineOffset[y3]; --y2 >= 0; y3 += DrawingArea.width) {
 			drawLDGouraudScanline(DrawingArea.pixels, y3, x3 >> 16, x1 >> 16, hsl3 >> 7, hsl1 >> 7);
 			x1 += l2;
 			x3 += j3;
@@ -649,9 +649,9 @@ final class Texture extends DrawingArea {
 	private static void drawLDGouraudScanline(int ai[], int i, int l, int i1, int j1, int k1) {
 		int j;// was parameter
 		int k;// was parameter
-		if (aBoolean1464) {
+		if (textureMipmap) {
 			int l1;
-			if (aBoolean1462) {
+			if (opaque) {
 				if (i1 - l > 3)
 					l1 = (k1 - j1) / (i1 - l);
 				else
@@ -673,13 +673,13 @@ final class Texture extends DrawingArea {
 				i += l;
 				k = i1 - l >> 2;
 				if (k > 0)
-					l1 = (k1 - j1) * anIntArray1468[k] >> 15;
+					l1 = (k1 - j1) * reciprocal[k] >> 15;
 				else
 					l1 = 0;
 			}
-			if (anInt1465 == 0) {
+			if (textureCycle == 0) {
 				while (--k >= 0) {
-					j = anIntArray1482[j1 >> 8];
+					j = HSL_TO_RGB[j1 >> 8];
 					j1 += l1;
 					ai[i++] = j;
 					ai[i++] = j;
@@ -688,17 +688,17 @@ final class Texture extends DrawingArea {
 				}
 				k = i1 - l & 3;
 				if (k > 0) {
-					j = anIntArray1482[j1 >> 8];
+					j = HSL_TO_RGB[j1 >> 8];
 					do
 						ai[i++] = j;
 					while (--k > 0);
 					return;
 				}
 			} else {
-				int j2 = anInt1465;
-				int l2 = 256 - anInt1465;
+				int j2 = textureCycle;
+				int l2 = 256 - textureCycle;
 				while (--k >= 0) {
-					j = anIntArray1482[j1 >> 8];
+					j = HSL_TO_RGB[j1 >> 8];
 					j1 += l1;
 					j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
 					ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -708,7 +708,7 @@ final class Texture extends DrawingArea {
 				}
 				k = i1 - l & 3;
 				if (k > 0) {
-					j = anIntArray1482[j1 >> 8];
+					j = HSL_TO_RGB[j1 >> 8];
 					j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
 					do
 						ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -720,7 +720,7 @@ final class Texture extends DrawingArea {
 		if (l >= i1)
 			return;
 		int i2 = (k1 - j1) / (i1 - l);
-		if (aBoolean1462) {
+		if (opaque) {
 			if (i1 > DrawingArea.centerX)
 				i1 = DrawingArea.centerX;
 			if (l < 0) {
@@ -732,17 +732,17 @@ final class Texture extends DrawingArea {
 		}
 		i += l;
 		k = i1 - l;
-		if (anInt1465 == 0) {
+		if (textureCycle == 0) {
 			do {
-				ai[i++] = anIntArray1482[j1 >> 8];
+				ai[i++] = HSL_TO_RGB[j1 >> 8];
 				j1 += i2;
 			} while (--k > 0);
 			return;
 		}
-		int k2 = anInt1465;
-		int i3 = 256 - anInt1465;
+		int k2 = textureCycle;
+		int i3 = 256 - textureCycle;
 		do {
-			j = anIntArray1482[j1 >> 8];
+			j = HSL_TO_RGB[j1 >> 8];
 			j1 += i2;
 			j = ((j & 0xff00ff) * i3 >> 8 & 0xff00ff) + ((j & 0xff00) * i3 >> 8 & 0xff00);
 			ai[i++] = j + ((ai[i] & 0xff00ff) * k2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * k2 >> 8 & 0xff00);
@@ -751,9 +751,9 @@ final class Texture extends DrawingArea {
 
 	public static void drawHDGouraudTriangle(int y1, int y2, int y3, int x1, int x2, int x3, int hsl1, int hsl2,
 			int hsl3) {
-		int rgb1 = anIntArray1482[hsl1];
-		int rgb2 = anIntArray1482[hsl2];
-		int rgb3 = anIntArray1482[hsl3];
+		int rgb1 = HSL_TO_RGB[hsl1];
+		int rgb2 = HSL_TO_RGB[hsl2];
+		int rgb3 = HSL_TO_RGB[hsl3];
 		int r1 = rgb1 >> 16 & 0xff;
 		int g1 = rgb1 >> 8 & 0xff;
 		int b1 = rgb1 & 0xff;
@@ -833,7 +833,7 @@ final class Texture extends DrawingArea {
 				if (y1 != y2 && dx3 < dx1 || y1 == y2 && dx3 > dx2) {
 					y3 -= y2;
 					y2 -= y1;
-					for (y1 = anIntArray1472[y1]; --y2 >= 0; y1 += DrawingArea.width) {
+					for (y1 = scanlineOffset[y1]; --y2 >= 0; y1 += DrawingArea.width) {
 						drawHDGouraudScanline(DrawingArea.pixels, y1, x3 >> 16, x1 >> 16, r3, g3, b3, r1, g1, b1);
 						x3 += dx3;
 						x1 += dx1;
@@ -860,7 +860,7 @@ final class Texture extends DrawingArea {
 				}
 				y3 -= y2;
 				y2 -= y1;
-				for (y1 = anIntArray1472[y1]; --y2 >= 0; y1 += DrawingArea.width) {
+				for (y1 = scanlineOffset[y1]; --y2 >= 0; y1 += DrawingArea.width) {
 					drawHDGouraudScanline(DrawingArea.pixels, y1, x1 >> 16, x3 >> 16, r1, g1, b1, r3, g3, b3);
 					x3 += dx3;
 					x1 += dx1;
@@ -914,7 +914,7 @@ final class Texture extends DrawingArea {
 			if (y1 != y3 && dx3 < dx1 || y1 == y3 && dx2 > dx1) {
 				y2 -= y3;
 				y3 -= y1;
-				for (y1 = anIntArray1472[y1]; --y3 >= 0; y1 += DrawingArea.width) {
+				for (y1 = scanlineOffset[y1]; --y3 >= 0; y1 += DrawingArea.width) {
 					drawHDGouraudScanline(DrawingArea.pixels, y1, x2 >> 16, x1 >> 16, r2, g2, b2, r1, g1, b1);
 					x2 += dx3;
 					x1 += dx1;
@@ -941,7 +941,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y3;
 			y3 -= y1;
-			for (y1 = anIntArray1472[y1]; --y3 >= 0; y1 += DrawingArea.width) {
+			for (y1 = scanlineOffset[y1]; --y3 >= 0; y1 += DrawingArea.width) {
 				drawHDGouraudScanline(DrawingArea.pixels, y1, x1 >> 16, x2 >> 16, r1, g1, b1, r2, g2, b2);
 				x2 += dx3;
 				x1 += dx1;
@@ -1006,7 +1006,7 @@ final class Texture extends DrawingArea {
 				if (y2 != y3 && dx1 < dx2 || y2 == y3 && dx1 > dx3) {
 					y1 -= y3;
 					y3 -= y2;
-					for (y2 = anIntArray1472[y2]; --y3 >= 0; y2 += DrawingArea.width) {
+					for (y2 = scanlineOffset[y2]; --y3 >= 0; y2 += DrawingArea.width) {
 						drawHDGouraudScanline(DrawingArea.pixels, y2, x1 >> 16, x2 >> 16, r1, g1, b1, r2, g2, b2);
 						x1 += dx1;
 						x2 += dx2;
@@ -1033,7 +1033,7 @@ final class Texture extends DrawingArea {
 				}
 				y1 -= y3;
 				y3 -= y2;
-				for (y2 = anIntArray1472[y2]; --y3 >= 0; y2 += DrawingArea.width) {
+				for (y2 = scanlineOffset[y2]; --y3 >= 0; y2 += DrawingArea.width) {
 					drawHDGouraudScanline(DrawingArea.pixels, y2, x2 >> 16, x1 >> 16, r2, g2, b2, r1, g1, b1);
 					x1 += dx1;
 					x2 += dx2;
@@ -1087,7 +1087,7 @@ final class Texture extends DrawingArea {
 			if (dx1 < dx2) {
 				y3 -= y1;
 				y1 -= y2;
-				for (y2 = anIntArray1472[y2]; --y1 >= 0; y2 += DrawingArea.width) {
+				for (y2 = scanlineOffset[y2]; --y1 >= 0; y2 += DrawingArea.width) {
 					drawHDGouraudScanline(DrawingArea.pixels, y2, x3 >> 16, x2 >> 16, r3, g3, b3, r2, g2, b2);
 					x3 += dx1;
 					x2 += dx2;
@@ -1114,7 +1114,7 @@ final class Texture extends DrawingArea {
 			}
 			y3 -= y1;
 			y1 -= y2;
-			for (y2 = anIntArray1472[y2]; --y1 >= 0; y2 += DrawingArea.width) {
+			for (y2 = scanlineOffset[y2]; --y1 >= 0; y2 += DrawingArea.width) {
 				drawHDGouraudScanline(DrawingArea.pixels, y2, x2 >> 16, x3 >> 16, r2, g2, b2, r3, g3, b3);
 				x3 += dx1;
 				x2 += dx2;
@@ -1178,7 +1178,7 @@ final class Texture extends DrawingArea {
 			if (dx2 < dx3) {
 				y2 -= y1;
 				y1 -= y3;
-				for (y3 = anIntArray1472[y3]; --y1 >= 0; y3 += DrawingArea.width) {
+				for (y3 = scanlineOffset[y3]; --y1 >= 0; y3 += DrawingArea.width) {
 					drawHDGouraudScanline(DrawingArea.pixels, y3, x2 >> 16, x3 >> 16, r2, g2, b2, r3, g3, b3);
 					x2 += dx2;
 					x3 += dx3;
@@ -1205,7 +1205,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y1;
 			y1 -= y3;
-			for (y3 = anIntArray1472[y3]; --y1 >= 0; y3 += DrawingArea.width) {
+			for (y3 = scanlineOffset[y3]; --y1 >= 0; y3 += DrawingArea.width) {
 				drawHDGouraudScanline(DrawingArea.pixels, y3, x3 >> 16, x2 >> 16, r3, g3, b3, r2, g2, b2);
 				x2 += dx2;
 				x3 += dx3;
@@ -1259,7 +1259,7 @@ final class Texture extends DrawingArea {
 		if (dx2 < dx3) {
 			y1 -= y2;
 			y2 -= y3;
-			for (y3 = anIntArray1472[y3]; --y2 >= 0; y3 += DrawingArea.width) {
+			for (y3 = scanlineOffset[y3]; --y2 >= 0; y3 += DrawingArea.width) {
 				drawHDGouraudScanline(DrawingArea.pixels, y3, x1 >> 16, x3 >> 16, r1, g1, b1, r3, g3, b3);
 				x1 += dx2;
 				x3 += dx3;
@@ -1286,7 +1286,7 @@ final class Texture extends DrawingArea {
 		}
 		y1 -= y2;
 		y2 -= y3;
-		for (y3 = anIntArray1472[y3]; --y2 >= 0; y3 += DrawingArea.width) {
+		for (y3 = scanlineOffset[y3]; --y2 >= 0; y3 += DrawingArea.width) {
 			drawHDGouraudScanline(DrawingArea.pixels, y3, x3 >> 16, x1 >> 16, r3, g3, b3, r1, g1, b1);
 			x1 += dx2;
 			x3 += dx3;
@@ -1320,7 +1320,7 @@ final class Texture extends DrawingArea {
 		r2 = (r2 - r1) / n;
 		g2 = (g2 - g1) / n;
 		b2 = (b2 - b1) / n;
-		if (aBoolean1462) {
+		if (opaque) {
 			if (x2 > DrawingArea.centerX) {
 				n -= x2 - DrawingArea.centerX;
 				x2 = DrawingArea.centerX;
@@ -1335,7 +1335,7 @@ final class Texture extends DrawingArea {
 		}
 		if (x1 < x2) {
 			offset += x1;
-			if (anInt1465 == 0) {
+			if (textureCycle == 0) {
 				while (--n >= 0) {
 					dest[offset] = (r1 & 0xff0000) | (g1 >> 8 & 0xff00) | (b1 >> 16 & 0xff);
 					r1 += r2;
@@ -1344,8 +1344,8 @@ final class Texture extends DrawingArea {
 					offset++;
 				}
 			} else {
-				final int a1 = anInt1465;
-				final int a2 = 256 - anInt1465;
+				final int a1 = textureCycle;
+				final int a2 = 256 - textureCycle;
 				int rgb;
 				int dst;
 				while (--n >= 0) {
@@ -1394,7 +1394,7 @@ final class Texture extends DrawingArea {
 				if (i != j && j2 < l1 || i == j && j2 > i2) {
 					k -= j;
 					j -= i;
-					for (i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width) {
+					for (i = scanlineOffset[i]; --j >= 0; i += DrawingArea.width) {
 						drawScanline(DrawingArea.pixels, i, k1, j1 >> 16, l >> 16);
 						j1 += j2;
 						l += l1;
@@ -1410,7 +1410,7 @@ final class Texture extends DrawingArea {
 				}
 				k -= j;
 				j -= i;
-				for (i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width) {
+				for (i = scanlineOffset[i]; --j >= 0; i += DrawingArea.width) {
 					drawScanline(DrawingArea.pixels, i, k1, l >> 16, j1 >> 16);
 					j1 += j2;
 					l += l1;
@@ -1438,7 +1438,7 @@ final class Texture extends DrawingArea {
 			if (i != k && j2 < l1 || i == k && i2 > l1) {
 				j -= k;
 				k -= i;
-				for (i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width) {
+				for (i = scanlineOffset[i]; --k >= 0; i += DrawingArea.width) {
 					drawScanline(DrawingArea.pixels, i, k1, i1 >> 16, l >> 16);
 					i1 += j2;
 					l += l1;
@@ -1454,7 +1454,7 @@ final class Texture extends DrawingArea {
 			}
 			j -= k;
 			k -= i;
-			for (i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width) {
+			for (i = scanlineOffset[i]; --k >= 0; i += DrawingArea.width) {
 				drawScanline(DrawingArea.pixels, i, k1, l >> 16, i1 >> 16);
 				i1 += j2;
 				l += l1;
@@ -1490,7 +1490,7 @@ final class Texture extends DrawingArea {
 				if (j != k && l1 < i2 || j == k && l1 > j2) {
 					i -= k;
 					k -= j;
-					for (j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width) {
+					for (j = scanlineOffset[j]; --k >= 0; j += DrawingArea.width) {
 						drawScanline(DrawingArea.pixels, j, k1, l >> 16, i1 >> 16);
 						l += l1;
 						i1 += i2;
@@ -1506,7 +1506,7 @@ final class Texture extends DrawingArea {
 				}
 				i -= k;
 				k -= j;
-				for (j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width) {
+				for (j = scanlineOffset[j]; --k >= 0; j += DrawingArea.width) {
 					drawScanline(DrawingArea.pixels, j, k1, i1 >> 16, l >> 16);
 					l += l1;
 					i1 += i2;
@@ -1534,7 +1534,7 @@ final class Texture extends DrawingArea {
 			if (l1 < i2) {
 				k -= i;
 				i -= j;
-				for (j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width) {
+				for (j = scanlineOffset[j]; --i >= 0; j += DrawingArea.width) {
 					drawScanline(DrawingArea.pixels, j, k1, j1 >> 16, i1 >> 16);
 					j1 += l1;
 					i1 += i2;
@@ -1550,7 +1550,7 @@ final class Texture extends DrawingArea {
 			}
 			k -= i;
 			i -= j;
-			for (j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width) {
+			for (j = scanlineOffset[j]; --i >= 0; j += DrawingArea.width) {
 				drawScanline(DrawingArea.pixels, j, k1, i1 >> 16, j1 >> 16);
 				j1 += l1;
 				i1 += i2;
@@ -1585,7 +1585,7 @@ final class Texture extends DrawingArea {
 			if (i2 < j2) {
 				j -= i;
 				i -= k;
-				for (k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width) {
+				for (k = scanlineOffset[k]; --i >= 0; k += DrawingArea.width) {
 					drawScanline(DrawingArea.pixels, k, k1, i1 >> 16, j1 >> 16);
 					i1 += i2;
 					j1 += j2;
@@ -1601,7 +1601,7 @@ final class Texture extends DrawingArea {
 			}
 			j -= i;
 			i -= k;
-			for (k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width) {
+			for (k = scanlineOffset[k]; --i >= 0; k += DrawingArea.width) {
 				drawScanline(DrawingArea.pixels, k, k1, j1 >> 16, i1 >> 16);
 				i1 += i2;
 				j1 += j2;
@@ -1629,7 +1629,7 @@ final class Texture extends DrawingArea {
 		if (i2 < j2) {
 			i -= j;
 			j -= k;
-			for (k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width) {
+			for (k = scanlineOffset[k]; --j >= 0; k += DrawingArea.width) {
 				drawScanline(DrawingArea.pixels, k, k1, l >> 16, j1 >> 16);
 				l += i2;
 				j1 += j2;
@@ -1645,7 +1645,7 @@ final class Texture extends DrawingArea {
 		}
 		i -= j;
 		j -= k;
-		for (k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width) {
+		for (k = scanlineOffset[k]; --j >= 0; k += DrawingArea.width) {
 			drawScanline(DrawingArea.pixels, k, k1, j1 >> 16, l >> 16);
 			l += i2;
 			j1 += j2;
@@ -1661,7 +1661,7 @@ final class Texture extends DrawingArea {
 
 	private static void drawScanline(int ai[], int i, int j, int l, int i1) {
 		int k;// was parameter
-		if (aBoolean1462) {
+		if (opaque) {
 			if (i1 > DrawingArea.centerX)
 				i1 = DrawingArea.centerX;
 			if (l < 0)
@@ -1671,7 +1671,7 @@ final class Texture extends DrawingArea {
 			return;
 		i += l;
 		k = i1 - l >> 2;
-		if (anInt1465 == 0) {
+		if (textureCycle == 0) {
 			while (--k >= 0) {
 				ai[i++] = j;
 				ai[i++] = j;
@@ -1683,8 +1683,8 @@ final class Texture extends DrawingArea {
 
 			return;
 		}
-		int j1 = anInt1465;
-		int k1 = 256 - anInt1465;
+		int j1 = textureCycle;
+		int k1 = 256 - textureCycle;
 		j = ((j & 0xff00ff) * k1 >> 8 & 0xff00ff) + ((j & 0xff00) * k1 >> 8 & 0xff00);
 		while (--k >= 0) {
 			ai[i++] = j + ((ai[i] & 0xff00ff) * j1 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j1 >> 8 & 0xff00);
@@ -1699,7 +1699,7 @@ final class Texture extends DrawingArea {
 
 	public static void drawTexturedTriangleFull(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, int j2, int k2,
 			int l2, int i3, int j3, int k3, int l3, int i4, int j4, int k4) {
-		if (smoothShading && aBoolean1464) {
+		if (smoothShading && textureMipmap) {
 			drawHDTexturedTriangle(i, j, k, l, i1, j1, k1, l1, i2, j2, k2, l2, i3, j3, k3, l3, i4, j4, k4);
 		} else {
 			drawLDTexturedTriangle(i, j, k, l, i1, j1, k1, l1, i2, j2, k2, l2, i3, j3, k3, l3, i4, j4, k4);
@@ -1709,7 +1709,7 @@ final class Texture extends DrawingArea {
 	public static void drawLDTexturedTriangle(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2,
 			int j2, int k2, int l2, int i3, int j3, int k3, int l3, int i4, int j4, int k4) {
 		int ai[] = getTexturePixels(k4);
-		aBoolean1463 = !aBooleanArray1475[k4];
+		textureTranslucent = !textureLoaded[k4];
 		k2 = j2 - k2;
 		j3 = i3 - j3;
 		i4 = l3 - i4;
@@ -1774,7 +1774,7 @@ final class Texture extends DrawingArea {
 				if (i != j && i8 < i7 || i == j && i8 > k7) {
 					k -= j;
 					j -= i;
-					i = anIntArray1472[i];
+					i = scanlineOffset[i];
 					while (--j >= 0) {
 						drawLDTexturedScanline(DrawingArea.pixels, ai, i, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5,
 								j6, i5, l5, k6);
@@ -1803,7 +1803,7 @@ final class Texture extends DrawingArea {
 				}
 				k -= j;
 				j -= i;
-				i = anIntArray1472[i];
+				i = scanlineOffset[i];
 				while (--j >= 0) {
 					drawLDTexturedScanline(DrawingArea.pixels, ai, i, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6,
 							i5, l5, k6);
@@ -1853,7 +1853,7 @@ final class Texture extends DrawingArea {
 			if (i != k && i8 < i7 || i == k && k7 > i7) {
 				j -= k;
 				k -= i;
-				i = anIntArray1472[i];
+				i = scanlineOffset[i];
 				while (--k >= 0) {
 					drawLDTexturedScanline(DrawingArea.pixels, ai, i, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6,
 							i5, l5, k6);
@@ -1882,7 +1882,7 @@ final class Texture extends DrawingArea {
 			}
 			j -= k;
 			k -= i;
-			i = anIntArray1472[i];
+			i = scanlineOffset[i];
 			while (--k >= 0) {
 				drawLDTexturedScanline(DrawingArea.pixels, ai, i, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5,
 						l5, k6);
@@ -1940,7 +1940,7 @@ final class Texture extends DrawingArea {
 				if (j != k && i7 < k7 || j == k && i7 > i8) {
 					i -= k;
 					k -= j;
-					j = anIntArray1472[j];
+					j = scanlineOffset[j];
 					while (--k >= 0) {
 						drawLDTexturedScanline(DrawingArea.pixels, ai, j, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5,
 								j6, i5, l5, k6);
@@ -1969,7 +1969,7 @@ final class Texture extends DrawingArea {
 				}
 				i -= k;
 				k -= j;
-				j = anIntArray1472[j];
+				j = scanlineOffset[j];
 				while (--k >= 0) {
 					drawLDTexturedScanline(DrawingArea.pixels, ai, j, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6,
 							i5, l5, k6);
@@ -2019,7 +2019,7 @@ final class Texture extends DrawingArea {
 			if (i7 < k7) {
 				k -= i;
 				i -= j;
-				j = anIntArray1472[j];
+				j = scanlineOffset[j];
 				while (--i >= 0) {
 					drawLDTexturedScanline(DrawingArea.pixels, ai, j, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6,
 							i5, l5, k6);
@@ -2048,7 +2048,7 @@ final class Texture extends DrawingArea {
 			}
 			k -= i;
 			i -= j;
-			j = anIntArray1472[j];
+			j = scanlineOffset[j];
 			while (--i >= 0) {
 				drawLDTexturedScanline(DrawingArea.pixels, ai, j, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5,
 						l5, k6);
@@ -2105,7 +2105,7 @@ final class Texture extends DrawingArea {
 			if (k7 < i8) {
 				j -= i;
 				i -= k;
-				k = anIntArray1472[k];
+				k = scanlineOffset[k];
 				while (--i >= 0) {
 					drawLDTexturedScanline(DrawingArea.pixels, ai, k, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6,
 							i5, l5, k6);
@@ -2134,7 +2134,7 @@ final class Texture extends DrawingArea {
 			}
 			j -= i;
 			i -= k;
-			k = anIntArray1472[k];
+			k = scanlineOffset[k];
 			while (--i >= 0) {
 				drawLDTexturedScanline(DrawingArea.pixels, ai, k, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5,
 						l5, k6);
@@ -2184,7 +2184,7 @@ final class Texture extends DrawingArea {
 		if (k7 < i8) {
 			i -= j;
 			j -= k;
-			k = anIntArray1472[k];
+			k = scanlineOffset[k];
 			while (--j >= 0) {
 				drawLDTexturedScanline(DrawingArea.pixels, ai, k, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5,
 						l5, k6);
@@ -2213,7 +2213,7 @@ final class Texture extends DrawingArea {
 		}
 		i -= j;
 		j -= k;
-		k = anIntArray1472[k];
+		k = scanlineOffset[k];
 		while (--j >= 0) {
 			drawLDTexturedScanline(DrawingArea.pixels, ai, k, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5,
 					k6);
@@ -2248,7 +2248,7 @@ final class Texture extends DrawingArea {
 			return;
 		int j3;
 		int k3;
-		if (aBoolean1462) {
+		if (opaque) {
 			j3 = (k1 - j1) / (i1 - l);
 			if (i1 > DrawingArea.centerX)
 				i1 = DrawingArea.centerX;
@@ -2264,7 +2264,7 @@ final class Texture extends DrawingArea {
 		} else {
 			if (i1 - l > 7) {
 				k3 = i1 - l >> 3;
-				j3 = (k1 - j1) * anIntArray1468[k3] >> 6;
+				j3 = (k1 - j1) * reciprocal[k3] >> 6;
 			} else {
 				k3 = 0;
 				j3 = 0;
@@ -2304,7 +2304,7 @@ final class Texture extends DrawingArea {
 			int k7 = k4 - j >> 3;
 			i += (j1 & 0x600000) >> 3;
 			int i8 = j1 >> 23;
-			if (aBoolean1463) {
+			if (textureTranslucent) {
 				while (k3-- > 0) {
 					ai[k++] = ai1[(j & 0xfc0) + (i >> 6)] >>> i8;
 					i += i7;
@@ -2458,7 +2458,7 @@ final class Texture extends DrawingArea {
 		int l7 = l4 - j >> 3;
 		i += j1 & 0x600000;
 		int j8 = j1 >> 23;
-		if (aBoolean1463) {
+		if (textureTranslucent) {
 			while (k3-- > 0) {
 				ai[k++] = ai1[(j & 0x3f80) + (i >> 7)] >>> j8;
 				i += j7;
@@ -2587,7 +2587,7 @@ final class Texture extends DrawingArea {
 		l2 = 0x7f - l2 << 1;
 		l3 = 0x7f - l3 << 1;
 		int ai[] = getTexturePixels(tex);
-		aBoolean1463 = !aBooleanArray1475[tex];
+		textureTranslucent = !textureLoaded[tex];
 		tx2 = tx1 - tx2;
 		ty2 = ty1 - ty2;
 		tz2 = tz1 - tz2;
@@ -2652,7 +2652,7 @@ final class Texture extends DrawingArea {
 				if (y1 != y2 && i8 < i7 || y1 == y2 && i8 > k7) {
 					y3 -= y2;
 					y2 -= y1;
-					y1 = anIntArray1472[y1];
+					y1 = scanlineOffset[y1];
 					while (--y2 >= 0) {
 						drawHDTexturedScanline(DrawingArea.pixels, ai, y1, x3 >> 16, x1 >> 16, l3, l1, l4, k5, j6, i5,
 								l5, k6);
@@ -2681,7 +2681,7 @@ final class Texture extends DrawingArea {
 				}
 				y3 -= y2;
 				y2 -= y1;
-				y1 = anIntArray1472[y1];
+				y1 = scanlineOffset[y1];
 				while (--y2 >= 0) {
 					drawHDTexturedScanline(DrawingArea.pixels, ai, y1, x1 >> 16, x3 >> 16, l1, l3, l4, k5, j6, i5, l5,
 							k6);
@@ -2731,7 +2731,7 @@ final class Texture extends DrawingArea {
 			if (y1 != y3 && i8 < i7 || y1 == y3 && k7 > i7) {
 				y2 -= y3;
 				y3 -= y1;
-				y1 = anIntArray1472[y1];
+				y1 = scanlineOffset[y1];
 				while (--y3 >= 0) {
 					drawHDTexturedScanline(DrawingArea.pixels, ai, y1, x2 >> 16, x1 >> 16, l2, l1, l4, k5, j6, i5, l5,
 							k6);
@@ -2760,7 +2760,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y3;
 			y3 -= y1;
-			y1 = anIntArray1472[y1];
+			y1 = scanlineOffset[y1];
 			while (--y3 >= 0) {
 				drawHDTexturedScanline(DrawingArea.pixels, ai, y1, x1 >> 16, x2 >> 16, l1, l2, l4, k5, j6, i5, l5, k6);
 				x2 += i8;
@@ -2816,7 +2816,7 @@ final class Texture extends DrawingArea {
 				if (y2 != y3 && i7 < k7 || y2 == y3 && i7 > i8) {
 					y1 -= y3;
 					y3 -= y2;
-					y2 = anIntArray1472[y2];
+					y2 = scanlineOffset[y2];
 					while (--y3 >= 0) {
 						drawHDTexturedScanline(DrawingArea.pixels, ai, y2, x1 >> 16, x2 >> 16, l1, l2, l4, k5, j6, i5,
 								l5, k6);
@@ -2845,7 +2845,7 @@ final class Texture extends DrawingArea {
 				}
 				y1 -= y3;
 				y3 -= y2;
-				y2 = anIntArray1472[y2];
+				y2 = scanlineOffset[y2];
 				while (--y3 >= 0) {
 					drawHDTexturedScanline(DrawingArea.pixels, ai, y2, x2 >> 16, x1 >> 16, l2, l1, l4, k5, j6, i5, l5,
 							k6);
@@ -2895,7 +2895,7 @@ final class Texture extends DrawingArea {
 			if (i7 < k7) {
 				y3 -= y1;
 				y1 -= y2;
-				y2 = anIntArray1472[y2];
+				y2 = scanlineOffset[y2];
 				while (--y1 >= 0) {
 					drawHDTexturedScanline(DrawingArea.pixels, ai, y2, x3 >> 16, x2 >> 16, l3, l2, l4, k5, j6, i5, l5,
 							k6);
@@ -2924,7 +2924,7 @@ final class Texture extends DrawingArea {
 			}
 			y3 -= y1;
 			y1 -= y2;
-			y2 = anIntArray1472[y2];
+			y2 = scanlineOffset[y2];
 			while (--y1 >= 0) {
 				drawHDTexturedScanline(DrawingArea.pixels, ai, y2, x2 >> 16, x3 >> 16, l2, l3, l4, k5, j6, i5, l5, k6);
 				x3 += i7;
@@ -2979,7 +2979,7 @@ final class Texture extends DrawingArea {
 			if (k7 < i8) {
 				y2 -= y1;
 				y1 -= y3;
-				y3 = anIntArray1472[y3];
+				y3 = scanlineOffset[y3];
 				while (--y1 >= 0) {
 					drawHDTexturedScanline(DrawingArea.pixels, ai, y3, x2 >> 16, x3 >> 16, l2, l3, l4, k5, j6, i5, l5,
 							k6);
@@ -3008,7 +3008,7 @@ final class Texture extends DrawingArea {
 			}
 			y2 -= y1;
 			y1 -= y3;
-			y3 = anIntArray1472[y3];
+			y3 = scanlineOffset[y3];
 			while (--y1 >= 0) {
 				drawHDTexturedScanline(DrawingArea.pixels, ai, y3, x3 >> 16, x2 >> 16, l3, l2, l4, k5, j6, i5, l5, k6);
 				x2 += k7;
@@ -3056,7 +3056,7 @@ final class Texture extends DrawingArea {
 		if (k7 < i8) {
 			y1 -= y2;
 			y2 -= y3;
-			y3 = anIntArray1472[y3];
+			y3 = scanlineOffset[y3];
 			while (--y2 >= 0) {
 				drawHDTexturedScanline(DrawingArea.pixels, ai, y3, x1 >> 16, x3 >> 16, l1, l3, l4, k5, j6, i5, l5, k6);
 				x1 += k7;
@@ -3083,7 +3083,7 @@ final class Texture extends DrawingArea {
 		}
 		y1 -= y2;
 		y2 -= y3;
-		y3 = anIntArray1472[y3];
+		y3 = scanlineOffset[y3];
 		while (--y2 >= 0) {
 			drawHDTexturedScanline(DrawingArea.pixels, ai, y3, x3 >> 16, x1 >> 16, l3, l1, l4, k5, j6, i5, l5, k6);
 			x1 += k7;
@@ -3116,7 +3116,7 @@ final class Texture extends DrawingArea {
 			return;
 		int dl = (l2 - l1) / (x2 - x1);
 		int n;
-		if (aBoolean1462) {
+		if (opaque) {
 			if (x2 > DrawingArea.centerX)
 				x2 = DrawingArea.centerX;
 			if (x1 < 0) {
@@ -3158,7 +3158,7 @@ final class Texture extends DrawingArea {
 			}
 			int i7 = i4 - i >> 3;
 			int k7 = k4 - j >> 3;
-			if (aBoolean1463) {
+			if (textureTranslucent) {
 				int rgb;
 				int l;
 				while (n-- > 0) {
@@ -3363,7 +3363,7 @@ final class Texture extends DrawingArea {
 		}
 		int j7 = j4 - i >> 3;
 		int l7 = l4 - j >> 3;
-		if (aBoolean1463) {
+		if (textureTranslucent) {
 			while (n-- > 0) {
 				int rgb;
 				int l;
@@ -3553,43 +3553,43 @@ final class Texture extends DrawingArea {
 
 	public static final int anInt1459 = -477;
 	public static boolean lowMem = true;
-	static boolean aBoolean1462;
-	private static boolean aBoolean1463;
-	public static boolean aBoolean1464 = true;
-	public static int anInt1465;
+	static boolean opaque;
+	private static boolean textureTranslucent;
+	public static boolean textureMipmap = true;
+	public static int textureCycle;
 	public static int textureInt1;
 	public static int textureInt2;
-	private static int[] anIntArray1468;
-	public static final int[] anIntArray1469;
-	public static int anIntArray1470[];
-	public static int anIntArray1471[];
-	public static int anIntArray1472[];
-	private static int anInt1473;
-	public static Background aBackgroundArray1474s[] = new Background[50];
-	private static boolean[] aBooleanArray1475 = new boolean[50];
-	private static int[] anIntArray1476 = new int[50];
-	private static int anInt1477;
-	private static int[][] anIntArrayArray1478;
-	private static int[][] anIntArrayArray1479 = new int[50][];
-	public static int anIntArray1480[] = new int[50];
-	public static int anInt1481;
-	public static int anIntArray1482[] = new int[0x10000];
-	private static int[][] anIntArrayArray1483 = new int[50][];
+	private static int[] reciprocal;
+	public static final int[] lightDecay;
+	public static int SINE[];
+	public static int COSINE[];
+	public static int scanlineOffset[];
+	private static int textureCount;
+	public static Background textures[] = new Background[50];
+	private static boolean[] textureLoaded = new boolean[50];
+	private static int[] averageTextureColor = new int[50];
+	private static int texturePoolSize;
+	private static int[][] texturePixelCache;
+	private static int[][] textureLastUsed = new int[50][];
+	public static int textureLastCycle[] = new int[50];
+	public static int textureCycleCounter;
+	public static int HSL_TO_RGB[] = new int[0x10000];
+	private static int[][] texturePixels = new int[50][];
 
 	static {
-		anIntArray1468 = new int[512];
-		anIntArray1469 = new int[2048];
-		anIntArray1470 = new int[2048];
-		anIntArray1471 = new int[2048];
+		reciprocal = new int[512];
+		lightDecay = new int[2048];
+		SINE = new int[2048];
+		COSINE = new int[2048];
 		for (int i = 1; i < 512; i++)
-			anIntArray1468[i] = 32768 / i;
+			reciprocal[i] = 32768 / i;
 
 		for (int j = 1; j < 2048; j++)
-			anIntArray1469[j] = 0x10000 / j;
+			lightDecay[j] = 0x10000 / j;
 
 		for (int k = 0; k < 2048; k++) {
-			anIntArray1470[k] = (int) (65536D * Math.sin((double) k * 0.0030679614999999999D));
-			anIntArray1471[k] = (int) (65536D * Math.cos((double) k * 0.0030679614999999999D));
+			SINE[k] = (int) (65536D * Math.sin((double) k * 0.0030679614999999999D));
+			COSINE[k] = (int) (65536D * Math.cos((double) k * 0.0030679614999999999D));
 		}
 
 	}

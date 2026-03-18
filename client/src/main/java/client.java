@@ -192,7 +192,7 @@ public int followDistance = 1;
 
 	private void drawChatArea() {
 		aRSImageProducer_1166.initDrawingArea();
-		Texture.anIntArray1472 = anIntArray1180;
+		Texture.scanlineOffset = anIntArray1180;
 		chatArea.drawSprite(0, 0);
 		drawChannelButtons();
 		TextDrawingArea textDrawingArea = aTextDrawingArea_1271;
@@ -392,7 +392,7 @@ public int followDistance = 1;
 		}
 		aRSImageProducer_1166.drawGraphics(338, super.graphics, 0);
 		aRSImageProducer_1165.initDrawingArea();
-		Texture.anIntArray1472 = anIntArray1182;
+		Texture.scanlineOffset = anIntArray1182;
 	}
 
 	public void init() {
@@ -784,7 +784,7 @@ public int followDistance = 1;
 		ItemDef.mruNodes2.unlinkAll();
 		ItemDef.mruNodes1.unlinkAll();
 		Player.mruNodes.unlinkAll();
-		SpotAnim.aMRUNodes_415.unlinkAll();
+		SpotAnim.modelCache.unlinkAll();
 	}
 
 	private void drawMiniMapDots(int i)
@@ -915,7 +915,7 @@ public int followDistance = 1;
 		{
 			NPC npc = npcArray[npcIndices[j]];
 			int k = 0x20000000 + (npcIndices[j] << 14);
-			if(npc == null || !npc.isVisible() || npc.desc.aBoolean93 != flag)
+			if(npc == null || !npc.isVisible() || npc.desc.priorityRender != flag)
 				continue;
 			int l = npc.x >> 7;
 			int i1 = npc.y >> 7;
@@ -927,7 +927,7 @@ public int followDistance = 1;
 					continue;
 				anIntArrayArray929[l][i1] = anInt1265;
 			}
-			if(!npc.desc.aBoolean84)
+			if(!npc.desc.clickable)
 				k += 0x80000000;
 			worldController.addTempObject(plane, npc.faceAngle, getTileHeight(plane, npc.y, npc.x), k, npc.y, (npc.tileSize - 1) * 64 + 60, npc.x, npc, npc.animStretches);
 		}
@@ -1592,10 +1592,10 @@ public int followDistance = 1;
 				}
 			} else {
 				EntityDef entityDef_1 = ((NPC)obj).desc;
-				if(entityDef_1.anInt75 >= 0 && entityDef_1.anInt75 < headIcons.length) {
+				if(entityDef_1.headIcon >= 0 && entityDef_1.headIcon < headIcons.length) {
 					npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
 					if(spriteDrawX > -1)
-						headIcons[entityDef_1.anInt75].drawSprite(spriteDrawX - 12, spriteDrawY - 30);
+						headIcons[entityDef_1.headIcon].drawSprite(spriteDrawX - 12, spriteDrawY - 30);
 				}
 				if(anInt855 == 1 && anInt1222 == npcIndices[j - playerCount] && loopCycle % 20 < 10) {
 					npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
@@ -1899,7 +1899,7 @@ public int followDistance = 1;
 
 	private void drawTabArea() {
 		aRSImageProducer_1163.initDrawingArea();
-		Texture.anIntArray1472 = anIntArray1181;
+		Texture.scanlineOffset = anIntArray1181;
 		tabArea.drawSprite(0, 0);
 		if(invOverlayInterfaceID == -1) {
 			drawRedStones();
@@ -1917,16 +1917,16 @@ public int followDistance = 1;
 			drawMenu();
 		aRSImageProducer_1163.drawGraphics(168, super.graphics, 519);
 		aRSImageProducer_1165.initDrawingArea();
-		Texture.anIntArray1472 = anIntArray1182;
+		Texture.scanlineOffset = anIntArray1182;
 	}
 
 	private void animateTexture(int j) {
 		if(!lowMem) {
-			if(Texture.anIntArray1480[17] >= j) {
-				Background background = Texture.aBackgroundArray1474s[17];
-				int k = background.anInt1452 * background.anInt1453 - 1;
+			if(Texture.textureLastCycle[17] >= j) {
+				Background background = Texture.textures[17];
+				int k = background.width * background.anInt1453 - 1;
 				//fire cape apparently?
-				int j1 = background.anInt1452 * anInt945 * 2;
+				int j1 = background.width * anInt945 * 2;
 				byte abyte0[] = background.aByteArray1450;
 				byte abyte3[] = aByteArray912;
 				for(int i2 = 0; i2 <= k; i2++)
@@ -1955,10 +1955,10 @@ public int followDistance = 1;
 					stream.writeBytes(stream.currentOffset - l2);
 				}
 			}
-			if(Texture.anIntArray1480[24] >= j) {
-				Background background_1 = Texture.aBackgroundArray1474s[24];
-				int l = background_1.anInt1452 * background_1.anInt1453 - 1;
-				int k1 = background_1.anInt1452 * anInt945 * 2;
+			if(Texture.textureLastCycle[24] >= j) {
+				Background background_1 = Texture.textures[24];
+				int l = background_1.width * background_1.anInt1453 - 1;
+				int k1 = background_1.width * anInt945 * 2;
 				byte abyte1[] = background_1.aByteArray1450;
 				byte abyte4[] = aByteArray912;
 				for(int j2 = 0; j2 <= l; j2++)
@@ -1968,10 +1968,10 @@ public int followDistance = 1;
 				aByteArray912 = abyte1;
 				Texture.setTextureActive(24);
 			}
-			if(Texture.anIntArray1480[34] >= j) {
-				Background background_2 = Texture.aBackgroundArray1474s[34];
-				int i1 = background_2.anInt1452 * background_2.anInt1453 - 1;
-				int l1 = background_2.anInt1452 * anInt945 * 2;
+			if(Texture.textureLastCycle[34] >= j) {
+				Background background_2 = Texture.textures[34];
+				int i1 = background_2.width * background_2.anInt1453 - 1;
+				int l1 = background_2.width * anInt945 * 2;
 				byte abyte2[] = background_2.aByteArray1450;
 				byte abyte5[] = aByteArray912;
 				for(int k2 = 0; k2 <= i1; k2++)
@@ -1981,11 +1981,11 @@ public int followDistance = 1;
 				aByteArray912 = abyte2;
 				Texture.setTextureActive(34);
 			}
-			if(Texture.anIntArray1480[40] >= j)
+			if(Texture.textureLastCycle[40] >= j)
             {
-				Background background_2 = Texture.aBackgroundArray1474s[40];
-				int i1 = background_2.anInt1452 * background_2.anInt1453 - 1;
-				int l1 = background_2.anInt1452 * anInt945 * 2;
+				Background background_2 = Texture.textures[40];
+				int i1 = background_2.width * background_2.anInt1453 - 1;
+				int l1 = background_2.width * anInt945 * 2;
 				byte abyte2[] = background_2.aByteArray1450;
 				byte abyte5[] = aByteArray912;
 				for(int k2 = 0; k2 <= i1; k2++)
@@ -2297,12 +2297,12 @@ followDistance = 1;
 			int k1 = stream.readBits(1);
 			if(k1 == 1)
 				anIntArray894[anInt893++] = k;
-			npc.tileSize = npc.desc.aByte68;
-			npc.turnSpeed = npc.desc.anInt79;
+			npc.tileSize = npc.desc.tileSpan;
+			npc.turnSpeed = npc.desc.degreesToTurn;
 			npc.walkBackAnimId = npc.desc.walkAnim;
-			npc.walkLeftAnimId = npc.desc.anInt58;
-			npc.walkRightAnimId = npc.desc.anInt83;
-			npc.runAnimId = npc.desc.anInt55;
+			npc.walkLeftAnimId = npc.desc.turnAroundAnim;
+			npc.walkRightAnimId = npc.desc.walkRightAnim;
+			npc.runAnimId = npc.desc.walkBackAnim;
 			npc.standAnimId = npc.desc.standAnim;
 			npc.setPos(myPlayer.smallX[0] + i1, myPlayer.smallY[0] + l, j1 == 1);
 		}
@@ -2493,7 +2493,7 @@ followDistance = 1;
 			if(class46_2.mapSceneId != -1) {
 				Background background_2 = mapScenes[class46_2.mapSceneId];
 				if(background_2 != null) {
-					int i6 = (class46_2.sizeX * 4 - background_2.anInt1452) / 2;
+					int i6 = (class46_2.sizeX * 4 - background_2.width) / 2;
 					int j6 = (class46_2.sizeY * 4 - background_2.anInt1453) / 2;
 					background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - class46_2.sizeY) * 4 + j6);
 				}
@@ -2563,7 +2563,7 @@ followDistance = 1;
 			if(class46_1.mapSceneId != -1) {
 				Background background_1 = mapScenes[class46_1.mapSceneId];
 				if(background_1 != null) {
-					int j5 = (class46_1.sizeX * 4 - background_1.anInt1452) / 2;
+					int j5 = (class46_1.sizeX * 4 - background_1.width) / 2;
 					int k5 = (class46_1.sizeY * 4 - background_1.anInt1453) / 2;
 					background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - class46_1.sizeY) * 4 + k5);
 				}
@@ -2593,7 +2593,7 @@ followDistance = 1;
 			if(class46.mapSceneId != -1) {
 				Background background = mapScenes[class46.mapSceneId];
 				if(background != null) {
-					int i4 = (class46.sizeX * 4 - background.anInt1452) / 2;
+					int i4 = (class46.sizeX * 4 - background.width) / 2;
 					int j4 = (class46.sizeY * 4 - background.anInt1453) / 2;
 					background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - class46.sizeY) * 4 + j4);
 				}
@@ -2761,30 +2761,30 @@ followDistance = 1;
 	private void processProjectiles()
 	{
 		for(Animable_Sub4 class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetFirst(); class30_sub2_sub4_sub4 != null; class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetNext())
-			if(class30_sub2_sub4_sub4.anInt1597 != plane || loopCycle > class30_sub2_sub4_sub4.anInt1572)
+			if(class30_sub2_sub4_sub4.sourceEntityIndex != plane || loopCycle > class30_sub2_sub4_sub4.endCycle)
 				class30_sub2_sub4_sub4.unlink();
 			else
-			if(loopCycle >= class30_sub2_sub4_sub4.anInt1571)
+			if(loopCycle >= class30_sub2_sub4_sub4.startCycle)
 			{
-				if(class30_sub2_sub4_sub4.anInt1590 > 0)
+				if(class30_sub2_sub4_sub4.targetLocSize > 0)
 				{
-					NPC npc = npcArray[class30_sub2_sub4_sub4.anInt1590 - 1];
+					NPC npc = npcArray[class30_sub2_sub4_sub4.targetLocSize - 1];
 					if(npc != null && npc.x >= 0 && npc.x < 13312 && npc.y >= 0 && npc.y < 13312)
-						class30_sub2_sub4_sub4.trackTarget(loopCycle, npc.y, getTileHeight(class30_sub2_sub4_sub4.anInt1597, npc.y, npc.x) - class30_sub2_sub4_sub4.anInt1583, npc.x);
+						class30_sub2_sub4_sub4.trackTarget(loopCycle, npc.y, getTileHeight(class30_sub2_sub4_sub4.sourceEntityIndex, npc.y, npc.x) - class30_sub2_sub4_sub4.targetEntityIndex, npc.x);
 				}
-				if(class30_sub2_sub4_sub4.anInt1590 < 0)
+				if(class30_sub2_sub4_sub4.targetLocSize < 0)
 				{
-					int j = -class30_sub2_sub4_sub4.anInt1590 - 1;
+					int j = -class30_sub2_sub4_sub4.targetLocSize - 1;
 					Player player;
 					if(j == unknownInt10)
 						player = myPlayer;
 					else
 						player = playerArray[j];
 					if(player != null && player.x >= 0 && player.x < 13312 && player.y >= 0 && player.y < 13312)
-						class30_sub2_sub4_sub4.trackTarget(loopCycle, player.y, getTileHeight(class30_sub2_sub4_sub4.anInt1597, player.y, player.x) - class30_sub2_sub4_sub4.anInt1583, player.x);
+						class30_sub2_sub4_sub4.trackTarget(loopCycle, player.y, getTileHeight(class30_sub2_sub4_sub4.sourceEntityIndex, player.y, player.x) - class30_sub2_sub4_sub4.targetEntityIndex, player.x);
 				}
 				class30_sub2_sub4_sub4.advanceProjectile(anInt945);
-				worldController.addTempObject(plane, class30_sub2_sub4_sub4.anInt1595, (int)class30_sub2_sub4_sub4.aDouble1587, -1, (int)class30_sub2_sub4_sub4.aDouble1586, 60, (int)class30_sub2_sub4_sub4.aDouble1585, class30_sub2_sub4_sub4, false);
+				worldController.addTempObject(plane, class30_sub2_sub4_sub4.yawAngle, (int)class30_sub2_sub4_sub4.currentZ, -1, (int)class30_sub2_sub4_sub4.currentY, 60, (int)class30_sub2_sub4_sub4.currentX, class30_sub2_sub4_sub4, false);
 			}
 
 	}
@@ -4861,12 +4861,12 @@ followDistance = 1;
 			if(k1 == 1)
 			{
 				NPC npc = npcArray[l1];
-				if(npc.desc.aByte68 == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64)
+				if(npc.desc.tileSpan == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64)
 				{
 					for(int j2 = 0; j2 < npcCount; j2++)
 					{
 						NPC npc2 = npcArray[npcIndices[j2]];
-						if(npc2 != null && npc2 != npc && npc2.desc.aByte68 == 1 && npc2.x == npc.x && npc2.y == npc.y)
+						if(npc2 != null && npc2 != npc && npc2.desc.tileSpan == 1 && npc2.x == npc.x && npc2.y == npc.y)
 							buildAtNPCMenu(npc2.desc, npcIndices[j2], j1, i1);
 					}
 
@@ -4888,7 +4888,7 @@ followDistance = 1;
 					for(int k2 = 0; k2 < npcCount; k2++)
 					{
 						NPC class30_sub2_sub4_sub1_sub1_2 = npcArray[npcIndices[k2]];
-						if(class30_sub2_sub4_sub1_sub1_2 != null && class30_sub2_sub4_sub1_sub1_2.desc.aByte68 == 1 && class30_sub2_sub4_sub1_sub1_2.x == player.x && class30_sub2_sub4_sub1_sub1_2.y == player.y)
+						if(class30_sub2_sub4_sub1_sub1_2 != null && class30_sub2_sub4_sub1_sub1_2.desc.tileSpan == 1 && class30_sub2_sub4_sub1_sub1_2.x == player.x && class30_sub2_sub4_sub1_sub1_2.y == player.y)
 							buildAtNPCMenu(class30_sub2_sub4_sub1_sub1_2.desc, npcIndices[k2], j1, i1);
 					}
 
@@ -5091,7 +5091,7 @@ followDistance = 1;
 		DummyClass.cache = null;
 		Animation.anims = null;
 		SpotAnim.cache = null;
-		SpotAnim.aMRUNodes_415 = null;
+		SpotAnim.modelCache = null;
 		Varp.cache = null;
 		super.fullGameScreen = null;
 		Player.mruNodes = null;
@@ -5800,7 +5800,7 @@ followDistance = 1;
 					}
 
 				model.buildLabelGroups();
-				model.applyTransform(Animation.anims[myPlayer.standAnimId].anIntArray353[0]);
+				model.applyTransform(Animation.anims[myPlayer.standAnimId].frameIds[0]);
 				model.calculateLighting(64, 850, -30, -50, -30, true);
 				class9.anInt233 = 5;
 				class9.mediaID = 0;
@@ -5824,7 +5824,7 @@ followDistance = 1;
 					}
 				int staticFrame = myPlayer.standAnimId;
 				characterDisplay.buildLabelGroups();
-				characterDisplay.applyTransform(Animation.anims[staticFrame].anIntArray353[0]);
+				characterDisplay.applyTransform(Animation.anims[staticFrame].frameIds[0]);
 				//characterDisplay.calculateLighting(64, 850, -30, -50, -30, true);
 				rsInterface.anInt233 = 5;
 				rsInterface.mediaID = 0;
@@ -6973,7 +6973,7 @@ followDistance = 1;
 				int i2 = stream.readUnsignedByte();
 				if(i1 == npc.anim && i1 != -1)
 				{
-					int l2 = Animation.anims[i1].anInt365;
+					int l2 = Animation.anims[i1].replayMode;
 					if(l2 == 1)
 					{
 						npc.animFrame = 0;
@@ -6984,7 +6984,7 @@ followDistance = 1;
 					if(l2 == 2)
 						npc.animFrameCount = 0;
 				} else
-				if(i1 == -1 || npc.anim == -1 || Animation.anims[i1].anInt359 >= Animation.anims[npc.anim].anInt359)
+				if(i1 == -1 || npc.anim == -1 || Animation.anims[i1].priority >= Animation.anims[npc.anim].priority)
 				{
 					npc.anim = i1;
 					npc.animFrame = 0;
@@ -7041,12 +7041,12 @@ followDistance = 1;
 			if((l & 2) != 0)
 			{
 				npc.desc = EntityDef.forID(stream.readWordLEBigA());
-				npc.tileSize = npc.desc.aByte68;
-				npc.turnSpeed = npc.desc.anInt79;
+				npc.tileSize = npc.desc.tileSpan;
+				npc.turnSpeed = npc.desc.degreesToTurn;
 				npc.walkBackAnimId = npc.desc.walkAnim;
-				npc.walkLeftAnimId = npc.desc.anInt58;
-				npc.walkRightAnimId = npc.desc.anInt83;
-				npc.runAnimId = npc.desc.anInt55;
+				npc.walkLeftAnimId = npc.desc.turnAroundAnim;
+				npc.walkRightAnimId = npc.desc.walkRightAnim;
+				npc.runAnimId = npc.desc.walkBackAnim;
 				npc.standAnimId = npc.desc.standAnim;
 			}
 			if((l & 4) != 0)
@@ -7065,7 +7065,7 @@ followDistance = 1;
 			entityDef = entityDef.getChildDefinition();
 		if(entityDef == null)
 			return;
-		if(!entityDef.aBoolean84)
+		if(!entityDef.clickable)
 			return;
 		String s = entityDef.name;
 		if(entityDef.combatLevel != 0)
@@ -7640,7 +7640,7 @@ followDistance = 1;
 				int i7 = 0;
 				for(int k7 = 0; k7 < 34; k7++)
 				{
-					if(mapBack.aByteArray1450[k7 + j6 * mapBack.anInt1452] == 0)
+					if(mapBack.aByteArray1450[k7 + j6 * mapBack.width] == 0)
 					{
 						if(k6 == 999)
 							k6 = k7;
@@ -7662,7 +7662,7 @@ followDistance = 1;
 				int l7 = 0;
 				for(int j8 = 25; j8 < 172; j8++)
 				{
-					if(mapBack.aByteArray1450[j8 + l6 * mapBack.anInt1452] == 0 && (j8 > 34 || l6 > 34))
+					if(mapBack.aByteArray1450[j8 + l6 * mapBack.width] == 0 && (j8 > 34 || l6 > 34))
 					{
 						if(j7 == 999)
 							j7 = j8;
@@ -7679,19 +7679,19 @@ followDistance = 1;
 			}
 
 			Texture.setViewport(765, 503);
-			fullScreenTextureArray = Texture.anIntArray1472;
+			fullScreenTextureArray = Texture.scanlineOffset;
 			Texture.setViewport(519, 165);
-			anIntArray1180 = Texture.anIntArray1472;
+			anIntArray1180 = Texture.scanlineOffset;
 			Texture.setViewport(246, 335);
-			anIntArray1181 = Texture.anIntArray1472;
+			anIntArray1181 = Texture.scanlineOffset;
 			Texture.setViewport(512, 334);
-			anIntArray1182 = Texture.anIntArray1472;
+			anIntArray1182 = Texture.scanlineOffset;
 			int ai[] = new int[9];
 			for(int i8 = 0; i8 < 9; i8++)
 			{
 				int k8 = 128 + i8 * 32 + 15;
 				int l8 = 600 + k8 * 3;
-				int i9 = Texture.anIntArray1470[k8];
+				int i9 = Texture.SINE[k8];
 				ai[i8] = l8 * i9 >> 16;
 			}
 
@@ -7752,8 +7752,8 @@ followDistance = 1;
 				i -= 73;
 				j -= 75;
 				int k = minimapInt1 + minimapInt2 & 0x7ff;
-				int i1 = Texture.anIntArray1470[k];
-				int j1 = Texture.anIntArray1471[k];
+				int i1 = Texture.SINE[k];
+				int j1 = Texture.COSINE[k];
 				i1 = i1 * (minimapInt3 + 256) >> 8;
 				j1 = j1 * (minimapInt3 + 256) >> 8;
 				int k1 = j * i1 + i * j1 >> 11;
@@ -7967,12 +7967,12 @@ followDistance = 1;
 		if(entity.anim != -1 && entity.animDelay == 0)
 		{
 			Animation animation = Animation.anims[entity.anim];
-			if(entity.pathRemainder > 0 && animation.anInt363 == 0)
+			if(entity.pathRemainder > 0 && animation.precedenceAnimating == 0)
 			{
 				entity.stepDelayCounter++;
 				return;
 			}
-			if(entity.pathRemainder <= 0 && animation.anInt364 == 0)
+			if(entity.pathRemainder <= 0 && animation.walkMerge == 0)
 			{
 				entity.stepDelayCounter++;
 				return;
@@ -8143,12 +8143,12 @@ followDistance = 1;
 		{
 			Animation animation = Animation.anims[entity.movementAnimId];
 			entity.movementAnimCycle++;
-			if(entity.movementAnimFrame < animation.anInt352 && entity.movementAnimCycle > animation.getFrameDuration(entity.movementAnimFrame))
+			if(entity.movementAnimFrame < animation.frameCount && entity.movementAnimCycle > animation.getFrameDuration(entity.movementAnimFrame))
 			{
 				entity.movementAnimCycle = 0;
 				entity.movementAnimFrame++;
 			}
-			if(entity.movementAnimFrame >= animation.anInt352)
+			if(entity.movementAnimFrame >= animation.frameCount)
 			{
 				entity.movementAnimCycle = 0;
 				entity.movementAnimFrame = 0;
@@ -8158,17 +8158,17 @@ followDistance = 1;
 		{
 			if(entity.spotAnimFrame < 0)
 				entity.spotAnimFrame = 0;
-			Animation animation_1 = SpotAnim.cache[entity.spotAnimId].aAnimation_407;
-			for(entity.spotAnimCycle++; entity.spotAnimFrame < animation_1.anInt352 && entity.spotAnimCycle > animation_1.getFrameDuration(entity.spotAnimFrame); entity.spotAnimFrame++)
+			Animation animation_1 = SpotAnim.cache[entity.spotAnimId].animation;
+			for(entity.spotAnimCycle++; entity.spotAnimFrame < animation_1.frameCount && entity.spotAnimCycle > animation_1.getFrameDuration(entity.spotAnimFrame); entity.spotAnimFrame++)
 				entity.spotAnimCycle -= animation_1.getFrameDuration(entity.spotAnimFrame);
 
-			if(entity.spotAnimFrame >= animation_1.anInt352 && (entity.spotAnimFrame < 0 || entity.spotAnimFrame >= animation_1.anInt352))
+			if(entity.spotAnimFrame >= animation_1.frameCount && (entity.spotAnimFrame < 0 || entity.spotAnimFrame >= animation_1.frameCount))
 				entity.spotAnimId = -1;
 		}
 		if(entity.anim != -1 && entity.animDelay <= 1)
 		{
 			Animation animation_2 = Animation.anims[entity.anim];
-			if(animation_2.anInt363 == 1 && entity.pathRemainder > 0 && entity.forceMoveEndCycle <= loopCycle && entity.forceMoveStartCycle < loopCycle)
+			if(animation_2.precedenceAnimating == 1 && entity.pathRemainder > 0 && entity.forceMoveEndCycle <= loopCycle && entity.forceMoveStartCycle < loopCycle)
 			{
 				entity.animDelay = 1;
 				return;
@@ -8177,19 +8177,19 @@ followDistance = 1;
 		if(entity.anim != -1 && entity.animDelay == 0)
 		{
 			Animation animation_3 = Animation.anims[entity.anim];
-			for(entity.animCycle++; entity.animFrame < animation_3.anInt352 && entity.animCycle > animation_3.getFrameDuration(entity.animFrame); entity.animFrame++)
+			for(entity.animCycle++; entity.animFrame < animation_3.frameCount && entity.animCycle > animation_3.getFrameDuration(entity.animFrame); entity.animFrame++)
 				entity.animCycle -= animation_3.getFrameDuration(entity.animFrame);
 
-			if(entity.animFrame >= animation_3.anInt352)
+			if(entity.animFrame >= animation_3.frameCount)
 			{
-				entity.animFrame -= animation_3.anInt356;
+				entity.animFrame -= animation_3.loopOffset;
 				entity.animFrameCount++;
-				if(entity.animFrameCount >= animation_3.anInt362)
+				if(entity.animFrameCount >= animation_3.maxLoops)
 					entity.anim = -1;
-				if(entity.animFrame < 0 || entity.animFrame >= animation_3.anInt352)
+				if(entity.animFrame < 0 || entity.animFrame >= animation_3.frameCount)
 					entity.anim = -1;
 			}
-			entity.animStretches = animation_3.aBoolean358;
+			entity.animStretches = animation_3.stretches;
 		}
 		if(entity.animDelay > 0)
 			entity.animDelay--;
@@ -8206,7 +8206,7 @@ followDistance = 1;
 				anInt945 = 0;
 				resetAllImageProducers();
 				super.fullGameScreen.initDrawingArea();
-				Texture.anIntArray1472 = fullScreenTextureArray;
+				Texture.scanlineOffset = fullScreenTextureArray;
 				DrawingArea.setAllPixelsToZero();
 				welcomeScreenRaised = true;
 				if (openInterfaceID != -1) {
@@ -8366,16 +8366,16 @@ followDistance = 1;
 	{
 		Animable_Sub3 class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetFirst();
 		for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetNext())
-			if(class30_sub2_sub4_sub3.anInt1560 != plane || class30_sub2_sub4_sub3.aBoolean1567)
+			if(class30_sub2_sub4_sub3.plane != plane || class30_sub2_sub4_sub3.finished)
 				class30_sub2_sub4_sub3.unlink();
 			else
-			if(loopCycle >= class30_sub2_sub4_sub3.anInt1564)
+			if(loopCycle >= class30_sub2_sub4_sub3.endCycle)
 			{
 				class30_sub2_sub4_sub3.advanceSpotAnimFrame(anInt945);
-				if(class30_sub2_sub4_sub3.aBoolean1567)
+				if(class30_sub2_sub4_sub3.finished)
 					class30_sub2_sub4_sub3.unlink();
 				else
-					worldController.addTempObject(class30_sub2_sub4_sub3.anInt1560, 0, class30_sub2_sub4_sub3.anInt1563, -1, class30_sub2_sub4_sub3.anInt1562, 60, class30_sub2_sub4_sub3.anInt1561, class30_sub2_sub4_sub3, false);
+					worldController.addTempObject(class30_sub2_sub4_sub3.plane, 0, class30_sub2_sub4_sub3.startZ, -1, class30_sub2_sub4_sub3.startY, 60, class30_sub2_sub4_sub3.startX, class30_sub2_sub4_sub3, false);
 			}
 
 	}
@@ -8669,8 +8669,8 @@ followDistance = 1;
 					int j4 = Texture.textureInt2;
 					Texture.textureInt1 = k2 + class9_1.width / 2;
 					Texture.textureInt2 = l2 + class9_1.height / 2;
-					int i5 = Texture.anIntArray1470[class9_1.modelRotation1] * class9_1.modelZoom >> 16;
-					int l5 = Texture.anIntArray1471[class9_1.modelRotation1] * class9_1.modelZoom >> 16;
+					int i5 = Texture.SINE[class9_1.modelRotation1] * class9_1.modelZoom >> 16;
+					int l5 = Texture.COSINE[class9_1.modelRotation1] * class9_1.modelZoom >> 16;
 					boolean flag2 = interfaceIsSelected(class9_1);
 					int i7;
 					if(flag2)
@@ -8682,7 +8682,7 @@ followDistance = 1;
 						model = class9_1.getWidgetModel(-1, -1, flag2);
 					} else {
 						Animation animation = Animation.anims[i7];
-						model = class9_1.getWidgetModel(animation.anIntArray354[class9_1.anInt246], animation.anIntArray353[class9_1.anInt246], flag2);
+						model = class9_1.getWidgetModel(animation.frameDelays[class9_1.anInt246], animation.frameIds[class9_1.anInt246], flag2);
 					}
 					if(model != null)
 						model.renderModel2D(class9_1.modelRotation2, 0, class9_1.modelRotation1, 0, i5, l5);
@@ -8739,7 +8739,7 @@ followDistance = 1;
 		if(background != null) {
 			int l1 = 0;
 			for(int j2 = 0; j2 < background.anInt1453; j2++) {
-				for(int l2 = 0; l2 < background.anInt1452; l2++)
+				for(int l2 = 0; l2 < background.width; l2++)
 					if(background.aByteArray1450[l1++] != 0) {
 						int i3 = l2 + 16 + background.anInt1454;
 						int j3 = j2 + 16 + background.anInt1455;
@@ -8784,7 +8784,7 @@ followDistance = 1;
 			int i2 = stream.readUnsignedByteNeg();
 			if(l == player.anim && l != -1)
 			{
-				int i3 = Animation.anims[l].anInt365;
+				int i3 = Animation.anims[l].replayMode;
 				if(i3 == 1)
 				{
 					player.animFrame = 0;
@@ -8795,7 +8795,7 @@ followDistance = 1;
 				if(i3 == 2)
 					player.animFrameCount = 0;
 			} else
-			if(l == -1 || player.anim == -1 || Animation.anims[l].anInt359 >= Animation.anims[player.anim].anInt359)
+			if(l == -1 || player.anim == -1 || Animation.anims[l].priority >= Animation.anims[player.anim].priority)
 			{
 				player.anim = l;
 				player.animFrame = 0;
@@ -9419,10 +9419,10 @@ followDistance = 1;
 					{
 						class9_1.anInt208 -= animation.getFrameDuration(class9_1.anInt246) + 1;
 						class9_1.anInt246++;
-						if(class9_1.anInt246 >= animation.anInt352)
+						if(class9_1.anInt246 >= animation.frameCount)
 						{
-							class9_1.anInt246 -= animation.anInt356;
-							if(class9_1.anInt246 < 0 || class9_1.anInt246 >= animation.anInt352)
+							class9_1.anInt246 -= animation.loopOffset;
+							if(class9_1.anInt246 < 0 || class9_1.anInt246 >= animation.frameCount)
 								class9_1.anInt246 = 0;
 						}
 						flag1 = true;
@@ -9673,9 +9673,9 @@ followDistance = 1;
 				{
 					int j2 = ai[l++];
 					VarBit varBit = VarBit.cache[j2];
-					int l3 = varBit.anInt648;
-					int i4 = varBit.anInt649;
-					int j4 = varBit.anInt650;
+					int l3 = varBit.settingIndex;
+					int i4 = varBit.lowBit;
+					int j4 = varBit.highBit;
 					int k4 = anIntArray1232[j4 - i4];
 					k1 = variousSettings[l3] >> i4 & k4;
 				}
@@ -9768,7 +9768,7 @@ followDistance = 1;
 				EntityDef entityDef = npc.desc;
 				if(entityDef.childrenIDs != null)
 					entityDef = entityDef.getChildDefinition();
-				if(entityDef != null && entityDef.aBoolean87 && entityDef.aBoolean84) {
+				if(entityDef != null && entityDef.drawOnMinimap && entityDef.clickable) {
 					int i1 = npc.x / 32 - myPlayer.x / 32;
 					int k3 = npc.y / 32 - myPlayer.y / 32;
 					markMinimap(mapDotNPC, i1, k3);
@@ -12173,7 +12173,7 @@ case 174:
 						yCameraCurve = 383;
 				}
 			}
-		int k2 = Texture.anInt1481;
+		int k2 = Texture.textureCycleCounter;
 		Model.mousePickingEnabled = true;
 		Model.mousePickCount = 0;
 		Model.mousePickX = super.mouseX - 4;

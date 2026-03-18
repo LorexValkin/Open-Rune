@@ -7,74 +7,74 @@ final class Animable_Sub3 extends Animable {
 	public Animable_Sub3(int i, int j, int l, int i1, int j1, int k1,
 						 int l1)
 	{
-		aBoolean1567 = false;
-		aSpotAnim_1568 = SpotAnim.cache[i1];
-		anInt1560 = i;
-		anInt1561 = l1;
-		anInt1562 = k1;
-		anInt1563 = j1;
-		anInt1564 = j + l;
-			aBoolean1567 = false;
+		finished = false;
+		spotAnim = SpotAnim.cache[i1];
+		plane = i;
+		startX = l1;
+		startY = k1;
+		startZ = j1;
+		endCycle = j + l;
+			finished = false;
 	}
 
 	public Model getRotatedModel()
 	{
-		Model model = aSpotAnim_1568.getModel();
+		Model model = spotAnim.getModel();
 		if(model == null)
 			return null;
-		int j = aSpotAnim_1568.aAnimation_407.anIntArray353[anInt1569];
+		int j = spotAnim.animation.frameIds[animFrame];
 		Model model_1 = new Model(true, AnimFrame.isFrameLoaded(j), false, model);
-		if(!aBoolean1567)
+		if(!finished)
 		{
 			model_1.buildLabelGroups();
 			model_1.applyTransform(j);
 			model_1.labelGroupsUnused = null;
 			model_1.labelGroups = null;
 		}
-		if(aSpotAnim_1568.anInt410 != 128 || aSpotAnim_1568.anInt411 != 128)
-			model_1.scale(aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt411);
-		if(aSpotAnim_1568.anInt412 != 0)
+		if(spotAnim.scaleXY != 128 || spotAnim.scaleZ != 128)
+			model_1.scale(spotAnim.scaleXY, spotAnim.scaleXY, spotAnim.scaleZ);
+		if(spotAnim.rotation != 0)
 		{
-			if(aSpotAnim_1568.anInt412 == 90)
+			if(spotAnim.rotation == 90)
 				model_1.rotateY90();
-			if(aSpotAnim_1568.anInt412 == 180)
+			if(spotAnim.rotation == 180)
 			{
 				model_1.rotateY90();
 				model_1.rotateY90();
 			}
-			if(aSpotAnim_1568.anInt412 == 270)
+			if(spotAnim.rotation == 270)
 			{
 				model_1.rotateY90();
 				model_1.rotateY90();
 				model_1.rotateY90();
 			}
 		}
-		model_1.calculateLighting(64 + aSpotAnim_1568.anInt413, 850 + aSpotAnim_1568.anInt414, -30, -50, -30, true);
+		model_1.calculateLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
 		return model_1;
 	}
 
 	public void advanceSpotAnimFrame(int i)
 	{
-		for(anInt1570 += i; anInt1570 > aSpotAnim_1568.aAnimation_407.getFrameDuration(anInt1569);)
+		for(animCycle += i; animCycle > spotAnim.animation.getFrameDuration(animFrame);)
 		{
-			anInt1570 -= aSpotAnim_1568.aAnimation_407.getFrameDuration(anInt1569) + 1;
-			anInt1569++;
-			if(anInt1569 >= aSpotAnim_1568.aAnimation_407.anInt352 && (anInt1569 < 0 || anInt1569 >= aSpotAnim_1568.aAnimation_407.anInt352))
+			animCycle -= spotAnim.animation.getFrameDuration(animFrame) + 1;
+			animFrame++;
+			if(animFrame >= spotAnim.animation.frameCount && (animFrame < 0 || animFrame >= spotAnim.animation.frameCount))
 			{
-				anInt1569 = 0;
-				aBoolean1567 = true;
+				animFrame = 0;
+				finished = true;
 			}
 		}
 
 	}
 
-	public final int anInt1560;
-	public final int anInt1561;
-	public final int anInt1562;
-	public final int anInt1563;
-	public final int anInt1564;
-	public boolean aBoolean1567;
-	private final SpotAnim aSpotAnim_1568;
-	private int anInt1569;
-	private int anInt1570;
+	public final int plane;
+	public final int startX;
+	public final int startY;
+	public final int startZ;
+	public final int endCycle;
+	public boolean finished;
+	private final SpotAnim spotAnim;
+	private int animFrame;
+	private int animCycle;
 }

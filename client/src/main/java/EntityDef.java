@@ -18,8 +18,8 @@ public final class EntityDef {
 		for(int j = 0; j < 20; j++)
 			if(cache[j].type == (long)i)
 				return cache[j];
-		anInt56 = (anInt56 + 1) % 20;
-		EntityDef entityDef = cache[anInt56] = new EntityDef();
+		cacheIndex = (cacheIndex + 1) % 20;
+		EntityDef entityDef = cache[cacheIndex] = new EntityDef();
 		stream.currentOffset = streamIndices[i];
 		entityDef.type = i;
 		entityDef.readValues(stream);
@@ -39,9 +39,9 @@ public final class EntityDef {
     entityDef.combatLevel = 624; //combat level
 	entityDef.walkAnim = 7058;
 	entityDef.standAnim = 7059;
-	entityDef.anInt91 = 110; //width?
-	entityDef.anInt86 = 110; //height?
-	entityDef.aByte68 = 4;
+	entityDef.scaleXZ = 110; //width?
+	entityDef.scaleY = 110; //height?
+	entityDef.tileSpan = 4;
     entityDef.description = "The mighty lord Bandos!".getBytes(); // NPC description
 	}
 	if(i == 2551) { // NPC ID 
@@ -55,7 +55,7 @@ public final class EntityDef {
     entityDef.combatLevel = 141; //combat level
 	entityDef.walkAnim = 6152;
 	entityDef.standAnim = 6153;
-	entityDef.aByte68 = 1;
+	entityDef.tileSpan = 1;
     entityDef.description = "A follower of Bandos.".getBytes(); // NPC description
 	}
 	if(i == 2552) { // NPC ID 
@@ -69,7 +69,7 @@ public final class EntityDef {
     entityDef.combatLevel = 142; //combat level
 	entityDef.walkAnim = 6152;
 	entityDef.standAnim = 6153;
-	entityDef.aByte68 = 1;
+	entityDef.tileSpan = 1;
     entityDef.description = "A follower of Bandos.".getBytes(); // NPC description
 	}
 	if(i == 2553) { // NPC ID 
@@ -82,16 +82,16 @@ public final class EntityDef {
     entityDef.combatLevel = 142; //combat level
 	entityDef.walkAnim = 6152;
 	entityDef.standAnim = 6153;
-	entityDef.aByte68 = 1;
+	entityDef.tileSpan = 1;
     entityDef.description = "A follower of Bandos.".getBytes(); // NPC description
 	}
 
 	if(i == 2554) { // NPC ID
-    //aClass30_Sub2_Sub2_60.anInt1406 = streamIndices[630]; 
+    //aClass30_Sub2_Sub2_60.streamOffset = streamIndices[630]; 
     //entityDef.readValues(true, aClass30_Sub2_Sub2_60); // Collect original NPC data
     entityDef.actions = new String[5];
     entityDef.actions[1] = "Attack";
-	entityDef.aByte68 = 5;
+	entityDef.tileSpan = 5;
     entityDef.models = new int[5]; // Number of models the NPC uses
     int changedColors = 1; // Number of model colors changed on the NPC
     entityDef.originalModelColors = new int[changedColors];
@@ -105,8 +105,8 @@ public final class EntityDef {
     entityDef.models[4] = 27764;
     entityDef.name = "K'ril Tsutsaroth"; // NPC name
     entityDef.combatLevel = 650; //combat level
-	entityDef.anInt91 = 110; //width?
-	entityDef.anInt86 = 110; //height?
+	entityDef.scaleXZ = 110; //width?
+	entityDef.scaleY = 110; //height?
 	entityDef.walkAnim = 6942;
 	entityDef.standAnim = 6943;
     entityDef.description = "The mighty lord zamoraks demon K'ril Tsutsaroth!".getBytes(); // NPC description
@@ -123,7 +123,7 @@ public final class EntityDef {
     entityDef.combatLevel = 145; //combat level
 	entityDef.walkAnim = 63;
 	entityDef.standAnim = 66;
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
     entityDef.description = "A follower of Zamorak.".getBytes(); // NPC description
 	}
 	if(i == 2556) { // NPC ID 
@@ -138,9 +138,9 @@ public final class EntityDef {
     entityDef.combatLevel = 142; //combat level
 	entityDef.walkAnim = 63;
 	entityDef.standAnim = 66;
-	entityDef.anInt91 = 86; //width?
-	entityDef.anInt86 = 86; //height?
-	entityDef.aByte68 = 2;
+	entityDef.scaleXZ = 86; //width?
+	entityDef.scaleY = 86; //height?
+	entityDef.tileSpan = 2;
     entityDef.description = "A follower of Zamorak.".getBytes(); // NPC description
 	}
 	if(i == 2557) { // NPC ID 
@@ -155,16 +155,16 @@ public final class EntityDef {
     entityDef.combatLevel = 151; //combat level
 	entityDef.walkAnim = 63;
 	entityDef.standAnim = 66;
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
     entityDef.description = "A follower of Zamorak.".getBytes(); // NPC description
 	}
 
 	if(i == 2558) { // NPC ID
-    //aClass30_Sub2_Sub2_60.anInt1406 = streamIndices[630]; 
+    //aClass30_Sub2_Sub2_60.streamOffset = streamIndices[630]; 
     //entityDef.readValues(true, aClass30_Sub2_Sub2_60); // Collect original NPC data
     entityDef.actions = new String[5];
     entityDef.actions[1] = "Attack";
-	entityDef.aByte68 = 5;
+	entityDef.tileSpan = 5;
     entityDef.models = new int[3]; // Number of models the NPC uses
     int changedColors = 1; // Number of model colors changed on the NPC
     entityDef.originalModelColors = new int[changedColors];
@@ -174,8 +174,8 @@ public final class EntityDef {
     entityDef.models[0] = 28002;
     entityDef.models[1] = 28003;
     entityDef.models[2] = 28004;
-	entityDef.anInt91 = 128; //width?
-	entityDef.anInt86 = 110; //height?
+	entityDef.scaleXZ = 128; //width?
+	entityDef.scaleY = 110; //height?
     entityDef.name = "Kree'arra"; // NPC name
     entityDef.combatLevel = 650; //combat level
 	entityDef.walkAnim = 3500;
@@ -184,7 +184,7 @@ public final class EntityDef {
 	}
 	if (i == 2559) {
 	entityDef.name = "Wingman Skree";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
 	entityDef.standAnim = 6949;
 	entityDef.walkAnim = 6950;
 	entityDef.combatLevel = 143;
@@ -207,7 +207,7 @@ public final class EntityDef {
 	}
 	if (i == 2560) {
 	entityDef.name = "Flockleader Geerin";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
 	entityDef.standAnim = 6949;
 	entityDef.walkAnim = 6950;
 	entityDef.combatLevel = 149;
@@ -227,7 +227,7 @@ public final class EntityDef {
 	}
 	if (i == 2561) {
 	entityDef.name = "Flight Kilisa";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
 	entityDef.standAnim = 6949;
 	entityDef.walkAnim = 6950;
 	entityDef.combatLevel = 159;
@@ -247,11 +247,11 @@ public final class EntityDef {
 	entityDef.description = "A follower of Armadyl.".getBytes();
 	}
 	if(i == 2562) { // NPC ID
-    //aClass30_Sub2_Sub2_60.anInt1406 = streamIndices[630]; 
+    //aClass30_Sub2_Sub2_60.streamOffset = streamIndices[630]; 
     //entityDef.readValues(true, aClass30_Sub2_Sub2_60); // Collect original NPC data
     entityDef.actions = new String[5];
     entityDef.actions[1] = "Attack";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
     entityDef.models = new int[3]; // Number of models the NPC uses
     int changedColors = 1; // Number of model colors changed on the NPC
     entityDef.originalModelColors = new int[changedColors];
@@ -265,19 +265,19 @@ public final class EntityDef {
     entityDef.combatLevel = 648; //combat level
 	entityDef.walkAnim = 6962;
 	entityDef.standAnim = 6963;
-	entityDef.anInt91 = 110;
-	entityDef.anInt86 = 110;
+	entityDef.scaleXZ = 110;
+	entityDef.scaleY = 110;
     entityDef.description = "The mighty lord Saradomins commander Zilyana !".getBytes(); // NPC description
 	}
 	
 	if (i == 2563) {
 	entityDef.name = "Starlight";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
 	entityDef.standAnim = 6374;
 	entityDef.walkAnim = 6373;
 	entityDef.combatLevel = 149;
-	entityDef.anInt91 = 110;
-	entityDef.anInt86 = 110;
+	entityDef.scaleXZ = 110;
+	entityDef.scaleY = 110;
 	entityDef.models = new int[2];
 	entityDef.models[0] = 27761;
 	entityDef.models[1] = 25756;
@@ -291,12 +291,12 @@ public final class EntityDef {
 	}
 	if (i == 2564) {
 	entityDef.name = "Growler";
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
 	entityDef.standAnim = 7014;
 	entityDef.walkAnim = 7015;
 	entityDef.combatLevel = 139;
-	entityDef.anInt91 = 144;
-	entityDef.anInt86 = 144;
+	entityDef.scaleXZ = 144;
+	entityDef.scaleY = 144;
 	entityDef.models = new int[1];
 	entityDef.models[0] = 27718;
 	entityDef.actions = new String[5];
@@ -309,7 +309,7 @@ public final class EntityDef {
 	}
 	if (i == 2565) {
 	entityDef.name = "Bree";
-	entityDef.aByte68 = 2;
+	entityDef.tileSpan = 2;
 	entityDef.standAnim = 4311;
 	entityDef.walkAnim = 4310;
 	entityDef.combatLevel = 146;
@@ -325,7 +325,7 @@ public final class EntityDef {
 	}
 	if(i == 83) {
 	stream.currentOffset = streamIndices[630]; 
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
 	entityDef.readValues(stream); // Collect original NPC data
 	entityDef.actions = new String[5];
 	entityDef.actions[1] = "Attack";
@@ -343,7 +343,7 @@ public final class EntityDef {
 	}
 	if(i == 84) {
 	stream.currentOffset = streamIndices[630]; 
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
 	entityDef.readValues(stream); // Collect original NPC data
 	entityDef.actions = new String[5];
 	entityDef.actions[1] = "Attack";
@@ -373,7 +373,7 @@ public final class EntityDef {
 	}
 	if(i == 82) {
 	stream.currentOffset = streamIndices[630]; 
-	entityDef.aByte68 = 3;
+	entityDef.tileSpan = 3;
 	entityDef.readValues(stream); // Collect original NPC data
 	entityDef.actions = new String[5];
 	entityDef.actions[1] = "Attack";
@@ -403,7 +403,7 @@ public final class EntityDef {
 			for (int j = 0; j < 6386; j++) {
 				int offset1 = dat.size();
 				EntityDef npc = forID(j);
-				if (npc.anIntArray73 == null) {
+				if (npc.headModelIds == null) {
 					dat.writeByte(0);
 					idx.writeShort(1);
 					continue;
@@ -422,20 +422,20 @@ public final class EntityDef {
 					dat.writeByte(3);
 					writeString(dat, npc.description.toString());					
 				}
-				if (npc.aByte68 != 1) {
+				if (npc.tileSpan != 1) {
 					dat.writeByte(12);
-					dat.writeByte(npc.aByte68);
+					dat.writeByte(npc.tileSpan);
 				}
 				if (npc.standAnim != -1) {
 					dat.writeByte(13);
 					dat.writeShort(npc.standAnim);				
 				}
-				if (npc.walkAnim != -1 || npc.anInt58 != -1 || npc.anInt55 != -1 || npc.anInt83 != -1) {
+				if (npc.walkAnim != -1 || npc.turnAroundAnim != -1 || npc.walkBackAnim != -1 || npc.walkRightAnim != -1) {
 					dat.writeByte(17);
 					dat.writeShort(npc.walkAnim);
-					dat.writeShort(npc.anInt58);
-					dat.writeShort(npc.anInt83);
-					dat.writeShort(npc.anInt55);				
+					dat.writeShort(npc.turnAroundAnim);
+					dat.writeShort(npc.walkRightAnim);
+					dat.writeShort(npc.walkBackAnim);				
 				}
 				if (npc.actions != null) {
 					for (int ii = 0; ii < 5; ii++) {
@@ -455,57 +455,57 @@ public final class EntityDef {
 					}
 				
 				}
-				if (npc.anIntArray73 != null) {
+				if (npc.headModelIds != null) {
 					dat.writeByte(60);
-					dat.write(npc.anIntArray73.length);
-					for (int j1 : npc.anIntArray73) {
+					dat.write(npc.headModelIds.length);
+					for (int j1 : npc.headModelIds) {
 						dat.writeShort(j1);					
 					}				
 				}
-				if (!npc.aBoolean87) {
+				if (!npc.drawOnMinimap) {
 					dat.writeByte(93);
 				}
 				if (npc.combatLevel != -1) {
 					dat.writeByte(95);
 					dat.writeShort(npc.combatLevel);				
 				}
-				if(npc.anInt91 != 128) {
+				if(npc.scaleXZ != 128) {
 					dat.writeByte(97);
-					dat.writeShort(npc.anInt91);
+					dat.writeShort(npc.scaleXZ);
 				}
-				if(npc.anInt86 != 128) {
+				if(npc.scaleY != 128) {
 					dat.writeByte(98);
-					dat.writeShort(npc.anInt86);
+					dat.writeShort(npc.scaleY);
 				}
-				if(npc.aBoolean93) {
+				if(npc.priorityRender) {
 					dat.writeByte(99);
 				}
-				if(npc.anInt85 != -1) {
+				if(npc.ambient != -1) {
 					dat.writeByte(100);
-					dat.writeByte(npc.anInt85);
+					dat.writeByte(npc.ambient);
 				}
-				if(npc.anInt92 != -1) {
+				if(npc.contrast != -1) {
 					dat.writeByte(101);
-					dat.writeByte((npc.anInt92 / 5));
+					dat.writeByte((npc.contrast / 5));
 				}
-				if(npc.anInt75 != -1) {
+				if(npc.headIcon != -1) {
 					dat.writeByte(102);
-					dat.writeShort(npc.anInt75);
+					dat.writeShort(npc.headIcon);
 				}
-				if(npc.anInt79 != 32) {
+				if(npc.degreesToTurn != 32) {
 					dat.writeByte(103);
-					dat.writeShort(npc.anInt79);
+					dat.writeShort(npc.degreesToTurn);
 				}
 				if(npc.childrenIDs != null) {
 					dat.writeByte(106);
-					dat.writeShort(npc.anInt57);
-					dat.writeShort(npc.anInt59);
+					dat.writeShort(npc.varbitId);
+					dat.writeShort(npc.settingId);
 					dat.writeByte(npc.childrenIDs.length - 1);
 					for(int ii = 0; ii < npc.childrenIDs.length; ii++) {
 						dat.writeShort(npc.childrenIDs[ii]);
 					}
 				}
-				if(!npc.aBoolean84) {
+				if(!npc.clickable) {
 					dat.writeByte(107);
 				}
 				dat.writeByte(0);
@@ -536,18 +536,18 @@ public final class EntityDef {
 			else
 				return entityDef.getHeadModel();
 		}
-		if(anIntArray73 == null)
+		if(headModelIds == null)
 			return null;
 		boolean flag1 = false;
-		for(int i = 0; i < anIntArray73.length; i++)
-			if(!Model.isModelLoaded(anIntArray73[i]))
+		for(int i = 0; i < headModelIds.length; i++)
+			if(!Model.isModelLoaded(headModelIds[i]))
 				flag1 = true;
 
 		if(flag1)
 			return null;
-		Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray73.length];
-		for(int j = 0; j < anIntArray73.length; j++)
-			aclass30_sub2_sub4_sub6s[j] = Model.getModel(anIntArray73[j]);
+		Model aclass30_sub2_sub4_sub6s[] = new Model[headModelIds.length];
+		for(int j = 0; j < headModelIds.length; j++)
+			aclass30_sub2_sub4_sub6s[j] = Model.getModel(headModelIds[j]);
 
 		Model model;
 		if(aclass30_sub2_sub4_sub6s.length == 1)
@@ -566,17 +566,17 @@ public final class EntityDef {
 	public EntityDef getChildDefinition()
 	{
 		int j = -1;
-		if(anInt57 != -1)
+		if(varbitId != -1)
 		{
-			VarBit varBit = VarBit.cache[anInt57];
-			int k = varBit.anInt648;
-			int l = varBit.anInt649;
-			int i1 = varBit.anInt650;
+			VarBit varBit = VarBit.cache[varbitId];
+			int k = varBit.settingIndex;
+			int l = varBit.lowBit;
+			int i1 = varBit.highBit;
 			int j1 = client.anIntArray1232[i1 - l];
 			j = clientInstance.variousSettings[k] >> l & j1;
 		} else
-		if(anInt59 != -1)
-			j = clientInstance.variousSettings[anInt59];
+		if(settingId != -1)
+			j = clientInstance.variousSettings[settingId];
 		if(j < 0 || j >= childrenIDs.length || childrenIDs[j] == -1)
 			return null;
 		else
@@ -642,7 +642,7 @@ public final class EntityDef {
 
 			}
 			model.buildLabelGroups();
-			model.calculateLighting(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
+			model.calculateLighting(64 + ambient, 850 + contrast, -30, -50, -30, true);
 			mruNodes.removeFromCache(model, type);
 		}
 		Model model_1 = Model.sharedModel;
@@ -652,12 +652,12 @@ public final class EntityDef {
 		else
 		if(k != -1)
 			model_1.applyTransform(k);
-		if(anInt91 != 128 || anInt86 != 128)
-			model_1.scale(anInt91, anInt91, anInt86);
+		if(scaleXZ != 128 || scaleY != 128)
+			model_1.scale(scaleXZ, scaleXZ, scaleY);
 		model_1.calculateBounds();
 		model_1.labelGroupsUnused = null;
 		model_1.labelGroups = null;
-		if(aByte68 == 1)
+		if(tileSpan == 1)
 			model_1.singleTile = true;
 		return model_1;
 	}
@@ -684,7 +684,7 @@ public final class EntityDef {
 				description = stream.readBytes();
 			else
 			if(i == 12)
-				aByte68 = stream.readSignedByte();
+				tileSpan = stream.readSignedByte();
 			else
 			if(i == 13)
 				standAnim = stream.readUnsignedWord();
@@ -695,9 +695,9 @@ public final class EntityDef {
 			if(i == 17)
 			{
 				walkAnim = stream.readUnsignedWord();
-				anInt58 = stream.readUnsignedWord();
-				anInt83 = stream.readUnsignedWord();
-				anInt55 = stream.readUnsignedWord();
+				turnAroundAnim = stream.readUnsignedWord();
+				walkRightAnim = stream.readUnsignedWord();
+				walkBackAnim = stream.readUnsignedWord();
 			} else
 			if(i >= 30 && i < 40)
 			{
@@ -722,9 +722,9 @@ public final class EntityDef {
 			if(i == 60)
 			{
 				int l = stream.readUnsignedByte();
-				anIntArray73 = new int[l];
+				headModelIds = new int[l];
 				for(int l1 = 0; l1 < l; l1++)
-					anIntArray73[l1] = stream.readUnsignedWord();
+					headModelIds[l1] = stream.readUnsignedWord();
 
 			} else
 			if(i == 90)
@@ -737,40 +737,40 @@ public final class EntityDef {
 				stream.readUnsignedWord();
 			else
 			if(i == 93)
-				aBoolean87 = false;
+				drawOnMinimap = false;
 			else
 			if(i == 95)
 				combatLevel = stream.readUnsignedWord();
 			else
 			if(i == 97)
-				anInt91 = stream.readUnsignedWord();
+				scaleXZ = stream.readUnsignedWord();
 			else
 			if(i == 98)
-				anInt86 = stream.readUnsignedWord();
+				scaleY = stream.readUnsignedWord();
 			else
 			if(i == 99)
-				aBoolean93 = true;
+				priorityRender = true;
 			else
 			if(i == 100)
-				anInt85 = stream.readSignedByte();
+				ambient = stream.readSignedByte();
 			else
 			if(i == 101)
-				anInt92 = stream.readSignedByte() * 5;
+				contrast = stream.readSignedByte() * 5;
 			else
 			if(i == 102)
-				anInt75 = stream.readUnsignedWord();
+				headIcon = stream.readUnsignedWord();
 			else
 			if(i == 103)
-				anInt79 = stream.readUnsignedWord();
+				degreesToTurn = stream.readUnsignedWord();
 			else
 			if(i == 106)
 			{
-				anInt57 = stream.readUnsignedWord();
-				if(anInt57 == 65535)
-					anInt57 = -1;
-				anInt59 = stream.readUnsignedWord();
-				if(anInt59 == 65535)
-					anInt59 = -1;
+				varbitId = stream.readUnsignedWord();
+				if(varbitId == 65535)
+					varbitId = -1;
+				settingId = stream.readUnsignedWord();
+				if(settingId == 65535)
+					settingId = -1;
 				int i1 = stream.readUnsignedByte();
 				childrenIDs = new int[i1 + 1];
 				for(int i2 = 0; i2 <= i1; i2++)
@@ -782,64 +782,64 @@ public final class EntityDef {
 
 			} else
 			if(i == 107)
-				aBoolean84 = false;
+				clickable = false;
 		} while(true);
 	}
 
 	private EntityDef()
 	{
-		anInt55 = -1;
-		anInt57 = -1;
-		anInt58 = -1;
-		anInt59 = -1;
+		walkBackAnim = -1;
+		varbitId = -1;
+		turnAroundAnim = -1;
+		settingId = -1;
 		combatLevel = -1;
-		anInt64 = 1834;
+		decompressedLength = 1834;
 		walkAnim = -1;
-		aByte68 = 1;
-		anInt75 = -1;
+		tileSpan = 1;
+		headIcon = -1;
 		standAnim = -1;
 		type = -1L;
-		anInt79 = 32;
-		anInt83 = -1;
-		aBoolean84 = true;
-		anInt86 = 128;
-		aBoolean87 = true;
-		anInt91 = 128;
-		aBoolean93 = false;
+		degreesToTurn = 32;
+		walkRightAnim = -1;
+		clickable = true;
+		scaleY = 128;
+		drawOnMinimap = true;
+		scaleXZ = 128;
+		priorityRender = false;
 	}
 
-	public int anInt55;
-	private static int anInt56;
-	private int anInt57;
-	public int anInt58;
-	private int anInt59;
+	public int walkBackAnim;
+	private static int cacheIndex;
+	private int varbitId;
+	public int turnAroundAnim;
+	private int settingId;
 	private static Stream stream;
 	public int combatLevel;
-	private final int anInt64;
+	private final int decompressedLength;
 	public String name;
 	public String actions[];
 	public int walkAnim;//walkAnim
-	public byte aByte68;
+	public byte tileSpan;
 	private int[] modifiedModelColors;//modifiedModelColors
 	private static int[] streamIndices;
-	private int[] anIntArray73;
-	public int anInt75;
+	private int[] headModelIds;
+	public int headIcon;
 	private int[] originalModelColors;//originalModelColors
 	public int standAnim;//anInt177
 	public long type;
-	public int anInt79;
+	public int degreesToTurn;
 	private static EntityDef[] cache;
 	public static client clientInstance;
-	public int anInt83;
-	public boolean aBoolean84;
-	private int anInt85;
-	private int anInt86;
-	public boolean aBoolean87;
+	public int walkRightAnim;
+	public boolean clickable;
+	private int ambient;
+	private int scaleY;
+	public boolean drawOnMinimap;
 	public int childrenIDs[];
 	public byte description[];
-	private int anInt91;
-	private int anInt92;
-	public boolean aBoolean93;
+	private int scaleXZ;
+	private int contrast;
+	public boolean priorityRender;
 	private int[] models;//anIntArray94
 	public static MRUNodes mruNodes = new MRUNodes(30);
 

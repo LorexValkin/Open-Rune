@@ -204,7 +204,7 @@ final class ObjectManager {
 								}
 								int i22 = 0;
 								if(j21 != -1)
-									i22 = Texture.anIntArray1482[adjustUnderlayLight(k21, 96)];
+									i22 = Texture.HSL_TO_RGB[adjustUnderlayLight(k21, 96)];
 								if(i19 == 0)
 								{
 									worldController.addTile(l, l6, k17, 0, 0, -1, j19, k19, l19, i20, adjustUnderlayLight(j21, j20), adjustUnderlayLight(j21, k20), adjustUnderlayLight(j21, l20), adjustUnderlayLight(j21, i21), 0, 0, 0, 0, i22, 0);
@@ -227,12 +227,12 @@ final class ObjectManager {
 										j23 = -2;
 										i23 = -1;
 									} else if(flo_2.rgb == 0x333333) {
-										k23 = Texture.anIntArray1482[adjustOverlayLight(flo_2.blendedHSL, 96)];								
+										k23 = Texture.HSL_TO_RGB[adjustOverlayLight(flo_2.blendedHSL, 96)];								
 										j23 = -2;
 										i23 = -1;
 									} else {
 										j23 = packHSL(flo_2.hue, flo_2.saturation, flo_2.lightness);
-										k23 = Texture.anIntArray1482[adjustOverlayLight(flo_2.blendedHSL, 96)];
+										k23 = Texture.HSL_TO_RGB[adjustOverlayLight(flo_2.blendedHSL, 96)];
 									}
 									worldController.addTile(l, l6, k17, k22, byte4, i23, j19, k19, l19, i20, adjustUnderlayLight(j21, j20), adjustUnderlayLight(j21, k20), adjustUnderlayLight(j21, l20), adjustUnderlayLight(j21, i21), adjustOverlayLight(j23, j20), adjustOverlayLight(j23, k20), adjustOverlayLight(j23, l20), adjustOverlayLight(j23, i21), i22, k23);
 								}
@@ -1033,7 +1033,7 @@ label0:
 
 	private static int interpolate(int i, int j, int k, int l)
 	{
-		int i1 = 0x10000 - Texture.anIntArray1471[(k * 1024) / l] >> 1;
+		int i1 = 0x10000 - Texture.COSINE[(k * 1024) / l] >> 1;
 		return (i * (0x10000 - i1) >> 16) + (j * i1 >> 16);
 	}
 
