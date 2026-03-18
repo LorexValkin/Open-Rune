@@ -18,8 +18,8 @@ public class DrawingArea extends NodeSub {
 			topY = 0;
 			bottomX = width;
 			bottomY = height;
-			screenBoundX = bottomX - 1;
-			centerY = bottomY / 2;
+			centerX = bottomX - 1;
+			centerY = bottomX / 2;
 	}
 
 	public static void setDrawingArea(int i, int j, int k, int l)
@@ -36,8 +36,8 @@ public class DrawingArea extends NodeSub {
 		topY = l;
 		bottomX = k;
 		bottomY = i;
-		screenBoundX = bottomX - 1;
-		centerY = bottomY / 2;
+		centerX = bottomX - 1;
+		centerY = bottomX / 2;
 		viewportHalfHeight = bottomY / 2;
 	}
 
@@ -229,6 +229,6 @@ public class DrawingArea extends NodeSub {
 	public static int centerY;
 	public static int topX;
 	public static int bottomX;
-	public static int screenBoundX;
+	public static int centerX;
 
 }

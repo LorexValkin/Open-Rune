@@ -1630,7 +1630,7 @@ label0:
 		Texture.textureCycle = 0;
 		if((i6 - k6) * (l5 - l6) - (j6 - l6) * (k5 - k6) > 0)
 		{
-			Texture.opaque = i6 < 0 || k6 < 0 || k5 < 0 || i6 > DrawingArea.centerX || k6 > DrawingArea.centerX || k5 > DrawingArea.centerX;
+			Texture.opaque = i6 < 0 || k6 < 0 || k5 < 0 || i6 > DrawingArea.screenBoundX || k6 > DrawingArea.screenBoundX || k5 > DrawingArea.screenBoundX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j6, l6, l5, i6, k6, k5))
 			{
 				clickedTileX = j1;
@@ -1655,7 +1655,7 @@ label0:
 		}
 		if((i5 - k5) * (l6 - l5) - (j5 - l5) * (k6 - k5) > 0)
 		{
-			Texture.opaque = i5 < 0 || k5 < 0 || k6 < 0 || i5 > DrawingArea.centerX || k5 > DrawingArea.centerX || k6 > DrawingArea.centerX;
+			Texture.opaque = i5 < 0 || k5 < 0 || k6 < 0 || i5 > DrawingArea.screenBoundX || k5 > DrawingArea.screenBoundX || k6 > DrawingArea.screenBoundX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j5, l5, l6, i5, k5, k6))
 			{
 				clickedTileX = j1;
@@ -1722,7 +1722,7 @@ label0:
 			int j5 = ShapedTile.tmpScreenY[l3];
 			if((i4 - j4) * (j5 - i5) - (l4 - i5) * (k4 - j4) > 0)
 			{
-				Texture.opaque = i4 < 0 || j4 < 0 || k4 < 0 || i4 > DrawingArea.centerX || j4 > DrawingArea.centerX || k4 > DrawingArea.centerX;
+				Texture.opaque = i4 < 0 || j4 < 0 || k4 < 0 || i4 > DrawingArea.screenBoundX || j4 > DrawingArea.screenBoundX || k4 > DrawingArea.screenBoundX;
 				if(clickPending && frustumContains(clickScreenY, clickScreenX, l4, i5, j5, i4, j4, k4))
 				{
 					clickedTileX = i;

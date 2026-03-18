@@ -656,8 +656,8 @@ final class Texture extends DrawingArea {
 					l1 = (k1 - j1) / (i1 - l);
 				else
 					l1 = 0;
-				if (i1 > DrawingArea.centerX)
-					i1 = DrawingArea.centerX;
+				if (i1 > DrawingArea.screenBoundX)
+					i1 = DrawingArea.screenBoundX;
 				if (l < 0) {
 					j1 -= l * l1;
 					l = 0;
@@ -721,8 +721,8 @@ final class Texture extends DrawingArea {
 			return;
 		int i2 = (k1 - j1) / (i1 - l);
 		if (opaque) {
-			if (i1 > DrawingArea.centerX)
-				i1 = DrawingArea.centerX;
+			if (i1 > DrawingArea.screenBoundX)
+				i1 = DrawingArea.screenBoundX;
 			if (l < 0) {
 				j1 -= l * i2;
 				l = 0;
@@ -1321,9 +1321,9 @@ final class Texture extends DrawingArea {
 		g2 = (g2 - g1) / n;
 		b2 = (b2 - b1) / n;
 		if (opaque) {
-			if (x2 > DrawingArea.centerX) {
-				n -= x2 - DrawingArea.centerX;
-				x2 = DrawingArea.centerX;
+			if (x2 > DrawingArea.screenBoundX) {
+				n -= x2 - DrawingArea.screenBoundX;
+				x2 = DrawingArea.screenBoundX;
 			}
 			if (x1 < 0) {
 				n = x2;
@@ -1662,8 +1662,8 @@ final class Texture extends DrawingArea {
 	private static void drawScanline(int ai[], int i, int j, int l, int i1) {
 		int k;// was parameter
 		if (opaque) {
-			if (i1 > DrawingArea.centerX)
-				i1 = DrawingArea.centerX;
+			if (i1 > DrawingArea.screenBoundX)
+				i1 = DrawingArea.screenBoundX;
 			if (l < 0)
 				l = 0;
 		}
@@ -2250,8 +2250,8 @@ final class Texture extends DrawingArea {
 		int k3;
 		if (opaque) {
 			j3 = (k1 - j1) / (i1 - l);
-			if (i1 > DrawingArea.centerX)
-				i1 = DrawingArea.centerX;
+			if (i1 > DrawingArea.screenBoundX)
+				i1 = DrawingArea.screenBoundX;
 			if (l < 0) {
 				j1 -= l * j3;
 				l = 0;
@@ -3117,8 +3117,8 @@ final class Texture extends DrawingArea {
 		int dl = (l2 - l1) / (x2 - x1);
 		int n;
 		if (opaque) {
-			if (x2 > DrawingArea.centerX)
-				x2 = DrawingArea.centerX;
+			if (x2 > DrawingArea.screenBoundX)
+				x2 = DrawingArea.screenBoundX;
 			if (x1 < 0) {
 				l1 -= x1 * dl;
 				x1 = 0;
