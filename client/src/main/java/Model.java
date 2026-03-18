@@ -1230,11 +1230,11 @@ public final class Model extends Animable {
 		int i4 = k1 * k - j2 * j >> 16;
 		int j4 = boundsXZRadius * j >> 16;
 		int k4 = i4 + j4 << 9;
-		if(k4 / i3 <= -DrawingArea.bottomY)
+		if(k4 / i3 <= -DrawingArea.centerY)
 			return;
 		int l4 = j4 + (super.modelHeight * k >> 16);
 		int i5 = i4 - l4 << 9;
-		if(i5 / i3 >= DrawingArea.bottomY)
+		if(i5 / i3 >= DrawingArea.centerY)
 			return;
 		int j5 = l2 + (super.modelHeight * j >> 16);
 		boolean flag = false;

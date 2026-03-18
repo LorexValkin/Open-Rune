@@ -76,6 +76,10 @@ public final class TextDrawingArea extends DrawingArea {
 		drawWaving(flag, j, i, s, l);
 	}
 
+	public void drawCenteredText(int color, String s, int y, int x) {
+		drawText(color, s, y, x - getTextWidth(s) / 2);
+	}
+
 	public int getTextWidth(String s) {
 		if(s == null)
 			return 0;

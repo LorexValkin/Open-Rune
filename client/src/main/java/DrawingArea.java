@@ -225,10 +225,9 @@ public class DrawingArea extends NodeSub {
 	public static int height;
 	public static int topY;
 	public static int bottomY;
+	public static int centerY;
 	public static int topX;
 	public static int bottomX;
 	public static int centerX;
-	public static int centerY;
-	public static int bottomY;
 
 }
