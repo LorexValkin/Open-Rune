@@ -390,7 +390,7 @@ public int followDistance = 1;
 		if(menuOpen && menuScreenArea == 2) {
 			drawMenu();
 		}
-		topCenterIP.drawGraphics(clientSize == 0 ? 338 : clientHeight - 165, super.graphics, 0);
+		topCenterIP.drawGraphics(338, super.graphics, 0);
 		loginMsgIP.initDrawingArea();
 		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
@@ -1915,7 +1915,7 @@ public int followDistance = 1;
 		}
 		if(menuOpen && menuScreenArea == 1)
 			drawMenu();
-		titleMuralIP.drawGraphics(clientSize == 0 ? 168 : clientHeight - 335, super.graphics, clientSize == 0 ? 519 : clientWidth - 246);
+		titleMuralIP.drawGraphics(168, super.graphics, 519);
 		loginMsgIP.initDrawingArea();
 		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
@@ -2708,7 +2708,7 @@ followDistance = 1;
 			loginMsgIP.initDrawingArea();
 			boldFont.drawText(0, "Loading - please wait.", 151, 257);
 			boldFont.drawText(0xffffff, "Loading - please wait.", 150, 256);
-			loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
+			loginMsgIP.drawGraphics(4, super.graphics, 4);
 			loadingStage = 1;
 			serverSeed = System.currentTimeMillis();
 		}
@@ -3721,7 +3721,7 @@ followDistance = 1;
 		boldFont.drawText(0xffffff, "Connection lost", 143, 256);
 		boldFont.drawText(0, "Please wait - attempting to reestablish", 159, 257);
 		boldFont.drawText(0xffffff, "Please wait - attempting to reestablish", 158, 256);
-		loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
+		loginMsgIP.drawGraphics(4, super.graphics, 4);
 		chatAreaScrollPos = 0;
 		destX = 0;
 		RSSocket rsSocket = socketStream;
@@ -6319,9 +6319,9 @@ followDistance = 1;
 		buildSplitPrivateChatMenu();
 		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
-		if (super.mouseX > 0 && super.mouseY > 0 && super.mouseX < (clientSize == 0 ? 516 : clientWidth) && super.mouseY < (clientSize == 0 ? 338 : clientHeight)) {
+		if (super.mouseX > 0 && super.mouseY > 0 && super.mouseX < 516 && super.mouseY < 338) {
 			if (openInterfaceID != -1) {
-				buildInterfaceMenu(clientSize == 0 ? 4 : 0, RSInterface.interfaceCache[openInterfaceID], super.mouseX, clientSize == 0 ? 4 : 0, super.mouseY, 0);
+				buildInterfaceMenu(4, RSInterface.interfaceCache[openInterfaceID], super.mouseX, 4, super.mouseY, 0);
 			} else {
 				build3dScreenMenu();
 			}
@@ -6334,7 +6334,7 @@ followDistance = 1;
 		}
 		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
-	   if(super.mouseX > (clientSize == 0 ? 548 : clientWidth - 217) && super.mouseY > (clientSize == 0 ? 207 : clientHeight - 296) && super.mouseX < (clientSize == 0 ? 740 : clientWidth) && super.mouseY < (clientSize == 0 ? 468 : clientHeight - 35)) {
+	   if(super.mouseX > 548 && super.mouseY > 207 && super.mouseX < 740 && super.mouseY < 468) {
 			if(invOverlayInterfaceID != -1) {
 				buildInterfaceMenu(548, RSInterface.interfaceCache[invOverlayInterfaceID], super.mouseX, 207, super.mouseY, 0);
 			} else if(tabInterfaceIDs[tabID] != -1) {
@@ -6353,7 +6353,7 @@ followDistance = 1;
 		}
 		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
-		if(super.mouseX > 0 && super.mouseY > (clientSize == 0 ? 338 : clientHeight - 165) && super.mouseX < 490 && super.mouseY < (clientSize == 0 ? 463 : clientHeight - 40)) {
+		if(super.mouseX > 0 && super.mouseY > 338 && super.mouseX < 490 && super.mouseY < 463) {
 			if(backDialogID != -1) {
 				buildInterfaceMenu(20, RSInterface.interfaceCache[backDialogID], super.mouseX, 358, super.mouseY, 0);
 			} else if(super.mouseY < 463 && super.mouseX < 490) {
@@ -6369,9 +6369,9 @@ followDistance = 1;
 			anInt1500 = anInt1315;
 		}
 		/* Enable custom right click areas */
-		if(super.mouseX > 4 && super.mouseY > (clientSize == 0 ? 480 : clientHeight - 23) && super.mouseX < (clientSize == 0 ? 516 : 516) && super.mouseY < (clientSize == 0 ? 503 : clientHeight))
+		if(super.mouseX > 4 && super.mouseY > 480 && super.mouseX < 516 && super.mouseY < 503)
 			rightClickChatButtons();
-		if(super.mouseX > (clientSize == 0 ? 519 : clientWidth - 246) && super.mouseY > 0 && super.mouseX < (clientSize == 0 ? 765 : clientWidth) && super.mouseY < 168)
+		if(super.mouseX > 519 && super.mouseY > 0 && super.mouseX < 765 && super.mouseY < 168)
 			rightClickMapArea();
 
 		/**/
@@ -8253,24 +8253,16 @@ followDistance = 1;
 		}
 		if(welcomeScreenRaised) {
 			welcomeScreenRaised = false;
-			if (clientSize == 0) {
-				topFrame.drawGraphics(0, super.graphics, 0);
-				leftFrame.drawGraphics(4, super.graphics, 0);
-				rightFrame.drawGraphics(4, super.graphics, 516);
-				mapEdgeIP.drawGraphics(4, super.graphics, 519);
-			} else {
-				// Clear background in resizable mode
-				if (super.graphics != null) {
-					super.graphics.setColor(java.awt.Color.BLACK);
-					super.graphics.fillRect(0, 0, clientWidth, clientHeight);
-				}
-			}
+			topFrame.drawGraphics(0, super.graphics, 0);
+			leftFrame.drawGraphics(4, super.graphics, 0);
+			rightFrame.drawGraphics(4, super.graphics, 516);
+			mapEdgeIP.drawGraphics(4, super.graphics, 519);
 			needDrawTabArea = true;
 			inputTaken = true;
 			tabAreaAltered = true;
 			aBoolean1233 = true;
 			if(loadingStage != 2) {
-				loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
+				loginMsgIP.drawGraphics(4, super.graphics, 4);
 				titleButtonIP.drawGraphics(4, super.graphics, 545);
 			}
 		}
@@ -9085,7 +9077,7 @@ followDistance = 1;
 		drawSplitPrivateChat();
 		if(crossType == 1)
 		{
-			crosses[crossIndex / 100].drawSprite(crossX - 8 - (clientSize == 0 ? 4 : 0), crossY - 8 - (clientSize == 0 ? 4 : 0));
+			crosses[crossIndex / 100].drawSprite(crossX - 8 - 4, crossY - 8 - 4);
 			anInt1142_static++;
 			if(anInt1142_static > 67)
 			{
@@ -9094,7 +9086,7 @@ followDistance = 1;
 			}
 		}
 		if(crossType == 2)
-			crosses[4 + crossIndex / 100].drawSprite(crossX - 8 - (clientSize == 0 ? 4 : 0), crossY - 8 - (clientSize == 0 ? 4 : 0));
+			crosses[4 + crossIndex / 100].drawSprite(crossX - 8 - 4, crossY - 8 - 4);
 		if(anInt1018 != -1)
 		{
 			animateInterface(cameraTargetLocalZ, anInt1018);
@@ -9273,7 +9265,7 @@ followDistance = 1;
 
 		i += 8;
 		int l = 15 * menuActionRow + 21;
-		if(super.saveClickX > (clientSize == 0 ? 4 : 0) && super.saveClickY > (clientSize == 0 ? 4 : 0) && super.saveClickX < (clientSize == 0 ? 516 : clientWidth) && super.saveClickY < (clientSize == 0 ? 338 : clientHeight))
+		if(super.saveClickX > 4 && super.saveClickY > 4 && super.saveClickX < 516 && super.saveClickY < 338)
 		{
 			int i1 = super.saveClickX - 4 - i / 2;
 			if(i1 + i > 512)
@@ -9292,15 +9284,15 @@ followDistance = 1;
 			menuWidth = i;
 			menuHeight = 15 * menuActionRow + 22;
 		}
-		if(super.saveClickX > (clientSize == 0 ? 519 : clientWidth - 246) && super.saveClickY > (clientSize == 0 ? 168 : clientHeight - 335) && super.saveClickX < (clientSize == 0 ? 765 : clientWidth) && super.saveClickY < (clientSize == 0 ? 503 : clientHeight))
+		if(super.saveClickX > 519 && super.saveClickY > 168 && super.saveClickX < 765 && super.saveClickY < 503)
 		{
-			int j1 = super.saveClickX - (clientSize == 0 ? 519 : clientWidth - 246) - i / 2;
+			int j1 = super.saveClickX - 519 - i / 2;
 			if(j1 < 0)
 				j1 = 0;
 			else
 			if(j1 + i > 245)
 				j1 = 245 - i;
-			int i2 = super.saveClickY - (clientSize == 0 ? 168 : clientHeight - 335);
+			int i2 = super.saveClickY - 168;
 			if(i2 < 0)
 				i2 = 0;
 			else
@@ -9313,15 +9305,15 @@ followDistance = 1;
 			menuWidth = i;
 			menuHeight = 15 * menuActionRow + 22;
 		}
-		if(super.saveClickX > 0 && super.saveClickY > (clientSize == 0 ? 338 : clientHeight - 165) && super.saveClickX < (clientSize == 0 ? 516 : 516) && super.saveClickY < (clientSize == 0 ? 503 : clientHeight))
+		if(super.saveClickX > 0 && super.saveClickY > 338 && super.saveClickX < 516 && super.saveClickY < 503)
 		{
 			int k1 = super.saveClickX - 0 - i / 2;
 			if(k1 < 0)
 				k1 = 0;
 			else
-			if(k1 + i > (clientSize == 0 ? 516 : clientWidth))
+			if(k1 + i > 516)
 				k1 = 516 - i;
-			int j2 = super.saveClickY - (clientSize == 0 ? 338 : clientHeight - 165);
+			int j2 = super.saveClickY - 338;
 			if(j2 < 0)
 				j2 = 0;
 			else
@@ -11309,7 +11301,7 @@ followDistance = 1;
 					loginMsgIP.initDrawingArea();
 					boldFont.drawText(0, "Loading - please wait.", 151, 257);
 					boldFont.drawText(0xffffff, "Loading - please wait.", 150, 256);
-					loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
+					loginMsgIP.drawGraphics(4, super.graphics, 4);
 					if(pktType == 73) {
 						int k16 = 0;
 						for(int i21 = (mapRegionX - 6) / 8; i21 <= (mapRegionX + 6) / 8; i21++) {
@@ -12206,7 +12198,7 @@ case 174:
 		drawHeadIcon();
 		animateTexture(k2);
 		draw3dScreen();
-		loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
+		loginMsgIP.drawGraphics(4, super.graphics, 4);
 		xCameraPos = l;
 		zCameraPos = i1;
 		yCameraPos = j1;
@@ -12958,18 +12950,15 @@ case 174:
 	// --- Resize methods (Phase A-2) ---
 
 	public void checkSize() {
-		if (clientSize == 1) {
-			// Read actual panel dimensions (not frame — panel fills the content area)
-			int w = getGameComponent().getWidth();
-			int h = getGameComponent().getHeight();
+		if (clientSize == 1 && outerFrame != null) {
+			java.awt.Insets insets = outerFrame.getInsets();
+			int w = outerFrame.getWidth() - insets.left - insets.right;
+			int h = outerFrame.getHeight() - insets.top - insets.bottom;
 			if (w > 0 && h > 0 && (w != clientWidth || h != clientHeight)) {
 				clientWidth = w;
 				clientHeight = h;
 				gameAreaWidth = w;
 				gameAreaHeight = h;
-				super.myWidth = w;
-				super.myHeight = h;
-				super.graphics = getGameComponent().getGraphics();
 				updateGameArea();
 			}
 		}
@@ -13023,15 +13012,20 @@ case 174:
 		}
 		clientWidth = width;
 		clientHeight = height;
+		if (outerFrame != null) {
+			if (outerFrame instanceof java.awt.Frame) {
+				java.awt.Frame f = (java.awt.Frame) outerFrame;
+				f.setResizable(size == 1);
+			}
+			java.awt.Insets insets = outerFrame.getInsets();
+			outerFrame.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+			if (size == 0 || size == 1) {
+				if (outerFrame instanceof java.awt.Window) ((java.awt.Window) outerFrame).setLocationRelativeTo(null);
+			}
+		}
 		super.myWidth = width;
 		super.myHeight = height;
-
-		// Update JFrame and JPanel via Jframe helper
-		Jframe.updatePanelSize(size, width, height);
-
-		// Refresh graphics
 		super.graphics = getGameComponent().getGraphics();
-
 		updateGameArea();
 	}
 
@@ -13061,7 +13055,7 @@ case 174:
 		topSideIP2 = null;
 		bottomSideIP1 = null;
 		bottomSideIP2 = null;
-		super.fullGameScreen = new RSImageProducer(clientWidth, clientHeight, getGameComponent());
+		super.fullGameScreen = new RSImageProducer(765, 503, getGameComponent());
 		welcomeScreenRaised = true;
 	}
 	
