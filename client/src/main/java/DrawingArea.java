@@ -38,7 +38,7 @@ public class DrawingArea extends NodeSub {
 		bottomY = i;
 		centerX = bottomX - 1;
 		centerY = bottomX / 2;
-		bottomY = bottomY / 2;
+		viewportHalfHeight = bottomY / 2;
 	}
 
 	public static void setAllPixelsToZero()
@@ -225,6 +225,7 @@ public class DrawingArea extends NodeSub {
 	public static int height;
 	public static int topY;
 	public static int bottomY;
+	public static int viewportHalfHeight;
 	public static int centerY;
 	public static int topX;
 	public static int bottomX;
