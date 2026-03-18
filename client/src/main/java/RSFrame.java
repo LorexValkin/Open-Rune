@@ -2,30 +2,68 @@ import java.awt.*;
 
 final class RSFrame extends Frame {
 
-	public RSFrame(RSApplet RSApplet_, int i, int j) {
-		rsApplet = RSApplet_;
-		setTitle("Runescape");
-		setResizable(false);
-		setVisible(true);
-		toFront();
-		setSize(i + 8, j + 28);
-		setResizable(true);
-		setLocationRelativeTo(null);
-	}
+    private static final long serialVersionUID = 1L;
+    private final RSApplet rsApplet;
 
-	public Graphics getGraphics() {
-		Graphics g = super.getGraphics();
-		g.translate(4, 24);
-		return g;
-	}
+    /**
+     * Standard constructor — fixed size window.
+     */
+    public RSFrame(RSApplet applet, int width, int height) {
+        this(applet, width, height, false, false);
+    }
 
-	public void update(Graphics g) {
-		rsApplet.update(g);
-	}
+    /**
+     * Full constructor — supports undecorated and resizable modes.
+     */
+    public RSFrame(RSApplet applet, int width, int height, boolean undecorated, boolean resizable) {
+        rsApplet = applet;
+        setTitle("OpenRune");
+        setUndecorated(undecorated);
+        setBackground(Color.BLACK);
+        setVisible(true);
+        requestFocus();
+        toFront();
+        setResizable(resizable);
+        setFocusTraversalKeysEnabled(false);
 
-	public void paint(Graphics g) {
-		rsApplet.paint(g);
-	}
+        Insets insets = getInsets();
+        setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+        setLocationRelativeTo(null);
+    }
 
-	private final RSApplet rsApplet;
+    /**
+     * Returns the usable frame width (excluding window decorations).
+     */
+    public int getFrameWidth() {
+        Insets insets = getInsets();
+        return getWidth() - (insets.left + insets.right);
+    }
+
+    /**
+     * Returns the usable frame height (excluding window decorations).
+     */
+    public int getFrameHeight() {
+        Insets insets = getInsets();
+        return getHeight() - (insets.top + insets.bottom);
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        Graphics g = super.getGraphics();
+        if (g != null) {
+            Insets insets = getInsets();
+            g.translate(insets.left, insets.top);
+        }
+        return g;
+    }
+
+    @Override
+    public void update(Graphics g) {
+        rsApplet.update(g);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        rsApplet.paint(g);
+    }
 }

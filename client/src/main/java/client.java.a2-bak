@@ -5286,19 +5286,7 @@ followDistance = 1;
 							clientData = true;
 						if(inputString.equals("::dataoff"))
 							clientData = false;
-						if(inputString.equals("::fixed")) {
-					toggleSize(0);
-					pushMessage("Switched to fixed mode.", 0, "");
-				}
-				if(inputString.equals("::resize")) {
-					toggleSize(1);
-					pushMessage("Switched to resizable mode.", 0, "");
-				}
-				if(inputString.equals("::fullscreen")) {
-					toggleSize(2);
-					pushMessage("Switched to fullscreen mode.", 0, "");
-				}
-				if(inputString.equals("::noclip")) {
+						if(inputString.equals("::noclip")) {
 							for(int k1 = 0; k1 < 4; k1++) {
 								for(int i2 = 1; i2 < 103; i2++) {
 									for(int k2 = 1; k2 < 103; k2++)
@@ -9020,7 +9008,6 @@ followDistance = 1;
 
 	public void processDrawing()
 	{
-		checkSize();
 		if(rsAlreadyLoaded || loadingError || genericLoadingError)
 		{
 			showErrorScreen();
@@ -12189,8 +12176,8 @@ case 174:
 		int k2 = Texture.textureCycleCounter;
 		Model.mousePickingEnabled = true;
 		Model.mousePickCount = 0;
-		Model.mousePickX = super.mouseX - (clientSize == 0 ? 4 : 0);
-		Model.mousePickY = super.mouseY - (clientSize == 0 ? 4 : 0);
+		Model.mousePickX = super.mouseX - 4;
+		Model.mousePickY = super.mouseY - 4;
 		DrawingArea.setAllPixelsToZero();
 		worldController.renderScene(xCameraPos, yCameraPos, xCameraCurve, zCameraPos, j, yCameraCurve);
 		worldController.clearObj5Cache();
@@ -12934,107 +12921,6 @@ case 174:
 	public int anInt1500;//377
 	public int anInt1501;//377
 	public int[] fullScreenTextureArray;
-
-	// --- Resize infrastructure (Phase A-2) ---
-	public static final int REGULAR_WIDTH = 765;
-	public static final int REGULAR_HEIGHT = 503;
-	private static final int RESIZABLE_DEFAULT_WIDTH = 900;
-	private static final int RESIZABLE_DEFAULT_HEIGHT = 600;
-	public static int clientSize = 0; // 0=fixed, 1=resizable, 2=fullscreen
-	public static int clientWidth = 765;
-	public static int clientHeight = 503;
-	public int gameAreaWidth = 512;
-	public int gameAreaHeight = 334;
-	public static java.awt.Container outerFrame; // set by Jframe.java
-	public static client instance;
-	// --- Resize methods (Phase A-2) ---
-
-	public void checkSize() {
-		if (clientSize == 1 && outerFrame != null) {
-			java.awt.Insets insets = outerFrame.getInsets();
-			int w = outerFrame.getWidth() - insets.left - insets.right;
-			int h = outerFrame.getHeight() - insets.top - insets.bottom;
-			if (w > 0 && h > 0 && (w != clientWidth || h != clientHeight)) {
-				clientWidth = w;
-				clientHeight = h;
-				gameAreaWidth = w;
-				gameAreaHeight = h;
-				updateGameArea();
-			}
-		}
-	}
-
-	public void updateGameArea() {
-		Texture.setViewport(clientSize == 0 ? REGULAR_WIDTH : clientWidth, clientSize == 0 ? REGULAR_HEIGHT : clientHeight);
-		fullScreenTextureArray = Texture.scanlineOffset;
-		Texture.setViewport(clientSize == 0 ? 519 : clientWidth, clientSize == 0 ? 165 : clientHeight);
-		mapChunkX2 = Texture.scanlineOffset;
-		Texture.setViewport(clientSize == 0 ? 246 : clientWidth, clientSize == 0 ? 335 : clientHeight);
-		mapChunkY2 = Texture.scanlineOffset;
-		Texture.setViewport(clientSize == 0 ? 512 : gameAreaWidth, clientSize == 0 ? 334 : gameAreaHeight);
-		mapChunkLandscapeIds = Texture.scanlineOffset;
-
-		int ai[] = new int[9];
-		for (int i8 = 0; i8 < 9; i8++) {
-			int k8 = 128 + i8 * 32 + 15;
-			int l8 = 600 + k8 * 3;
-			int i9 = Texture.SINE[k8];
-			ai[i8] = l8 * i9 >> 16;
-		}
-
-		WorldController.drawMinimapTile(500, 800, clientSize == 0 ? 512 : gameAreaWidth, clientSize == 0 ? 334 : gameAreaHeight, ai);
-		loginMsgIP = new RSImageProducer(clientSize == 0 ? 512 : gameAreaWidth, clientSize == 0 ? 334 : gameAreaHeight, getGameComponent());
-		DrawingArea.setAllPixelsToZero();
-		super.fullGameScreen = new RSImageProducer(clientWidth, clientHeight, getGameComponent());
-		welcomeScreenRaised = true;
-	}
-
-	public void toggleSize(int size) {
-		if (clientSize == size) return;
-		clientSize = size;
-		int width, height;
-		if (size == 0) {
-			width = REGULAR_WIDTH;
-			height = REGULAR_HEIGHT;
-			gameAreaWidth = 512;
-			gameAreaHeight = 334;
-		} else if (size == 1) {
-			width = RESIZABLE_DEFAULT_WIDTH;
-			height = RESIZABLE_DEFAULT_HEIGHT;
-			gameAreaWidth = width;
-			gameAreaHeight = height;
-		} else {
-			java.awt.Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-			width = (int) screen.getWidth();
-			height = (int) screen.getHeight();
-			gameAreaWidth = width;
-			gameAreaHeight = height;
-		}
-		clientWidth = width;
-		clientHeight = height;
-		if (outerFrame != null) {
-			if (outerFrame instanceof java.awt.Frame) {
-				java.awt.Frame f = (java.awt.Frame) outerFrame;
-				f.setResizable(size == 1);
-			}
-			java.awt.Insets insets = outerFrame.getInsets();
-			outerFrame.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
-			if (size == 0 || size == 1) {
-				if (outerFrame instanceof java.awt.Window) ((java.awt.Window) outerFrame).setLocationRelativeTo(null);
-			}
-		}
-		super.myWidth = width;
-		super.myHeight = height;
-		super.graphics = getGameComponent().getGraphics();
-		updateGameArea();
-	}
-
-	public boolean isFixed() {
-		return clientSize == 0;
-	}
-
-	// --- End resize methods ---
-
 	public void resetAllImageProducers() {
 		if (super.fullGameScreen != null) {
 			return;
