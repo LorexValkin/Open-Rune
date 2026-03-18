@@ -178,17 +178,17 @@ public int followDistance = 1;
 					break;
 			}
 		}
-		smallText.drawWaving(true, 425, 0xffffff, "Report Abuse", 157);
-		smallText.drawWaving(true, 26, 0xffffff, "All", 157);
-		smallText.drawWaving(true, 86, 0xffffff, "Game", 157);
-		smallText.drawWaving(true, 150, 0xffffff, "Public", 152);
-		smallText.drawWaving(true, 212, 0xffffff, "Private", 152);
-		smallText.drawWaving(true, 286, 0xffffff, "Clan", 152);
-		smallText.drawWaving(true, 349, 0xffffff, "Trade", 152);
-		smallText.drawRightAligned(textColor[publicChatMode], 164, text[publicChatMode], 163, true);
-		smallText.drawRightAligned(textColor[privateChatMode], 230, text[privateChatMode], 163, true);
-		smallText.drawRightAligned(textColor[clanChatMode], 296, text[clanChatMode], 163, true);
-		smallText.drawRightAligned(textColor[tradeMode], 362, text[tradeMode], 163, true);
+		smallText.drawWaving(true, 425, 0xffffff, "Report Abuse", btnY + 157);
+		smallText.drawWaving(true, 26, 0xffffff, "All", btnY + 157);
+		smallText.drawWaving(true, 86, 0xffffff, "Game", btnY + 157);
+		smallText.drawWaving(true, 150, 0xffffff, "Public", btnY + 152);
+		smallText.drawWaving(true, 212, 0xffffff, "Private", btnY + 152);
+		smallText.drawWaving(true, 286, 0xffffff, "Clan", btnY + 152);
+		smallText.drawWaving(true, 349, 0xffffff, "Trade", btnY + 152);
+		smallText.drawRightAligned(textColor[publicChatMode], 164, text[publicChatMode], btnY + 163, true);
+		smallText.drawRightAligned(textColor[privateChatMode], 230, text[privateChatMode], btnY + 163, true);
+		smallText.drawRightAligned(textColor[clanChatMode], 296, text[clanChatMode], btnY + 163, true);
+		smallText.drawRightAligned(textColor[tradeMode], 362, text[tradeMode], btnY + 163, true);
 	}
 
 	private void drawChatArea() {
@@ -13182,6 +13182,13 @@ case 174:
 			} catch (Exception e) { }
 		}
 		// UI content on top of sprites
+		// Tab panel background fill
+		boolean wideTabs2 = clientWidth >= 1000;
+		if (wideTabs2) {
+			DrawingArea.drawPixels(260, clientHeight - 303, clientWidth - 197, 0x50463C, 190);
+		} else {
+			DrawingArea.drawPixels(260, clientHeight - 339, clientWidth - 216, 0x50463C, 190);
+		}
 		// Parchment fill for chat area
 		DrawingArea.drawPixels(129, clientHeight - 165 + 6, 7, 0xccbb9a, 506);
 		drawChatArea();
