@@ -7716,6 +7716,21 @@ followDistance = 1;
 			mouseDetection = new MouseDetection(this);
 			startRunnable(mouseDetection, 10);
 			Animable_Sub5.clientInstance = this;
+
+			// Load resizable UI sprites
+			try {
+				String spriteDir = signlink.findcachedir() + "Sprites/";
+				cacheSprite = new Sprite[35];
+				for (int sprIdx = 0; sprIdx < 35; sprIdx++) {
+					java.io.File sprFile = new java.io.File(spriteDir + sprIdx + ".png");
+					if (sprFile.exists()) {
+						cacheSprite[sprIdx] = new Sprite("" + sprIdx);
+					}
+				}
+				System.out.println("Loaded " + cacheSprite.length + " cache sprites");
+			} catch (Exception sprEx) {
+				System.out.println("Failed to load cache sprites: " + sprEx.getMessage());
+			}
 			ObjectDef.clientInstance = this;
 			EntityDef.clientInstance = this;
 			return;
@@ -8292,7 +8307,7 @@ followDistance = 1;
 			needDrawTabArea = true;
 		/*if(needDrawTabArea)
 		{*/
-			drawTabArea();
+			if (clientSize == 0) drawTabArea();
 			/*needDrawTabArea = false;
 		}*/
 		if(backDialogID == -1)
@@ -8325,12 +8340,12 @@ followDistance = 1;
 		if(menuOpen && menuScreenArea == 2)
 			inputTaken = true;
 		if(inputTaken) {
-			drawChatArea();
+			if (clientSize == 0) drawChatArea();
 			inputTaken = false;
 		}
 		if(loadingStage == 2)
 			processSceneEntities();
-		if(loadingStage == 2) {
+		if(loadingStage == 2 && clientSize == 0) {
 			drawMinimap();
 			titleButtonIP.drawGraphics(4, super.graphics, 545);
 		}
@@ -12211,6 +12226,7 @@ case 174:
 		drawHeadIcon();
 		animateTexture(k2);
 		draw3dScreen();
+		drawUnfixedGame();
 		loginMsgIP.drawGraphics(clientSize == 0 ? 4 : 0, super.graphics, clientSize == 0 ? 4 : 0);
 		xCameraPos = l;
 		zCameraPos = i1;
@@ -12964,6 +12980,7 @@ case 174:
 	private static final int CAMERA_ZOOM_MIN = -300;
 	private static final int CAMERA_ZOOM_MAX = 600;
 	private static final int CAMERA_ZOOM_STEP = 40;
+	public static Sprite[] cacheSprite;
 	// --- Resize methods (Phase A-2) ---
 
 	public void checkSize() {
@@ -13119,6 +13136,36 @@ case 174:
 			cameraZoom = CAMERA_ZOOM_MIN;
 		if (cameraZoom > CAMERA_ZOOM_MAX)
 			cameraZoom = CAMERA_ZOOM_MAX;
+	}
+
+	/**
+	 * Draws the resizable mode UI overlays (chat, tabs, minimap)
+	 * on top of the 3D viewport. Called from processSceneEntities.
+	 */
+	public void drawUnfixedGame() {
+		if (clientSize == 0 || cacheSprite == null) return;
+		try {
+			if (cacheSprite[30] != null)
+				cacheSprite[30].drawSprite(0, clientHeight - 166);
+			if (cacheSprite[31] != null)
+				cacheSprite[31].drawSprite(0, clientHeight - 22);
+			if (cacheSprite[33] != null)
+				cacheSprite[33].drawSprite(clientWidth - 238, 3);
+			boolean wideTabs = clientWidth >= 1000;
+			if (wideTabs) {
+				if (cacheSprite[27] != null)
+					cacheSprite[27].drawSprite(clientWidth - 461, clientHeight - 36);
+			} else {
+				if (cacheSprite[28] != null)
+					cacheSprite[28].drawSprite(clientWidth - 241, clientHeight - 73);
+			}
+			if (cacheSprite[29] != null) {
+				if (wideTabs)
+					cacheSprite[29].drawSprite(clientWidth - 204, clientHeight - 310);
+				else
+					cacheSprite[29].drawSprite(clientWidth - 222, clientHeight - 346);
+			}
+		} catch (Exception e) { }
 	}
 
 	public boolean isFixed() {
