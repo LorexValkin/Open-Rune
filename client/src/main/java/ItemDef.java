@@ -1151,7 +1151,7 @@ public final class ItemDef {
 	public static Sprite getSprite(int i, int j, int k) {
 		if(k == 0) {
 			Sprite sprite = (Sprite) mruNodes1.insertFromCache(i);
-			if(sprite != null && sprite.anInt1445 != j && sprite.anInt1445 != -1) {
+			if(sprite != null && sprite.maxHeight != j && sprite.maxHeight != -1) {
 				sprite.unlink();
 				sprite = null;
 			}
@@ -1234,13 +1234,13 @@ public final class ItemDef {
 			}
 		}
 		if(itemDef.certTemplateID != -1) {
-			int l5 = sprite.anInt1444;
-			int j6 = sprite.anInt1445;
-			sprite.anInt1444 = 32;
-			sprite.anInt1445 = 32;
+			int l5 = sprite.maxWidth;
+			int j6 = sprite.maxHeight;
+			sprite.maxWidth = 32;
+			sprite.maxHeight = 32;
 			sprite.drawSprite(0, 0);
-			sprite.anInt1444 = l5;
-			sprite.anInt1445 = j6;
+			sprite.maxWidth = l5;
+			sprite.maxHeight = j6;
 		}
 		if(k == 0)
 			mruNodes1.removeFromCache(sprite2, i);
@@ -1251,10 +1251,10 @@ public final class ItemDef {
 		Texture.scanlineOffset = ai;
 		Texture.textureMipmap = true;
 		if(itemDef.stackable)
-			sprite2.anInt1444 = 33;
+			sprite2.maxWidth = 33;
 		else
-			sprite2.anInt1444 = 32;
-		sprite2.anInt1445 = j;
+			sprite2.maxWidth = 32;
+		sprite2.maxHeight = j;
 		return sprite2;
 	}
 

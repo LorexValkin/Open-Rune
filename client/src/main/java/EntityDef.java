@@ -572,7 +572,7 @@ public final class EntityDef {
 			int k = varBit.settingIndex;
 			int l = varBit.lowBit;
 			int i1 = varBit.highBit;
-			int j1 = client.anIntArray1232[i1 - l];
+			int j1 = client.BIT_MASKS[i1 - l];
 			j = clientInstance.variousSettings[k] >> l & j1;
 		} else
 		if(settingId != -1)
@@ -840,7 +840,7 @@ public final class EntityDef {
 	private int scaleXZ;
 	private int contrast;
 	public boolean priorityRender;
-	private int[] models;//anIntArray94
+	private int[] models;//models
 	public static MRUNodes mruNodes = new MRUNodes(30);
 
 }

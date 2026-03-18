@@ -20,25 +20,25 @@ final class StreamLoader {
 			BZip2Decoder.decompress(abyte1, i, abyte0, j, 6);
 			aByteArray726 = abyte1;
 			stream = new Stream(aByteArray726);
-			aBoolean732 = true;
+			isCompressed = true;
 		} else
 		{
 			aByteArray726 = abyte0;
-			aBoolean732 = false;
+			isCompressed = false;
 		}
 		dataSize = stream.readUnsignedWord();
-		anIntArray728 = new int[dataSize];
-		anIntArray729 = new int[dataSize];
-		anIntArray730 = new int[dataSize];
-		anIntArray731 = new int[dataSize];
+		nameHashes = new int[dataSize];
+		fileSizes = new int[dataSize];
+		decompressedSizes = new int[dataSize];
+		fileOffsets = new int[dataSize];
 		int k = stream.currentOffset + dataSize * 10;
 		for(int l = 0; l < dataSize; l++)
 		{
-			anIntArray728[l] = stream.readDWord();
-			anIntArray729[l] = stream.read3Bytes();
-			anIntArray730[l] = stream.read3Bytes();
-			anIntArray731[l] = k;
-			k += anIntArray730[l];
+			nameHashes[l] = stream.readDWord();
+			fileSizes[l] = stream.read3Bytes();
+			decompressedSizes[l] = stream.read3Bytes();
+			fileOffsets[l] = k;
+			k += decompressedSizes[l];
 		}
 	}
 
@@ -53,18 +53,18 @@ final class StreamLoader {
 			System.out.println("");
 
 		for(int k = 0; k < dataSize; k++)
-			if(anIntArray728[k] == i)
+			if(nameHashes[k] == i)
 			{
 				if(abyte0 == null)
-					abyte0 = new byte[anIntArray729[k]];
-				if(!aBoolean732)
+					abyte0 = new byte[fileSizes[k]];
+				if(!isCompressed)
 				{
-					BZip2Decoder.decompress(abyte0, anIntArray729[k], aByteArray726, anIntArray730[k], anIntArray731[k]);
+					BZip2Decoder.decompress(abyte0, fileSizes[k], aByteArray726, decompressedSizes[k], fileOffsets[k]);
 					if (s.equalsIgnoreCase("NPC.DAT") || s.equalsIgnoreCase("NPC.IDX"))
 						System.out.println("");
 				} else
 				{
-					System.arraycopy(aByteArray726, anIntArray731[k], abyte0, 0, anIntArray729[k]);
+					System.arraycopy(aByteArray726, fileOffsets[k], abyte0, 0, fileSizes[k]);
 				}
 				return abyte0;
 			}
@@ -105,9 +105,9 @@ final class StreamLoader {
 	
 	private final byte[] aByteArray726;
 	private final int dataSize;
-	private final int[] anIntArray728;
-	private final int[] anIntArray729;
-	private final int[] anIntArray730;
-	private final int[] anIntArray731;
-	private final boolean aBoolean732;
+	private final int[] nameHashes;
+	private final int[] fileSizes;
+	private final int[] decompressedSizes;
+	private final int[] fileOffsets;
+	private final boolean isCompressed;
 }

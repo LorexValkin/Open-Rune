@@ -15,9 +15,9 @@ public final class Sprite extends DrawingArea {
 
 	public Sprite(int i, int j) {
 		myPixels = new int[i * j];
-		myWidth = anInt1444 = i;
-		myHeight = anInt1445 = j;
-		anInt1442 = anInt1443 = 0;
+		myWidth = maxWidth = i;
+		myHeight = maxHeight = j;
+		offsetX = offsetY = 0;
 	}
 
 	public String location = signlink.findcachedir() + "Sprites/";
@@ -32,10 +32,10 @@ public final class Sprite extends DrawingArea {
 			mediatracker.waitForAll();
 			myWidth = image.getWidth(component);
 			myHeight = image.getHeight(component);
-			anInt1444 = myWidth;
-			anInt1445 = myHeight;
-			anInt1442 = 0;
-			anInt1443 = 0;
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			offsetX = 0;
+			offsetY = 0;
 			myPixels = new int[myWidth * myHeight];
 			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
 			pixelgrabber.grabPixels();
@@ -54,8 +54,8 @@ public final class Sprite extends DrawingArea {
 			myHeight = imageicon.getIconHeight();
 			maxWidth = myWidth;
 			maxHeight = myHeight;
-			anInt1442 = 0;
-			anInt1443 = 0;
+			offsetX = 0;
+			offsetY = 0;
 			myPixels = new int[myWidth * myHeight];
 			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
 			pixelgrabber.grabPixels();
@@ -70,10 +70,10 @@ public final class Sprite extends DrawingArea {
 			Image image = Toolkit.getDefaultToolkit().createImage(FileOperations.ReadFile(img));
 			myWidth = width;
 			myHeight = height;
-			anInt1444 = myWidth;
-			anInt1445 = myHeight;
-			anInt1442 = 0;
-			anInt1443 = 0;
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			offsetX = 0;
+			offsetY = 0;
 			myPixels = new int[myWidth * myHeight];
 			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
 			pixelgrabber.grabPixels();
@@ -89,10 +89,10 @@ public final class Sprite extends DrawingArea {
 			ImageIcon sprite = new ImageIcon(image);
 			myWidth = sprite.getIconWidth();
 			myHeight = sprite.getIconHeight();
-			anInt1444 = myWidth;
-			anInt1445 = myHeight;
-			anInt1442 = 0;
-			anInt1443 = 0;
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			offsetX = 0;
+			offsetY = 0;
 			myPixels = new int[myWidth * myHeight];
 			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
 			pixelgrabber.grabPixels();
@@ -114,8 +114,8 @@ public final class Sprite extends DrawingArea {
 		Stream stream = new Stream(streamLoader.getDataForName(s + ".dat"));
 		Stream stream_1 = new Stream(streamLoader.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord();
-		anInt1444 = stream_1.readUnsignedWord();
-		anInt1445 = stream_1.readUnsignedWord();
+		maxWidth = stream_1.readUnsignedWord();
+		maxHeight = stream_1.readUnsignedWord();
 		int j = stream_1.readUnsignedByte();
 		int ai[] = new int[j];
 		for (int k = 0; k < j - 1; k++) {
@@ -130,8 +130,8 @@ public final class Sprite extends DrawingArea {
 			stream_1.currentOffset++;
 		}
 
-		anInt1442 = stream_1.readUnsignedByte();
-		anInt1443 = stream_1.readUnsignedByte();
+		offsetX = stream_1.readUnsignedByte();
+		offsetY = stream_1.readUnsignedByte();
 		myWidth = stream_1.readUnsignedWord();
 		myHeight = stream_1.readUnsignedWord();
 		int i1 = stream_1.readUnsignedByte();
@@ -186,21 +186,21 @@ public final class Sprite extends DrawingArea {
 	}
 
 	public void drawCentered() {
-		int ai[] = new int[anInt1444 * anInt1445];
+		int ai[] = new int[maxWidth * maxHeight];
 		for (int j = 0; j < myHeight; j++) {
-			System.arraycopy(myPixels, j * myWidth, ai, j + anInt1443 * anInt1444 + anInt1442, myWidth);
+			System.arraycopy(myPixels, j * myWidth, ai, j + offsetY * maxWidth + offsetX, myWidth);
 		}
 
 		myPixels = ai;
-		myWidth = anInt1444;
-		myHeight = anInt1445;
-		anInt1442 = 0;
-		anInt1443 = 0;
+		myWidth = maxWidth;
+		myHeight = maxHeight;
+		offsetX = 0;
+		offsetY = 0;
 	}
 
 	public void drawTransparent(int i, int j) {
-		i += anInt1442;
-		j += anInt1443;
+		i += offsetX;
+		j += offsetY;
 		int l = i + j * DrawingArea.width;
 		int i1 = 0;
 		int j1 = myHeight;
@@ -258,8 +258,8 @@ public final class Sprite extends DrawingArea {
 
 	public void drawSprite1(int i, int j) {
 		int k = 128;// was parameter
-		i += anInt1442;
-		j += anInt1443;
+		i += offsetX;
+		j += offsetY;
 		int i1 = i + j * DrawingArea.width;
 		int j1 = 0;
 		int k1 = myHeight;
@@ -296,8 +296,8 @@ public final class Sprite extends DrawingArea {
 	}
 
 	public void drawSprite(int i, int k) {
-		i += anInt1442;
-		k += anInt1443;
+		i += offsetX;
+		k += offsetY;
 		int l = i + k * DrawingArea.width;
 		int i1 = 0;
 		int j1 = myHeight;
@@ -367,8 +367,8 @@ public final class Sprite extends DrawingArea {
 		}
 		i--;
 		k--;
-		i += anInt1442;
-		k += anInt1443;
+		i += offsetX;
+		k += offsetY;
 		int l = i + k * DrawingArea.width;
 		int i1 = 0;
 		int j1 = tempHeight;
@@ -407,8 +407,8 @@ public final class Sprite extends DrawingArea {
 
 	public void drawSprite2(int i, int j) {
 		int k = 225;// was parameter
-		i += anInt1442;
-		j += anInt1443;
+		i += offsetX;
+		j += offsetY;
 		int i1 = i + j * DrawingArea.width;
 		int j1 = 0;
 		int k1 = myHeight;
@@ -605,8 +605,8 @@ public final class Sprite extends DrawingArea {
 	}
 
 	public void drawToBackground(Background background, int i, int j) {
-		j += anInt1442;
-		i += anInt1443;
+		j += offsetX;
+		i += offsetY;
 		int k = j + i * DrawingArea.width;
 		int l = 0;
 		int i1 = myHeight;
@@ -686,10 +686,8 @@ public final class Sprite extends DrawingArea {
 	public int myPixels[];
 	public int myWidth;
 	public int myHeight;
-	private int anInt1442;
-	private int anInt1443;
-	public int anInt1444;
-	public int anInt1445;
+	private int offsetX;
+	private int offsetY;
 	public int maxWidth;
 	public int maxHeight;
 }

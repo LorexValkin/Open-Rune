@@ -62,9 +62,9 @@ public final class AnimFrame
 			for(int i3 = 0; i3 < j2; i3++) {
 				int j3 = stream_2.readUnsignedByte();
 				if(j3 > 0) {
-					if(animBase.anIntArray342[i3] != 0) {
+					if(animBase.badCombinations[i3] != 0) {
 						for(int l3 = i3 - 1; l3 > k2; l3--) {
-							if(animBase.anIntArray342[l3] != 0)
+							if(animBase.badCombinations[l3] != 0)
 								continue;
 							ai[l2] = l3;
 							ai1[l2] = 0;
@@ -76,7 +76,7 @@ public final class AnimFrame
 					}
 					ai[l2] = i3;
 					char c = '\0';
-					if(animBase.anIntArray342[i3] == 3)
+					if(animBase.badCombinations[i3] == 3)
 						c = '\200';
 					if((j3 & 1) != 0)
 						ai1[l2] = stream_3.readSmartSigned();
@@ -92,7 +92,7 @@ public final class AnimFrame
 						ai3[l2] = c;
 					k2 = i3;
 					l2++;
-					if(animBase.anIntArray342[i3] == 5)
+					if(animBase.badCombinations[i3] == 5)
 						frameMissing[i2] = false;
 				}
 			}
@@ -153,11 +153,11 @@ public final class AnimFrame
 				int j3 = stream_2.readUnsignedByte();
 				if(j3 > 0)
 				{
-					if(animBase.anIntArray342[i3] != 0)
+					if(animBase.badCombinations[i3] != 0)
 					{
 						for(int l3 = i3 - 1; l3 > k2; l3--)
 						{
-							if(animBase.anIntArray342[l3] != 0)
+							if(animBase.badCombinations[l3] != 0)
 								continue;
 							ai[l2] = l3;
 							ai1[l2] = 0;
@@ -170,7 +170,7 @@ public final class AnimFrame
 					}
 					ai[l2] = i3;
 					char c = '\0';
-					if(animBase.anIntArray342[i3] == 3)
+					if(animBase.badCombinations[i3] == 3)
 						c = '\200';
 					if((j3 & 1) != 0)
 						ai1[l2] = stream_3.readSmartSigned();
@@ -186,7 +186,7 @@ public final class AnimFrame
 						ai3[l2] = c;
 					k2 = i3;
 					l2++;
-					if(animBase.anIntArray342[i3] == 5)
+					if(animBase.badCombinations[i3] == 5)
 						frameMissing[i2] = false;
 				}
 			}

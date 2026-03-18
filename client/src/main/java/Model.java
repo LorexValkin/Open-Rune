@@ -6,7 +6,7 @@ import java.util.zip.*;
 public final class Model extends Animable {
 
 	public static void nullLoader() {
-		aAnimTransformArray1661 = null;
+		modelHeaders = null;
 		faceNearClipped = null;
 		faceClippedX = null;
 		projectedVertexX = null;
@@ -48,14 +48,14 @@ public final class Model extends Animable {
 	}
 
 	public static void initModelStorage(int i, OnDemandFetcherParent onDemandFetcherParent) {
-		aAnimTransformArray1661 = new AnimTransform[i + 400000];
-		aOnDemandFetcherParent_1662 = onDemandFetcherParent;
+		modelHeaders = new AnimTransform[i + 400000];
+		onDemandFetcher = onDemandFetcherParent;
 	}
 
 	public static void decodeModelHeader(byte[] abyte0, int j) {
         boolean newFormat = abyte0[abyte0.length - 1] == -1 && abyte0[abyte0.length - 2] == -1;
         if (abyte0 == null) {
-            AnimTransform animTransform = aAnimTransformArray1661[j] = new AnimTransform();
+            AnimTransform animTransform = modelHeaders[j] = new AnimTransform();
             animTransform.vertexCount = 0;
             animTransform.faceCount = 0;
             animTransform.texturedFaceCount = 0;
@@ -63,7 +63,7 @@ public final class Model extends Animable {
         }
         Stream class30_sub2_sub2 = new Stream(abyte0);
         class30_sub2_sub2.currentOffset = abyte0.length - (!newFormat ? 18 : 23);
-        AnimTransform animTransform_1 = aAnimTransformArray1661[j] = new AnimTransform();
+        AnimTransform animTransform_1 = modelHeaders[j] = new AnimTransform();
         animTransform_1.rawData = abyte0;
         animTransform_1.vertexCount = class30_sub2_sub2.readUnsignedWord();
         animTransform_1.faceCount = class30_sub2_sub2.readUnsignedWord();
@@ -128,15 +128,15 @@ public final class Model extends Animable {
     }
 
 	public static void clearModel(int j) {
-		aAnimTransformArray1661[j] = null;
+		modelHeaders[j] = null;
 	}
 
 	public static Model getModel(int j) {
-		if(aAnimTransformArray1661 == null)
+		if(modelHeaders == null)
 			return null;
-		AnimTransform animTransform = aAnimTransformArray1661[j];
+		AnimTransform animTransform = modelHeaders[j];
 		if(animTransform == null) {
-			aOnDemandFetcherParent_1662.requestModel(j);
+			onDemandFetcher.requestModel(j);
 			return null;
 		} else {
 			return new Model(j);
@@ -144,11 +144,11 @@ public final class Model extends Animable {
 	}
 
 	public static boolean isModelLoaded(int i) {
-		if(aAnimTransformArray1661 == null)
+		if(modelHeaders == null)
 			return false;
-		AnimTransform animTransform = aAnimTransformArray1661[i];
+		AnimTransform animTransform = modelHeaders[i];
 		if(animTransform == null) {
-			aOnDemandFetcherParent_1662.requestModel(i);
+			onDemandFetcher.requestModel(i);
 			return false;
 		} else {
 			return true;
@@ -161,7 +161,7 @@ public final class Model extends Animable {
 
 	private Model(int i) {
 		singleTile = false;
-		AnimTransform animTransform = aAnimTransformArray1661[i];
+		AnimTransform animTransform = modelHeaders[i];
 		vertexCount = animTransform.vertexCount;
 		faceCount = animTransform.faceCount;
 		texturedFaceCount = animTransform.texturedFaceCount;
@@ -802,7 +802,7 @@ public final class Model extends Animable {
 		transformTempZ = 0;
 		for(int k = 0; k < animFrame.transformCount; k++) {
 			int l = animFrame.transformTypes[k];
-			recolorTriangle(animBase.anIntArray342[l], animBase.anIntArrayArray343[l], animFrame.transformX[k], animFrame.transformY[k], animFrame.transformZ[k]);
+			recolorTriangle(animBase.badCombinations[l], animBase.badWordFragments[l], animFrame.transformX[k], animFrame.transformY[k], animFrame.transformZ[k]);
 		}
 	}
 
@@ -830,8 +830,8 @@ public final class Model extends Animable {
 		for(int j1 = 0; j1 < animFrame.transformCount; j1++) {
 			int k1;
 			for(k1 = animFrame.transformTypes[j1]; k1 > i1; i1 = ai[l++]);
-				if(k1 != i1 || animBase.anIntArray342[k1] == 0)
-					recolorTriangle(animBase.anIntArray342[k1], animBase.anIntArrayArray343[k1], animFrame.transformX[j1], animFrame.transformY[j1], animFrame.transformZ[j1]);
+				if(k1 != i1 || animBase.badCombinations[k1] == 0)
+					recolorTriangle(animBase.badCombinations[k1], animBase.badWordFragments[k1], animFrame.transformX[j1], animFrame.transformY[j1], animFrame.transformZ[j1]);
 		}
 		transformTempX = 0;
 		transformTempY = 0;
@@ -841,8 +841,8 @@ public final class Model extends Animable {
 		for(int l1 = 0; l1 < animFrame_1.transformCount; l1++) {
 			int i2;
 			for(i2 = animFrame_1.transformTypes[l1]; i2 > i1; i1 = ai[l++]);
-				if(i2 == i1 || animBase.anIntArray342[i2] == 0)
-					recolorTriangle(animBase.anIntArray342[i2], animBase.anIntArrayArray343[i2], animFrame_1.transformX[l1], animFrame_1.transformY[l1], animFrame_1.transformZ[l1]);
+				if(i2 == i1 || animBase.badCombinations[i2] == 0)
+					recolorTriangle(animBase.badCombinations[i2], animBase.badWordFragments[i2], animFrame_1.transformX[l1], animFrame_1.transformY[l1], animFrame_1.transformZ[l1]);
 		}
 	}
 
@@ -1698,8 +1698,8 @@ public final class Model extends Animable {
 	public int labelGroupsUnused[][];
 	public boolean singleTile;
 	VertexNormal mergedNormals[];
-	private static AnimTransform[] aAnimTransformArray1661;
-	private static OnDemandFetcherParent aOnDemandFetcherParent_1662;
+	private static AnimTransform[] modelHeaders;
+	private static OnDemandFetcherParent onDemandFetcher;
 	private static boolean[] faceNearClipped = new boolean[4096];
 	private static boolean[] faceClippedX = new boolean[4096];
 	private static int[] projectedVertexX = new int[4096];

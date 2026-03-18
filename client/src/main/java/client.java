@@ -496,7 +496,7 @@ public int followDistance = 1;
 					int l1 = menuActionCmd2[menuActionRow - 1];
 					int j2 = menuActionCmd3[menuActionRow - 1];
 					RSInterface class9 = RSInterface.interfaceCache[j2];
-					if(class9.aBoolean259 || class9.aBoolean235) {
+					if(class9.replaceItems || class9.filled) {
 						aBoolean1242 = false;
 						anInt989 = 0;
 						anInt1084 = j2;
@@ -884,7 +884,7 @@ public int followDistance = 1;
 			ItemDef itemDef = ItemDef.forID(item.ID);
 			int l = itemDef.value;
 			if(itemDef.stackable)
-				l *= item.anInt1559 + 1;
+				l *= item.itemQuantity + 1;
 //	notifyItemSpawn(item, i + baseX, j + baseY);
 	
 			if(l > k)
@@ -990,9 +990,9 @@ public int followDistance = 1;
 			if(class9.children[l1] < 0 || class9.children[l1] >= RSInterface.interfaceCache.length) continue;
 			RSInterface class9_1 = RSInterface.interfaceCache[class9.children[l1]];
 			if(class9_1 == null) continue;
-			i2 += class9_1.anInt263;
-			j2 += class9_1.anInt265;
-			if((class9_1.mOverInterToTrigger >= 0 || class9_1.anInt216 != 0) && k >= i2 && i1 >= j2 && k < i2 + class9_1.width && i1 < j2 + class9_1.height)
+			i2 += class9_1.invSpritePadX;
+			j2 += class9_1.invSpritePadY;
+			if((class9_1.mOverInterToTrigger >= 0 || class9_1.enabledColor != 0) && k >= i2 && i1 >= j2 && k < i2 + class9_1.width && i1 < j2 + class9_1.height)
 				if(class9_1.mOverInterToTrigger >= 0)
 					anInt886 = class9_1.mOverInterToTrigger;
 				else
@@ -1451,7 +1451,7 @@ public int followDistance = 1;
 
 	private void applyVarpSetting(int i)
 	{
-		int j = Varp.cache[i].anInt709;
+		int j = Varp.cache[i].usage;
 		if(j == 0)
 			return;
 		int k = variousSettings[i];
@@ -1609,7 +1609,7 @@ public int followDistance = 1;
 				if(spriteDrawX > -1 && anInt974 < anInt975)
 				{
 					anIntArray979[anInt974] = chatTextDrawingArea.getTextWidth(((Entity) (obj)).textSpoken) / 2;
-					anIntArray978[anInt974] = chatTextDrawingArea.anInt1497;
+					anIntArray978[anInt974] = chatTextDrawingArea.fontHeight;
 					anIntArray976[anInt974] = spriteDrawX;
 					anIntArray977[anInt974] = spriteDrawY;
 					anIntArray980[anInt974] = ((Entity) (obj)).turnAroundAnimId;
@@ -1771,7 +1771,7 @@ public int followDistance = 1;
 						else
 						if(j4 > 125)
 							l4 = j4 - 125;
-						DrawingArea.setDrawingArea(spriteDrawY + 5, 0, 512, spriteDrawY - chatTextDrawingArea.anInt1497 - 1);
+						DrawingArea.setDrawingArea(spriteDrawY + 5, 0, 512, spriteDrawY - chatTextDrawingArea.fontHeight - 1);
 						chatTextDrawingArea.drawText(0, s, spriteDrawY + 1 + l4, spriteDrawX);
 						chatTextDrawingArea.drawText(i3, s, spriteDrawY + l4, spriteDrawX);
 						DrawingArea.defaultDrawingAreaSize();
@@ -1924,7 +1924,7 @@ public int followDistance = 1;
 		if(!lowMem) {
 			if(Texture.textureLastCycle[17] >= j) {
 				Background background = Texture.textures[17];
-				int k = background.width * background.anInt1453 - 1;
+				int k = background.width * background.height - 1;
 				//fire cape apparently?
 				int j1 = background.width * anInt945 * 2;
 				byte abyte0[] = background.aByteArray1450;
@@ -1957,7 +1957,7 @@ public int followDistance = 1;
 			}
 			if(Texture.textureLastCycle[24] >= j) {
 				Background background_1 = Texture.textures[24];
-				int l = background_1.width * background_1.anInt1453 - 1;
+				int l = background_1.width * background_1.height - 1;
 				int k1 = background_1.width * anInt945 * 2;
 				byte abyte1[] = background_1.aByteArray1450;
 				byte abyte4[] = aByteArray912;
@@ -1970,7 +1970,7 @@ public int followDistance = 1;
 			}
 			if(Texture.textureLastCycle[34] >= j) {
 				Background background_2 = Texture.textures[34];
-				int i1 = background_2.width * background_2.anInt1453 - 1;
+				int i1 = background_2.width * background_2.height - 1;
 				int l1 = background_2.width * anInt945 * 2;
 				byte abyte2[] = background_2.aByteArray1450;
 				byte abyte5[] = aByteArray912;
@@ -1984,7 +1984,7 @@ public int followDistance = 1;
 			if(Texture.textureLastCycle[40] >= j)
             {
 				Background background_2 = Texture.textures[40];
-				int i1 = background_2.width * background_2.anInt1453 - 1;
+				int i1 = background_2.width * background_2.height - 1;
 				int l1 = background_2.width * anInt945 * 2;
 				byte abyte2[] = background_2.aByteArray1450;
 				byte abyte5[] = aByteArray912;
@@ -2268,7 +2268,7 @@ followDistance = 1;
 		for(int j = 0; j < 7; j++) {
 			anIntArray1065[j] = -1;
 			for(int k = 0; k < IDK.length; k++) {
-				if(IDK.cache[k].aBoolean662 || IDK.cache[k].anInt657 != j + (aBoolean1047 ? 0 : 7))
+				if(IDK.cache[k].aBoolean662 || IDK.cache[k].bodyPartId != j + (aBoolean1047 ? 0 : 7))
 					continue;
 				anIntArray1065[j] = k;
 				break;
@@ -2417,7 +2417,7 @@ followDistance = 1;
 						i2 = IDK.length - 1;
 					if(j1 == 1 && ++i2 >= IDK.length)
 						i2 = 0;
-				} while(IDK.cache[i2].aBoolean662 || IDK.cache[i2].anInt657 != k + (aBoolean1047 ? 0 : 7));
+				} while(IDK.cache[i2].aBoolean662 || IDK.cache[i2].bodyPartId != k + (aBoolean1047 ? 0 : 7));
 				anIntArray1065[k] = i2;
 				aBoolean1031 = true;
 			}
@@ -2494,7 +2494,7 @@ followDistance = 1;
 				Background background_2 = mapScenes[class46_2.mapSceneId];
 				if(background_2 != null) {
 					int i6 = (class46_2.sizeX * 4 - background_2.width) / 2;
-					int j6 = (class46_2.sizeY * 4 - background_2.anInt1453) / 2;
+					int j6 = (class46_2.sizeY * 4 - background_2.height) / 2;
 					background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - class46_2.sizeY) * 4 + j6);
 				}
 			} else {
@@ -2564,7 +2564,7 @@ followDistance = 1;
 				Background background_1 = mapScenes[class46_1.mapSceneId];
 				if(background_1 != null) {
 					int j5 = (class46_1.sizeX * 4 - background_1.width) / 2;
-					int k5 = (class46_1.sizeY * 4 - background_1.anInt1453) / 2;
+					int k5 = (class46_1.sizeY * 4 - background_1.height) / 2;
 					background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - class46_1.sizeY) * 4 + k5);
 				}
 			} else if(j3 == 9) {
@@ -2594,7 +2594,7 @@ followDistance = 1;
 				Background background = mapScenes[class46.mapSceneId];
 				if(background != null) {
 					int i4 = (class46.sizeX * 4 - background.width) / 2;
-					int j4 = (class46.sizeY * 4 - background.anInt1453) / 2;
+					int j4 = (class46.sizeY * 4 - background.height) / 2;
 					background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - class46.sizeY) * 4 + j4);
 				}
 			}
@@ -2976,8 +2976,8 @@ followDistance = 1;
 			if(class9_1 == null) continue;
 			if(class9_1.type == 1)
 				resetInterfaceAnim(class9_1.id);
-			class9_1.anInt246 = 0;
-			class9_1.anInt208 = 0;
+			class9_1.enabledSpriteId = 0;
+			class9_1.animationId = 0;
 		}
 	}
 
@@ -3237,7 +3237,7 @@ followDistance = 1;
 							j1 = 1;
 						if(class9.inv[mouseInvInterfaceIndex] <= 0)
 							j1 = 0;
-						if(class9.aBoolean235)
+						if(class9.filled)
 						{
 							int l2 = anInt1085;
 							int l3 = mouseInvInterfaceIndex;
@@ -4072,7 +4072,7 @@ followDistance = 1;
 			if(s8.indexOf(" ") != -1)
 				s8 = s8.substring(s8.indexOf(" ") + 1);
 			spellTooltip = s4 + " " + class9_1.spellName + " " + s8;
-			//class9_1.sprite1.drawSprite(class9_1.anInt263, class9_1.anInt265, 0xffffff);
+			//class9_1.sprite1.drawSprite(class9_1.invSpritePadX, class9_1.invSpritePadY, 0xffffff);
 			//class9_1.sprite1.drawSprite(200,200);
 			//System.out.println("Sprite: " + class9_1.sprite1.toString());
 			if(spellUsableOn == 16)
@@ -4329,9 +4329,9 @@ followDistance = 1;
 			if(class9_2.valueIndexArray != null && class9_2.valueIndexArray[0][0] == 5)
 			{
 				int i2 = class9_2.valueIndexArray[0][1];
-				if(variousSettings[i2] != class9_2.anIntArray212[0])
+				if(variousSettings[i2] != class9_2.scriptDefaults[0])
 				{
-					variousSettings[i2] = class9_2.anIntArray212[0];
+					variousSettings[i2] = class9_2.scriptDefaults[0];
 					applyVarpSetting(i2);
 					needDrawTabArea = true;
 				}
@@ -5802,7 +5802,7 @@ followDistance = 1;
 				model.buildLabelGroups();
 				model.applyTransform(Animation.anims[myPlayer.standAnimId].frameIds[0]);
 				model.calculateLighting(64, 850, -30, -50, -30, true);
-				class9.anInt233 = 5;
+				class9.enabledMediaType = 5;
 				class9.mediaID = 0;
 				RSInterface.clearModelCache(aBoolean994, model);
 			}
@@ -5826,7 +5826,7 @@ followDistance = 1;
 				characterDisplay.buildLabelGroups();
 				characterDisplay.applyTransform(Animation.anims[staticFrame].frameIds[0]);
 				//characterDisplay.calculateLighting(64, 850, -30, -50, -30, true);
-				rsInterface.anInt233 = 5;
+				rsInterface.enabledMediaType = 5;
 				rsInterface.mediaID = 0;
 				RSInterface.clearModelCache(aBoolean994, characterDisplay);
 			}
@@ -8409,8 +8409,8 @@ followDistance = 1;
 			if(class9.children[j2] < 0 || class9.children[j2] >= RSInterface.interfaceCache.length) continue;
 			RSInterface class9_1 = RSInterface.interfaceCache[class9.children[j2]];
 			if(class9_1 == null) continue;
-			k2 += class9_1.anInt263;
-			l2 += class9_1.anInt265;
+			k2 += class9_1.invSpritePadX;
+			l2 += class9_1.invSpritePadY;
 			if(class9_1.contentType > 0)
 				drawFriendsListOrWelcomeScreen(class9_1);
 			//here
@@ -8511,7 +8511,7 @@ followDistance = 1;
 											class30_sub2_sub1_sub1_2.drawSprite1(k5, j6);
 										else
 											class30_sub2_sub1_sub1_2.drawSprite(k5, j6);
-										if(class30_sub2_sub1_sub1_2.anInt1444 == 33 || class9_1.invStackSizes[i3] != 1)
+										if(class30_sub2_sub1_sub1_2.maxWidth == 33 || class9_1.invStackSizes[i3] != 1)
 										{
 											int k10 = class9_1.invStackSizes[i3];
 											if(k10 >= 1)
@@ -8540,23 +8540,23 @@ followDistance = 1;
 						flag = true;
 					int j3;
 					if(interfaceIsSelected(class9_1)) {
-						j3 = class9_1.anInt219;
-						if(flag && class9_1.anInt239 != 0)
-							j3 = class9_1.anInt239;
+						j3 = class9_1.disabledColor;
+						if(flag && class9_1.hoverColor != 0)
+							j3 = class9_1.hoverColor;
 					} else {
 						j3 = class9_1.textColor;
-						if(flag && class9_1.anInt216 != 0)
-							j3 = class9_1.anInt216;
+						if(flag && class9_1.enabledColor != 0)
+							j3 = class9_1.enabledColor;
 					}
-					if(class9_1.aByte254 == 0) {
-						if(class9_1.aBoolean227)
+					if(class9_1.opacity == 0) {
+						if(class9_1.textCentered)
 							DrawingArea.drawPixels(class9_1.height, l2, k2, j3, class9_1.width);
 						else
 							DrawingArea.fillPixels(k2, class9_1.width, class9_1.height, j3, l2);
-					} else if(class9_1.aBoolean227)
-						DrawingArea.fillRect(j3, l2, class9_1.width, class9_1.height, 256 - (class9_1.aByte254 & 0xff), k2);
+					} else if(class9_1.textCentered)
+						DrawingArea.fillRect(j3, l2, class9_1.width, class9_1.height, 256 - (class9_1.opacity & 0xff), k2);
 					else
-						DrawingArea.drawRect(l2, class9_1.height, 256 - (class9_1.aByte254 & 0xff), j3, class9_1.width, k2);
+						DrawingArea.drawRect(l2, class9_1.height, 256 - (class9_1.opacity & 0xff), j3, class9_1.width, k2);
 				} else if(class9_1.type == 4) {
 					TextDrawingArea textDrawingArea = class9_1.textDrawingAreas;
 					String s = class9_1.message;
@@ -8565,15 +8565,15 @@ followDistance = 1;
 						flag1 = true;
 					int i4;
 					if(interfaceIsSelected(class9_1)) {
-						i4 = class9_1.anInt219;
-						if(flag1 && class9_1.anInt239 != 0)
-							i4 = class9_1.anInt239;
-						if(class9_1.aString228.length() > 0)
-							s = class9_1.aString228;
+						i4 = class9_1.disabledColor;
+						if(flag1 && class9_1.hoverColor != 0)
+							i4 = class9_1.hoverColor;
+						if(class9_1.enabledText.length() > 0)
+							s = class9_1.enabledText;
 					} else {
 						i4 = class9_1.textColor;
-						if(flag1 && class9_1.anInt216 != 0)
-							i4 = class9_1.anInt216;
+						if(flag1 && class9_1.enabledColor != 0)
+							i4 = class9_1.enabledColor;
 					}
 					if(class9_1.atActionType == 6 && aBoolean1149) {
 						s = "Please wait...";
@@ -8591,7 +8591,7 @@ followDistance = 1;
 							case 7040819: i4 = 0xAF6A1A; break;
 						}
 					}
-					for(int l6 = l2 + textDrawingArea.anInt1497; s.length() > 0; l6 += textDrawingArea.anInt1497)
+					for(int l6 = l2 + textDrawingArea.fontHeight; s.length() > 0; l6 += textDrawingArea.fontHeight)
 					{
 						if(s.indexOf("%") != -1)
 						{
@@ -8674,15 +8674,15 @@ followDistance = 1;
 					boolean flag2 = interfaceIsSelected(class9_1);
 					int i7;
 					if(flag2)
-						i7 = class9_1.anInt258;
+						i7 = class9_1.disabledAnimation;
 					else
-						i7 = class9_1.anInt257;
+						i7 = class9_1.enabledAnimation;
 					Model model;
 					if(i7 == -1) {
 						model = class9_1.getWidgetModel(-1, -1, flag2);
 					} else {
 						Animation animation = Animation.anims[i7];
-						model = class9_1.getWidgetModel(animation.frameDelays[class9_1.anInt246], animation.frameIds[class9_1.anInt246], flag2);
+						model = class9_1.getWidgetModel(animation.frameDelays[class9_1.enabledSpriteId], animation.frameIds[class9_1.enabledSpriteId], flag2);
 					}
 					if(model != null)
 						model.renderModel2D(class9_1.modelRotation2, 0, class9_1.modelRotation1, 0, i5, l5);
@@ -8738,11 +8738,11 @@ followDistance = 1;
 		}
 		if(background != null) {
 			int l1 = 0;
-			for(int j2 = 0; j2 < background.anInt1453; j2++) {
+			for(int j2 = 0; j2 < background.height; j2++) {
 				for(int l2 = 0; l2 < background.width; l2++)
 					if(background.aByteArray1450[l1++] != 0) {
-						int i3 = l2 + 16 + background.anInt1454;
-						int j3 = j2 + 16 + background.anInt1455;
+						int i3 = l2 + 16 + background.offsetX;
+						int j3 = j2 + 16 + background.offsetY;
 						int k3 = i3 + (j3 << 7);
 						anIntArray1190[k3] = 0;
 					}
@@ -9404,26 +9404,26 @@ followDistance = 1;
 			RSInterface class9_1 = RSInterface.interfaceCache[class9.children[k]];
 			if(class9_1.type == 1)
 				flag1 |= animateInterface(i, class9_1.id);
-			if(class9_1.type == 6 && (class9_1.anInt257 != -1 || class9_1.anInt258 != -1))
+			if(class9_1.type == 6 && (class9_1.enabledAnimation != -1 || class9_1.disabledAnimation != -1))
 			{
 				boolean flag2 = interfaceIsSelected(class9_1);
 				int l;
 				if(flag2)
-					l = class9_1.anInt258;
+					l = class9_1.disabledAnimation;
 				else
-					l = class9_1.anInt257;
+					l = class9_1.enabledAnimation;
 				if(l != -1)
 				{
 					Animation animation = Animation.anims[l];
-					for(class9_1.anInt208 += i; class9_1.anInt208 > animation.getFrameDuration(class9_1.anInt246);)
+					for(class9_1.animationId += i; class9_1.animationId > animation.getFrameDuration(class9_1.enabledSpriteId);)
 					{
-						class9_1.anInt208 -= animation.getFrameDuration(class9_1.anInt246) + 1;
-						class9_1.anInt246++;
-						if(class9_1.anInt246 >= animation.frameCount)
+						class9_1.animationId -= animation.getFrameDuration(class9_1.enabledSpriteId) + 1;
+						class9_1.enabledSpriteId++;
+						if(class9_1.enabledSpriteId >= animation.frameCount)
 						{
-							class9_1.anInt246 -= animation.loopOffset;
-							if(class9_1.anInt246 < 0 || class9_1.anInt246 >= animation.frameCount)
-								class9_1.anInt246 = 0;
+							class9_1.enabledSpriteId -= animation.loopOffset;
+							if(class9_1.enabledSpriteId < 0 || class9_1.enabledSpriteId >= animation.frameCount)
+								class9_1.enabledSpriteId = 0;
 						}
 						flag1 = true;
 					}
@@ -9676,7 +9676,7 @@ followDistance = 1;
 					int l3 = varBit.settingIndex;
 					int i4 = varBit.lowBit;
 					int j4 = varBit.highBit;
-					int k4 = anIntArray1232[j4 - i4];
+					int k4 = BIT_MASKS[j4 - i4];
 					k1 = variousSettings[l3] >> i4 & k4;
 				}
 				if(j1 == 15)
@@ -9964,23 +9964,23 @@ followDistance = 1;
 
 	private boolean interfaceIsSelected(RSInterface class9)
 	{
-		if(class9.anIntArray245 == null)
+		if(class9.scriptCompareType == null)
 			return false;
-		for(int i = 0; i < class9.anIntArray245.length; i++)
+		for(int i = 0; i < class9.scriptCompareType.length; i++)
 		{
 			int j = extractInterfaceValues(class9, i);
-			int k = class9.anIntArray212[i];
-			if(class9.anIntArray245[i] == 2)
+			int k = class9.scriptDefaults[i];
+			if(class9.scriptCompareType[i] == 2)
 			{
 				if(j >= k)
 					return false;
 			} else
-			if(class9.anIntArray245[i] == 3)
+			if(class9.scriptCompareType[i] == 3)
 			{
 				if(j <= k)
 					return false;
 			} else
-			if(class9.anIntArray245[i] == 4)
+			if(class9.scriptCompareType[i] == 4)
 			{
 				if(j == k)
 					return false;
@@ -10309,9 +10309,9 @@ followDistance = 1;
 				{
 					for(Item class30_sub2_sub4_sub2_3 = (Item)class19_1.reverseGetFirst(); class30_sub2_sub4_sub2_3 != null; class30_sub2_sub4_sub2_3 = (Item)class19_1.reverseGetNext())
 					{
-						if(class30_sub2_sub4_sub2_3.ID != (l8 & 0x7fff) || class30_sub2_sub4_sub2_3.anInt1559 != k11)
+						if(class30_sub2_sub4_sub2_3.ID != (l8 & 0x7fff) || class30_sub2_sub4_sub2_3.itemQuantity != k11)
 							continue;
-						class30_sub2_sub4_sub2_3.anInt1559 = l13;
+						class30_sub2_sub4_sub2_3.itemQuantity = l13;
 						break;
 					}
 
@@ -10333,7 +10333,7 @@ followDistance = 1;
 			{
 				anIntArray1207[anInt1062] = i9;
 				anIntArray1241[anInt1062] = i16;
-				anIntArray1250[anInt1062] = Sounds.anIntArray326[i9];
+				anIntArray1250[anInt1062] = Sounds.delays[i9];
 				anInt1062++;
 			}
 		}
@@ -10349,7 +10349,7 @@ followDistance = 1;
 			{
 				Item class30_sub2_sub4_sub2_2 = new Item();
 				class30_sub2_sub4_sub2_2.ID = i1;
-				class30_sub2_sub4_sub2_2.anInt1559 = j14;
+				class30_sub2_sub4_sub2_2.itemQuantity = j14;
 				if(groundArray[plane][k6][j9] == null)
 					groundArray[plane][k6][j9] = new NodeList();
 				groundArray[plane][k6][j9].insertHead(class30_sub2_sub4_sub2_2);
@@ -10545,7 +10545,7 @@ followDistance = 1;
 			{
 				Item class30_sub2_sub4_sub2_1 = new Item();
 				class30_sub2_sub4_sub2_1.ID = k2;
-				class30_sub2_sub4_sub2_1.anInt1559 = j5;
+				class30_sub2_sub4_sub2_1.itemQuantity = j5;
 				if(groundArray[plane][l10][i13] == null)
 					groundArray[plane][l10][i13] = new NodeList();
 				groundArray[plane][l10][i13].insertHead(class30_sub2_sub4_sub2_1);
@@ -10778,9 +10778,9 @@ followDistance = 1;
 		int k1 = j * i1 + i * j1 >> 16;
 		int l1 = j * j1 - i * i1 >> 16;
 		if(l > 2500) {
-			sprite.drawSprite(((94 + k1) - sprite.anInt1444 / 2) + 4 , 83 - l1 - sprite.anInt1445 / 2 - 4);
+			sprite.drawSprite(((94 + k1) - sprite.maxWidth / 2) + 4 , 83 - l1 - sprite.maxHeight / 2 - 4);
 		} else {
-			sprite.drawSprite(((94 + k1) - sprite.anInt1444 / 2) + 4, 83 - l1 - sprite.anInt1445 / 2 - 4);
+			sprite.drawSprite(((94 + k1) - sprite.maxWidth / 2) + 4, 83 - l1 - sprite.maxHeight / 2 - 4);
 		}
 	}
 
@@ -10953,8 +10953,8 @@ followDistance = 1;
 				stream.writeWord(button);
 				RSInterface class9_2 = RSInterface.interfaceCache[button];
 				if(class9_2.valueIndexArray != null && class9_2.valueIndexArray[0][0] == 5) {
-					if(variousSettings[toggle] != class9_2.anIntArray212[0]) {
-						variousSettings[toggle] = class9_2.anIntArray212[0];
+					if(variousSettings[toggle] != class9_2.scriptDefaults[0]) {
+						variousSettings[toggle] = class9_2.scriptDefaults[0];
 						applyVarpSetting(toggle);
 						needDrawTabArea = true;
 					}
@@ -11116,7 +11116,7 @@ followDistance = 1;
 					
 				case 185:
 					int k = inStream.readWordLEBigA();
-					RSInterface.interfaceCache[k].anInt233 = 3;
+					RSInterface.interfaceCache[k].enabledMediaType = 3;
 					if(myPlayer.desc == null)
 						RSInterface.interfaceCache[k].mediaID = (myPlayer.bodyColors[0] << 25) + (myPlayer.bodyColors[4] << 20) + (myPlayer.equipment[0] << 15) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
 					else
@@ -11240,8 +11240,8 @@ followDistance = 1;
 					int l10 = inStream.readSignedWordLE();
 					int i16 = inStream.readWordLE();
 					RSInterface class9_5 = RSInterface.interfaceCache[i16];
-					class9_5.anInt263 = k2;
-					class9_5.anInt265 = l10;
+					class9_5.invSpritePadX = k2;
+					class9_5.invSpritePadY = l10;
 					pktType = -1;
 					return true;
 					
@@ -11444,7 +11444,7 @@ followDistance = 1;
 				case 75:
 					int j3 = inStream.readWordLEBigA();
 					int j11 = inStream.readWordLEBigA();
-					RSInterface.interfaceCache[j11].anInt233 = 2;
+					RSInterface.interfaceCache[j11].enabledMediaType = 2;
 					RSInterface.interfaceCache[j11].mediaID = j3;
 					pktType = -1;
 					return true;
@@ -11786,12 +11786,12 @@ case 174:
 					int i13 = inStream.readUnsignedWord();
 					int k18 = inStream.readUnsignedWord();
 					if(k18 == 65535) {
-						RSInterface.interfaceCache[i6].anInt233 = 0;
+						RSInterface.interfaceCache[i6].enabledMediaType = 0;
 						pktType = -1;
 						return true;
 					} else {
 						ItemDef itemDef = ItemDef.forID(k18);
-						RSInterface.interfaceCache[i6].anInt233 = 4;
+						RSInterface.interfaceCache[i6].enabledMediaType = 4;
 						RSInterface.interfaceCache[i6].mediaID = k18;
 						RSInterface.interfaceCache[i6].modelRotation1 = itemDef.modelRotation1;
 						RSInterface.interfaceCache[i6].modelRotation2 = itemDef.modelRotation2;
@@ -11861,7 +11861,7 @@ case 174:
 				case 8:
 					int k6 = inStream.readWordLEBigA();
 					int l13 = inStream.readUnsignedWord();
-					RSInterface.interfaceCache[k6].anInt233 = 1;
+					RSInterface.interfaceCache[k6].enabledMediaType = 1;
 					RSInterface.interfaceCache[k6].mediaID = l13;
 					pktType = -1;
 					return true;
@@ -12029,10 +12029,10 @@ case 174:
 					int l8 = inStream.readUnsignedWord();
 					int i15 = inStream.readSignedWord();
 					RSInterface class9_4 = RSInterface.interfaceCache[l8];
-					class9_4.anInt257 = i15;
+					class9_4.enabledAnimation = i15;
 					if(i15 == -1) {
-						class9_4.anInt246 = 0;
-						class9_4.anInt208 = 0;
+						class9_4.enabledSpriteId = 0;
+						class9_4.animationId = 0;
 					}
 					pktType = -1;
 					return true;
@@ -12859,7 +12859,7 @@ case 174:
 	private boolean songChanging;
 	private final int[] anIntArray1229;
 	private CollisionMap[] aCollisionMapArray1230;
-	public static int anIntArray1232[];
+	public static int BIT_MASKS[];
 	private boolean aBoolean1233;
 	private int[] anIntArray1234;
 	private int[] anIntArray1235;
@@ -12982,10 +12982,10 @@ case 174:
 			i += i1;
 			anIntArray1019[j] = i / 4;
 		}
-		anIntArray1232 = new int[32];
+		BIT_MASKS = new int[32];
 		i = 2;
 		for(int k = 0; k < 32; k++) {
-			anIntArray1232[k] = i - 1;
+			BIT_MASKS[k] = i - 1;
 			i += i;
 		}
 	}

@@ -43,12 +43,12 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 			aLongArray7[k1] = System.currentTimeMillis();
 
 		long l = System.currentTimeMillis();
-		while(anInt4 >= 0) 
+		while(targetFps >= 0) 
 		{
-			if(anInt4 > 0)
+			if(targetFps > 0)
 			{
-				anInt4--;
-				if(anInt4 == 0)
+				targetFps--;
+				if(targetFps == 0)
 				{
 					exit();
 					return;
@@ -125,13 +125,13 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 				j1 = 0;
 			}
 		}
-		if(anInt4 == -1)
+		if(targetFps == -1)
 			exit();
 	}
 
 	private void exit()
 	{
-		anInt4 = -2;
+		targetFps = -2;
 		cleanUpForQuit();
 		if(gameFrame != null)
 		{
@@ -155,25 +155,25 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 
 	public final void start()
 	{
-		if(anInt4 >= 0)
-			anInt4 = 0;
+		if(targetFps >= 0)
+			targetFps = 0;
 	}
 
 	public final void stop()
 	{
-		if(anInt4 >= 0)
-			anInt4 = 4000 / delayTime;
+		if(targetFps >= 0)
+			targetFps = 4000 / delayTime;
 	}
 
 	public final void destroy()
 	{
-		anInt4 = -1;
+		targetFps = -1;
 		try
 		{
 			Thread.sleep(5000L);
 		}
 		catch(Exception _ex) { }
-		if(anInt4 == -1)
+		if(targetFps == -1)
 			exit();
 	}
 
@@ -553,7 +553,7 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 		charQueue = new int[128];
 	}
 
-	private int anInt4;
+	private int targetFps;
 	private int delayTime;
 	int minDelay;
 	private final long[] aLongArray7;
@@ -582,5 +582,5 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
 	private final int[] charQueue;
 	private int readIndex;
 	private int writeIndex;
-	public static int anInt34;
+	public static int debugFlags;
 }

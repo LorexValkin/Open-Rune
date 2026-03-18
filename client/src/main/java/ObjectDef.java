@@ -157,7 +157,7 @@ public final class ObjectDef {
 			int j = varBit.settingIndex;
 			int k = varBit.lowBit;
 			int l = varBit.highBit;
-			int i1 = client.anIntArray1232[l - k];
+			int i1 = client.BIT_MASKS[l - k];
 			i = clientInstance.variousSettings[j] >> k & i1;
 		} else
 		if(settingId != -1)

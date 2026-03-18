@@ -26,27 +26,27 @@ public final class IDK {
 			if(i == 0)
 				return;
 			if(i == 1)
-				anInt657 = stream.readUnsignedByte();
+				bodyPartId = stream.readUnsignedByte();
 			else
 			if(i == 2)
 			{
 				int j = stream.readUnsignedByte();
-				anIntArray658 = new int[j];
+				bodyModelIds = new int[j];
 				for(int k = 0; k < j; k++)
-					anIntArray658[k] = stream.readUnsignedWord();
+					bodyModelIds[k] = stream.readUnsignedWord();
 
 			} else
 			if(i == 3)
 				aBoolean662 = true;
 			else
 			if(i >= 40 && i < 50)
-				anIntArray659[i - 40] = stream.readUnsignedWord();
+				originalColors[i - 40] = stream.readUnsignedWord();
 			else
 			if(i >= 50 && i < 60)
-				anIntArray660[i - 50] = stream.readUnsignedWord();
+				modifiedColors[i - 50] = stream.readUnsignedWord();
 			else
 			if(i >= 60 && i < 70)
-				anIntArray661[i - 60] = stream.readUnsignedWord();
+				headModelIds[i - 60] = stream.readUnsignedWord();
 			else
 				System.out.println("Error unrecognised config code: " + i);
 		} while(true);
@@ -54,11 +54,11 @@ public final class IDK {
 
 	public boolean isIDKHeadModelReady()
 	{
-		if(anIntArray658 == null)
+		if(bodyModelIds == null)
 			return true;
 		boolean flag = true;
-		for(int j = 0; j < anIntArray658.length; j++)
-			if(!Model.isModelLoaded(anIntArray658[j]))
+		for(int j = 0; j < bodyModelIds.length; j++)
+			if(!Model.isModelLoaded(bodyModelIds[j]))
 				flag = false;
 
 		return flag;
@@ -66,11 +66,11 @@ public final class IDK {
 
 	public Model getIDKHeadModel()
 	{
-		if(anIntArray658 == null)
+		if(bodyModelIds == null)
 			return null;
-		Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray658.length];
-		for(int i = 0; i < anIntArray658.length; i++)
-			aclass30_sub2_sub4_sub6s[i] = Model.getModel(anIntArray658[i]);
+		Model aclass30_sub2_sub4_sub6s[] = new Model[bodyModelIds.length];
+		for(int i = 0; i < bodyModelIds.length; i++)
+			aclass30_sub2_sub4_sub6s[i] = Model.getModel(bodyModelIds[i]);
 
 		Model model;
 		if(aclass30_sub2_sub4_sub6s.length == 1)
@@ -79,9 +79,9 @@ public final class IDK {
 			model = new Model(aclass30_sub2_sub4_sub6s.length, aclass30_sub2_sub4_sub6s);
 		for(int j = 0; j < 6; j++)
 		{
-			if(anIntArray659[j] == 0)
+			if(originalColors[j] == 0)
 				break;
-			model.replaceColor(anIntArray659[j], anIntArray660[j]);
+			model.replaceColor(originalColors[j], modifiedColors[j]);
 		}
 
 		return model;
@@ -91,7 +91,7 @@ public final class IDK {
 	{
 		boolean flag1 = true;
 		for(int i = 0; i < 5; i++)
-			if(anIntArray661[i] != -1 && !Model.isModelLoaded(anIntArray661[i]))
+			if(headModelIds[i] != -1 && !Model.isModelLoaded(headModelIds[i]))
 				flag1 = false;
 
 		return flag1;
@@ -102,15 +102,15 @@ public final class IDK {
 		Model aclass30_sub2_sub4_sub6s[] = new Model[5];
 		int j = 0;
 		for(int k = 0; k < 5; k++)
-			if(anIntArray661[k] != -1)
-				aclass30_sub2_sub4_sub6s[j++] = Model.getModel(anIntArray661[k]);
+			if(headModelIds[k] != -1)
+				aclass30_sub2_sub4_sub6s[j++] = Model.getModel(headModelIds[k]);
 
 		Model model = new Model(j, aclass30_sub2_sub4_sub6s);
 		for(int l = 0; l < 6; l++)
 		{
-			if(anIntArray659[l] == 0)
+			if(originalColors[l] == 0)
 				break;
-			model.replaceColor(anIntArray659[l], anIntArray660[l]);
+			model.replaceColor(originalColors[l], modifiedColors[l]);
 		}
 
 		return model;
@@ -118,19 +118,19 @@ public final class IDK {
 
 	private IDK()
 	{
-		anInt657 = -1;
-		anIntArray659 = new int[6];
-		anIntArray660 = new int[6];
+		bodyPartId = -1;
+		originalColors = new int[6];
+		modifiedColors = new int[6];
 		aBoolean662 = false;
 	}
 
 	public static int length;
 	public static IDK cache[];
-	public int anInt657;
-	private int[] anIntArray658;
-	private final int[] anIntArray659;
-	private final int[] anIntArray660;
-	private final int[] anIntArray661 = {
+	public int bodyPartId;
+	private int[] bodyModelIds;
+	private final int[] originalColors;
+	private final int[] modifiedColors;
+	private final int[] headModelIds = {
 		-1, -1, -1, -1, -1
 	};
 	public boolean aBoolean662;

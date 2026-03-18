@@ -10,7 +10,7 @@ public final class Background extends DrawingArea {
 		Stream stream_1 = new Stream(streamLoader.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord();
 		textureWidth = stream_1.readUnsignedWord();
-		anInt1457 = stream_1.readUnsignedWord();
+		maxHeight = stream_1.readUnsignedWord();
 		int j = stream_1.readUnsignedByte();
 		pixels = new int[j];
 		for(int k = 0; k < j - 1; k++)
@@ -23,12 +23,12 @@ public final class Background extends DrawingArea {
 			stream_1.currentOffset++;
 		}
 
-		anInt1454 = stream_1.readUnsignedByte();
-		anInt1455 = stream_1.readUnsignedByte();
+		offsetX = stream_1.readUnsignedByte();
+		offsetY = stream_1.readUnsignedByte();
 		width = stream_1.readUnsignedWord();
-		anInt1453 = stream_1.readUnsignedWord();
+		height = stream_1.readUnsignedWord();
 		int i1 = stream_1.readUnsignedByte();
-		int j1 = width * anInt1453;
+		int j1 = width * height;
 		aByteArray1450 = new byte[j1];
 		if(i1 == 0)
 		{
@@ -41,7 +41,7 @@ public final class Background extends DrawingArea {
 		{
 			for(int l1 = 0; l1 < width; l1++)
 			{
-				for(int i2 = 0; i2 < anInt1453; i2++)
+				for(int i2 = 0; i2 < height; i2++)
 					aByteArray1450[l1 + i2 * width] = stream.readSignedByte();
 
 			}
@@ -52,48 +52,48 @@ public final class Background extends DrawingArea {
 	public void readSprite()
 	{
 		textureWidth /= 2;
-		anInt1457 /= 2;
-		byte abyte0[] = new byte[textureWidth * anInt1457];
+		maxHeight /= 2;
+		byte abyte0[] = new byte[textureWidth * maxHeight];
 		int i = 0;
-		for(int j = 0; j < anInt1453; j++)
+		for(int j = 0; j < height; j++)
 		{
 			for(int k = 0; k < width; k++)
-				abyte0[(k + anInt1454 >> 1) + (j + anInt1455 >> 1) * textureWidth] = aByteArray1450[i++];
+				abyte0[(k + offsetX >> 1) + (j + offsetY >> 1) * textureWidth] = aByteArray1450[i++];
 
 		}
 
 		aByteArray1450 = abyte0;
 		width = textureWidth;
-		anInt1453 = anInt1457;
-		anInt1454 = 0;
-			anInt1455 = 0;
+		height = maxHeight;
+		offsetX = 0;
+			offsetY = 0;
 	}
 
 	public void flipHorizontally()
 	{
-		if(width == textureWidth && anInt1453 == anInt1457)
+		if(width == textureWidth && height == maxHeight)
 			return;
-		byte abyte0[] = new byte[textureWidth * anInt1457];
+		byte abyte0[] = new byte[textureWidth * maxHeight];
 		int i = 0;
-		for(int j = 0; j < anInt1453; j++)
+		for(int j = 0; j < height; j++)
 		{
 			for(int k = 0; k < width; k++)
-				abyte0[k + anInt1454 + (j + anInt1455) * textureWidth] = aByteArray1450[i++];
+				abyte0[k + offsetX + (j + offsetY) * textureWidth] = aByteArray1450[i++];
 
 		}
 
 		aByteArray1450 = abyte0;
 		width = textureWidth;
-		anInt1453 = anInt1457;
-		anInt1454 = 0;
-		anInt1455 = 0;
+		height = maxHeight;
+		offsetX = 0;
+		offsetY = 0;
 	}
 
 	public void flipVertically()
 	{
-		byte abyte0[] = new byte[width * anInt1453];
+		byte abyte0[] = new byte[width * height];
 		int j = 0;
-		for(int k = 0; k < anInt1453; k++)
+		for(int k = 0; k < height; k++)
 		{
 			for(int l = width - 1; l >= 0; l--)
 				abyte0[j++] = aByteArray1450[l + k * width];
@@ -101,14 +101,14 @@ public final class Background extends DrawingArea {
 		}
 
 		aByteArray1450 = abyte0;
-		anInt1454 = textureWidth - width - anInt1454;
+		offsetX = textureWidth - width - offsetX;
 	}
 
 	public void resizeToLibrary()
 	{
-		byte abyte0[] = new byte[width * anInt1453];
+		byte abyte0[] = new byte[width * height];
 		int i = 0;
-		for(int j = anInt1453 - 1; j >= 0; j--)
+		for(int j = height - 1; j >= 0; j--)
 		{
 			for(int k = 0; k < width; k++)
 				abyte0[i++] = aByteArray1450[k + j * width];
@@ -116,7 +116,7 @@ public final class Background extends DrawingArea {
 		}
 
 		aByteArray1450 = abyte0;
-		anInt1455 = anInt1457 - anInt1453 - anInt1455;
+		offsetY = maxHeight - height - offsetY;
 	}
 
 	public void drawBackground(int i, int j, int k)
@@ -150,11 +150,11 @@ public final class Background extends DrawingArea {
 
 	public void drawBackground(int i, int k)
 	{
-		i += anInt1454;
-		k += anInt1455;
+		i += offsetX;
+		k += offsetY;
 		int l = i + k * DrawingArea.width;
 		int i1 = 0;
-		int j1 = anInt1453;
+		int j1 = height;
 		int k1 = width;
 		int l1 = DrawingArea.width - k1;
 		int i2 = 0;
@@ -240,9 +240,9 @@ public final class Background extends DrawingArea {
 	public byte aByteArray1450[];
 	public final int[] pixels;
 	public int width;
-	public int anInt1453;
-	public int anInt1454;
-	public int anInt1455;
+	public int height;
+	public int offsetX;
+	public int offsetY;
 	public int textureWidth;
-	private int anInt1457;
+	private int maxHeight;
 }

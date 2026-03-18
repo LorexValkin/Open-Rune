@@ -51,7 +51,7 @@ final class Animable_Sub5 extends Animable {
 			int k = varBit.settingIndex;
 			int l = varBit.lowBit;
 			int i1 = varBit.highBit;
-			int j1 = client.anIntArray1232[i1 - l];
+			int j1 = client.BIT_MASKS[i1 - l];
 			i = clientInstance.variousSettings[k] >> l & j1;
 		} else
 		if(settingId != -1)

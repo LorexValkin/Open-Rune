@@ -6,7 +6,7 @@ final class Sounds {
 
 	private Sounds()
 	{
-		aSoundTrackArray329 = new SoundTrack[10];
+		tracks = new SoundTrack[10];
 	}
 
 	public static void unpack(Stream stream)
@@ -21,7 +21,7 @@ final class Sounds {
 				return;
 			aSoundsArray325s[j] = new Sounds();
 			aSoundsArray325s[j].decodeSoundDef(stream);
-			anIntArray326[j] = aSoundsArray325s[j].calculateDuration();
+			delays[j] = aSoundsArray325s[j].calculateDuration();
 		} while(true);
 	}
 
@@ -45,33 +45,33 @@ final class Sounds {
 			if(j != 0)
 			{
 				stream.currentOffset--;
-				aSoundTrackArray329[i] = new SoundTrack();
-				aSoundTrackArray329[i].decode(stream);
+				tracks[i] = new SoundTrack();
+				tracks[i].decode(stream);
 			}
 		}
-		anInt330 = stream.readUnsignedWord();
-		anInt331 = stream.readUnsignedWord();
+		loopCount = stream.readUnsignedWord();
+		loopStart = stream.readUnsignedWord();
 	}
 
 	private int calculateDuration()
 	{
 		int j = 0x98967f;
 		for(int k = 0; k < 10; k++)
-			if(aSoundTrackArray329[k] != null && aSoundTrackArray329[k].anInt114 / 20 < j)
-				j = aSoundTrackArray329[k].anInt114 / 20;
+			if(tracks[k] != null && tracks[k].offset / 20 < j)
+				j = tracks[k].offset / 20;
 
-		if(anInt330 < anInt331 && anInt330 / 20 < j)
-			j = anInt330 / 20;
+		if(loopCount < loopStart && loopCount / 20 < j)
+			j = loopCount / 20;
 		if(j == 0x98967f || j == 0)
 			return 0;
 		for(int l = 0; l < 10; l++)
-			if(aSoundTrackArray329[l] != null)
-				aSoundTrackArray329[l].anInt114 -= j * 20;
+			if(tracks[l] != null)
+				tracks[l].offset -= j * 20;
 
-		if(anInt330 < anInt331)
+		if(loopCount < loopStart)
 		{
-			anInt330 -= j * 20;
-			anInt331 -= j * 20;
+			loopCount -= j * 20;
+			loopStart -= j * 20;
 		}
 		return j;
 	}
@@ -101,14 +101,14 @@ final class Sounds {
 	{
 		int j = 0;
 		for(int k = 0; k < 10; k++)
-			if(aSoundTrackArray329[k] != null && aSoundTrackArray329[k].anInt113 + aSoundTrackArray329[k].anInt114 > j)
-				j = aSoundTrackArray329[k].anInt113 + aSoundTrackArray329[k].anInt114;
+			if(tracks[k] != null && tracks[k].duration + tracks[k].offset > j)
+				j = tracks[k].duration + tracks[k].offset;
 
 		if(j == 0)
 			return 0;
 		int l = (22050 * j) / 1000;
-		int i1 = (22050 * anInt330) / 1000;
-		int j1 = (22050 * anInt331) / 1000;
+		int i1 = (22050 * loopCount) / 1000;
+		int j1 = (22050 * loopStart) / 1000;
 		if(i1 < 0 || i1 > l || j1 < 0 || j1 > l || i1 >= j1)
 			i = 0;
 		int k1 = l + (j1 - i1) * (i - 1);
@@ -116,11 +116,11 @@ final class Sounds {
 			aByteArray327[l1] = -128;
 
 		for(int i2 = 0; i2 < 10; i2++)
-			if(aSoundTrackArray329[i2] != null)
+			if(tracks[i2] != null)
 			{
-				int j2 = (aSoundTrackArray329[i2].anInt113 * 22050) / 1000;
-				int i3 = (aSoundTrackArray329[i2].anInt114 * 22050) / 1000;
-				int ai[] = aSoundTrackArray329[i2].synthesize(j2, aSoundTrackArray329[i2].anInt113);
+				int j2 = (tracks[i2].duration * 22050) / 1000;
+				int i3 = (tracks[i2].offset * 22050) / 1000;
+				int ai[] = tracks[i2].synthesize(j2, tracks[i2].duration);
 				for(int l3 = 0; l3 < j2; l3++)
 					aByteArray327[l3 + i3 + 44] += (byte)(ai[l3] >> 8);
 
@@ -148,11 +148,11 @@ final class Sounds {
 	}
 
 	private static final Sounds[] aSoundsArray325s = new Sounds[5000];
-	public static final int[] anIntArray326 = new int[5000];
+	public static final int[] delays = new int[5000];
 	private static byte[] aByteArray327;
 	private static Stream aStream_328;
-	private final SoundTrack[] aSoundTrackArray329;
-	private int anInt330;
-	private int anInt331;
+	private final SoundTrack[] tracks;
+	private int loopCount;
+	private int loopStart;
 
 }

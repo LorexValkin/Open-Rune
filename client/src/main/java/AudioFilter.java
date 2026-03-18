@@ -32,14 +32,14 @@ final class AudioFilter
 			float f1 = (float)anIntArray668[0] + (float)(anIntArray668[1] - anIntArray668[0]) * f;
 			f1 *= 0.003051758F;
 			aFloat671 = (float)Math.pow(0.10000000000000001D, f1 / 20F);
-			anInt672 = (int)(aFloat671 * 65536F);
+			outputSize = (int)(aFloat671 * 65536F);
 		}
-		if(anIntArray665[i] == 0)
+		if(outputBuffer[i] == 0)
 			return 0;
 		float f2 = getFilterGain(i, 0, f);
 		aFloatArrayArray669[i][0] = -2F * f2 * (float)Math.cos(getFilterFrequency(f, 0, i));
 		aFloatArrayArray669[i][1] = f2 * f2;
-		for(int k = 1; k < anIntArray665[i]; k++)
+		for(int k = 1; k < outputBuffer[i]; k++)
 		{
 			float f3 = getFilterGain(i, k, f);
 			float f4 = -2F * f3 * (float)Math.cos(getFilterFrequency(f, k, i));
@@ -55,21 +55,21 @@ final class AudioFilter
 
 		if(i == 0)
 		{
-			for(int l = 0; l < anIntArray665[0] * 2; l++)
+			for(int l = 0; l < outputBuffer[0] * 2; l++)
 				aFloatArrayArray669[0][l] *= aFloat671;
 
 		}
-		for(int i1 = 0; i1 < anIntArray665[i] * 2; i1++)
-			anIntArrayArray670[i][i1] = (int)(aFloatArrayArray669[i][i1] * 65536F);
+		for(int i1 = 0; i1 < outputBuffer[i] * 2; i1++)
+			mixBuffer[i][i1] = (int)(aFloatArrayArray669[i][i1] * 65536F);
 
-		return anIntArray665[i] * 2;
+		return outputBuffer[i] * 2;
 	}
 
 	public void decodeFilter(Stream stream, SoundEnvelope soundEnvelope)
 	{
 		int i = stream.readUnsignedByte();
-		anIntArray665[0] = i >> 4;
-		anIntArray665[1] = i & 0xf;
+		outputBuffer[0] = i >> 4;
+		outputBuffer[1] = i & 0xf;
 		if(i != 0)
 		{
 			anIntArray668[0] = stream.readUnsignedWord();
@@ -77,7 +77,7 @@ final class AudioFilter
 			int j = stream.readUnsignedByte();
 			for(int k = 0; k < 2; k++)
 			{
-				for(int l = 0; l < anIntArray665[k]; l++)
+				for(int l = 0; l < outputBuffer[k]; l++)
 				{
 					anIntArrayArrayArray666[k][0][l] = stream.readUnsignedWord();
 					anIntArrayArrayArray667[k][0][l] = stream.readUnsignedWord();
@@ -87,7 +87,7 @@ final class AudioFilter
 
 			for(int i1 = 0; i1 < 2; i1++)
 			{
-				for(int j1 = 0; j1 < anIntArray665[i1]; j1++)
+				for(int j1 = 0; j1 < outputBuffer[i1]; j1++)
 					if((j & 1 << i1 * 4 << j1) != 0)
 					{
 						anIntArrayArrayArray666[i1][1][j1] = stream.readUnsignedWord();
@@ -110,19 +110,19 @@ final class AudioFilter
 
 	public AudioFilter()
 	{
-		anIntArray665 = new int[2];
+		outputBuffer = new int[2];
 		anIntArrayArrayArray666 = new int[2][2][4];
 		anIntArrayArrayArray667 = new int[2][2][4];
 		anIntArray668 = new int[2];
 	}
 
-	final int[] anIntArray665;
+	final int[] outputBuffer;
 	private final int[][][] anIntArrayArrayArray666;
 	private final int[][][] anIntArrayArrayArray667;
 	private final int[] anIntArray668;
 	private static final float[][] aFloatArrayArray669 = new float[2][8];
-	static final int[][] anIntArrayArray670 = new int[2][8];
+	static final int[][] mixBuffer = new int[2][8];
 	private static float aFloat671;
-	static int anInt672;
+	static int outputSize;
 
 }

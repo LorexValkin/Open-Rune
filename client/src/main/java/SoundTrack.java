@@ -7,128 +7,128 @@ final class SoundTrack
 
 	public static void initNoise()
 	{
-		anIntArray116 = new int[32768];
+		oscillatorPhase = new int[32768];
 		for(int i = 0; i < 32768; i++)
 			if(Math.random() > 0.5D)
-				anIntArray116[i] = 1;
+				oscillatorPhase[i] = 1;
 			else
-				anIntArray116[i] = -1;
+				oscillatorPhase[i] = -1;
 
-		anIntArray117 = new int[32768];
+		oscillatorAmplitude = new int[32768];
 		for(int j = 0; j < 32768; j++)
-			anIntArray117[j] = (int)(Math.sin((double)j / 5215.1903000000002D) * 16384D);
+			oscillatorAmplitude[j] = (int)(Math.sin((double)j / 5215.1903000000002D) * 16384D);
 
-		anIntArray115 = new int[0x35d54];
+		oscillatorFrequency = new int[0x35d54];
 	}
 
 	public int[] synthesize(int i, int j)
 	{
 		for(int k = 0; k < i; k++)
-			anIntArray115[k] = 0;
+			oscillatorFrequency[k] = 0;
 
 		if(j < 10)
-			return anIntArray115;
+			return oscillatorFrequency;
 		double d = (double)i / ((double)j + 0.0D);
-		aSoundEnvelope_98.resetValues();
-		aSoundEnvelope_99.resetValues();
+		pitchEnvelope.resetValues();
+		volumeEnvelope.resetValues();
 		int l = 0;
 		int i1 = 0;
 		int j1 = 0;
-		if(aSoundEnvelope_100 != null)
+		if(pitchModEnvelope != null)
 		{
-			aSoundEnvelope_100.resetValues();
-			aSoundEnvelope_101.resetValues();
-			l = (int)(((double)(aSoundEnvelope_100.anInt539 - aSoundEnvelope_100.anInt538) * 32.768000000000001D) / d);
-			i1 = (int)(((double)aSoundEnvelope_100.anInt538 * 32.768000000000001D) / d);
+			pitchModEnvelope.resetValues();
+			pitchModRangeEnvelope.resetValues();
+			l = (int)(((double)(pitchModEnvelope.formStart - pitchModEnvelope.formDuration) * 32.768000000000001D) / d);
+			i1 = (int)(((double)pitchModEnvelope.formDuration * 32.768000000000001D) / d);
 		}
 		int k1 = 0;
 		int l1 = 0;
 		int i2 = 0;
-		if(aSoundEnvelope_102 != null)
+		if(gatingEnvelope != null)
 		{
-			aSoundEnvelope_102.resetValues();
-			aSoundEnvelope_103.resetValues();
-			k1 = (int)(((double)(aSoundEnvelope_102.anInt539 - aSoundEnvelope_102.anInt538) * 32.768000000000001D) / d);
-			l1 = (int)(((double)aSoundEnvelope_102.anInt538 * 32.768000000000001D) / d);
+			gatingEnvelope.resetValues();
+			gatingFreqEnvelope.resetValues();
+			k1 = (int)(((double)(gatingEnvelope.formStart - gatingEnvelope.formDuration) * 32.768000000000001D) / d);
+			l1 = (int)(((double)gatingEnvelope.formDuration * 32.768000000000001D) / d);
 		}
 		for(int j2 = 0; j2 < 5; j2++)
-			if(anIntArray106[j2] != 0)
+			if(oscillatorVolume[j2] != 0)
 			{
-				anIntArray118[j2] = 0;
-				anIntArray119[j2] = (int)((double)anIntArray108[j2] * d);
-				anIntArray120[j2] = (anIntArray106[j2] << 14) / 100;
-				anIntArray121[j2] = (int)(((double)(aSoundEnvelope_98.anInt539 - aSoundEnvelope_98.anInt538) * 32.768000000000001D * Math.pow(1.0057929410678534D, anIntArray107[j2])) / d);
-				anIntArray122[j2] = (int)(((double)aSoundEnvelope_98.anInt538 * 32.768000000000001D) / d);
+				oscillatorSemitone[j2] = 0;
+				oscillatorStart[j2] = (int)((double)oscillatorDelay[j2] * d);
+				oscillatorVolumeDelta[j2] = (oscillatorVolume[j2] << 14) / 100;
+				oscillatorPitchDelta[j2] = (int)(((double)(pitchEnvelope.formStart - pitchEnvelope.formDuration) * 32.768000000000001D * Math.pow(1.0057929410678534D, oscillatorPitch[j2])) / d);
+				oscillatorMinDelay[j2] = (int)(((double)pitchEnvelope.formDuration * 32.768000000000001D) / d);
 			}
 
 		for(int k2 = 0; k2 < i; k2++)
 		{
-			int l2 = aSoundEnvelope_98.evaluateSE(i);
-			int j4 = aSoundEnvelope_99.evaluateSE(i);
-			if(aSoundEnvelope_100 != null)
+			int l2 = pitchEnvelope.evaluateSE(i);
+			int j4 = volumeEnvelope.evaluateSE(i);
+			if(pitchModEnvelope != null)
 			{
-				int j5 = aSoundEnvelope_100.evaluateSE(i);
-				int j6 = aSoundEnvelope_101.evaluateSE(i);
-				l2 += evaluateWave(j6, j1, aSoundEnvelope_100.anInt540) >> 1;
+				int j5 = pitchModEnvelope.evaluateSE(i);
+				int j6 = pitchModRangeEnvelope.evaluateSE(i);
+				l2 += evaluateWave(j6, j1, pitchModEnvelope.formEnd) >> 1;
 				j1 += (j5 * l >> 16) + i1;
 			}
-			if(aSoundEnvelope_102 != null)
+			if(gatingEnvelope != null)
 			{
-				int k5 = aSoundEnvelope_102.evaluateSE(i);
-				int k6 = aSoundEnvelope_103.evaluateSE(i);
-				j4 = j4 * ((evaluateWave(k6, i2, aSoundEnvelope_102.anInt540) >> 1) + 32768) >> 15;
+				int k5 = gatingEnvelope.evaluateSE(i);
+				int k6 = gatingFreqEnvelope.evaluateSE(i);
+				j4 = j4 * ((evaluateWave(k6, i2, gatingEnvelope.formEnd) >> 1) + 32768) >> 15;
 				i2 += (k5 * k1 >> 16) + l1;
 			}
 			for(int l5 = 0; l5 < 5; l5++)
-				if(anIntArray106[l5] != 0)
+				if(oscillatorVolume[l5] != 0)
 				{
-					int l6 = k2 + anIntArray119[l5];
+					int l6 = k2 + oscillatorStart[l5];
 					if(l6 < i)
 					{
-						anIntArray115[l6] += evaluateWave(j4 * anIntArray120[l5] >> 15, anIntArray118[l5], aSoundEnvelope_98.anInt540);
-						anIntArray118[l5] += (l2 * anIntArray121[l5] >> 16) + anIntArray122[l5];
+						oscillatorFrequency[l6] += evaluateWave(j4 * oscillatorVolumeDelta[l5] >> 15, oscillatorSemitone[l5], pitchEnvelope.formEnd);
+						oscillatorSemitone[l5] += (l2 * oscillatorPitchDelta[l5] >> 16) + oscillatorMinDelay[l5];
 					}
 				}
 
 		}
 
-		if(aSoundEnvelope_104 != null)
+		if(filterEnvelope != null)
 		{
-			aSoundEnvelope_104.resetValues();
-			aSoundEnvelope_105.resetValues();
+			filterEnvelope.resetValues();
+			filterRangeEnvelope.resetValues();
 			int i3 = 0;
 			boolean flag = false;
 			boolean flag1 = true;
 			for(int i7 = 0; i7 < i; i7++)
 			{
-				int k7 = aSoundEnvelope_104.evaluateSE(i);
-				int i8 = aSoundEnvelope_105.evaluateSE(i);
+				int k7 = filterEnvelope.evaluateSE(i);
+				int i8 = filterRangeEnvelope.evaluateSE(i);
 				int k4;
 				if(flag1)
-					k4 = aSoundEnvelope_104.anInt538 + ((aSoundEnvelope_104.anInt539 - aSoundEnvelope_104.anInt538) * k7 >> 8);
+					k4 = filterEnvelope.formDuration + ((filterEnvelope.formStart - filterEnvelope.formDuration) * k7 >> 8);
 				else
-					k4 = aSoundEnvelope_104.anInt538 + ((aSoundEnvelope_104.anInt539 - aSoundEnvelope_104.anInt538) * i8 >> 8);
+					k4 = filterEnvelope.formDuration + ((filterEnvelope.formStart - filterEnvelope.formDuration) * i8 >> 8);
 				if((i3 += 256) >= k4)
 				{
 					i3 = 0;
 					flag1 = !flag1;
 				}
 				if(flag1)
-					anIntArray115[i7] = 0;
+					oscillatorFrequency[i7] = 0;
 			}
 
 		}
-		if(anInt109 > 0 && anInt110 > 0)
+		if(delayTime > 0 && delayDecay > 0)
 		{
-			int j3 = (int)((double)anInt109 * d);
+			int j3 = (int)((double)delayTime * d);
 			for(int l4 = j3; l4 < i; l4++)
-				anIntArray115[l4] += (anIntArray115[l4 - j3] * anInt110) / 100;
+				oscillatorFrequency[l4] += (oscillatorFrequency[l4 - j3] * delayDecay) / 100;
 
 		}
-		if(aAudioFilter_111.anIntArray665[0] > 0 || aAudioFilter_111.anIntArray665[1] > 0)
+		if(aAudioFilter_111.outputBuffer[0] > 0 || aAudioFilter_111.outputBuffer[1] > 0)
 		{
-			aSoundEnvelope_112.resetValues();
-			int k3 = aSoundEnvelope_112.evaluateSE(i + 1);
+			releaseEnvelope.resetValues();
+			int k3 = releaseEnvelope.evaluateSE(i + 1);
 			int i5 = aAudioFilter_111.computeCoefficients(0, (float)k3 / 65536F);
 			int i6 = aAudioFilter_111.computeCoefficients(1, (float)k3 / 65536F);
 			if(i >= i5 + i6)
@@ -139,15 +139,15 @@ final class SoundTrack
 					l7 = i - i5;
 				for(; j7 < l7; j7++)
 				{
-					int j8 = (int)((long)anIntArray115[j7 + i5] * (long)AudioFilter.anInt672 >> 16);
+					int j8 = (int)((long)oscillatorFrequency[j7 + i5] * (long)AudioFilter.outputSize >> 16);
 					for(int k8 = 0; k8 < i5; k8++)
-						j8 += (int)((long)anIntArray115[(j7 + i5) - 1 - k8] * (long)AudioFilter.anIntArrayArray670[0][k8] >> 16);
+						j8 += (int)((long)oscillatorFrequency[(j7 + i5) - 1 - k8] * (long)AudioFilter.mixBuffer[0][k8] >> 16);
 
 					for(int j9 = 0; j9 < j7; j9++)
-						j8 -= (int)((long)anIntArray115[j7 - 1 - j9] * (long)AudioFilter.anIntArrayArray670[1][j9] >> 16);
+						j8 -= (int)((long)oscillatorFrequency[j7 - 1 - j9] * (long)AudioFilter.mixBuffer[1][j9] >> 16);
 
-					anIntArray115[j7] = j8;
-					k3 = aSoundEnvelope_112.evaluateSE(i + 1);
+					oscillatorFrequency[j7] = j8;
+					k3 = releaseEnvelope.evaluateSE(i + 1);
 				}
 
 				char c = '\200';
@@ -158,15 +158,15 @@ final class SoundTrack
 						l7 = i - i5;
 					for(; j7 < l7; j7++)
 					{
-						int l8 = (int)((long)anIntArray115[j7 + i5] * (long)AudioFilter.anInt672 >> 16);
+						int l8 = (int)((long)oscillatorFrequency[j7 + i5] * (long)AudioFilter.outputSize >> 16);
 						for(int k9 = 0; k9 < i5; k9++)
-							l8 += (int)((long)anIntArray115[(j7 + i5) - 1 - k9] * (long)AudioFilter.anIntArrayArray670[0][k9] >> 16);
+							l8 += (int)((long)oscillatorFrequency[(j7 + i5) - 1 - k9] * (long)AudioFilter.mixBuffer[0][k9] >> 16);
 
 						for(int i10 = 0; i10 < i6; i10++)
-							l8 -= (int)((long)anIntArray115[j7 - 1 - i10] * (long)AudioFilter.anIntArrayArray670[1][i10] >> 16);
+							l8 -= (int)((long)oscillatorFrequency[j7 - 1 - i10] * (long)AudioFilter.mixBuffer[1][i10] >> 16);
 
-						anIntArray115[j7] = l8;
-						k3 = aSoundEnvelope_112.evaluateSE(i + 1);
+						oscillatorFrequency[j7] = l8;
+						k3 = releaseEnvelope.evaluateSE(i + 1);
 					}
 
 					if(j7 >= i - i5)
@@ -179,26 +179,26 @@ final class SoundTrack
 				{
 					int i9 = 0;
 					for(int l9 = (j7 + i5) - i; l9 < i5; l9++)
-						i9 += (int)((long)anIntArray115[(j7 + i5) - 1 - l9] * (long)AudioFilter.anIntArrayArray670[0][l9] >> 16);
+						i9 += (int)((long)oscillatorFrequency[(j7 + i5) - 1 - l9] * (long)AudioFilter.mixBuffer[0][l9] >> 16);
 
 					for(int j10 = 0; j10 < i6; j10++)
-						i9 -= (int)((long)anIntArray115[j7 - 1 - j10] * (long)AudioFilter.anIntArrayArray670[1][j10] >> 16);
+						i9 -= (int)((long)oscillatorFrequency[j7 - 1 - j10] * (long)AudioFilter.mixBuffer[1][j10] >> 16);
 
-					anIntArray115[j7] = i9;
-					int l3 = aSoundEnvelope_112.evaluateSE(i + 1);
+					oscillatorFrequency[j7] = i9;
+					int l3 = releaseEnvelope.evaluateSE(i + 1);
 				}
 
 			}
 		}
 		for(int i4 = 0; i4 < i; i4++)
 		{
-			if(anIntArray115[i4] < -32768)
-				anIntArray115[i4] = -32768;
-			if(anIntArray115[i4] > 32767)
-				anIntArray115[i4] = 32767;
+			if(oscillatorFrequency[i4] < -32768)
+				oscillatorFrequency[i4] = -32768;
+			if(oscillatorFrequency[i4] > 32767)
+				oscillatorFrequency[i4] = 32767;
 		}
 
-		return anIntArray115;
+		return oscillatorFrequency;
 	}
 
 	private int evaluateWave(int i, int k, int l)
@@ -209,100 +209,100 @@ final class SoundTrack
 			else
 				return -i;
 		if(l == 2)
-			return anIntArray117[k & 0x7fff] * i >> 14;
+			return oscillatorAmplitude[k & 0x7fff] * i >> 14;
 		if(l == 3)
 			return ((k & 0x7fff) * i >> 14) - i;
 		if(l == 4)
-			return anIntArray116[k / 2607 & 0x7fff] * i;
+			return oscillatorPhase[k / 2607 & 0x7fff] * i;
 		else
 			return 0;
 	}
 
 	public void decode(Stream stream)
 	{
-		aSoundEnvelope_98 = new SoundEnvelope();
-		aSoundEnvelope_98.decodeSE(stream);
-		aSoundEnvelope_99 = new SoundEnvelope();
-		aSoundEnvelope_99.decodeSE(stream);
+		pitchEnvelope = new SoundEnvelope();
+		pitchEnvelope.decodeSE(stream);
+		volumeEnvelope = new SoundEnvelope();
+		volumeEnvelope.decodeSE(stream);
 		int i = stream.readUnsignedByte();
 		if(i != 0)
 		{
 			stream.currentOffset--;
-			aSoundEnvelope_100 = new SoundEnvelope();
-			aSoundEnvelope_100.decodeSE(stream);
-			aSoundEnvelope_101 = new SoundEnvelope();
-			aSoundEnvelope_101.decodeSE(stream);
+			pitchModEnvelope = new SoundEnvelope();
+			pitchModEnvelope.decodeSE(stream);
+			pitchModRangeEnvelope = new SoundEnvelope();
+			pitchModRangeEnvelope.decodeSE(stream);
 		}
 		i = stream.readUnsignedByte();
 		if(i != 0)
 		{
 			stream.currentOffset--;
-			aSoundEnvelope_102 = new SoundEnvelope();
-			aSoundEnvelope_102.decodeSE(stream);
-			aSoundEnvelope_103 = new SoundEnvelope();
-			aSoundEnvelope_103.decodeSE(stream);
+			gatingEnvelope = new SoundEnvelope();
+			gatingEnvelope.decodeSE(stream);
+			gatingFreqEnvelope = new SoundEnvelope();
+			gatingFreqEnvelope.decodeSE(stream);
 		}
 		i = stream.readUnsignedByte();
 		if(i != 0)
 		{
 			stream.currentOffset--;
-			aSoundEnvelope_104 = new SoundEnvelope();
-			aSoundEnvelope_104.decodeSE(stream);
-			aSoundEnvelope_105 = new SoundEnvelope();
-			aSoundEnvelope_105.decodeSE(stream);
+			filterEnvelope = new SoundEnvelope();
+			filterEnvelope.decodeSE(stream);
+			filterRangeEnvelope = new SoundEnvelope();
+			filterRangeEnvelope.decodeSE(stream);
 		}
 		for(int j = 0; j < 10; j++)
 		{
 			int k = stream.readSmart();
 			if(k == 0)
 				break;
-			anIntArray106[j] = k;
-			anIntArray107[j] = stream.readSmartSigned();
-			anIntArray108[j] = stream.readSmart();
+			oscillatorVolume[j] = k;
+			oscillatorPitch[j] = stream.readSmartSigned();
+			oscillatorDelay[j] = stream.readSmart();
 		}
 
-		anInt109 = stream.readSmart();
-		anInt110 = stream.readSmart();
-		anInt113 = stream.readUnsignedWord();
-		anInt114 = stream.readUnsignedWord();
+		delayTime = stream.readSmart();
+		delayDecay = stream.readSmart();
+		duration = stream.readUnsignedWord();
+		offset = stream.readUnsignedWord();
 		aAudioFilter_111 = new AudioFilter();
-		aSoundEnvelope_112 = new SoundEnvelope();
-		aAudioFilter_111.decodeFilter(stream, aSoundEnvelope_112);
+		releaseEnvelope = new SoundEnvelope();
+		aAudioFilter_111.decodeFilter(stream, releaseEnvelope);
 	}
 
 	public SoundTrack()
 	{
-		anIntArray106 = new int[5];
-		anIntArray107 = new int[5];
-		anIntArray108 = new int[5];
-		anInt110 = 100;
-		anInt113 = 500;
+		oscillatorVolume = new int[5];
+		oscillatorPitch = new int[5];
+		oscillatorDelay = new int[5];
+		delayDecay = 100;
+		duration = 500;
 	}
 
-	private SoundEnvelope aSoundEnvelope_98;
-	private SoundEnvelope aSoundEnvelope_99;
-	private SoundEnvelope aSoundEnvelope_100;
-	private SoundEnvelope aSoundEnvelope_101;
-	private SoundEnvelope aSoundEnvelope_102;
-	private SoundEnvelope aSoundEnvelope_103;
-	private SoundEnvelope aSoundEnvelope_104;
-	private SoundEnvelope aSoundEnvelope_105;
-	private final int[] anIntArray106;
-	private final int[] anIntArray107;
-	private final int[] anIntArray108;
-	private int anInt109;
-	private int anInt110;
+	private SoundEnvelope pitchEnvelope;
+	private SoundEnvelope volumeEnvelope;
+	private SoundEnvelope pitchModEnvelope;
+	private SoundEnvelope pitchModRangeEnvelope;
+	private SoundEnvelope gatingEnvelope;
+	private SoundEnvelope gatingFreqEnvelope;
+	private SoundEnvelope filterEnvelope;
+	private SoundEnvelope filterRangeEnvelope;
+	private final int[] oscillatorVolume;
+	private final int[] oscillatorPitch;
+	private final int[] oscillatorDelay;
+	private int delayTime;
+	private int delayDecay;
 	private AudioFilter aAudioFilter_111;
-	private SoundEnvelope aSoundEnvelope_112;
-	int anInt113;
-	int anInt114;
-	private static int[] anIntArray115;
-	private static int[] anIntArray116;
-	private static int[] anIntArray117;
-	private static final int[] anIntArray118 = new int[5];
-	private static final int[] anIntArray119 = new int[5];
-	private static final int[] anIntArray120 = new int[5];
-	private static final int[] anIntArray121 = new int[5];
-	private static final int[] anIntArray122 = new int[5];
+	private SoundEnvelope releaseEnvelope;
+	int duration;
+	int offset;
+	private static int[] oscillatorFrequency;
+	private static int[] oscillatorPhase;
+	private static int[] oscillatorAmplitude;
+	private static final int[] oscillatorSemitone = new int[5];
+	private static final int[] oscillatorStart = new int[5];
+	private static final int[] oscillatorVolumeDelta = new int[5];
+	private static final int[] oscillatorPitchDelta = new int[5];
+	private static final int[] oscillatorMinDelay = new int[5];
 
 }

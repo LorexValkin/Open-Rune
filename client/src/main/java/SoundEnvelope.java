@@ -7,64 +7,64 @@ final class SoundEnvelope
 
 	public void decodeSE(Stream stream)
 	{
-		anInt540 = stream.readUnsignedByte();
-			anInt538 = stream.readDWord();
-			anInt539 = stream.readDWord();
+		formEnd = stream.readUnsignedByte();
+			formDuration = stream.readDWord();
+			formStart = stream.readDWord();
 			decodeShape(stream);
 	}
 
 	public void decodeShape(Stream stream)
 	{
-		anInt535 = stream.readUnsignedByte();
-		anIntArray536 = new int[anInt535];
-		anIntArray537 = new int[anInt535];
-		for(int i = 0; i < anInt535; i++)
+		segmentCount = stream.readUnsignedByte();
+		segmentDuration = new int[segmentCount];
+		segmentPeak = new int[segmentCount];
+		for(int i = 0; i < segmentCount; i++)
 		{
-			anIntArray536[i] = stream.readUnsignedWord();
-			anIntArray537[i] = stream.readUnsignedWord();
+			segmentDuration[i] = stream.readUnsignedWord();
+			segmentPeak[i] = stream.readUnsignedWord();
 		}
 
 	}
 
 	void resetValues()
 	{
-		anInt541 = 0;
-		anInt542 = 0;
-		anInt543 = 0;
-		anInt544 = 0;
-		anInt545 = 0;
+		currentSegment = 0;
+		segmentPosition = 0;
+		currentPeak = 0;
+		nextPeak = 0;
+		interpolationStep = 0;
 	}
 
 	int evaluateSE(int i)
 	{
-		if(anInt545 >= anInt541)
+		if(interpolationStep >= currentSegment)
 		{
-			anInt544 = anIntArray537[anInt542++] << 15;
-			if(anInt542 >= anInt535)
-				anInt542 = anInt535 - 1;
-			anInt541 = (int)(((double)anIntArray536[anInt542] / 65536D) * (double)i);
-			if(anInt541 > anInt545)
-				anInt543 = ((anIntArray537[anInt542] << 15) - anInt544) / (anInt541 - anInt545);
+			nextPeak = segmentPeak[segmentPosition++] << 15;
+			if(segmentPosition >= segmentCount)
+				segmentPosition = segmentCount - 1;
+			currentSegment = (int)(((double)segmentDuration[segmentPosition] / 65536D) * (double)i);
+			if(currentSegment > interpolationStep)
+				currentPeak = ((segmentPeak[segmentPosition] << 15) - nextPeak) / (currentSegment - interpolationStep);
 		}
-		anInt544 += anInt543;
-		anInt545++;
-		return anInt544 - anInt543 >> 15;
+		nextPeak += currentPeak;
+		interpolationStep++;
+		return nextPeak - currentPeak >> 15;
 	}
 
 	public SoundEnvelope()
 	{
 	}
 
-	private int anInt535;
-	private int[] anIntArray536;
-	private int[] anIntArray537;
-	int anInt538;
-	int anInt539;
-	int anInt540;
-	private int anInt541;
-	private int anInt542;
-	private int anInt543;
-	private int anInt544;
-	private int anInt545;
-	public static int anInt546;
+	private int segmentCount;
+	private int[] segmentDuration;
+	private int[] segmentPeak;
+	int formDuration;
+	int formStart;
+	int formEnd;
+	private int currentSegment;
+	private int segmentPosition;
+	private int currentPeak;
+	private int nextPeak;
+	private int interpolationStep;
+	public static int sampleRate;
 }
