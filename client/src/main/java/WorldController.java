@@ -924,8 +924,8 @@ label0:
 		clickPending = true;
 		clickScreenY = j;
 		clickScreenX = i;
-		anInt470 = -1;
-		anInt471 = -1;
+		clickedTileX = -1;
+		clickedTileY = -1;
 	}
 
 	public void renderScene(int i, int j, int k, int l, int i1, int j1)
@@ -1633,8 +1633,8 @@ label0:
 			Texture.opaque = i6 < 0 || k6 < 0 || k5 < 0 || i6 > DrawingArea.centerX || k6 > DrawingArea.centerX || k5 > DrawingArea.centerX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j6, l6, l5, i6, k6, k5))
 			{
-				anInt470 = j1;
-				anInt471 = k1;
+				clickedTileX = j1;
+				clickedTileY = k1;
 			}
 			if(plainTile.textureId == -1)
 			{
@@ -1658,8 +1658,8 @@ label0:
 			Texture.opaque = i5 < 0 || k5 < 0 || k6 < 0 || i5 > DrawingArea.centerX || k5 > DrawingArea.centerX || k6 > DrawingArea.centerX;
 			if(clickPending && frustumContains(clickScreenY, clickScreenX, j5, l5, l6, i5, k5, k6))
 			{
-				anInt470 = j1;
-				anInt471 = k1;
+				clickedTileX = j1;
+				clickedTileY = k1;
 			}
 			if(plainTile.textureId == -1)
 			{
@@ -1725,8 +1725,8 @@ label0:
 				Texture.opaque = i4 < 0 || j4 < 0 || k4 < 0 || i4 > DrawingArea.centerX || j4 > DrawingArea.centerX || k4 > DrawingArea.centerX;
 				if(clickPending && frustumContains(clickScreenY, clickScreenX, l4, i5, j5, i4, j4, k4))
 				{
-					anInt470 = i;
-					anInt471 = i1;
+					clickedTileX = i;
+					clickedTileY = i1;
 				}
 				if(shapedTile.triangleTextureId == null || shapedTile.triangleTextureId[j2] == -1)
 				{
@@ -2190,8 +2190,8 @@ label0:
 	private static boolean clickPending;
 	private static int clickScreenY;
 	private static int clickScreenX;
-	public static int anInt470 = -1;
-	public static int anInt471 = -1;
+	public static int clickedTileX = -1;
+	public static int clickedTileY = -1;
 	private static final int maxOccluderPlanes;
 	private static int[] occluderCount;
 	private static Occluder[][] aOccluderArrayArray474;

@@ -191,13 +191,13 @@ public int followDistance = 1;
 	}
 
 	private void drawChatArea() {
-		aRSImageProducer_1166.initDrawingArea();
-		Texture.scanlineOffset = anIntArray1180;
+		topCenterIP.initDrawingArea();
+		Texture.scanlineOffset = mapChunkX2;
 		chatArea.drawSprite(0, 0);
 		drawChannelButtons();
-		TextDrawingArea textDrawingArea = aTextDrawingArea_1271;
+		TextDrawingArea textDrawingArea = boldFont;
 		if(messagePromptRaised) {
-			chatTextDrawingArea.drawText(0, aString1121, 60, 259);
+			chatTextDrawingArea.drawText(0, inputTitle, 60, 259);
 			chatTextDrawingArea.drawText(128, promptInput + "*", 80, 259);
 		} else if(inputDialogState == 1) {
 			chatTextDrawingArea.drawText(0, "Enter amount:", 60, 259);
@@ -205,8 +205,8 @@ public int followDistance = 1;
 		} else if(inputDialogState == 2) {
 			chatTextDrawingArea.drawText(0, "Enter name:", 60, 259);
 			chatTextDrawingArea.drawText(128, amountOrNameInput + "*", 80, 259);
-		} else if(aString844 != null) {
-			chatTextDrawingArea.drawText(0, aString844, 60, 259);
+		} else if(clickToContinueString != null) {
+			chatTextDrawingArea.drawText(0, clickToContinueString, 60, 259);
 			chatTextDrawingArea.drawText(128, "Click to continue", 80, 259);
 		} else if(backDialogID != -1) {
 			drawInterface(0, 20, RSInterface.interfaceCache[backDialogID], 20);
@@ -219,7 +219,7 @@ public int followDistance = 1;
 			for(int k = 0; k < 500; k++)
 			if(chatMessages[k] != null) {
 				int chatType = chatTypes[k];
-				int yPos = (70 - j77 * 14) + anInt1089 + 5;
+				int yPos = (70 - j77 * 14) + chatScrollAmount + 5;
 				String s1 = chatNames[k];
 				byte byte0 = 0;
 				if(s1 != null && s1.startsWith("@cr1@")) {
@@ -374,10 +374,10 @@ public int followDistance = 1;
 					}
 			}
 			DrawingArea.defaultDrawingAreaSize();
-			anInt1211 = j * 14 + 7 + 5;
-			if(anInt1211 < 111)
-				anInt1211 = 111;
-			drawScrollbar(114, anInt1211 - anInt1089 - 113, 7, 496, anInt1211);
+			chatFilterScrollMax = j * 14 + 7 + 5;
+			if(chatFilterScrollMax < 111)
+				chatFilterScrollMax = 111;
+			drawScrollbar(114, chatFilterScrollMax - chatScrollAmount - 113, 7, 496, chatFilterScrollMax);
 			String s;
 			if(myPlayer != null && myPlayer.name != null)
 				s = myPlayer.name;
@@ -390,9 +390,9 @@ public int followDistance = 1;
 		if(menuOpen && menuScreenArea == 2) {
 			drawMenu();
 		}
-		aRSImageProducer_1166.drawGraphics(338, super.graphics, 0);
-		aRSImageProducer_1165.initDrawingArea();
-		Texture.scanlineOffset = anIntArray1182;
+		topCenterIP.drawGraphics(338, super.graphics, 0);
+		loginMsgIP.initDrawingArea();
+		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
 
 	public void init() {
@@ -498,12 +498,12 @@ public int followDistance = 1;
 					RSInterface class9 = RSInterface.interfaceCache[j2];
 					if(class9.replaceItems || class9.filled) {
 						aBoolean1242 = false;
-						anInt989 = 0;
-						anInt1084 = j2;
-						anInt1085 = l1;
+						moveItemInterfaceId = 0;
+						dragFromSlotInterface = j2;
+						dragFromSlot = l1;
 						activeInterfaceType = 2;
-						anInt1087 = super.saveClickX;
-						anInt1088 = super.saveClickY;
+						dragStartX = super.saveClickX;
+						dragStartY = super.saveClickY;
 						if(RSInterface.interfaceCache[j2].parentID == openInterfaceID)
 							activeInterfaceType = 1;
 						if(RSInterface.interfaceCache[j2].parentID == backDialogID)
@@ -512,7 +512,7 @@ public int followDistance = 1;
 					}
 				}
 			}
-			if(j == 1 && (anInt1253 == 1 || menuHasAddFriend(menuActionRow - 1)) && menuActionRow > 2)
+			if(j == 1 && (clickMode == 1 || menuHasAddFriend(menuActionRow - 1)) && menuActionRow > 2)
 				j = 2;
 			if(j == 1 && menuActionRow > 0)
 				doAction(menuActionRow - 1);
@@ -556,9 +556,9 @@ public int followDistance = 1;
 	{
 		try
 		{
-			anInt985 = -1;
-			aClass19_1056.removeAll();
-			aClass19_1013.removeAll();
+			activeInterfaceId = -1;
+			spotAnimList.removeAll();
+			projectileList.removeAll();
 			Texture.clearDepthBuffer();
 			unlinkMRUNodes();
 			worldController.initToNull();
@@ -578,45 +578,45 @@ public int followDistance = 1;
 			}
 
 			ObjectManager objectManager = new ObjectManager(byteGroundArray, intGroundArray);
-			int k2 = aByteArrayArray1183.length;
+			int k2 = mapLandscapeData.length;
 			stream.createFrame(0);
 			if(!aBoolean1159)
 			{
 				for(int i3 = 0; i3 < k2; i3++)
 				{
-					int i4 = (anIntArray1234[i3] >> 8) * 64 - baseX;
-					int k5 = (anIntArray1234[i3] & 0xff) * 64 - baseY;
-					byte abyte0[] = aByteArrayArray1183[i3];
-					if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+anIntArray1235[i3]+".dat")) 
-						abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+anIntArray1235[i3]+".dat");
+					int i4 = (chatFilterTypes[i3] >> 8) * 64 - baseX;
+					int k5 = (chatFilterTypes[i3] & 0xff) * 64 - baseY;
+					byte abyte0[] = mapLandscapeData[i3];
+					if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+chatFilterNames[i3]+".dat")) 
+						abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+chatFilterNames[i3]+".dat");
 					if(abyte0 != null)
-						objectManager.parseLandscape(abyte0, k5, i4, (anInt1069 - 6) * 8, (anInt1070 - 6) * 8, aCollisionMapArray1230);
+						objectManager.parseLandscape(abyte0, k5, i4, (mapRegionX - 6) * 8, (mapRegionY - 6) * 8, aCollisionMapArray1230);
 				}
 
 				for(int j4 = 0; j4 < k2; j4++)
 				{
-					int l5 = (anIntArray1234[j4] >> 8) * 64 - baseX;
-					int k7 = (anIntArray1234[j4] & 0xff) * 64 - baseY;
-					byte abyte2[] = aByteArrayArray1183[j4];
-					if(abyte2 == null && anInt1070 < 800)
+					int l5 = (chatFilterTypes[j4] >> 8) * 64 - baseX;
+					int k7 = (chatFilterTypes[j4] & 0xff) * 64 - baseY;
+					byte abyte2[] = mapLandscapeData[j4];
+					if(abyte2 == null && mapRegionY < 800)
 						objectManager.flattenTerrain(k7, 64, 64, l5);
 				}
 
-				anInt1097++;
-				if(anInt1097 > 160)
+				anInt1097_counter++;
+				if(anInt1097_counter > 160)
 				{
-					anInt1097 = 0;
+					anInt1097_counter = 0;
 					stream.createFrame(238);
 					stream.writeWordBigEndian(96);
 				}
 				stream.createFrame(0);
 				for(int i6 = 0; i6 < k2; i6++)
 				{
-					byte abyte1[] = aByteArrayArray1247[i6];
+					byte abyte1[] = mapObjectData[i6];
 					if(abyte1 != null)
 					{
-						int l8 = (anIntArray1234[i6] >> 8) * 64 - baseX;
-						int k9 = (anIntArray1234[i6] & 0xff) * 64 - baseY;
+						int l8 = (chatFilterTypes[i6] >> 8) * 64 - baseX;
+						int k9 = (chatFilterTypes[i6] & 0xff) * 64 - baseY;
 						objectManager.parseLocalObjectLocations(l8, aCollisionMapArray1230, k9, worldController, abyte1);
 					}
 				}
@@ -630,7 +630,7 @@ public int followDistance = 1;
 					{
 						for(int j6 = 0; j6 < 13; j6++)
 						{
-							int l7 = anIntArrayArrayArray1129[j3][k4][j6];
+							int l7 = tileFlags[j3][k4][j6];
 							if(l7 != -1)
 							{
 								int i9 = l7 >> 24 & 3;
@@ -638,11 +638,11 @@ public int followDistance = 1;
 								int j10 = l7 >> 14 & 0x3ff;
 								int l10 = l7 >> 3 & 0x7ff;
 								int j11 = (j10 / 8 << 8) + l10 / 8;
-								for(int l11 = 0; l11 < anIntArray1234.length; l11++)
+								for(int l11 = 0; l11 < chatFilterTypes.length; l11++)
 								{
-									if(anIntArray1234[l11] != j11 || aByteArrayArray1183[l11] == null)
+									if(chatFilterTypes[l11] != j11 || mapLandscapeData[l11] == null)
 										continue;
-									objectManager.parseInstancedLandscape(i9, l9, aCollisionMapArray1230, k4 * 8, (j10 & 7) * 8, aByteArrayArray1183[l11], (l10 & 7) * 8, j3, j6 * 8);
+									objectManager.parseInstancedLandscape(i9, l9, aCollisionMapArray1230, k4 * 8, (j10 & 7) * 8, mapLandscapeData[l11], (l10 & 7) * 8, j3, j6 * 8);
 									break;
 								}
 
@@ -657,7 +657,7 @@ public int followDistance = 1;
 				{
 					for(int k6 = 0; k6 < 13; k6++)
 					{
-						int i8 = anIntArrayArrayArray1129[0][l4][k6];
+						int i8 = tileFlags[0][l4][k6];
 						if(i8 == -1)
 							objectManager.flattenTerrain(k6 * 8, 8, 8, l4 * 8);
 					}
@@ -671,7 +671,7 @@ public int followDistance = 1;
 					{
 						for(int j9 = 0; j9 < 13; j9++)
 						{
-							int i10 = anIntArrayArrayArray1129[l6][j8][j9];
+							int i10 = tileFlags[l6][j8][j9];
 							if(i10 != -1)
 							{
 								int k10 = i10 >> 24 & 3;
@@ -679,15 +679,15 @@ public int followDistance = 1;
 								int k11 = i10 >> 14 & 0x3ff;
 								int i12 = i10 >> 3 & 0x7ff;
 								int j12 = (k11 / 8 << 8) + i12 / 8;
-								for(int k12 = 0; k12 < anIntArray1234.length; k12++)
+								for(int k12 = 0; k12 < chatFilterTypes.length; k12++)
 								{
-									if(anIntArray1234[k12] != j12 || aByteArrayArray1247[k12] == null)
+									if(chatFilterTypes[k12] != j12 || mapObjectData[k12] == null)
 										continue;
-									//objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
-									byte abyte0[] = aByteArrayArray1247[k12];
-                                    if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+anIntArray1235[k12]+".dat")) 
-										abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+anIntArray1235[k12]+".dat");
-                                    objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
+									//objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, mapObjectData[k12], (k11 & 7) * 8, i11, j9 * 8);
+									byte abyte0[] = mapObjectData[k12];
+                                    if (FileOperations.FileExists(signlink.findcachedir()+"maps/"+chatFilterNames[k12]+".dat")) 
+										abyte0 = FileOperations.ReadFile(signlink.findcachedir()+"maps/"+chatFilterNames[k12]+".dat");
+                                    objectManager.parseObjectLocations(aCollisionMapArray1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, mapObjectData[k12], (k11 & 7) * 8, i11, j9 * 8);
 									break;
 								}
 
@@ -701,7 +701,7 @@ public int followDistance = 1;
 			}
 			stream.createFrame(0);
 			objectManager.applyTerrainCollision(aCollisionMapArray1230, worldController);
-			aRSImageProducer_1165.initDrawingArea();
+			loginMsgIP.initDrawingArea();
 			stream.createFrame(0);
 			int k3 = ObjectManager.minimumPlane;
 			if(k3 > plane)
@@ -719,10 +719,10 @@ public int followDistance = 1;
 
 			}
 
-			anInt1051++;
-			if(anInt1051 > 98)
+			anInt1051_counter++;
+			if(anInt1051_counter > 98)
 			{
-				anInt1051 = 0;
+				anInt1051_counter = 0;
 				stream.createFrame(150);
 			}
 			resetSpawnObjects();
@@ -748,10 +748,10 @@ public int followDistance = 1;
 		System.gc();
 		Texture.initTextureCache();
 		onDemandFetcher.clearQueue();
-		int k = (anInt1069 - 6) / 8 - 1;
-		int j1 = (anInt1069 + 6) / 8 + 1;
-		int i2 = (anInt1070 - 6) / 8 - 1;
-		int l2 = (anInt1070 + 6) / 8 + 1;
+		int k = (mapRegionX - 6) / 8 - 1;
+		int j1 = (mapRegionX + 6) / 8 + 1;
+		int i2 = (mapRegionY - 6) / 8 - 1;
+		int l2 = (mapRegionY + 6) / 8 + 1;
 		if(aBoolean1141)
 		{
 			k = 49;
@@ -789,7 +789,7 @@ public int followDistance = 1;
 
 	private void drawMiniMapDots(int i)
 	{
-		int ai[] = aClass30_Sub2_Sub1_Sub1_1263.myPixels;
+		int ai[] = minimapSprite.myPixels;
 		int j = ai.length;
 		for(int k = 0; k < j; k++)
 			ai[k] = 0;
@@ -810,7 +810,7 @@ public int followDistance = 1;
 
 		int j1 = ((238 + (int)(Math.random() * 20D)) - 10 << 16) + ((238 + (int)(Math.random() * 20D)) - 10 << 8) + ((238 + (int)(Math.random() * 20D)) - 10);
 		int l1 = (238 + (int)(Math.random() * 20D)) - 10 << 16;
-		aClass30_Sub2_Sub1_Sub1_1263.drawInverse();
+		minimapSprite.drawInverse();
 		for(int i2 = 1; i2 < 103; i2++)
 		{
 			for(int j2 = 1; j2 < 103; j2++)
@@ -823,8 +823,8 @@ public int followDistance = 1;
 
 		}
 
-		aRSImageProducer_1165.initDrawingArea();
-		anInt1071 = 0;
+		loginMsgIP.initDrawingArea();
+		mapFunctionCount = 0;
 		for(int k2 = 0; k2 < 104; k2++)
 		{
 			for(int l2 = 0; l2 < 104; l2++)
@@ -857,10 +857,10 @@ public int followDistance = 1;
 							}
 
 						}
-						aClass30_Sub2_Sub1_Sub1Array1140[anInt1071] = mapFunctions[j3];
-						anIntArray1072[anInt1071] = k3;
-						anIntArray1073[anInt1071] = l3;
-						anInt1071++;
+						minimapImages[mapFunctionCount] = mapFunctions[j3];
+						mapFunctionX[mapFunctionCount] = k3;
+						mapFunctionY[mapFunctionCount] = l3;
+						mapFunctionCount++;
 					}
 				}
 			}
@@ -923,9 +923,9 @@ public int followDistance = 1;
 				continue;
 			if(npc.tileSize == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64)
 			{
-				if(anIntArrayArray929[l][i1] == anInt1265)
+				if(constructRegionData[l][i1] == hintIconY)
 					continue;
-				anIntArrayArray929[l][i1] = anInt1265;
+				constructRegionData[l][i1] = hintIconY;
 			}
 			if(!npc.desc.clickable)
 				k += 0x80000000;
@@ -994,9 +994,9 @@ public int followDistance = 1;
 			j2 += class9_1.invSpritePadY;
 			if((class9_1.mOverInterToTrigger >= 0 || class9_1.enabledColor != 0) && k >= i2 && i1 >= j2 && k < i2 + class9_1.width && i1 < j2 + class9_1.height)
 				if(class9_1.mOverInterToTrigger >= 0)
-					anInt886 = class9_1.mOverInterToTrigger;
+					lastItemSelectedSlot = class9_1.mOverInterToTrigger;
 				else
-					anInt886 = class9_1.id;
+					lastItemSelectedSlot = class9_1.id;
 			if (class9_1.type == 8 && k >= i2 && i1 >= j2 && k < i2 + class9_1.width && i1 < j2 + class9_1.height) {
                 anInt1315 = class9_1.id;
             }
@@ -1089,7 +1089,7 @@ public int followDistance = 1;
 									ItemDef itemDef = ItemDef.forID(class9_1.inv[k2] - 1);
 									if(itemSelected == 1 && class9_1.isInventoryInterface)
 									{
-										if(class9_1.id != anInt1284 || k2 != anInt1283)
+										if(class9_1.id != selectedInventoryInterface || k2 != selectedInventorySlot)
 										{
 											menuActionName[menuActionRow] = "Use " + selectedItemName + " with @lre@" + itemDef.name;
 											menuActionID[menuActionRow] = 870;
@@ -1333,14 +1333,14 @@ public int followDistance = 1;
 
 	private void updateNPCs(Stream stream, int i)
 	{
-		anInt839 = 0;
-		anInt893 = 0;
+		npcUpdateCount = 0;
+		entityCount = 0;
 		parseNPCRemovals(stream);
 		parseNewNPCs(i, stream);
 		parseNPCUpdateMasks(stream);
-		for(int k = 0; k < anInt839; k++)
+		for(int k = 0; k < npcUpdateCount; k++)
 		{
-			int l = anIntArray840[k];
+			int l = entityUpdateIndices[k];
 			if(npcArray[l].textColor != loopCycle)
 			{
 				npcArray[l].desc = null;
@@ -1511,38 +1511,38 @@ public int followDistance = 1;
 		{
 			if(k == 0)
 			{
-				aBoolean848 = true;
+				pendingInput = true;
 				setWaveVolume(0);
 			}
 			if(k == 1)
 			{
-				aBoolean848 = true;
+				pendingInput = true;
 				setWaveVolume(-400);
 			}
 			if(k == 2)
 			{
-				aBoolean848 = true;
+				pendingInput = true;
 				setWaveVolume(-800);
 			}
 			if(k == 3)
 			{
-				aBoolean848 = true;
+				pendingInput = true;
 				setWaveVolume(-1200);
 			}
 			if(k == 4)
-				aBoolean848 = false;
+				pendingInput = false;
 		}
 		if(j == 5)
-			anInt1253 = k;
+			clickMode = k;
 		if(j == 6)
-			anInt1249 = k;
+			actionType = k;
 		if(j == 8)
 		{
 			splitPrivateChat = k;
 			inputTaken = true;
 		}
 		if(j == 9)
-			anInt913 = k;
+			terrainDataIndex = k;
 	}
 	
 	private Sprite HPBarFull;
@@ -1585,7 +1585,7 @@ public int followDistance = 1;
 						}
 					}
 				}
-				if(j >= 0 && anInt855 == 10 && anInt933 == playerIndices[j]) {
+				if(j >= 0 && minimapRotation == 10 && cameraTargetIndex == playerIndices[j]) {
 					npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
 					if(spriteDrawX > -1)
 						headIconsHint[player.hintIcon].drawSprite(spriteDrawX - 12, spriteDrawY - l);
@@ -1597,7 +1597,7 @@ public int followDistance = 1;
 					if(spriteDrawX > -1)
 						headIcons[entityDef_1.headIcon].drawSprite(spriteDrawX - 12, spriteDrawY - 30);
 				}
-				if(anInt855 == 1 && anInt1222 == npcIndices[j - playerCount] && loopCycle % 20 < 10) {
+				if(minimapRotation == 1 && hintIconNpcIndex == npcIndices[j - playerCount] && loopCycle % 20 < 10) {
 					npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
 					if(spriteDrawX > -1)
 						headIconsHint[0].drawSprite(spriteDrawX - 12, spriteDrawY - 28);
@@ -1606,25 +1606,25 @@ public int followDistance = 1;
 			if(((Entity) (obj)).textSpoken != null && (j >= playerCount || publicChatMode == 0 || publicChatMode == 3 || publicChatMode == 1 && isFriendOrSelf(((Player)obj).name)))
 			{
 				npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height);
-				if(spriteDrawX > -1 && anInt974 < anInt975)
+				if(spriteDrawX > -1 && anInt974 < maxOverheadCount)
 				{
-					anIntArray979[anInt974] = chatTextDrawingArea.getTextWidth(((Entity) (obj)).textSpoken) / 2;
-					anIntArray978[anInt974] = chatTextDrawingArea.fontHeight;
-					anIntArray976[anInt974] = spriteDrawX;
-					anIntArray977[anInt974] = spriteDrawY;
-					anIntArray980[anInt974] = ((Entity) (obj)).turnAroundAnimId;
-					anIntArray981[anInt974] = ((Entity) (obj)).animResetCycle;
-					anIntArray982[anInt974] = ((Entity) (obj)).textCycle;
-					aStringArray983[anInt974++] = ((Entity) (obj)).textSpoken;
-					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle >= 1 && ((Entity) (obj)).animResetCycle <= 3)
+					overheadWidth[anInt974] = chatTextDrawingArea.getTextWidth(((Entity) (obj)).textSpoken) / 2;
+					overheadHeight[anInt974] = chatTextDrawingArea.fontHeight;
+					overheadX[anInt974] = spriteDrawX;
+					overheadY[anInt974] = spriteDrawY;
+					overheadTextColor[anInt974] = ((Entity) (obj)).turnAroundAnimId;
+					overheadTextEffect[anInt974] = ((Entity) (obj)).animResetCycle;
+					overheadTextCycle[anInt974] = ((Entity) (obj)).textCycle;
+					overheadTextStr[anInt974++] = ((Entity) (obj)).textSpoken;
+					if(actionType == 0 && ((Entity) (obj)).animResetCycle >= 1 && ((Entity) (obj)).animResetCycle <= 3)
 					{
-						anIntArray978[anInt974] += 10;
-						anIntArray977[anInt974] += 5;
+						overheadHeight[anInt974] += 10;
+						overheadY[anInt974] += 5;
 					}
-					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle == 4)
-						anIntArray979[anInt974] = 60;
-					if(anInt1249 == 0 && ((Entity) (obj)).animResetCycle == 5)
-						anIntArray978[anInt974] += 5;
+					if(actionType == 0 && ((Entity) (obj)).animResetCycle == 4)
+						overheadWidth[anInt974] = 60;
+					if(actionType == 0 && ((Entity) (obj)).animResetCycle == 5)
+						overheadHeight[anInt974] += 5;
 				}
 			}
 			if(((Entity) (obj)).loopCycleStatus > loopCycle)
@@ -1676,38 +1676,38 @@ public int followDistance = 1;
 					}
 			}
 			for(int k = 0; k < anInt974; k++) {
-				int k1 = anIntArray976[k];
-				int l1 = anIntArray977[k];
-				int j2 = anIntArray979[k];
-				int k2 = anIntArray978[k];
+				int k1 = overheadX[k];
+				int l1 = overheadY[k];
+				int j2 = overheadWidth[k];
+				int k2 = overheadHeight[k];
 				boolean flag = true;
 				while(flag) 
 				{
 					flag = false;
 					for(int l2 = 0; l2 < k; l2++)
-						if(l1 + 2 > anIntArray977[l2] - anIntArray978[l2] && l1 - k2 < anIntArray977[l2] + 2 && k1 - j2 < anIntArray976[l2] + anIntArray979[l2] && k1 + j2 > anIntArray976[l2] - anIntArray979[l2] && anIntArray977[l2] - anIntArray978[l2] < l1)
+						if(l1 + 2 > overheadY[l2] - overheadHeight[l2] && l1 - k2 < overheadY[l2] + 2 && k1 - j2 < overheadX[l2] + overheadWidth[l2] && k1 + j2 > overheadX[l2] - overheadWidth[l2] && overheadY[l2] - overheadHeight[l2] < l1)
 						{
-							l1 = anIntArray977[l2] - anIntArray978[l2];
+							l1 = overheadY[l2] - overheadHeight[l2];
 							flag = true;
 						}
 
 				}
-				spriteDrawX = anIntArray976[k];
-				spriteDrawY = anIntArray977[k] = l1;
-				String s = aStringArray983[k];
-				if(anInt1249 == 0)
+				spriteDrawX = overheadX[k];
+				spriteDrawY = overheadY[k] = l1;
+				String s = overheadTextStr[k];
+				if(actionType == 0)
 				{
 					int i3 = 0xffff00;
-					if(anIntArray980[k] < 6)
-						i3 = anIntArray965[anIntArray980[k]];
-					if(anIntArray980[k] == 6)
-						i3 = anInt1265 % 20 >= 10 ? 0xffff00 : 0xff0000;
-					if(anIntArray980[k] == 7)
-						i3 = anInt1265 % 20 >= 10 ? 65535 : 255;
-					if(anIntArray980[k] == 8)
-						i3 = anInt1265 % 20 >= 10 ? 0x80ff80 : 45056;
-					if(anIntArray980[k] == 9) {
-						int j3 = 150 - anIntArray982[k];
+					if(overheadTextColor[k] < 6)
+						i3 = chatColors[overheadTextColor[k]];
+					if(overheadTextColor[k] == 6)
+						i3 = hintIconY % 20 >= 10 ? 0xffff00 : 0xff0000;
+					if(overheadTextColor[k] == 7)
+						i3 = hintIconY % 20 >= 10 ? 65535 : 255;
+					if(overheadTextColor[k] == 8)
+						i3 = hintIconY % 20 >= 10 ? 0x80ff80 : 45056;
+					if(overheadTextColor[k] == 9) {
+						int j3 = 150 - overheadTextCycle[k];
 						if(j3 < 50)
 							i3 = 0xff0000 + 1280 * j3;
 						else
@@ -1717,8 +1717,8 @@ public int followDistance = 1;
 						if(j3 < 150)
 							i3 = 65280 + 5 * (j3 - 100);
 					}
-					if(anIntArray980[k] == 10) {
-						int k3 = 150 - anIntArray982[k];
+					if(overheadTextColor[k] == 10) {
+						int k3 = 150 - overheadTextCycle[k];
 						if(k3 < 50)
 							i3 = 0xff0000 + 5 * k3;
 						else
@@ -1728,8 +1728,8 @@ public int followDistance = 1;
 						if(k3 < 150)
 							i3 = (255 + 0x50000 * (k3 - 100)) - 5 * (k3 - 100);
 					}
-					if(anIntArray980[k] == 11) {
-						int l3 = 150 - anIntArray982[k];
+					if(overheadTextColor[k] == 11) {
+						int l3 = 150 - overheadTextCycle[k];
 						if(l3 < 50)
 							i3 = 0xffffff - 0x50005 * l3;
 						else
@@ -1739,32 +1739,32 @@ public int followDistance = 1;
 						if(l3 < 150)
 							i3 = 0xffffff - 0x50000 * (l3 - 100);
 					}
-					if(anIntArray981[k] == 0) {
+					if(overheadTextEffect[k] == 0) {
 						chatTextDrawingArea.drawText(0, s, spriteDrawY + 1, spriteDrawX);
 						chatTextDrawingArea.drawText(i3, s, spriteDrawY, spriteDrawX);
 					}
-					if(anIntArray981[k] == 1) {
-						chatTextDrawingArea.drawTextShadow(0, s, spriteDrawX, anInt1265, spriteDrawY + 1);
-						chatTextDrawingArea.drawTextShadow(i3, s, spriteDrawX, anInt1265, spriteDrawY);
+					if(overheadTextEffect[k] == 1) {
+						chatTextDrawingArea.drawTextShadow(0, s, spriteDrawX, hintIconY, spriteDrawY + 1);
+						chatTextDrawingArea.drawTextShadow(i3, s, spriteDrawX, hintIconY, spriteDrawY);
 					}
-					if(anIntArray981[k] == 2) {
-						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, anInt1265, spriteDrawY + 1, 0);
-						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, anInt1265, spriteDrawY, i3);
+					if(overheadTextEffect[k] == 2) {
+						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, hintIconY, spriteDrawY + 1, 0);
+						chatTextDrawingArea.drawCenteredShadow(spriteDrawX, s, hintIconY, spriteDrawY, i3);
 					}
-					if(anIntArray981[k] == 3) {
-						chatTextDrawingArea.drawShaking(150 - anIntArray982[k], s, anInt1265, spriteDrawY + 1, spriteDrawX, 0);
-						chatTextDrawingArea.drawShaking(150 - anIntArray982[k], s, anInt1265, spriteDrawY, spriteDrawX, i3);
+					if(overheadTextEffect[k] == 3) {
+						chatTextDrawingArea.drawShaking(150 - overheadTextCycle[k], s, hintIconY, spriteDrawY + 1, spriteDrawX, 0);
+						chatTextDrawingArea.drawShaking(150 - overheadTextCycle[k], s, hintIconY, spriteDrawY, spriteDrawX, i3);
 					}
-					if(anIntArray981[k] == 4) {
+					if(overheadTextEffect[k] == 4) {
 						int i4 = chatTextDrawingArea.getTextWidth(s);
-						int k4 = ((150 - anIntArray982[k]) * (i4 + 100)) / 150;
+						int k4 = ((150 - overheadTextCycle[k]) * (i4 + 100)) / 150;
 						DrawingArea.setDrawingArea(334, spriteDrawX - 50, spriteDrawX + 50, 0);
 						chatTextDrawingArea.drawText(0, s, spriteDrawY + 1, (spriteDrawX + 50) - k4);
 						chatTextDrawingArea.drawText(i3, s, spriteDrawY, (spriteDrawX + 50) - k4);
 						DrawingArea.defaultDrawingAreaSize();
 					}
-					if(anIntArray981[k] == 5) {
-						int j4 = 150 - anIntArray982[k];
+					if(overheadTextEffect[k] == 5) {
+						int j4 = 150 - overheadTextCycle[k];
 						int l4 = 0;
 						if(j4 < 25)
 							l4 = j4 - 25;
@@ -1898,8 +1898,8 @@ public int followDistance = 1;
 	}
 
 	private void drawTabArea() {
-		aRSImageProducer_1163.initDrawingArea();
-		Texture.scanlineOffset = anIntArray1181;
+		titleMuralIP.initDrawingArea();
+		Texture.scanlineOffset = mapChunkY2;
 		tabArea.drawSprite(0, 0);
 		if(invOverlayInterfaceID == -1) {
 			drawRedStones();
@@ -1915,9 +1915,9 @@ public int followDistance = 1;
 		}
 		if(menuOpen && menuScreenArea == 1)
 			drawMenu();
-		aRSImageProducer_1163.drawGraphics(168, super.graphics, 519);
-		aRSImageProducer_1165.initDrawingArea();
-		Texture.scanlineOffset = anIntArray1182;
+		titleMuralIP.drawGraphics(168, super.graphics, 519);
+		loginMsgIP.initDrawingArea();
+		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
 
 	private void animateTexture(int j) {
@@ -1926,18 +1926,18 @@ public int followDistance = 1;
 				Background background = Texture.textures[17];
 				int k = background.width * background.height - 1;
 				//fire cape apparently?
-				int j1 = background.width * anInt945 * 2;
+				int j1 = background.width * cameraTargetLocalZ * 2;
 				byte abyte0[] = background.aByteArray1450;
-				byte abyte3[] = aByteArray912;
+				byte abyte3[] = terrainData;
 				for(int i2 = 0; i2 <= k; i2++)
 					abyte3[i2] = abyte0[i2 - j1 & k];
 
 				background.aByteArray1450 = abyte3;
-				aByteArray912 = abyte0;
+				terrainData = abyte0;
 				Texture.setTextureActive(17);
-				anInt854++;
-				if(anInt854 > 1235) {
-					anInt854 = 0;
+				cameraAngle++;
+				if(cameraAngle > 1235) {
+					cameraAngle = 0;
 					stream.createFrame(226);
 					stream.writeWordBigEndian(0);
 					int l2 = stream.currentOffset;
@@ -1958,41 +1958,41 @@ public int followDistance = 1;
 			if(Texture.textureLastCycle[24] >= j) {
 				Background background_1 = Texture.textures[24];
 				int l = background_1.width * background_1.height - 1;
-				int k1 = background_1.width * anInt945 * 2;
+				int k1 = background_1.width * cameraTargetLocalZ * 2;
 				byte abyte1[] = background_1.aByteArray1450;
-				byte abyte4[] = aByteArray912;
+				byte abyte4[] = terrainData;
 				for(int j2 = 0; j2 <= l; j2++)
 					abyte4[j2] = abyte1[j2 - k1 & l];
 
 				background_1.aByteArray1450 = abyte4;
-				aByteArray912 = abyte1;
+				terrainData = abyte1;
 				Texture.setTextureActive(24);
 			}
 			if(Texture.textureLastCycle[34] >= j) {
 				Background background_2 = Texture.textures[34];
 				int i1 = background_2.width * background_2.height - 1;
-				int l1 = background_2.width * anInt945 * 2;
+				int l1 = background_2.width * cameraTargetLocalZ * 2;
 				byte abyte2[] = background_2.aByteArray1450;
-				byte abyte5[] = aByteArray912;
+				byte abyte5[] = terrainData;
 				for(int k2 = 0; k2 <= i1; k2++)
 					abyte5[k2] = abyte2[k2 - l1 & i1];
 
 				background_2.aByteArray1450 = abyte5;
-				aByteArray912 = abyte2;
+				terrainData = abyte2;
 				Texture.setTextureActive(34);
 			}
 			if(Texture.textureLastCycle[40] >= j)
             {
 				Background background_2 = Texture.textures[40];
 				int i1 = background_2.width * background_2.height - 1;
-				int l1 = background_2.width * anInt945 * 2;
+				int l1 = background_2.width * cameraTargetLocalZ * 2;
 				byte abyte2[] = background_2.aByteArray1450;
-				byte abyte5[] = aByteArray912;
+				byte abyte5[] = terrainData;
 				for(int k2 = 0; k2 <= i1; k2++)
 					abyte5[k2] = abyte2[k2 - l1 & i1];
 
 				background_2.aByteArray1450 = abyte5;
-				aByteArray912 = abyte2;
+				terrainData = abyte2;
 				Texture.setTextureActive(40);
             }
 		}
@@ -2024,42 +2024,42 @@ public int followDistance = 1;
 	}
 
 	private void calcCameraPos() {
-		int i = anInt1098 * 128 + 64;
-		int j = anInt1099 * 128 + 64;
-		int k = getTileHeight(plane, j, i) - anInt1100;
+		int i = cameraLocX * 128 + 64;
+		int j = cameraLocY * 128 + 64;
+		int k = getTileHeight(plane, j, i) - cameraLocHeight;
 		if(xCameraPos < i) {
-			xCameraPos += anInt1101 + ((i - xCameraPos) * anInt1102) / 1000;
+			xCameraPos += cameraLocSpeed + ((i - xCameraPos) * cameraLocAccel) / 1000;
 			if(xCameraPos > i)
 				xCameraPos = i;
 		}
 		if(xCameraPos > i) {
-			xCameraPos -= anInt1101 + ((xCameraPos - i) * anInt1102) / 1000;
+			xCameraPos -= cameraLocSpeed + ((xCameraPos - i) * cameraLocAccel) / 1000;
 			if(xCameraPos < i)
 				xCameraPos = i;
 		}
 		if(zCameraPos < k) {
-			zCameraPos += anInt1101 + ((k - zCameraPos) * anInt1102) / 1000;
+			zCameraPos += cameraLocSpeed + ((k - zCameraPos) * cameraLocAccel) / 1000;
 			if(zCameraPos > k)
 				zCameraPos = k;
 		}
 		if(zCameraPos > k) {
-			zCameraPos -= anInt1101 + ((zCameraPos - k) * anInt1102) / 1000;
+			zCameraPos -= cameraLocSpeed + ((zCameraPos - k) * cameraLocAccel) / 1000;
 			if(zCameraPos < k)
 				zCameraPos = k;
 		}
 		if(yCameraPos < j) {
-			yCameraPos += anInt1101 + ((j - yCameraPos) * anInt1102) / 1000;
+			yCameraPos += cameraLocSpeed + ((j - yCameraPos) * cameraLocAccel) / 1000;
 			if(yCameraPos > j)
 				yCameraPos = j;
 		}
 		if(yCameraPos > j) {
-			yCameraPos -= anInt1101 + ((yCameraPos - j) * anInt1102) / 1000;
+			yCameraPos -= cameraLocSpeed + ((yCameraPos - j) * cameraLocAccel) / 1000;
 			if(yCameraPos < j)
 				yCameraPos = j;
 		}
-		i = anInt995 * 128 + 64;
-		j = anInt996 * 128 + 64;
-		k = getTileHeight(plane, j, i) - anInt997;
+		i = cameraPosX * 128 + 64;
+		j = cameraPosY * 128 + 64;
+		k = getTileHeight(plane, j, i) - cameraPosHeight;
 		int l = i - xCameraPos;
 		int i1 = k - zCameraPos;
 		int j1 = j - yCameraPos;
@@ -2071,12 +2071,12 @@ public int followDistance = 1;
 		if(l1 > 383)
 			l1 = 383;
 		if(yCameraCurve < l1) {
-			yCameraCurve += anInt998 + ((l1 - yCameraCurve) * anInt999) / 1000;
+			yCameraCurve += cameraSpeed + ((l1 - yCameraCurve) * cameraAcceleration) / 1000;
 			if(yCameraCurve > l1)
 				yCameraCurve = l1;
 		}
 		if(yCameraCurve > l1) {
-			yCameraCurve -= anInt998 + ((yCameraCurve - l1) * anInt999) / 1000;
+			yCameraCurve -= cameraSpeed + ((yCameraCurve - l1) * cameraAcceleration) / 1000;
 			if(yCameraCurve < l1)
 				yCameraCurve = l1;
 		}
@@ -2086,11 +2086,11 @@ public int followDistance = 1;
 		if(j2 < -1024)
 			j2 += 2048;
 		if(j2 > 0) {
-			xCameraCurve += anInt998 + (j2 * anInt999) / 1000;
+			xCameraCurve += cameraSpeed + (j2 * cameraAcceleration) / 1000;
 			xCameraCurve &= 0x7ff;
 		}
 		if(j2 < 0) {
-			xCameraCurve -= anInt998 + (-j2 * anInt999) / 1000;
+			xCameraCurve -= cameraSpeed + (-j2 * cameraAcceleration) / 1000;
 			xCameraCurve &= 0x7ff;
 		}
 		int k2 = i2 - xCameraCurve;
@@ -2266,11 +2266,11 @@ followDistance = 1;
 	private void resetDefaultAppearance() {
 		aBoolean1031 = true;
 		for(int j = 0; j < 7; j++) {
-			anIntArray1065[j] = -1;
+			menuActionTypes[j] = -1;
 			for(int k = 0; k < IDK.length; k++) {
 				if(IDK.cache[k].aBoolean662 || IDK.cache[k].bodyPartId != j + (aBoolean1047 ? 0 : 7))
 					continue;
-				anIntArray1065[j] = k;
+				menuActionTypes[j] = k;
 				break;
 			}
 		}
@@ -2296,7 +2296,7 @@ followDistance = 1;
 			npc.desc = EntityDef.forID(stream.readBits(14));
 			int k1 = stream.readBits(1);
 			if(k1 == 1)
-				anIntArray894[anInt893++] = k;
+				entityIndices[entityCount++] = k;
 			npc.tileSize = npc.desc.tileSpan;
 			npc.turnSpeed = npc.desc.degreesToTurn;
 			npc.walkBackAnimId = npc.desc.walkAnim;
@@ -2350,9 +2350,9 @@ followDistance = 1;
 				continue;
 			}
 			if((player.x & 0x7f) == 64 && (player.y & 0x7f) == 64) {
-				if(anIntArrayArray929[j1][k1] == anInt1265)
+				if(constructRegionData[j1][k1] == hintIconY)
 					continue;
-				anIntArrayArray929[j1][k1] = anInt1265;
+				constructRegionData[j1][k1] = hintIconY;
 			}
 			player.attachedModelHeight = getTileHeight(plane, player.y, player.x);
 			worldController.addTempObject(plane, player.faceAngle, player.attachedModelHeight, i1, player.y, 60, player.x, player, player.animStretches);
@@ -2361,14 +2361,14 @@ followDistance = 1;
 
 	private boolean promptUserForInput(RSInterface class9) {
 		int j = class9.contentType;
-		if(anInt900 == 2) {
+		if(mapRegionCount == 2) {
 			if(j == 201) {
 				inputTaken = true;
 				inputDialogState = 0;
 				messagePromptRaised = true;
 				promptInput = "";
 				friendsListAction = 1;
-				aString1121 = "Enter name of friend to add to list";
+				inputTitle = "Enter name of friend to add to list";
 			}
 			if(j == 202) {
 				inputTaken = true;
@@ -2376,11 +2376,11 @@ followDistance = 1;
 				messagePromptRaised = true;
 				promptInput = "";
 				friendsListAction = 2;
-				aString1121 = "Enter name of friend to delete from list";
+				inputTitle = "Enter name of friend to delete from list";
 			}
 		}
 		if(j == 205) {
-			anInt1011 = 250;
+			hintIconDelay = 250;
 			return true;
 		}
 		if(j == 501) {
@@ -2389,7 +2389,7 @@ followDistance = 1;
 			messagePromptRaised = true;
 			promptInput = "";
 			friendsListAction = 4;
-			aString1121 = "Enter name of player to add to list";
+			inputTitle = "Enter name of player to add to list";
 		}
 		if(j == 502) {
 			inputTaken = true;
@@ -2397,7 +2397,7 @@ followDistance = 1;
 			messagePromptRaised = true;
 			promptInput = "";
 			friendsListAction = 5;
-			aString1121 = "Enter name of player to delete from list";
+			inputTitle = "Enter name of player to delete from list";
 		}
 		if(j == 550) {
 			inputTaken = true;
@@ -2405,12 +2405,12 @@ followDistance = 1;
 			messagePromptRaised = true;
 			promptInput = "";
 			friendsListAction = 6;
-			aString1121 = "Enter the name of the chat you wish to join";
+			inputTitle = "Enter the name of the chat you wish to join";
 		}
 		if(j >= 300 && j <= 313) {
 			int k = (j - 300) / 2;
 			int j1 = j & 1;
-			int i2 = anIntArray1065[k];
+			int i2 = menuActionTypes[k];
 			if(i2 != -1) {
 				do {
 					if(j1 == 0 && --i2 < 0)
@@ -2418,19 +2418,19 @@ followDistance = 1;
 					if(j1 == 1 && ++i2 >= IDK.length)
 						i2 = 0;
 				} while(IDK.cache[i2].aBoolean662 || IDK.cache[i2].bodyPartId != k + (aBoolean1047 ? 0 : 7));
-				anIntArray1065[k] = i2;
+				menuActionTypes[k] = i2;
 				aBoolean1031 = true;
 			}
 		}
 		if(j >= 314 && j <= 323) {
 			int l = (j - 314) / 2;
 			int k1 = j & 1;
-			int j2 = anIntArray990[l];
+			int j2 = walkingQueueY[l];
 			if(k1 == 0 && --j2 < 0)
 				j2 = anIntArrayArray1003[l].length - 1;
 			if(k1 == 1 && ++j2 >= anIntArrayArray1003[l].length)
 				j2 = 0;
-			anIntArray990[l] = j2;
+			walkingQueueY[l] = j2;
 			aBoolean1031 = true;
 		}
 		if(j == 324 && !aBoolean1047) {
@@ -2445,10 +2445,10 @@ followDistance = 1;
 			stream.createFrame(101);
 			stream.writeWordBigEndian(aBoolean1047 ? 0 : 1);
 			for(int i1 = 0; i1 < 7; i1++)
-				stream.writeWordBigEndian(anIntArray1065[i1]);
+				stream.writeWordBigEndian(menuActionTypes[i1]);
 
 			for(int l1 = 0; l1 < 5; l1++)
-				stream.writeWordBigEndian(anIntArray990[l1]);
+				stream.writeWordBigEndian(walkingQueueY[l1]);
 
 			return true;
 		}
@@ -2467,8 +2467,8 @@ followDistance = 1;
 	}
 
 	private void parsePlayerUpdateMasks(Stream stream) {
-		for(int j = 0; j < anInt893; j++) {
-			int k = anIntArray894[j];
+		for(int j = 0; j < entityCount; j++) {
+			int k = entityIndices[j];
 			Player player = playerArray[k];
 			int l = stream.readUnsignedByte();
 			if((l & 0x40) != 0)
@@ -2486,7 +2486,7 @@ followDistance = 1;
 			int k3 = k;
 			if(k1 > 0)
 				k3 = i1;
-			int ai[] = aClass30_Sub2_Sub1_Sub1_1263.myPixels;
+			int ai[] = minimapSprite.myPixels;
 			int k4 = 24624 + l * 4 + (103 - i) * 512 * 4;
 			int i5 = k1 >> 14 & 0x7fff;
 			ObjectDef class46_2 = ObjectDef.forID(i5);
@@ -2571,7 +2571,7 @@ followDistance = 1;
 				int l4 = 0xeeeeee;
 				if(k1 > 0)
 					l4 = 0xee0000;
-				int ai1[] = aClass30_Sub2_Sub1_Sub1_1263.myPixels;
+				int ai1[] = minimapSprite.myPixels;
 				int l5 = 24624 + l * 4 + (103 - i) * 512 * 4;
 				if(l2 == 0 || l2 == 2) {
 					ai1[l5 + 1536] = l4;
@@ -2602,9 +2602,9 @@ followDistance = 1;
 	}
 
 	private void loadTitleScreen() {
-		aBackground_966 = new Background(titleStreamLoader, "titlebox", 0);
-		aBackground_967 = new Background(titleStreamLoader, "titlebutton", 0);
-		aBackgroundArray1152s = new Background[12];
+		loginFireLeft = new Background(titleStreamLoader, "titlebox", 0);
+		loginFireRight = new Background(titleStreamLoader, "titlebutton", 0);
+		loginScreenSprites = new Background[12];
 		int j = 0;
 		try {
 			j = 0; // fl_icon disabled
@@ -2612,68 +2612,68 @@ followDistance = 1;
 		}
 		if(j == 0) {
 			for(int k = 0; k < 12; k++)
-				aBackgroundArray1152s[k] = new Background(titleStreamLoader, "runes", k);
+				loginScreenSprites[k] = new Background(titleStreamLoader, "runes", k);
 
 		} else {
 			for(int l = 0; l < 12; l++)
-				aBackgroundArray1152s[l] = new Background(titleStreamLoader, "runes", 12 + (l & 3));
+				loginScreenSprites[l] = new Background(titleStreamLoader, "runes", 12 + (l & 3));
 
 		}
-		aClass30_Sub2_Sub1_Sub1_1201 = new Sprite(128, 265);
-		aClass30_Sub2_Sub1_Sub1_1202 = new Sprite(128, 265);
-		System.arraycopy(aRSImageProducer_1110.anIntArray315, 0, aClass30_Sub2_Sub1_Sub1_1201.myPixels, 0, 33920);
+		chatAreaBackground = new Sprite(128, 265);
+		chatSettingsBackground = new Sprite(128, 265);
+		System.arraycopy(chatAreaIP.pixelData, 0, chatAreaBackground.myPixels, 0, 33920);
 
-		System.arraycopy(aRSImageProducer_1111.anIntArray315, 0, aClass30_Sub2_Sub1_Sub1_1202.myPixels, 0, 33920);
+		System.arraycopy(chatSettingIP.pixelData, 0, chatSettingsBackground.myPixels, 0, 33920);
 
-		anIntArray851 = new int[256];
+		entityUpdateY = new int[256];
 		for(int k1 = 0; k1 < 64; k1++)
-			anIntArray851[k1] = k1 * 0x40000;
+			entityUpdateY[k1] = k1 * 0x40000;
 
 		for(int l1 = 0; l1 < 64; l1++)
-			anIntArray851[l1 + 64] = 0xff0000 + 1024 * l1;
+			entityUpdateY[l1 + 64] = 0xff0000 + 1024 * l1;
 
 		for(int i2 = 0; i2 < 64; i2++)
-			anIntArray851[i2 + 128] = 0xffff00 + 4 * i2;
+			entityUpdateY[i2 + 128] = 0xffff00 + 4 * i2;
 
 		for(int j2 = 0; j2 < 64; j2++)
-			anIntArray851[j2 + 192] = 0xffffff;
+			entityUpdateY[j2 + 192] = 0xffffff;
 
-		anIntArray852 = new int[256];
+		entityUpdateId = new int[256];
 		for(int k2 = 0; k2 < 64; k2++)
-			anIntArray852[k2] = k2 * 1024;
+			entityUpdateId[k2] = k2 * 1024;
 
 		for(int l2 = 0; l2 < 64; l2++)
-			anIntArray852[l2 + 64] = 65280 + 4 * l2;
+			entityUpdateId[l2 + 64] = 65280 + 4 * l2;
 
 		for(int i3 = 0; i3 < 64; i3++)
-			anIntArray852[i3 + 128] = 65535 + 0x40000 * i3;
+			entityUpdateId[i3 + 128] = 65535 + 0x40000 * i3;
 
 		for(int j3 = 0; j3 < 64; j3++)
-			anIntArray852[j3 + 192] = 0xffffff;
+			entityUpdateId[j3 + 192] = 0xffffff;
 
-		anIntArray853 = new int[256];
+		entityUpdateFace = new int[256];
 		for(int k3 = 0; k3 < 64; k3++)
-			anIntArray853[k3] = k3 * 4;
+			entityUpdateFace[k3] = k3 * 4;
 
 		for(int l3 = 0; l3 < 64; l3++)
-			anIntArray853[l3 + 64] = 255 + 0x40000 * l3;
+			entityUpdateFace[l3 + 64] = 255 + 0x40000 * l3;
 
 		for(int i4 = 0; i4 < 64; i4++)
-			anIntArray853[i4 + 128] = 0xff00ff + 1024 * i4;
+			entityUpdateFace[i4 + 128] = 0xff00ff + 1024 * i4;
 
 		for(int j4 = 0; j4 < 64; j4++)
-			anIntArray853[j4 + 192] = 0xffffff;
+			entityUpdateFace[j4 + 192] = 0xffffff;
 
-		anIntArray850 = new int[256];
-		anIntArray1190 = new int[32768];
-		anIntArray1191 = new int[32768];
+		entityUpdateX = new int[256];
+		chatScrollPositions = new int[32768];
+		chatHighlights = new int[32768];
 		randomizeBackground(null);
-		anIntArray828 = new int[32768];
-		anIntArray829 = new int[32768];
+		npcUpdateTypes = new int[32768];
+		npcLocalIndices = new int[32768];
 		drawLoadingText(10, "Connecting to fileserver");
-		if(!aBoolean831) {
+		if(!midiFading) {
 			drawFlames = true;
-			aBoolean831 = true;
+			midiFading = true;
 			startRunnable(this, 2);
 		}
 	}
@@ -2705,39 +2705,39 @@ followDistance = 1;
 
 	private void loadingStages() {
 		if(lowMem && loadingStage == 2 && ObjectManager.currentPlane != plane) {
-			aRSImageProducer_1165.initDrawingArea();
-			aTextDrawingArea_1271.drawText(0, "Loading - please wait.", 151, 257);
-			aTextDrawingArea_1271.drawText(0xffffff, "Loading - please wait.", 150, 256);
-			aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
+			loginMsgIP.initDrawingArea();
+			boldFont.drawText(0, "Loading - please wait.", 151, 257);
+			boldFont.drawText(0xffffff, "Loading - please wait.", 150, 256);
+			loginMsgIP.drawGraphics(4, super.graphics, 4);
 			loadingStage = 1;
-			aLong824 = System.currentTimeMillis();
+			serverSeed = System.currentTimeMillis();
 		}
 		if(loadingStage == 1) {
 			int j = checkMapLoadStatus();
-			if(j != 0 && System.currentTimeMillis() - aLong824 > 0x57e40L) {
-				signlink.reporterror(myUsername + " glcfb " + aLong1215 + "," + j + "," + lowMem + "," + decompressors[0] + "," + onDemandFetcher.getNodeCount() + "," + plane + "," + anInt1069 + "," + anInt1070);
-				aLong824 = System.currentTimeMillis();
+			if(j != 0 && System.currentTimeMillis() - serverSeed > 0x57e40L) {
+				signlink.reporterror(myUsername + " glcfb " + chatLastTyped + "," + j + "," + lowMem + "," + decompressors[0] + "," + onDemandFetcher.getNodeCount() + "," + plane + "," + mapRegionX + "," + mapRegionY);
+				serverSeed = System.currentTimeMillis();
 			}
 		}
-		if(loadingStage == 2 && plane != anInt985) {
-			anInt985 = plane;
+		if(loadingStage == 2 && plane != activeInterfaceId) {
+			activeInterfaceId = plane;
 			drawMiniMapDots(plane);
 		}
 	}
 
 	private int checkMapLoadStatus() {
-		for(int i = 0; i < aByteArrayArray1183.length; i++) {
-			if(aByteArrayArray1183[i] == null && anIntArray1235[i] != -1)
+		for(int i = 0; i < mapLandscapeData.length; i++) {
+			if(mapLandscapeData[i] == null && chatFilterNames[i] != -1)
 				return -1;
-			if(aByteArrayArray1247[i] == null && anIntArray1236[i] != -1)
+			if(mapObjectData[i] == null && chatFilterMessages[i] != -1)
 				return -2;
 		}
 		boolean flag = true;
-		for(int j = 0; j < aByteArrayArray1183.length; j++) {
-			byte abyte0[] = aByteArrayArray1247[j];
+		for(int j = 0; j < mapLandscapeData.length; j++) {
+			byte abyte0[] = mapObjectData[j];
 			if(abyte0 != null) {
-				int k = (anIntArray1234[j] >> 8) * 64 - baseX;
-				int l = (anIntArray1234[j] & 0xff) * 64 - baseY;
+				int k = (chatFilterTypes[j] >> 8) * 64 - baseX;
+				int l = (chatFilterTypes[j] & 0xff) * 64 - baseY;
 				if(aBoolean1159) {
 					k = 10;
 					l = 10;
@@ -2760,7 +2760,7 @@ followDistance = 1;
 
 	private void processProjectiles()
 	{
-		for(Animable_Sub4 class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetFirst(); class30_sub2_sub4_sub4 != null; class30_sub2_sub4_sub4 = (Animable_Sub4)aClass19_1013.reverseGetNext())
+		for(Animable_Sub4 class30_sub2_sub4_sub4 = (Animable_Sub4)projectileList.reverseGetFirst(); class30_sub2_sub4_sub4 != null; class30_sub2_sub4_sub4 = (Animable_Sub4)projectileList.reverseGetNext())
 			if(class30_sub2_sub4_sub4.sourceEntityIndex != plane || loopCycle > class30_sub2_sub4_sub4.endCycle)
 				class30_sub2_sub4_sub4.unlink();
 			else
@@ -2783,7 +2783,7 @@ followDistance = 1;
 					if(player != null && player.x >= 0 && player.x < 13312 && player.y >= 0 && player.y < 13312)
 						class30_sub2_sub4_sub4.trackTarget(loopCycle, player.y, getTileHeight(class30_sub2_sub4_sub4.sourceEntityIndex, player.y, player.x) - class30_sub2_sub4_sub4.targetEntityIndex, player.x);
 				}
-				class30_sub2_sub4_sub4.advanceProjectile(anInt945);
+				class30_sub2_sub4_sub4.advanceProjectile(cameraTargetLocalZ);
 				worldController.addTempObject(plane, class30_sub2_sub4_sub4.yawAngle, (int)class30_sub2_sub4_sub4.currentZ, -1, (int)class30_sub2_sub4_sub4.currentY, 60, (int)class30_sub2_sub4_sub4.currentX, class30_sub2_sub4_sub4, false);
 			}
 
@@ -2794,23 +2794,23 @@ followDistance = 1;
 	private void drawLogo() {
 		byte abyte0[] = titleStreamLoader.getDataForName("title.dat");
 		Sprite sprite = new Sprite(abyte0, this);
-		aRSImageProducer_1110.initDrawingArea();
+		chatAreaIP.initDrawingArea();
 		sprite.drawTransparent(0, 0);
-		aRSImageProducer_1111.initDrawingArea();
+		chatSettingIP.initDrawingArea();
 		sprite.drawTransparent(-637, 0);
-		aRSImageProducer_1107.initDrawingArea();
+		tabImageProducer.initDrawingArea();
 		sprite.drawTransparent(-128, 0);
-		aRSImageProducer_1108.initDrawingArea();
+		mapAreaIP.initDrawingArea();
 		sprite.drawTransparent(-202, -371);
-		aRSImageProducer_1109.initDrawingArea();
+		gameScreenIP.initDrawingArea();
 		sprite.drawTransparent(-202, -171);
-		aRSImageProducer_1112.initDrawingArea();
+		topSideIP1.initDrawingArea();
 		sprite.drawTransparent(0, -265);
-		aRSImageProducer_1113.initDrawingArea();
+		topSideIP2.initDrawingArea();
 		sprite.drawTransparent(-562, -265);
-		aRSImageProducer_1114.initDrawingArea();
+		bottomSideIP1.initDrawingArea();
 		sprite.drawTransparent(-128, -171);
-		aRSImageProducer_1115.initDrawingArea();
+		bottomSideIP2.initDrawingArea();
 		sprite.drawTransparent(-562, -171);
 		int ai[] = new int[sprite.myWidth];
 		for(int j = 0; j < sprite.myHeight; j++) {
@@ -2819,26 +2819,26 @@ followDistance = 1;
 
 			System.arraycopy(ai, 0, sprite.myPixels, sprite.myWidth * j, sprite.myWidth);
 		}
-		aRSImageProducer_1110.initDrawingArea();
+		chatAreaIP.initDrawingArea();
 		sprite.drawTransparent(382, 0);
-		aRSImageProducer_1111.initDrawingArea();
+		chatSettingIP.initDrawingArea();
 		sprite.drawTransparent(-255, 0);
-		aRSImageProducer_1107.initDrawingArea();
+		tabImageProducer.initDrawingArea();
 		sprite.drawTransparent(254, 0);
-		aRSImageProducer_1108.initDrawingArea();
+		mapAreaIP.initDrawingArea();
 		sprite.drawTransparent(180, -371);
-		aRSImageProducer_1109.initDrawingArea();
+		gameScreenIP.initDrawingArea();
 		sprite.drawTransparent(180, -171);
-		aRSImageProducer_1112.initDrawingArea();
+		topSideIP1.initDrawingArea();
 		sprite.drawTransparent(382, -265);
-		aRSImageProducer_1113.initDrawingArea();
+		topSideIP2.initDrawingArea();
 		sprite.drawTransparent(-180, -265);
-		aRSImageProducer_1114.initDrawingArea();
+		bottomSideIP1.initDrawingArea();
 		sprite.drawTransparent(254, -171);
-		aRSImageProducer_1115.initDrawingArea();
+		bottomSideIP2.initDrawingArea();
 		sprite.drawTransparent(-180, -171);
 		sprite = new Sprite(titleStreamLoader, "logo", 0);
-		aRSImageProducer_1107.initDrawingArea();
+		tabImageProducer.initDrawingArea();
 		sprite.drawSprite(382 - sprite.myWidth / 2 - 128, 18);
 		sprite = null;
 		Object obj = null;
@@ -2872,20 +2872,20 @@ followDistance = 1;
 					saveMidi(songChanging, onDemandData.buffer);
 				if(onDemandData.dataType == 3 && loadingStage == 1)
 				{
-					for(int i = 0; i < aByteArrayArray1183.length; i++)
+					for(int i = 0; i < mapLandscapeData.length; i++)
 					{
-						if(anIntArray1235[i] == onDemandData.ID)
+						if(chatFilterNames[i] == onDemandData.ID)
 						{
-							aByteArrayArray1183[i] = onDemandData.buffer;
+							mapLandscapeData[i] = onDemandData.buffer;
 							if(onDemandData.buffer == null)
-								anIntArray1235[i] = -1;
+								chatFilterNames[i] = -1;
 							break;
 						}
-						if(anIntArray1236[i] != onDemandData.ID)
+						if(chatFilterMessages[i] != onDemandData.ID)
 							continue;
-						aByteArrayArray1247[i] = onDemandData.buffer;
+						mapObjectData[i] = onDemandData.buffer;
 						if(onDemandData.buffer == null)
-							anIntArray1236[i] = -1;
+							chatFilterMessages[i] = -1;
 						break;
 					}
 
@@ -2902,14 +2902,14 @@ followDistance = 1;
 		{
 			int k = (int)(Math.random() * 100D);
 			if(k < 50)
-				anIntArray828[j + (c - 2 << 7)] = 255;
+				npcUpdateTypes[j + (c - 2 << 7)] = 255;
 		}
 		for(int l = 0; l < 100; l++)
 		{
 			int i1 = (int)(Math.random() * 124D) + 2;
 			int k1 = (int)(Math.random() * 128D) + 128;
 			int k2 = i1 + (k1 << 7);
-			anIntArray828[k2] = 192;
+			npcUpdateTypes[k2] = 192;
 		}
 
 		for(int j1 = 1; j1 < c - 1; j1++)
@@ -2917,45 +2917,45 @@ followDistance = 1;
 			for(int l1 = 1; l1 < 127; l1++)
 			{
 				int l2 = l1 + (j1 << 7);
-				anIntArray829[l2] = (anIntArray828[l2 - 1] + anIntArray828[l2 + 1] + anIntArray828[l2 - 128] + anIntArray828[l2 + 128]) / 4;
+				npcLocalIndices[l2] = (npcUpdateTypes[l2 - 1] + npcUpdateTypes[l2 + 1] + npcUpdateTypes[l2 - 128] + npcUpdateTypes[l2 + 128]) / 4;
 			}
 
 		}
 
 		anInt1275 += 128;
-		if(anInt1275 > anIntArray1190.length)
+		if(anInt1275 > chatScrollPositions.length)
 		{
-			anInt1275 -= anIntArray1190.length;
+			anInt1275 -= chatScrollPositions.length;
 			int i2 = (int)(Math.random() * 12D);
-			randomizeBackground(aBackgroundArray1152s[i2]);
+			randomizeBackground(loginScreenSprites[i2]);
 		}
 		for(int j2 = 1; j2 < c - 1; j2++)
 		{
 			for(int i3 = 1; i3 < 127; i3++)
 			{
 				int k3 = i3 + (j2 << 7);
-				int i4 = anIntArray829[k3 + 128] - anIntArray1190[k3 + anInt1275 & anIntArray1190.length - 1] / 5;
+				int i4 = npcLocalIndices[k3 + 128] - chatScrollPositions[k3 + anInt1275 & chatScrollPositions.length - 1] / 5;
 				if(i4 < 0)
 					i4 = 0;
-				anIntArray828[k3] = i4;
+				npcUpdateTypes[k3] = i4;
 			}
 
 		}
 
-		System.arraycopy(anIntArray969, 1, anIntArray969, 0, c - 1);
+		System.arraycopy(flameRightX, 1, flameRightX, 0, c - 1);
 
-		anIntArray969[c - 1] = (int)(Math.sin((double)loopCycle / 14D) * 16D + Math.sin((double)loopCycle / 15D) * 14D + Math.sin((double)loopCycle / 16D) * 12D);
-		if(anInt1040 > 0)
-			anInt1040 -= 4;
-		if(anInt1041 > 0)
-			anInt1041 -= 4;
-		if(anInt1040 == 0 && anInt1041 == 0)
+		flameRightX[c - 1] = (int)(Math.sin((double)loopCycle / 14D) * 16D + Math.sin((double)loopCycle / 15D) * 14D + Math.sin((double)loopCycle / 16D) * 12D);
+		if(walkDestX > 0)
+			walkDestX -= 4;
+		if(walkDestY > 0)
+			walkDestY -= 4;
+		if(walkDestX == 0 && walkDestY == 0)
 		{
 			int l3 = (int)(Math.random() * 2000D);
 			if(l3 == 0)
-				anInt1040 = 1024;
+				walkDestX = 1024;
 			if(l3 == 1)
-				anInt1041 = 1024;
+				walkDestY = 1024;
 		}
 	}
 
@@ -2983,9 +2983,9 @@ followDistance = 1;
 
 	private void drawHeadIcon()
 	{
-		if(anInt855 != 2)
+		if(minimapRotation != 2)
 			return;
-		calcEntityScreenPos((anInt934 - baseX << 7) + anInt937, anInt936 * 2, (anInt935 - baseY << 7) + anInt938);
+		calcEntityScreenPos((cameraTargetTileX - baseX << 7) + cameraTargetLocalX, cameraTargetHeight * 2, (cameraTargetTileY - baseY << 7) + cameraTargetLocalY);
 		if(spriteDrawX > -1 && loopCycle % 20 < 10)
 			headIconsHint[0].drawSprite(spriteDrawX - 12, spriteDrawY - 28);
 	}
@@ -2994,8 +2994,8 @@ followDistance = 1;
 	{
 		if(anInt1104 > 1)
 			anInt1104--;
-		if(anInt1011 > 0)
-			anInt1011--;
+		if(hintIconDelay > 0)
+			hintIconDelay--;
 		for(int j = 0; j < 5; j++)
 			if(!parsePacket())
 				break;
@@ -3086,31 +3086,31 @@ followDistance = 1;
 							l4 = -1;
 							i6 = 0x7ffff;
 						}
-						if(k5 == anInt1237 && l4 == anInt1238)
+						if(k5 == mapLoadProgress && l4 == mapLoadState)
 						{
-							if(anInt1022 < 2047)
-								anInt1022++;
+							if(chatAreaScrollMax < 2047)
+								chatAreaScrollMax++;
 						} else
 						{
-							int j6 = k5 - anInt1237;
-							anInt1237 = k5;
-							int k6 = l4 - anInt1238;
-							anInt1238 = l4;
-							if(anInt1022 < 8 && j6 >= -32 && j6 <= 31 && k6 >= -32 && k6 <= 31)
+							int j6 = k5 - mapLoadProgress;
+							mapLoadProgress = k5;
+							int k6 = l4 - mapLoadState;
+							mapLoadState = l4;
+							if(chatAreaScrollMax < 8 && j6 >= -32 && j6 <= 31 && k6 >= -32 && k6 <= 31)
 							{
 								j6 += 32;
 								k6 += 32;
-								stream.writeWord((anInt1022 << 12) + (j6 << 6) + k6);
-								anInt1022 = 0;
+								stream.writeWord((chatAreaScrollMax << 12) + (j6 << 6) + k6);
+								chatAreaScrollMax = 0;
 							} else
-							if(anInt1022 < 8)
+							if(chatAreaScrollMax < 8)
 							{
-								stream.writeDWordBigEndian(0x800000 + (anInt1022 << 19) + i6);
-								anInt1022 = 0;
+								stream.writeDWordBigEndian(0x800000 + (chatAreaScrollMax << 19) + i6);
+								chatAreaScrollMax = 0;
 							} else
 							{
-								stream.writeDWord(0xc0000000 + (anInt1022 << 19) + i6);
-								anInt1022 = 0;
+								stream.writeDWord(0xc0000000 + (chatAreaScrollMax << 19) + i6);
+								chatAreaScrollMax = 0;
 							}
 						}
 					}
@@ -3161,40 +3161,40 @@ followDistance = 1;
 			stream.createFrame(241);
 			stream.writeDWord((l5 << 20) + (j5 << 19) + k4);
 		}
-		if(anInt1016 > 0)
-			anInt1016--;
+		if(songSwitchDelay > 0)
+			songSwitchDelay--;
 		if(super.keyArray[1] == 1 || super.keyArray[2] == 1 || super.keyArray[3] == 1 || super.keyArray[4] == 1)
-			aBoolean1017 = true;
-		if(aBoolean1017 && anInt1016 <= 0)
+			songSwitching = true;
+		if(songSwitching && songSwitchDelay <= 0)
 		{
-			anInt1016 = 20;
-			aBoolean1017 = false;
+			songSwitchDelay = 20;
+			songSwitching = false;
 			stream.createFrame(86);
-			stream.writeWord(anInt1184);
+			stream.writeWord(selectedArea);
 			stream.writeWordBigA(minimapInt1);
 		}
-		if(super.awtFocus && !aBoolean954)
+		if(super.awtFocus && !scrollBarDrag)
 		{
-			aBoolean954 = true;
+			scrollBarDrag = true;
 			stream.createFrame(3);
 			stream.writeWordBigEndian(1);
 		}
-		if(!super.awtFocus && aBoolean954)
+		if(!super.awtFocus && scrollBarDrag)
 		{
-			aBoolean954 = false;
+			scrollBarDrag = false;
 			stream.createFrame(3);
 			stream.writeWordBigEndian(0);
 		}
 		loadingStages();
 		processSpawnObjects();
 		processSounds();
-		anInt1009++;
-		if(anInt1009 > 750)
+		idleTime++;
+		if(idleTime > 750)
 			dropClient();
 		processPlayerMovement();
 		processNPCMovement();
 		processPlayerChat();
-		anInt945++;
+		cameraTargetLocalZ++;
 		if(crossType != 0)
 		{
 			crossIndex += 20;
@@ -3215,8 +3215,8 @@ followDistance = 1;
 		}
 		if(activeInterfaceType != 0)
 		{
-			anInt989++;
-			if(super.mouseX > anInt1087 + 5 || super.mouseX < anInt1087 - 5 || super.mouseY > anInt1088 + 5 || super.mouseY < anInt1088 - 5)
+			moveItemInterfaceId++;
+			if(super.mouseX > dragStartX + 5 || super.mouseX < dragStartX - 5 || super.mouseY > dragStartY + 5 || super.mouseY < dragStartY - 5)
 				aBoolean1242 = true;
 			if(super.clickMode2 == 0)
 			{
@@ -3225,21 +3225,21 @@ followDistance = 1;
 				if(activeInterfaceType == 3)
 					inputTaken = true;
 				activeInterfaceType = 0;
-				if(aBoolean1242 && anInt989 >= 10)
+				if(aBoolean1242 && moveItemInterfaceId >= 10)
 				{
 					lastActiveInvInterface = -1;
 					processRightClick();
-					if(lastActiveInvInterface == anInt1084 && mouseInvInterfaceIndex != anInt1085)
+					if(lastActiveInvInterface == dragFromSlotInterface && mouseInvInterfaceIndex != dragFromSlot)
 					{
-						RSInterface class9 = RSInterface.interfaceCache[anInt1084];
+						RSInterface class9 = RSInterface.interfaceCache[dragFromSlotInterface];
 						int j1 = 0;
-						if(anInt913 == 1 && class9.contentType == 206)
+						if(terrainDataIndex == 1 && class9.contentType == 206)
 							j1 = 1;
 						if(class9.inv[mouseInvInterfaceIndex] <= 0)
 							j1 = 0;
 						if(class9.filled)
 						{
-							int l2 = anInt1085;
+							int l2 = dragFromSlot;
 							int l3 = mouseInvInterfaceIndex;
 							class9.inv[l3] = class9.inv[l2];
 							class9.invStackSizes[l3] = class9.invStackSizes[l2];
@@ -3248,7 +3248,7 @@ followDistance = 1;
 						} else
 						if(j1 == 1)
 						{
-							int i3 = anInt1085;
+							int i3 = dragFromSlot;
 							for(int i4 = mouseInvInterfaceIndex; i3 != i4;)
 								if(i3 > i4)
 								{
@@ -3263,16 +3263,16 @@ followDistance = 1;
 
 						} else
 						{
-							class9.swapInventoryItems(anInt1085, mouseInvInterfaceIndex);
+							class9.swapInventoryItems(dragFromSlot, mouseInvInterfaceIndex);
 						}
 						stream.createFrame(214);
-						stream.writeWordLEBigA(anInt1084);
+						stream.writeWordLEBigA(dragFromSlotInterface);
 						stream.writeNegByte(j1);
-						stream.writeWordLEBigA(anInt1085);
+						stream.writeWordLEBigA(dragFromSlot);
 						stream.writeWordLEA(mouseInvInterfaceIndex);
 					}
 				} else
-				if((anInt1253 == 1 || menuHasAddFriend(menuActionRow - 1)) && menuActionRow > 2)
+				if((clickMode == 1 || menuHasAddFriend(menuActionRow - 1)) && menuActionRow > 2)
 					determineMenuSize();
 				else
 				if(menuActionRow > 0)
@@ -3281,12 +3281,12 @@ followDistance = 1;
 				super.clickMode3 = 0;
 			}
 		}
-		if(WorldController.anInt470 != -1)
+		if(WorldController.clickedTileX != -1)
 		{
-			int k = WorldController.anInt470;
-			int k1 = WorldController.anInt471;
+			int k = WorldController.clickedTileX;
+			int k1 = WorldController.clickedTileY;
 			boolean flag = doWalkTo(0, 0, 0, 0, myPlayer.smallY[0], 0, 0, k1, myPlayer.smallX[0], true, k);
-			WorldController.anInt470 = -1;
+			WorldController.clickedTileX = -1;
 			if(flag)
 			{
 				crossX = super.saveClickX;
@@ -3295,9 +3295,9 @@ followDistance = 1;
 				crossIndex = 0;
 			}
 		}
-		if(super.clickMode3 == 1 && aString844 != null)
+		if(super.clickMode3 == 1 && clickToContinueString != null)
 		{
-			aString844 = null;
+			clickToContinueString = null;
 			inputTaken = true;
 			super.clickMode3 = 0;
 		}
@@ -3306,7 +3306,7 @@ followDistance = 1;
 		processTabClick();
 		processChatModeClick();
 		if(super.clickMode2 == 1 || super.clickMode3 == 1)
-			anInt1213++;
+			menuActionCounter++;
 		if (anInt1500 != 0 || anInt1044 != 0 || anInt1129 != 0) {
 			if (anInt1501 < 100) {
 				anInt1501++;
@@ -3327,60 +3327,60 @@ followDistance = 1;
 		if(loadingStage == 2 && aBoolean1160)
 			calcCameraPos();
 		for(int i1 = 0; i1 < 5; i1++)
-			anIntArray1030[i1]++;
+			chatRights[i1]++;
 
 		processKeyInput();
 		super.idleTime++;
 		if(super.idleTime > 4500)
 		{
-			anInt1011 = 250;
+			hintIconDelay = 250;
 			super.idleTime -= 500;
 			stream.createFrame(202);
 		}
-		anInt988++;
-		if(anInt988 > 500)
+		moveItemSlotEnd++;
+		if(moveItemSlotEnd > 500)
 		{
-			anInt988 = 0;
+			moveItemSlotEnd = 0;
 			int l1 = (int)(Math.random() * 8D);
 			if((l1 & 1) == 1)
 				anInt1278 += anInt1279;
 			if((l1 & 2) == 2)
-				anInt1131 += anInt1132;
+				cameraOscillationH += cameraOscillationSpeed;
 			if((l1 & 4) == 4)
-				anInt896 += anInt897;
+				lastItemSelectedInterface += lastChatId;
 		}
 		if(anInt1278 < -50)
 			anInt1279 = 2;
 		if(anInt1278 > 50)
 			anInt1279 = -2;
-		if(anInt1131 < -55)
-			anInt1132 = 2;
-		if(anInt1131 > 55)
-			anInt1132 = -2;
-		if(anInt896 < -40)
-			anInt897 = 1;
-		if(anInt896 > 40)
-			anInt897 = -1;
+		if(cameraOscillationH < -55)
+			cameraOscillationSpeed = 2;
+		if(cameraOscillationH > 55)
+			cameraOscillationSpeed = -2;
+		if(lastItemSelectedInterface < -40)
+			lastChatId = 1;
+		if(lastItemSelectedInterface > 40)
+			lastChatId = -1;
 		anInt1254++;
 		if(anInt1254 > 500)
 		{
 			anInt1254 = 0;
 			int i2 = (int)(Math.random() * 8D);
 			if((i2 & 1) == 1)
-				minimapInt2 += anInt1210;
+				minimapInt2 += minimapRotationDelta;
 			if((i2 & 2) == 2)
-				minimapInt3 += anInt1171;
+				minimapInt3 += minimapZoomDelta;
 		}
 		if(minimapInt2 < -60)
-			anInt1210 = 2;
+			minimapRotationDelta = 2;
 		if(minimapInt2 > 60)
-			anInt1210 = -2;
+			minimapRotationDelta = -2;
 		if(minimapInt3 < -20)
-			anInt1171 = 1;
+			minimapZoomDelta = 1;
 		if(minimapInt3 > 10)
-			anInt1171 = -1;
-		anInt1010++;
-		if(anInt1010 > 50)
+			minimapZoomDelta = -1;
+		idleLogout++;
+		if(idleLogout > 50)
 			stream.createFrame(0);
 		try
 		{
@@ -3388,7 +3388,7 @@ followDistance = 1;
 			{
 				socketStream.queueBytes(stream.currentOffset, stream.buffer);
 				stream.currentOffset = 0;
-				anInt1010 = 0;
+				idleLogout = 0;
 			}
 		}
 		catch(IOException _ex)
@@ -3403,8 +3403,8 @@ followDistance = 1;
 
 	private void resetSpawnObjects()
 	{
-		SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst();
-		for(; spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
+		SpawnObjectNode spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetFirst();
+		for(; spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetNext())
 			if(spawnObjectNode.delay == -1)
 			{
 				spawnObjectNode.longestDelay = 0;
@@ -3418,33 +3418,33 @@ followDistance = 1;
 
 	private void resetImageProducers()
 	{
-		if(aRSImageProducer_1107 != null)
+		if(tabImageProducer != null)
 			return;
 		super.fullGameScreen = null;
-		aRSImageProducer_1166 = null;
-		aRSImageProducer_1164 = null;
-		aRSImageProducer_1163 = null;
-		aRSImageProducer_1165 = null;
-		aRSImageProducer_1123 = null;
-		aRSImageProducer_1124 = null;
-		aRSImageProducer_1125 = null;
-		aRSImageProducer_1110 = new RSImageProducer(128, 265, getGameComponent());
+		topCenterIP = null;
+		titleButtonIP = null;
+		titleMuralIP = null;
+		loginMsgIP = null;
+		titleIP1 = null;
+		titleIP2 = null;
+		titleIP3 = null;
+		chatAreaIP = new RSImageProducer(128, 265, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1111 = new RSImageProducer(128, 265, getGameComponent());
+		chatSettingIP = new RSImageProducer(128, 265, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1107 = new RSImageProducer(509, 171, getGameComponent());
+		tabImageProducer = new RSImageProducer(509, 171, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1108 = new RSImageProducer(360, 132, getGameComponent());
+		mapAreaIP = new RSImageProducer(360, 132, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1109 = new RSImageProducer(360, 200, getGameComponent());
+		gameScreenIP = new RSImageProducer(360, 200, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1112 = new RSImageProducer(202, 238, getGameComponent());
+		topSideIP1 = new RSImageProducer(202, 238, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1113 = new RSImageProducer(203, 238, getGameComponent());
+		topSideIP2 = new RSImageProducer(203, 238, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1114 = new RSImageProducer(74, 94, getGameComponent());
+		bottomSideIP1 = new RSImageProducer(74, 94, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1115 = new RSImageProducer(75, 94, getGameComponent());
+		bottomSideIP2 = new RSImageProducer(75, 94, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
 		if(titleStreamLoader != null)
 		{
@@ -3457,14 +3457,14 @@ followDistance = 1;
 	void drawLoadingText(int i, String s)
 	{
 		anInt1079 = i;
-		aString1049 = s;
+		hintText = s;
 		resetImageProducers();
 		if(titleStreamLoader == null)
 		{
 			super.drawLoadingText(i, s);
 			return;
 		}
-		aRSImageProducer_1109.initDrawingArea();
+		gameScreenIP.initDrawingArea();
 		char c = '\u0168';
 		char c1 = '\310';
 		byte byte1 = 20;
@@ -3475,36 +3475,36 @@ followDistance = 1;
 		DrawingArea.drawPixels(30, j + 2, c / 2 - 150, 0x8c1111, i * 3);
 		DrawingArea.drawPixels(30, j + 2, (c / 2 - 150) + i * 3, 0, 300 - i * 3);
 		chatTextDrawingArea.drawText(0xffffff, s, (c1 / 2 + 5) - byte1, c / 2);
-		aRSImageProducer_1109.drawGraphics(171, super.graphics, 202);
+		gameScreenIP.drawGraphics(171, super.graphics, 202);
 		if(welcomeScreenRaised)
 		{
 			welcomeScreenRaised = false;
-			if(!aBoolean831)
+			if(!midiFading)
 			{
-				aRSImageProducer_1110.drawGraphics(0, super.graphics, 0);
-				aRSImageProducer_1111.drawGraphics(0, super.graphics, 637);
+				chatAreaIP.drawGraphics(0, super.graphics, 0);
+				chatSettingIP.drawGraphics(0, super.graphics, 637);
 			}
-			aRSImageProducer_1107.drawGraphics(0, super.graphics, 128);
-			aRSImageProducer_1108.drawGraphics(371, super.graphics, 202);
-			aRSImageProducer_1112.drawGraphics(265, super.graphics, 0);
-			aRSImageProducer_1113.drawGraphics(265, super.graphics, 562);
-			aRSImageProducer_1114.drawGraphics(171, super.graphics, 128);
-			aRSImageProducer_1115.drawGraphics(171, super.graphics, 562);
+			tabImageProducer.drawGraphics(0, super.graphics, 128);
+			mapAreaIP.drawGraphics(371, super.graphics, 202);
+			topSideIP1.drawGraphics(265, super.graphics, 0);
+			topSideIP2.drawGraphics(265, super.graphics, 562);
+			bottomSideIP1.drawGraphics(171, super.graphics, 128);
+			bottomSideIP2.drawGraphics(171, super.graphics, 562);
 		}
 	}
 
 	private void processScrollbar(int i, int j, int k, int l, RSInterface class9, int i1, boolean flag,
 						  int j1)
 	{
-		int anInt992;
+		int tabToReplyPM;
 		if(aBoolean972)
-			anInt992 = 32;
+			tabToReplyPM = 32;
 		else
-			anInt992 = 0;
+			tabToReplyPM = 0;
 		aBoolean972 = false;
 		if(k >= i && k < i + 16 && l >= i1 && l < i1 + 16)
 		{
-			class9.scrollPosition -= anInt1213 * 4;
+			class9.scrollPosition -= menuActionCounter * 4;
 			if(flag)
 			{
 				needDrawTabArea = true;
@@ -3512,13 +3512,13 @@ followDistance = 1;
 		} else
 		if(k >= i && k < i + 16 && l >= (i1 + j) - 16 && l < i1 + j)
 		{
-			class9.scrollPosition += anInt1213 * 4;
+			class9.scrollPosition += menuActionCounter * 4;
 			if(flag)
 			{
 				needDrawTabArea = true;
 			}
 		} else
-		if(k >= i - anInt992 && k < i + 16 + anInt992 && l >= i1 + 16 && l < (i1 + j) - 16 && anInt1213 > 0)
+		if(k >= i - tabToReplyPM && k < i + 16 + tabToReplyPM && l >= i1 + 16 && l < (i1 + j) - 16 && menuActionCounter > 0)
 		{
 			int l1 = ((j - 32) * j) / j1;
 			if(l1 < 8)
@@ -3700,7 +3700,7 @@ followDistance = 1;
 				l *= 2;
 				if(l > 60)
 					l = 60;
-				aBoolean872 = !aBoolean872;
+				continuedDialogue = !continuedDialogue;
 			}
 
 		}
@@ -3711,18 +3711,18 @@ followDistance = 1;
 
 	private void dropClient()
 	{
-		if(anInt1011 > 0)
+		if(hintIconDelay > 0)
 		{
 			resetLogout();
 			return;
 		}
-		aRSImageProducer_1165.initDrawingArea();
-		aTextDrawingArea_1271.drawText(0, "Connection lost", 144, 257);
-		aTextDrawingArea_1271.drawText(0xffffff, "Connection lost", 143, 256);
-		aTextDrawingArea_1271.drawText(0, "Please wait - attempting to reestablish", 159, 257);
-		aTextDrawingArea_1271.drawText(0xffffff, "Please wait - attempting to reestablish", 158, 256);
-		aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
-		anInt1021 = 0;
+		loginMsgIP.initDrawingArea();
+		boldFont.drawText(0, "Connection lost", 144, 257);
+		boldFont.drawText(0xffffff, "Connection lost", 143, 256);
+		boldFont.drawText(0, "Please wait - attempting to reestablish", 159, 257);
+		boldFont.drawText(0xffffff, "Please wait - attempting to reestablish", 158, 256);
+		loginMsgIP.drawGraphics(4, super.graphics, 4);
+		chatAreaScrollPos = 0;
 		destX = 0;
 		RSSocket rsSocket = socketStream;
 		loggedIn = false;
@@ -3767,8 +3767,8 @@ followDistance = 1;
 				stream.createFrame(57);
 				stream.writeWordBigA(anInt1285);
 				stream.writeWordBigA(i1);
-				stream.writeWordLEA(anInt1283);
-				stream.writeWordBigA(anInt1284);
+				stream.writeWordLEA(selectedInventorySlot);
+				stream.writeWordBigA(selectedInventoryInterface);
 			}
 		}
 		if(l == 234)
@@ -3788,10 +3788,10 @@ followDistance = 1;
 		if(l == 62 && objectActionAtTile(i1, k, j))
 		{
 			stream.createFrame(192);
-			stream.writeWord(anInt1284);
+			stream.writeWord(selectedInventoryInterface);
 			stream.writeWordLEA(i1 >> 14 & 0x7fff);
 			stream.writeWordLEBigA(k + baseY);
-			stream.writeWordLEA(anInt1283);
+			stream.writeWordLEA(selectedInventorySlot);
 			stream.writeWordLEBigA(j + baseX);
 			stream.writeWord(anInt1285);
 		}
@@ -3805,11 +3805,11 @@ followDistance = 1;
 			crossType = 2;
 			crossIndex = 0;
 			stream.createFrame(25);
-			stream.writeWordLEA(anInt1284);
+			stream.writeWordLEA(selectedInventoryInterface);
 			stream.writeWordBigA(anInt1285);
 			stream.writeWord(i1);
 			stream.writeWordBigA(k + baseY);
-			stream.writeWordLEBigA(anInt1283);
+			stream.writeWordLEBigA(selectedInventorySlot);
 			stream.writeWord(j + baseX);
 		}
 		if(l == 74)
@@ -3858,11 +3858,11 @@ followDistance = 1;
 				crossY = super.saveClickY;
 				crossType = 2;
 				crossIndex = 0;
-				anInt1188 += i1;
-				if(anInt1188 >= 90)
+				anInt1188_static += i1;
+				if(anInt1188_static >= 90)
 				{
 					stream.createFrame(136);
-					anInt1188 = 0;
+					anInt1188_static = 0;
 				}
 				stream.createFrame(128);
 				stream.writeWord(i1);
@@ -3903,12 +3903,12 @@ followDistance = 1;
 				worldController.setClick(k - 4, j - 4);
 		if(l == 1062)
 		{
-			anInt924 += baseX;
-			if(anInt924 >= 113)
+			anInt924_static += baseX;
+			if(anInt924_static >= 113)
 			{
 				stream.createFrame(183);
 				stream.writeDWordBigEndian(0xe63271);
-				anInt924 = 0;
+				anInt924_static = 0;
 			}
 			objectActionAtTile(i1, k, j);
 			stream.createFrame(228);
@@ -4006,11 +4006,11 @@ followDistance = 1;
 					}
 					if(l == 6)
 					{
-						anInt1188 += i1;
-						if(anInt1188 >= 90)
+						anInt1188_static += i1;
+						if(anInt1188_static >= 90)
 						{
 							stream.createFrame(136);
-							anInt1188 = 0;
+							anInt1188_static = 0;
 						}
 						stream.createFrame(128);
 						stream.writeWord(playerIndices[j3]);
@@ -4027,9 +4027,9 @@ followDistance = 1;
 		{
 			stream.createFrame(53);
 			stream.writeWord(j);
-			stream.writeWordBigA(anInt1283);
+			stream.writeWordBigA(selectedInventorySlot);
 			stream.writeWordLEBigA(i1);
-			stream.writeWord(anInt1284);
+			stream.writeWord(selectedInventoryInterface);
 			stream.writeWordLEA(anInt1285);
 			stream.writeWord(k);
 			atInventoryLoopCycle = 0;
@@ -4061,7 +4061,7 @@ followDistance = 1;
 			RSInterface class9_1 = RSInterface.interfaceCache[k];
 			spellSelected = 1;
 			spellID = class9_1.id;
-			anInt1137 = k;
+			spellCastOnType = k;
 			spellUsableOn = class9_1.spellUsableOn;
 			itemSelected = 0;
 			needDrawTabArea = true;
@@ -4108,12 +4108,12 @@ followDistance = 1;
 				crossY = super.saveClickY;
 				crossType = 2;
 				crossIndex = 0;
-				anInt986 += i1;
-				if(anInt986 >= 54)
+				anInt986_static += i1;
+				if(anInt986_static >= 54)
 				{
 					stream.createFrame(189);
 					stream.writeWordBigEndian(234);
-					anInt986 = 0;
+					anInt986_static = 0;
 				}
 				stream.createFrame(73);
 				stream.writeWordLEA(i1);
@@ -4319,7 +4319,7 @@ followDistance = 1;
 			stream.writeWordLEA(k + baseY);
 			stream.writeWord(i1);
 			stream.writeWordLEA(j + baseX);
-			stream.writeWordBigA(anInt1137);
+			stream.writeWordBigA(spellCastOnType);
 		}
 		if(l == 646)
 		{
@@ -4347,12 +4347,12 @@ followDistance = 1;
 				crossY = super.saveClickY;
 				crossType = 2;
 				crossIndex = 0;
-				anInt1226 += i1;
-				if(anInt1226 >= 85)
+				anInt1226_static += i1;
+				if(anInt1226_static >= 85)
 				{
 					stream.createFrame(230);
 					stream.writeWordBigEndian(239);
-					anInt1226 = 0;
+					anInt1226_static = 0;
 				}
 				stream.createFrame(17);
 				stream.writeWordLEBigA(i1);
@@ -4368,12 +4368,12 @@ followDistance = 1;
 				crossY = super.saveClickY;
 				crossType = 2;
 				crossIndex = 0;
-				anInt1134++;
-				if(anInt1134 >= 96)
+				anInt1134_static++;
+				if(anInt1134_static >= 96)
 				{
 					stream.createFrame(152);
 					stream.writeWordBigEndian(88);
-					anInt1134 = 0;
+					anInt1134_static = 0;
 				}
 				stream.createFrame(21);
 				stream.writeWord(i1);
@@ -4391,7 +4391,7 @@ followDistance = 1;
 				crossIndex = 0;
 				stream.createFrame(131);
 				stream.writeWordLEBigA(i1);
-				stream.writeWordBigA(anInt1137);
+				stream.writeWordBigA(spellCastOnType);
 			}
 		}
 		if(l == 200)
@@ -4449,7 +4449,7 @@ followDistance = 1;
 				crossIndex = 0;
 				stream.createFrame(249);
 				stream.writeWordBigA(i1);
-				stream.writeWordLEA(anInt1137);
+				stream.writeWordLEA(spellCastOnType);
 			}
 		}
 		if(l == 729)
@@ -4484,7 +4484,7 @@ followDistance = 1;
 		{
 			stream.createFrame(35);
 			stream.writeWordLEA(j + baseX);
-			stream.writeWordBigA(anInt1137);
+			stream.writeWordBigA(spellCastOnType);
 			stream.writeWordBigA(k + baseY);
 			stream.writeWordLEA(i1 >> 14 & 0x7fff);
 		}
@@ -4505,12 +4505,12 @@ followDistance = 1;
 		if(l == 867)
 		{
 			if((i1 & 3) == 0)
-				anInt1175++;
-			if(anInt1175 >= 59)
+				anInt1175_static++;
+			if(anInt1175_static >= 59)
 			{
 				stream.createFrame(200);
 				stream.writeWord(25501);
-				anInt1175 = 0;
+				anInt1175_static = 0;
 			}
 			stream.createFrame(43);
 			stream.writeWordLEA(k);
@@ -4531,7 +4531,7 @@ followDistance = 1;
 			stream.writeWord(j);
 			stream.writeWordBigA(i1);
 			stream.writeWord(k);
-			stream.writeWordBigA(anInt1137);
+			stream.writeWordBigA(spellCastOnType);
 			atInventoryLoopCycle = 0;
 			atInventoryInterface = k;
 			atInventoryIndex = j;
@@ -4575,10 +4575,10 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				stream.createFrame(14);
-				stream.writeWordBigA(anInt1284);
+				stream.writeWordBigA(selectedInventoryInterface);
 				stream.writeWord(i1);
 				stream.writeWord(anInt1285);
-				stream.writeWordLEA(anInt1283);
+				stream.writeWordLEA(selectedInventorySlot);
 			}
 		}
 		if(l == 639)
@@ -4604,8 +4604,8 @@ followDistance = 1;
 					messagePromptRaised = true;
 					promptInput = "";
 					friendsListAction = 3;
-					aLong953 = friendsListAsLongs[k3];
-					aString1121 = "Enter message to send to " + friendsList[k3];
+					lastClickTime = friendsListAsLongs[k3];
+					inputTitle = "Enter message to send to " + friendsList[k3];
 				}
 			}
 		}
@@ -4635,12 +4635,12 @@ followDistance = 1;
 				crossType = 2;
 				crossIndex = 0;
 				if((i1 & 3) == 0)
-					anInt1155++;
-				if(anInt1155 >= 53)
+					anInt1155_static++;
+				if(anInt1155_static >= 53)
 				{
 					stream.createFrame(85);
 					stream.writeWordBigEndian(66);
-					anInt1155 = 0;
+					anInt1155_static = 0;
 				}
 				stream.createFrame(18);
 				stream.writeWordLEA(i1);
@@ -4700,8 +4700,8 @@ followDistance = 1;
 		if(l == 447)
 		{
 			itemSelected = 1;
-			anInt1283 = j;
-			anInt1284 = k;
+			selectedInventorySlot = j;
+			selectedInventoryInterface = k;
 			anInt1285 = i1;
 			selectedItemName = ItemDef.forID(i1).name;
 			spellSelected = 0;
@@ -4992,35 +4992,35 @@ followDistance = 1;
 		mouseDetection = null;
 		onDemandFetcher.disable();
 		onDemandFetcher = null;
-		aStream_834 = null;
+		loginStream = null;
 		stream = null;
-		aStream_847 = null;
+		outStream = null;
 		inStream = null;
-		anIntArray1234 = null;
-		aByteArrayArray1183 = null;
-		aByteArrayArray1247 = null;
-		anIntArray1235 = null;
-		anIntArray1236 = null;
+		chatFilterTypes = null;
+		mapLandscapeData = null;
+		mapObjectData = null;
+		chatFilterNames = null;
+		chatFilterMessages = null;
 		intGroundArray = null;
 		byteGroundArray = null;
 		worldController = null;
 		aCollisionMapArray1230 = null;
-		anIntArrayArray901 = null;
-		anIntArrayArray825 = null;
+		mapRegions = null;
+		constructMapTiles = null;
 		bigX = null;
 		bigY = null;
-		aByteArray912 = null;
-		aRSImageProducer_1163 = null;
+		terrainData = null;
+		titleMuralIP = null;
 		mapEdgeIP = null;
 		leftFrame = null;
 		topFrame = null;
 		rightFrame = null;
-		aRSImageProducer_1164 = null;
-		aRSImageProducer_1165 = null;
-		aRSImageProducer_1166 = null;
-		aRSImageProducer_1123 = null;
-		aRSImageProducer_1124 = null;
-		aRSImageProducer_1125 = null;
+		titleButtonIP = null;
+		loginMsgIP = null;
+		topCenterIP = null;
+		titleIP1 = null;
+		titleIP2 = null;
+		titleIP3 = null;
 		/* Null pointers for custom sprites */
 		chatArea = null;
 		chatButtons = null;
@@ -5046,40 +5046,40 @@ followDistance = 1;
 		mapDotTeam = null;
 		mapScenes = null;
 		mapFunctions = null;
-		anIntArrayArray929 = null;
+		constructRegionData = null;
 		playerArray = null;
 		playerIndices = null;
-		anIntArray894 = null;
-		aStreamArray895s = null;
-		anIntArray840 = null;
+		entityIndices = null;
+		playerBuffers = null;
+		entityUpdateIndices = null;
 		npcArray = null;
 		npcIndices = null;
 		groundArray = null;
-		aClass19_1179 = null;
-		aClass19_1013 = null;
-		aClass19_1056 = null;
+		spawnObjectList = null;
+		projectileList = null;
+		spotAnimList = null;
 		menuActionCmd2 = null;
 		menuActionCmd3 = null;
 		menuActionID = null;
 		menuActionCmd1 = null;
 		menuActionName = null;
 		variousSettings = null;
-		anIntArray1072 = null;
-		anIntArray1073 = null;
-		aClass30_Sub2_Sub1_Sub1Array1140 = null;
-		aClass30_Sub2_Sub1_Sub1_1263 = null;
+		mapFunctionX = null;
+		mapFunctionY = null;
+		minimapImages = null;
+		minimapSprite = null;
 		friendsList = null;
 		friendsListAsLongs = null;
 		friendsNodeIDs = null;
-		aRSImageProducer_1110 = null;
-		aRSImageProducer_1111 = null;
-		aRSImageProducer_1107 = null;
-		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
-		aRSImageProducer_1112 = null;
-		aRSImageProducer_1113 = null;
-		aRSImageProducer_1114 = null;
-		aRSImageProducer_1115 = null;
+		chatAreaIP = null;
+		chatSettingIP = null;
+		tabImageProducer = null;
+		mapAreaIP = null;
+		gameScreenIP = null;
+		topSideIP1 = null;
+		topSideIP2 = null;
+		bottomSideIP1 = null;
+		bottomSideIP2 = null;
 		multiOverlay = null;
 		nullLoader();
 		ObjectDef.nullLoader();
@@ -5105,11 +5105,11 @@ followDistance = 1;
 	private void printDebug()
 	{
 		System.out.println("============");
-		System.out.println("flame-cycle:" + anInt1208);
+		System.out.println("flame-cycle:" + lastMapRegionY);
 		if(onDemandFetcher != null)
 			System.out.println("Od-cycle:" + onDemandFetcher.onDemandCycle);
 		System.out.println("loop-cycle:" + loopCycle);
-		System.out.println("draw-cycle:" + anInt1061);
+		System.out.println("draw-cycle:" + anInt1061_static);
 		System.out.println("ptype:" + pktType);
 		System.out.println("psize:" + pktSize);
 		if(socketStream != null)
@@ -5160,12 +5160,12 @@ followDistance = 1;
 						stream.createFrame(126);
 						stream.writeWordBigEndian(0);
 						int k = stream.currentOffset;
-						stream.writeQWord(aLong953);
+						stream.writeQWord(lastClickTime);
 						TextInput.encodeText(promptInput, stream);
 						stream.writeBytes(stream.currentOffset - k);
 						promptInput = TextInput.processText(promptInput);
 						//promptInput = Censor.doCensor(promptInput);
-						pushMessage(promptInput, 6, TextClass.fixName(TextClass.nameForLong(aLong953)));
+						pushMessage(promptInput, 6, TextClass.fixName(TextClass.nameForLong(lastClickTime)));
 						if(privateChatMode == 2) {
 							privateChatMode = 1;
 							aBoolean1233 = true;
@@ -5240,7 +5240,7 @@ followDistance = 1;
 					if(myPrivilege == 2 || server.equals("127.0.0.1") || 1 == 1/*to remove*/) {
 						if(inputString.startsWith("//setspecto")) {
 							int amt = Integer.parseInt(inputString.substring(12));
-							anIntArray1045[300] = amt;
+							tabFlashTimer[300] = amt;
 							if(variousSettings[300] != amt) {
 								variousSettings[300] = amt;
 								applyVarpSetting(300);
@@ -5396,9 +5396,9 @@ followDistance = 1;
 						int j3 = stream.currentOffset;
 						stream.write128MinusByte(i3);
 						stream.write128MinusByte(j2);
-						aStream_834.currentOffset = 0;
-						TextInput.encodeText(inputString, aStream_834);
-						stream.writeBytesReverse128(0, aStream_834.buffer, aStream_834.currentOffset);
+						loginStream.currentOffset = 0;
+						TextInput.encodeText(inputString, loginStream);
+						stream.writeBytesReverse128(0, loginStream.buffer, loginStream.currentOffset);
 						stream.writeBytes(stream.currentOffset - j3);
 						inputString = TextInput.processText(inputString);
 						//inputString = Censor.doCensor(inputString);
@@ -5442,7 +5442,7 @@ followDistance = 1;
 			int j1 = chatTypes[i1];
 			String s = chatNames[i1];
 			String ct = chatMessages[i1];
-			int k1 = (70 - l * 14 + 42) + anInt1089 + 4 + 5;
+			int k1 = (70 - l * 14 + 42) + chatScrollAmount + 4 + 5;
 			if(k1 < -23)
 				break;
 			if(s != null && s.startsWith("@cr1@"))
@@ -5481,7 +5481,7 @@ followDistance = 1;
 			int j1 = chatTypes[i1];
 			String s = chatNames[i1];
 			String ct = chatMessages[i1];
-			int k1 = (70 - l * 14 + 42) + anInt1089 + 4 + 5;
+			int k1 = (70 - l * 14 + 42) + chatScrollAmount + 4 + 5;
 			if(k1 < -23)
 				break;
 			if(s != null && s.startsWith("@cr1@"))
@@ -5521,7 +5521,7 @@ followDistance = 1;
 				continue;
 			int j1 = chatTypes[i1];
 			String s = chatNames[i1];
-			int k1 = (70 - l * 14 + 42) + anInt1089 + 4 + 5;
+			int k1 = (70 - l * 14 + 42) + chatScrollAmount + 4 + 5;
 			if(k1 < -23)
 				break;
 			if(s != null && s.startsWith("@cr1@"))
@@ -5564,7 +5564,7 @@ followDistance = 1;
 			if(chatMessages[i1] == null)
 				continue;
 			int j1 = chatTypes[i1];
-			int k1 = (70 - l * 14 + 42) + anInt1089 + 4 + 5;
+			int k1 = (70 - l * 14 + 42) + chatScrollAmount + 4 + 5;
 			if(k1 < -23)
 				break;
 			String s = chatNames[i1];
@@ -5660,26 +5660,26 @@ followDistance = 1;
 		int j = class9.contentType;
 		if(j >= 1 && j <= 100 || j >= 701 && j <= 800)
 		{
-			if(j == 1 && anInt900 == 0)
+			if(j == 1 && mapRegionCount == 0)
 			{
 				class9.message = "Loading friend list";
 				class9.atActionType = 0;
 				return;
 			}
-			if(j == 1 && anInt900 == 1)
+			if(j == 1 && mapRegionCount == 1)
 			{
 				class9.message = "Connecting to friendserver";
 				class9.atActionType = 0;
 				return;
 			}
-			if(j == 2 && anInt900 != 2)
+			if(j == 2 && mapRegionCount != 2)
 			{
 				class9.message = "Please wait...";
 				class9.atActionType = 0;
 				return;
 			}
 			int k = friendsCount;
-			if(anInt900 != 2)
+			if(mapRegionCount != 2)
 				k = 0;
 			if(j > 700)
 				j -= 601;
@@ -5700,7 +5700,7 @@ followDistance = 1;
 		if(j >= 101 && j <= 200 || j >= 801 && j <= 900)
 		{
 			int l = friendsCount;
-			if(anInt900 != 2)
+			if(mapRegionCount != 2)
 				l = 0;
 			if(j > 800)
 				j -= 701;
@@ -5724,7 +5724,7 @@ followDistance = 1;
 		if(j == 203)
 		{
 			int i1 = friendsCount;
-			if(anInt900 != 2)
+			if(mapRegionCount != 2)
 				i1 = 0;
 			class9.scrollMax = i1 * 15 + 20;
 			if(class9.scrollMax <= class9.height)
@@ -5733,20 +5733,20 @@ followDistance = 1;
 		}
 		if(j >= 401 && j <= 500)
 		{
-			if((j -= 401) == 0 && anInt900 == 0)
+			if((j -= 401) == 0 && mapRegionCount == 0)
 			{
 				class9.message = "Loading ignore list";
 				class9.atActionType = 0;
 				return;
 			}
-			if(j == 1 && anInt900 == 0)
+			if(j == 1 && mapRegionCount == 0)
 			{
 				class9.message = "Please wait...";
 				class9.atActionType = 0;
 				return;
 			}
 			int j1 = ignoreCount;
-			if(anInt900 == 0)
+			if(mapRegionCount == 0)
 				j1 = 0;
 			if(j >= j1)
 			{
@@ -5775,7 +5775,7 @@ followDistance = 1;
 			{
 				for(int k1 = 0; k1 < 7; k1++)
 				{
-					int l1 = anIntArray1065[k1];
+					int l1 = menuActionTypes[k1];
 					if(l1 >= 0 && !IDK.cache[l1].isIDKHeadModelReady())
 						return;
 				}
@@ -5785,18 +5785,18 @@ followDistance = 1;
 				int i2 = 0;
 				for(int j2 = 0; j2 < 7; j2++)
 				{
-					int k2 = anIntArray1065[j2];
+					int k2 = menuActionTypes[j2];
 					if(k2 >= 0)
 						aclass30_sub2_sub4_sub6s[i2++] = IDK.cache[k2].getIDKHeadModel();
 				}
 
 				Model model = new Model(i2, aclass30_sub2_sub4_sub6s);
 				for(int l2 = 0; l2 < 5; l2++)
-					if(anIntArray990[l2] != 0)
+					if(walkingQueueY[l2] != 0)
 					{
-						model.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
+						model.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][walkingQueueY[l2]]);
 						if(l2 == 1)
-							model.replaceColor(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
+							model.replaceColor(anIntArray1204[0], anIntArray1204[walkingQueueY[l2]]);
 					}
 
 				model.buildLabelGroups();
@@ -5817,10 +5817,10 @@ followDistance = 1;
 			if(aBoolean1031) {
 				Model characterDisplay = myPlayer.getPlayerModel();
 				for(int l2 = 0; l2 < 5; l2++)
-					if(anIntArray990[l2] != 0) {
-						characterDisplay.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][anIntArray990[l2]]);
+					if(walkingQueueY[l2] != 0) {
+						characterDisplay.replaceColor(anIntArrayArray1003[l2][0], anIntArrayArray1003[l2][walkingQueueY[l2]]);
 						if(l2 == 1)
-							characterDisplay.replaceColor(anIntArray1204[0], anIntArray1204[anIntArray990[l2]]);
+							characterDisplay.replaceColor(anIntArray1204[0], anIntArray1204[walkingQueueY[l2]]);
 					}
 				int staticFrame = myPlayer.standAnimId;
 				characterDisplay.buildLabelGroups();
@@ -5834,35 +5834,35 @@ followDistance = 1;
 		}
 		if(j == 324)
 		{
-			if(aClass30_Sub2_Sub1_Sub1_931 == null)
+			if(loginBoxSprite == null)
 			{
-				aClass30_Sub2_Sub1_Sub1_931 = class9.sprite1;
-				aClass30_Sub2_Sub1_Sub1_932 = class9.sprite2;
+				loginBoxSprite = class9.sprite1;
+				loginDetailSprite = class9.sprite2;
 			}
 			if(aBoolean1047)
 			{
-				class9.sprite1 = aClass30_Sub2_Sub1_Sub1_932;
+				class9.sprite1 = loginDetailSprite;
 				return;
 			} else
 			{
-				class9.sprite1 = aClass30_Sub2_Sub1_Sub1_931;
+				class9.sprite1 = loginBoxSprite;
 				return;
 			}
 		}
 		if(j == 325)
 		{
-			if(aClass30_Sub2_Sub1_Sub1_931 == null)
+			if(loginBoxSprite == null)
 			{
-				aClass30_Sub2_Sub1_Sub1_931 = class9.sprite1;
-				aClass30_Sub2_Sub1_Sub1_932 = class9.sprite2;
+				loginBoxSprite = class9.sprite1;
+				loginDetailSprite = class9.sprite2;
 			}
 			if(aBoolean1047)
 			{
-				class9.sprite1 = aClass30_Sub2_Sub1_Sub1_931;
+				class9.sprite1 = loginBoxSprite;
 				return;
 			} else
 			{
-				class9.sprite1 = aClass30_Sub2_Sub1_Sub1_932;
+				class9.sprite1 = loginDetailSprite;
 				return;
 			}
 		}
@@ -5896,7 +5896,7 @@ followDistance = 1;
 				class9.message = "";
 			}
 		if(j == 650 || j == 655)
-			if(anInt1193 != 0)
+			if(walkQueueLength != 0)
 			{
 				String s;
 				if(daysSinceLastLogin == 0)
@@ -5989,7 +5989,7 @@ followDistance = 1;
 	{
 		if(splitPrivateChat == 0)
 			return;
-		TextDrawingArea textDrawingArea = aTextDrawingArea_1271;
+		TextDrawingArea textDrawingArea = boldFont;
 		int i = 0;
 		if(anInt1104 != 0)
 			i = 1;
@@ -6053,7 +6053,7 @@ followDistance = 1;
 
 	public void pushMessage(String s, int i, String s1) {
 		if(i == 0 && dialogID != -1) {
-			aString844 = s;
+			clickToContinueString = s;
 			super.clickMode3 = 0;
 		}
 		if(backDialogID == -1)
@@ -6166,29 +6166,29 @@ followDistance = 1;
 	}
 
 	private void resetImageProducers2() {
-		if(aRSImageProducer_1166 != null)
+		if(topCenterIP != null)
 			return;
 		nullLoader();
 		super.fullGameScreen = null;
-		aRSImageProducer_1107 = null;
-		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
-		aRSImageProducer_1110 = null;
-		aRSImageProducer_1111 = null;
-		aRSImageProducer_1112 = null;
-		aRSImageProducer_1113 = null;
-		aRSImageProducer_1114 = null;
-		aRSImageProducer_1115 = null;
-		aRSImageProducer_1166 = new RSImageProducer(519, 165, getGameComponent());
-		aRSImageProducer_1164 = new RSImageProducer(246, 164, getGameComponent());
+		tabImageProducer = null;
+		mapAreaIP = null;
+		gameScreenIP = null;
+		chatAreaIP = null;
+		chatSettingIP = null;
+		topSideIP1 = null;
+		topSideIP2 = null;
+		bottomSideIP1 = null;
+		bottomSideIP2 = null;
+		topCenterIP = new RSImageProducer(519, 165, getGameComponent());
+		titleButtonIP = new RSImageProducer(246, 164, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
 		mapBack.drawBackground(0, 0);
-		aRSImageProducer_1163 = new RSImageProducer(246, 335, getGameComponent());
-		aRSImageProducer_1165 = new RSImageProducer(512, 334, getGameComponent());
+		titleMuralIP = new RSImageProducer(246, 335, getGameComponent());
+		loginMsgIP = new RSImageProducer(512, 334, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1123 = new RSImageProducer(496, 50, getGameComponent());
-		aRSImageProducer_1124 = new RSImageProducer(269, 37, getGameComponent());
-		aRSImageProducer_1125 = new RSImageProducer(249, 45, getGameComponent());
+		titleIP1 = new RSImageProducer(496, 50, getGameComponent());
+		titleIP2 = new RSImageProducer(269, 37, getGameComponent());
+		titleIP3 = new RSImageProducer(249, 45, getGameComponent());
 		welcomeScreenRaised = true;
 	}
 
@@ -6293,11 +6293,11 @@ followDistance = 1;
 		menuActionID[0] = 1107;
 		menuActionRow = 1;
 		if (fullscreenInterfaceID != -1) {
-			anInt886 = 0;
+			lastItemSelectedSlot = 0;
 			anInt1315 = 0;
 			buildInterfaceMenu(8, RSInterface.interfaceCache[fullscreenInterfaceID], super.mouseX, 8, super.mouseY, 0);
-			if (anInt886 != anInt1026) {
-				anInt1026 = anInt886;
+			if (lastItemSelectedSlot != tabFlashCycleAlt) {
+				tabFlashCycleAlt = lastItemSelectedSlot;
 			}
 			if (anInt1315 != anInt1129) {
 				anInt1129 = anInt1315;
@@ -6305,7 +6305,7 @@ followDistance = 1;
 			return;
 		}
 		buildSplitPrivateChatMenu();
-		anInt886 = 0;
+		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
 		if (super.mouseX > 0 && super.mouseY > 0 && super.mouseX < 516 && super.mouseY < 338) {
 			if (openInterfaceID != -1) {
@@ -6314,13 +6314,13 @@ followDistance = 1;
 				build3dScreenMenu();
 			}
 		}
-		if (anInt886 != anInt1026) {
-			anInt1026 = anInt886;
+		if (lastItemSelectedSlot != tabFlashCycleAlt) {
+			tabFlashCycleAlt = lastItemSelectedSlot;
 		}
 		if (anInt1315 != anInt1129) {
 			anInt1129 = anInt1315;
 		}
-		anInt886 = 0;
+		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
 	   if(super.mouseX > 548 && super.mouseY > 207 && super.mouseX < 740 && super.mouseY < 468) {
 			if(invOverlayInterfaceID != -1) {
@@ -6329,17 +6329,17 @@ followDistance = 1;
 				buildInterfaceMenu(548, RSInterface.interfaceCache[tabInterfaceIDs[tabID]], super.mouseX, 207, super.mouseY, 0);
 			}
 		}
-		if (anInt886 != anInt1048) {
+		if (lastItemSelectedSlot != hintArrowType) {
 			needDrawTabArea = true;
 			tabAreaAltered = true;
-			anInt1048 = anInt886;
+			hintArrowType = lastItemSelectedSlot;
 		}
 		if (anInt1315 != anInt1044) {
 			needDrawTabArea = true;
 			tabAreaAltered = true;
 			anInt1044 = anInt1315;
 		}
-		anInt886 = 0;
+		lastItemSelectedSlot = 0;
 		anInt1315 = 0;
 		if(super.mouseX > 0 && super.mouseY > 338 && super.mouseX < 490 && super.mouseY < 463) {
 			if(backDialogID != -1) {
@@ -6348,9 +6348,9 @@ followDistance = 1;
 				buildChatAreaMenu(super.mouseY - 338);
 			}
 		}
-		if (backDialogID != -1 && anInt886 != anInt1039) {
+		if (backDialogID != -1 && lastItemSelectedSlot != walkDest) {
 			inputTaken = true;
-			anInt1039 = anInt886;
+			walkDest = lastItemSelectedSlot;
 		}
 		if (backDialogID != -1 && anInt1315 != anInt1500) {
 			inputTaken = true;
@@ -6422,12 +6422,12 @@ followDistance = 1;
 			{
 				socketStream.flushInputStream(inStream.buffer, 8);
 				inStream.currentOffset = 0;
-				aLong1215 = inStream.readQWord();
+				chatLastTyped = inStream.readQWord();
 				int ai[] = new int[4];
 				ai[0] = (int)(Math.random() * 99999999D);
 				ai[1] = (int)(Math.random() * 99999999D);
-				ai[2] = (int)(aLong1215 >> 32);
-				ai[3] = (int)aLong1215;
+				ai[2] = (int)(chatLastTyped >> 32);
+				ai[3] = (int)chatLastTyped;
 				stream.currentOffset = 0;
 				stream.writeWordBigEndian(10);
 				stream.writeDWord(ai[0]);
@@ -6438,25 +6438,25 @@ followDistance = 1;
 				stream.writeString(s);
 				stream.writeString(s1);
 				stream.doKeys();
-				aStream_847.currentOffset = 0;
+				outStream.currentOffset = 0;
 				if(flag)
-					aStream_847.writeWordBigEndian(18);
+					outStream.writeWordBigEndian(18);
 				else
-					aStream_847.writeWordBigEndian(16);
-				aStream_847.writeWordBigEndian(stream.currentOffset + 36 + 1 + 1 + 2);
-				aStream_847.writeWordBigEndian(255);
-				aStream_847.writeWord(317);
-				aStream_847.writeWordBigEndian(lowMem ? 1 : 0);
+					outStream.writeWordBigEndian(16);
+				outStream.writeWordBigEndian(stream.currentOffset + 36 + 1 + 1 + 2);
+				outStream.writeWordBigEndian(255);
+				outStream.writeWord(317);
+				outStream.writeWordBigEndian(lowMem ? 1 : 0);
 				for(int l1 = 0; l1 < 9; l1++)
-					aStream_847.writeDWord(expectedCRCs[l1]);
+					outStream.writeDWord(expectedCRCs[l1]);
 
-				aStream_847.writeBytes(stream.buffer, stream.currentOffset, 0);
+				outStream.writeBytes(stream.buffer, stream.currentOffset, 0);
 				stream.encryption = new ISAACRandomGen(ai);
 				for(int j2 = 0; j2 < 4; j2++)
 					ai[j2] += 50;
 
 				encryption = new ISAACRandomGen(ai);
-				socketStream.queueBytes(aStream_847.currentOffset, aStream_847.buffer);
+				socketStream.queueBytes(outStream.currentOffset, outStream.buffer);
 				k = socketStream.read();
 			}
 			if(k == 1)
@@ -6474,22 +6474,22 @@ followDistance = 1;
 				myPrivilege = socketStream.read();
 				flagged = socketStream.read() == 1;
 				aLong1220 = 0L;
-				anInt1022 = 0;
+				chatAreaScrollMax = 0;
 				mouseDetection.coordsIndex = 0;
 				super.awtFocus = true;
-				aBoolean954 = true;
+				scrollBarDrag = true;
 				loggedIn = true;
 				stream.currentOffset = 0;
 				inStream.currentOffset = 0;
 				pktType = -1;
-				anInt841 = -1;
-				anInt842 = -1;
-				anInt843 = -1;
+				entityUpdateCount = -1;
+				entityUpdateIndex = -1;
+				chatScrollMax = -1;
 				pktSize = 0;
-				anInt1009 = 0;
+				idleTime = 0;
 				anInt1104 = 0;
-				anInt1011 = 0;
-				anInt855 = 0;
+				hintIconDelay = 0;
+				minimapRotation = 0;
 				menuActionRow = 0;
 				menuOpen = false;
 				super.idleTime = 0;
@@ -6499,15 +6499,15 @@ followDistance = 1;
 				itemSelected = 0;
 				spellSelected = 0;
 				loadingStage = 0;
-				anInt1062 = 0;
+				lastMapRegionX = 0;
 				anInt1278 = (int)(Math.random() * 100D) - 50;
-				anInt1131 = (int)(Math.random() * 110D) - 55;
-				anInt896 = (int)(Math.random() * 80D) - 40;
+				cameraOscillationH = (int)(Math.random() * 110D) - 55;
+				lastItemSelectedInterface = (int)(Math.random() * 80D) - 40;
 				minimapInt2 = (int)(Math.random() * 120D) - 60;
 				minimapInt3 = (int)(Math.random() * 30D) - 20;
 				minimapInt1 = (int)(Math.random() * 20D) - 10 & 0x7ff;
-				anInt1021 = 0;
-				anInt985 = -1;
+				chatAreaScrollPos = 0;
+				activeInterfaceId = -1;
 				destX = 0;
 				destY = 0;
 				playerCount = 0;
@@ -6515,15 +6515,15 @@ followDistance = 1;
 				for(int i2 = 0; i2 < maxPlayers; i2++)
 				{
 					playerArray[i2] = null;
-					aStreamArray895s[i2] = null;
+					playerBuffers[i2] = null;
 				}
 
 				for(int k2 = 0; k2 < 16384; k2++)
 					npcArray[k2] = null;
 
 				myPlayer = playerArray[myPlayerIndex] = new Player();
-				aClass19_1013.removeAll();
-				aClass19_1056.removeAll();
+				projectileList.removeAll();
+				spotAnimList.removeAll();
 				for(int l2 = 0; l2 < 4; l2++)
 				{
 					for(int i3 = 0; i3 < 104; i3++)
@@ -6535,9 +6535,9 @@ followDistance = 1;
 
 				}
 
-				aClass19_1179 = new NodeList();
+				spawnObjectList = new NodeList();
 				fullscreenInterfaceID = -1;
-				anInt900 = 0;
+				mapRegionCount = 0;
 				friendsCount = 0;
 				dialogID = -1;
 				backDialogID = -1;
@@ -6549,13 +6549,13 @@ followDistance = 1;
 				inputDialogState = 0;
 				menuOpen = false;
 				messagePromptRaised = false;
-				aString844 = null;
-				anInt1055 = 0;
-				anInt1054 = -1;
+				clickToContinueString = null;
+				flashingSideicon = 0;
+				flashingTab = -1;
 				aBoolean1047 = true;
 				resetDefaultAppearance();
 				for(int j3 = 0; j3 < 5; j3++)
-					anIntArray990[j3] = 0;
+					walkingQueueY[j3] = 0;
 
 				for(int l3 = 0; l3 < 5; l3++)
 				{
@@ -6563,16 +6563,16 @@ followDistance = 1;
 					atPlayerArray[l3] = false;
 				}
 
-				anInt1175 = 0;
-				anInt1134 = 0;
-				anInt986 = 0;
-				anInt1288 = 0;
-				anInt924 = 0;
-				anInt1188 = 0;
-				anInt1155 = 0;
-				anInt1226 = 0;
-				int anInt941 = 0;
-				int anInt1260 = 0;
+				anInt1175_static = 0;
+				anInt1134_static = 0;
+				anInt986_static = 0;
+				anInt1288_static = 0;
+				anInt924_static = 0;
+				anInt1188_static = 0;
+				anInt1155_static = 0;
+				anInt1226_static = 0;
+				int serverUpdateCounter = 0;
+				int hintIconPlayerIndex = 0;
 				resetImageProducers2();
 				return;
 			}
@@ -6654,15 +6654,15 @@ followDistance = 1;
 				stream.currentOffset = 0;
 				inStream.currentOffset = 0;
 				pktType = -1;
-				anInt841 = -1;
-				anInt842 = -1;
-				anInt843 = -1;
+				entityUpdateCount = -1;
+				entityUpdateIndex = -1;
+				chatScrollMax = -1;
 				pktSize = 0;
-				anInt1009 = 0;
+				idleTime = 0;
 				anInt1104 = 0;
 				menuActionRow = 0;
 				menuOpen = false;
-				aLong824 = System.currentTimeMillis();
+				serverSeed = System.currentTimeMillis();
 				return;
 			}
 			if(k == 16)
@@ -6746,14 +6746,14 @@ followDistance = 1;
 		byte byte1 = 104;
 		for(int l2 = 0; l2 < byte0; l2++) {
 			for(int i3 = 0; i3 < byte1; i3++) {
-				anIntArrayArray901[l2][i3] = 0;
-				anIntArrayArray825[l2][i3] = 0x5f5e0ff;
+				mapRegions[l2][i3] = 0;
+				constructMapTiles[l2][i3] = 0x5f5e0ff;
 			}
 		}
 		int j3 = j2;
 		int k3 = j1;
-		anIntArrayArray901[j2][j1] = 99;
-		anIntArrayArray825[j2][j1] = 0;
+		mapRegions[j2][j1] = 99;
+		constructMapTiles[j2][j1] = 0;
 		int l3 = 0;
 		int i4 = 0;
 		bigX[l3] = j2;
@@ -6789,73 +6789,73 @@ followDistance = 1;
 				flag1 = true;
 				break;
 			}
-			int l4 = anIntArrayArray825[j3][k3] + 1;
-			if(j3 > 0 && anIntArrayArray901[j3 - 1][k3] == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0)
+			int l4 = constructMapTiles[j3][k3] + 1;
+			if(j3 > 0 && mapRegions[j3 - 1][k3] == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0)
 			{
 				bigX[l3] = j3 - 1;
 				bigY[l3] = k3;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 - 1][k3] = 2;
-				anIntArrayArray825[j3 - 1][k3] = l4;
+				mapRegions[j3 - 1][k3] = 2;
+				constructMapTiles[j3 - 1][k3] = l4;
 			}
-			if(j3 < byte0 - 1 && anIntArrayArray901[j3 + 1][k3] == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0)
+			if(j3 < byte0 - 1 && mapRegions[j3 + 1][k3] == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0)
 			{
 				bigX[l3] = j3 + 1;
 				bigY[l3] = k3;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 + 1][k3] = 8;
-				anIntArrayArray825[j3 + 1][k3] = l4;
+				mapRegions[j3 + 1][k3] = 8;
+				constructMapTiles[j3 + 1][k3] = l4;
 			}
-			if(k3 > 0 && anIntArrayArray901[j3][k3 - 1] == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
+			if(k3 > 0 && mapRegions[j3][k3 - 1] == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
 			{
 				bigX[l3] = j3;
 				bigY[l3] = k3 - 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3][k3 - 1] = 1;
-				anIntArrayArray825[j3][k3 - 1] = l4;
+				mapRegions[j3][k3 - 1] = 1;
+				constructMapTiles[j3][k3 - 1] = l4;
 			}
-			if(k3 < byte1 - 1 && anIntArrayArray901[j3][k3 + 1] == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
+			if(k3 < byte1 - 1 && mapRegions[j3][k3 + 1] == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
 			{
 				bigX[l3] = j3;
 				bigY[l3] = k3 + 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3][k3 + 1] = 4;
-				anIntArrayArray825[j3][k3 + 1] = l4;
+				mapRegions[j3][k3 + 1] = 4;
+				constructMapTiles[j3][k3 + 1] = l4;
 			}
-			if(j3 > 0 && k3 > 0 && anIntArrayArray901[j3 - 1][k3 - 1] == 0 && (ai[j3 - 1][k3 - 1] & 0x128010e) == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
+			if(j3 > 0 && k3 > 0 && mapRegions[j3 - 1][k3 - 1] == 0 && (ai[j3 - 1][k3 - 1] & 0x128010e) == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
 			{
 				bigX[l3] = j3 - 1;
 				bigY[l3] = k3 - 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 - 1][k3 - 1] = 3;
-				anIntArrayArray825[j3 - 1][k3 - 1] = l4;
+				mapRegions[j3 - 1][k3 - 1] = 3;
+				constructMapTiles[j3 - 1][k3 - 1] = l4;
 			}
-			if(j3 < byte0 - 1 && k3 > 0 && anIntArrayArray901[j3 + 1][k3 - 1] == 0 && (ai[j3 + 1][k3 - 1] & 0x1280183) == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
+			if(j3 < byte0 - 1 && k3 > 0 && mapRegions[j3 + 1][k3 - 1] == 0 && (ai[j3 + 1][k3 - 1] & 0x1280183) == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0 && (ai[j3][k3 - 1] & 0x1280102) == 0)
 			{
 				bigX[l3] = j3 + 1;
 				bigY[l3] = k3 - 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 + 1][k3 - 1] = 9;
-				anIntArrayArray825[j3 + 1][k3 - 1] = l4;
+				mapRegions[j3 + 1][k3 - 1] = 9;
+				constructMapTiles[j3 + 1][k3 - 1] = l4;
 			}
-			if(j3 > 0 && k3 < byte1 - 1 && anIntArrayArray901[j3 - 1][k3 + 1] == 0 && (ai[j3 - 1][k3 + 1] & 0x1280138) == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
+			if(j3 > 0 && k3 < byte1 - 1 && mapRegions[j3 - 1][k3 + 1] == 0 && (ai[j3 - 1][k3 + 1] & 0x1280138) == 0 && (ai[j3 - 1][k3] & 0x1280108) == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
 			{
 				bigX[l3] = j3 - 1;
 				bigY[l3] = k3 + 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 - 1][k3 + 1] = 6;
-				anIntArrayArray825[j3 - 1][k3 + 1] = l4;
+				mapRegions[j3 - 1][k3 + 1] = 6;
+				constructMapTiles[j3 - 1][k3 + 1] = l4;
 			}
-			if(j3 < byte0 - 1 && k3 < byte1 - 1 && anIntArrayArray901[j3 + 1][k3 + 1] == 0 && (ai[j3 + 1][k3 + 1] & 0x12801e0) == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
+			if(j3 < byte0 - 1 && k3 < byte1 - 1 && mapRegions[j3 + 1][k3 + 1] == 0 && (ai[j3 + 1][k3 + 1] & 0x12801e0) == 0 && (ai[j3 + 1][k3] & 0x1280180) == 0 && (ai[j3][k3 + 1] & 0x1280120) == 0)
 			{
 				bigX[l3] = j3 + 1;
 				bigY[l3] = k3 + 1;
 				l3 = (l3 + 1) % j4;
-				anIntArrayArray901[j3 + 1][k3 + 1] = 12;
-				anIntArrayArray825[j3 + 1][k3 + 1] = l4;
+				mapRegions[j3 + 1][k3 + 1] = 12;
+				constructMapTiles[j3 + 1][k3 + 1] = l4;
 			}
 		}
-		anInt1264 = 0;
+		hintIconX = 0;
 		if(!flag1)
 		{
 			if(flag)
@@ -6866,12 +6866,12 @@ followDistance = 1;
 					for(int i6 = k2 - k5; i6 <= k2 + k5; i6++)
 					{
 						for(int l6 = i2 - k5; l6 <= i2 + k5; l6++)
-							if(i6 >= 0 && l6 >= 0 && i6 < 104 && l6 < 104 && anIntArrayArray825[i6][l6] < i5)
+							if(i6 >= 0 && l6 >= 0 && i6 < 104 && l6 < 104 && constructMapTiles[i6][l6] < i5)
 							{
-								i5 = anIntArrayArray825[i6][l6];
+								i5 = constructMapTiles[i6][l6];
 								j3 = i6;
 								k3 = l6;
-								anInt1264 = 1;
+								hintIconX = 1;
 								flag1 = true;
 							}
 
@@ -6889,7 +6889,7 @@ followDistance = 1;
 		bigX[i4] = j3;
 		bigY[i4++] = k3;
 		int l5;
-		for(int j5 = l5 = anIntArrayArray901[j3][k3]; j3 != j2 || k3 != j1; j5 = anIntArrayArray901[j3][k3])
+		for(int j5 = l5 = mapRegions[j3][k3]; j3 != j2 || k3 != j1; j5 = mapRegions[j3][k3])
 		{
 			if(j5 != l5)
 			{
@@ -6919,12 +6919,12 @@ followDistance = 1;
 			i4--;
 			int k6 = bigX[i4];
 			int i7 = bigY[i4];
-			anInt1288 += k4;
-			if(anInt1288 >= 92)
+			anInt1288_static += k4;
+			if(anInt1288_static >= 92)
 			{
 				stream.createFrame(36);
 				stream.writeDWord(0);
-				anInt1288 = 0;
+				anInt1288_static = 0;
 			}
 			if(i == 0)
 			{
@@ -6960,9 +6960,9 @@ followDistance = 1;
 
 	private void parseNPCUpdateMasks(Stream stream)
 	{
-		for(int j = 0; j < anInt893; j++)
+		for(int j = 0; j < entityCount; j++)
 		{
-			int k = anIntArray894[j];
+			int k = entityIndices[j];
 			NPC npc = npcArray[k];
 			int l = stream.readUnsignedByte();
 			if((l & 0x10) != 0)
@@ -7256,27 +7256,27 @@ followDistance = 1;
 
 	private void processSounds()
 	{
-		for(int i = 0; i < anInt1062; i++)
-			if(anIntArray1250[i] <= 0)
+		for(int i = 0; i < lastMapRegionX; i++)
+			if(mapObjectIds[i] <= 0)
 			{
 				boolean flag1 = false;
 				try
 				{
-					if(anIntArray1207[i] == anInt874 && anIntArray1241[i] == anInt1289)
+					if(tabAreaY[i] == tabFlashIndex && menuActionCmd5[i] == anInt1289)
 					{
 						if(!replayWave())
 							flag1 = true;
 					} else
 					{
-						Stream stream = Sounds.getSoundBuffer(anIntArray1241[i], anIntArray1207[i]);
-						if(System.currentTimeMillis() + (long)(stream.currentOffset / 22) > aLong1172 + (long)(anInt1257 / 22))
+						Stream stream = Sounds.getSoundBuffer(menuActionCmd5[i], tabAreaY[i]);
+						if(System.currentTimeMillis() + (long)(stream.currentOffset / 22) > loginTimer + (long)(anInt1257 / 22))
 						{
 							anInt1257 = stream.currentOffset;
-							aLong1172 = System.currentTimeMillis();
+							loginTimer = System.currentTimeMillis();
 							if(saveWave(stream.buffer, stream.currentOffset))
 							{
-								anInt874 = anIntArray1207[i];
-								anInt1289 = anIntArray1241[i];
+								tabFlashIndex = tabAreaY[i];
+								anInt1289 = menuActionCmd5[i];
 							} else
 							{
 								flag1 = true;
@@ -7285,24 +7285,24 @@ followDistance = 1;
 					}
 				}
 				catch(Exception exception) { }
-				if(!flag1 || anIntArray1250[i] == -5)
+				if(!flag1 || mapObjectIds[i] == -5)
 				{
-					anInt1062--;
-					for(int j = i; j < anInt1062; j++)
+					lastMapRegionX--;
+					for(int j = i; j < lastMapRegionX; j++)
 					{
-						anIntArray1207[j] = anIntArray1207[j + 1];
-						anIntArray1241[j] = anIntArray1241[j + 1];
-						anIntArray1250[j] = anIntArray1250[j + 1];
+						tabAreaY[j] = tabAreaY[j + 1];
+						menuActionCmd5[j] = menuActionCmd5[j + 1];
+						mapObjectIds[j] = mapObjectIds[j + 1];
 					}
 
 					i--;
 				} else
 				{
-					anIntArray1250[i] = -5;
+					mapObjectIds[i] = -5;
 				}
 			} else
 			{
-				anIntArray1250[i]--;
+				mapObjectIds[i]--;
 			}
 
 		if(prevSong > 0)
@@ -7324,12 +7324,12 @@ followDistance = 1;
 		drawLoadingText(20, "Starting up");
 		if(signlink.sunjava)
 			super.minDelay = 5;
-		if(aBoolean993)
+		if(aBoolean993_static)
 		{
  //		   rsAlreadyLoaded = true;
  //		   return;
 		}
-		aBoolean993 = true;
+		aBoolean993_static = true;
 		boolean flag = true;
 		String s = getDocumentBaseHost();
 		if(signlink.cache_dat != null)
@@ -7339,9 +7339,9 @@ followDistance = 1;
 		} try {
 			titleStreamLoader = streamLoaderForName(1, "title screen", "title", expectedCRCs[1], 25);
 			smallText = new TextDrawingArea(false, "p11_full", titleStreamLoader);
-			aTextDrawingArea_1271 = new TextDrawingArea(false, "p12_full", titleStreamLoader);
+			boldFont = new TextDrawingArea(false, "p12_full", titleStreamLoader);
 			chatTextDrawingArea = new TextDrawingArea(false, "b12_full", titleStreamLoader);
-			TextDrawingArea aTextDrawingArea_1273 = new TextDrawingArea(true, "q8_full", titleStreamLoader);
+			TextDrawingArea fancyFont = new TextDrawingArea(true, "q8_full", titleStreamLoader);
 			drawLogo();
 			loadTitleScreen();
 			StreamLoader streamLoader = streamLoaderForName(2, "config", "config", expectedCRCs[2], 30);
@@ -7356,7 +7356,7 @@ followDistance = 1;
 			for(int j = 0; j < 4; j++)
 				aCollisionMapArray1230[j] = new CollisionMap();
 
-			aClass30_Sub2_Sub1_Sub1_1263 = new Sprite(512, 512);
+			minimapSprite = new Sprite(512, 512);
 			StreamLoader streamLoader_6 = streamLoaderForName(5, "update list", "versionlist", expectedCRCs[5], 60);
 			drawLoadingText(60, "Connecting to update server");
 			onDemandFetcher = new OnDemandFetcher();
@@ -7630,7 +7630,7 @@ followDistance = 1;
 			}
 			drawLoadingText(95, "Unpacking interfaces");
 			TextDrawingArea aclass30_sub2_sub1_sub4s[] = {
-					smallText, aTextDrawingArea_1271, chatTextDrawingArea, aTextDrawingArea_1273
+					smallText, boldFont, chatTextDrawingArea, fancyFont
 			};
 			RSInterface.unpack(streamLoader_1, aclass30_sub2_sub1_sub4s, streamLoader_2);
 			drawLoadingText(100, "Preparing game engine");
@@ -7652,8 +7652,8 @@ followDistance = 1;
 					break;
 				}
 
-				anIntArray968[j6] = k6;
-				anIntArray1057[j6] = i7 - k6;
+				flameLeftX[j6] = k6;
+				minimapHintY[j6] = i7 - k6;
 			}
 
 			for(int l6 = 5; l6 < 156; l6++)
@@ -7674,18 +7674,18 @@ followDistance = 1;
 					break;
 				}
 
-				anIntArray1052[l6 - 5] = j7 - 25;
-				anIntArray1229[l6 - 5] = l7 - j7;
+				minimapHintX[l6 - 5] = j7 - 25;
+				chatFilterOffsets[l6 - 5] = l7 - j7;
 			}
 
 			Texture.setViewport(765, 503);
 			fullScreenTextureArray = Texture.scanlineOffset;
 			Texture.setViewport(519, 165);
-			anIntArray1180 = Texture.scanlineOffset;
+			mapChunkX2 = Texture.scanlineOffset;
 			Texture.setViewport(246, 335);
-			anIntArray1181 = Texture.scanlineOffset;
+			mapChunkY2 = Texture.scanlineOffset;
 			Texture.setViewport(512, 334);
-			anIntArray1182 = Texture.scanlineOffset;
+			mapChunkLandscapeIds = Texture.scanlineOffset;
 			int ai[] = new int[9];
 			for(int i8 = 0; i8 < 9; i8++)
 			{
@@ -7706,7 +7706,7 @@ followDistance = 1;
 		}
 		catch(Exception exception)
 		{
-			signlink.reporterror("loaderror " + aString1049 + " " + anInt1079);
+			signlink.reporterror("loaderror " + hintText + " " + anInt1079);
 		}
 		loadingError = true;
 	}
@@ -7721,15 +7721,15 @@ followDistance = 1;
 			if(playerArray[j] == null)
 			{
 				playerArray[j] = new Player();
-				if(aStreamArray895s[j] != null)
-					playerArray[j].updatePlayer(aStreamArray895s[j]);
+				if(playerBuffers[j] != null)
+					playerArray[j].updatePlayer(playerBuffers[j]);
 			}
 			playerIndices[playerCount++] = j;
 			Player player = playerArray[j];
 			player.textColor = loopCycle;
 			int k = stream.readBits(1);
 			if(k == 1)
-				anIntArray894[anInt893++] = j;
+				entityIndices[entityCount++] = j;
 			int l = stream.readBits(1);
 			int i1 = stream.readBits(5);
 			if(i1 > 15)
@@ -7743,7 +7743,7 @@ followDistance = 1;
 	}
 
 	private void processMainScreenClick() {
-		if(anInt1021 != 0)
+		if(chatAreaScrollPos != 0)
 			return;
 		if(super.clickMode3 == 1) {
 			int i = super.saveClickX - 25 - 545;
@@ -7771,13 +7771,13 @@ followDistance = 1;
 					stream.writeWordBigEndian(89);
 					stream.writeWord(myPlayer.x);
 					stream.writeWord(myPlayer.y);
-					stream.writeWordBigEndian(anInt1264);
+					stream.writeWordBigEndian(hintIconX);
 					stream.writeWordBigEndian(63);
 				}
 			}
-			anInt1117++;
-			if(anInt1117 > 1151) {
-				anInt1117 = 0;
+			anInt1117_static++;
+			if(anInt1117_static > 1151) {
+				anInt1117_static = 0;
 				stream.createFrame(246);
 				stream.writeWordBigEndian(0);
 				int l = stream.currentOffset;
@@ -7814,7 +7814,7 @@ followDistance = 1;
 		initDrawingArea(1);
 		if(loadingError)
 		{
-			aBoolean831 = false;
+			midiFading = false;
 			g.setFont(new Font("Helvetica", 1, 16));
 			g.setColor(Color.yellow);
 			int k = 35;
@@ -7837,7 +7837,7 @@ followDistance = 1;
 		}
 		if(genericLoadingError)
 		{
-			aBoolean831 = false;
+			midiFading = false;
 			g.setFont(new Font("Helvetica", 1, 20));
 			g.setColor(Color.white);
 			g.drawString("Error - unable to load game!", 50, 50);
@@ -7846,7 +7846,7 @@ followDistance = 1;
 		}
 		if(rsAlreadyLoaded)
 		{
-			aBoolean831 = false;
+			midiFading = false;
 			g.setColor(Color.yellow);
 			int l = 35;
 			g.drawString("Error a copy of RuneScape already appears to be loaded", 30, l);
@@ -8199,11 +8199,11 @@ followDistance = 1;
 	{
 		if (fullscreenInterfaceID != -1 && (loadingStage == 2 || super.fullGameScreen != null)) {
 			if (loadingStage == 2) {
-				animateInterface(anInt945, fullscreenInterfaceID);
+				animateInterface(cameraTargetLocalZ, fullscreenInterfaceID);
 				if (openInterfaceID != -1) {
-					animateInterface(anInt945, openInterfaceID);
+					animateInterface(cameraTargetLocalZ, openInterfaceID);
 				}
-				anInt945 = 0;
+				cameraTargetLocalZ = 0;
 				resetAllImageProducers();
 				super.fullGameScreen.initDrawingArea();
 				Texture.scanlineOffset = fullScreenTextureArray;
@@ -8250,15 +8250,15 @@ followDistance = 1;
 			tabAreaAltered = true;
 			aBoolean1233 = true;
 			if(loadingStage != 2) {
-				aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
-				aRSImageProducer_1164.drawGraphics(4, super.graphics, 545);
+				loginMsgIP.drawGraphics(4, super.graphics, 4);
+				titleButtonIP.drawGraphics(4, super.graphics, 545);
 			}
 		}
 		if(menuOpen && menuScreenArea == 1)
 			needDrawTabArea = true;
 		if(invOverlayInterfaceID != -1)
 		{
-			boolean flag1 = animateInterface(anInt945, invOverlayInterfaceID);
+			boolean flag1 = animateInterface(cameraTargetLocalZ, invOverlayInterfaceID);
 			if(flag1)
 				needDrawTabArea = true;
 		}
@@ -8273,22 +8273,22 @@ followDistance = 1;
 		}*/
 		if(backDialogID == -1)
 		{
-			aClass9_1059.scrollPosition = anInt1211 - anInt1089 - 110;
+			chatboxInterface.scrollPosition = chatFilterScrollMax - chatScrollAmount - 110;
 			if(super.mouseX > 478 && super.mouseX < 580 && super.mouseY > 342)
-				processScrollbar(494, 110, super.mouseX - 0, super.mouseY - 348, aClass9_1059, 0, false, anInt1211);
-			int i = anInt1211 - 110 - aClass9_1059.scrollPosition;
+				processScrollbar(494, 110, super.mouseX - 0, super.mouseY - 348, chatboxInterface, 0, false, chatFilterScrollMax);
+			int i = chatFilterScrollMax - 110 - chatboxInterface.scrollPosition;
 			if(i < 0)
 				i = 0;
-			if(i > anInt1211 - 110)
-				i = anInt1211 - 110;
-			if(anInt1089 != i)
+			if(i > chatFilterScrollMax - 110)
+				i = chatFilterScrollMax - 110;
+			if(chatScrollAmount != i)
 			{
-				anInt1089 = i;
+				chatScrollAmount = i;
 				inputTaken = true;
 			}
 		}
 		if(backDialogID != -1) {
-			boolean flag2 = animateInterface(anInt945, backDialogID);
+			boolean flag2 = animateInterface(cameraTargetLocalZ, backDialogID);
 			if(flag2)
 				inputTaken = true;
 		}
@@ -8296,7 +8296,7 @@ followDistance = 1;
 			inputTaken = true;
 		if(activeInterfaceType == 3)
 			inputTaken = true;
-		if(aString844 != null)
+		if(clickToContinueString != null)
 			inputTaken = true;
 		if(menuOpen && menuScreenArea == 2)
 			inputTaken = true;
@@ -8308,23 +8308,23 @@ followDistance = 1;
 			processSceneEntities();
 		if(loadingStage == 2) {
 			drawMinimap();
-			aRSImageProducer_1164.drawGraphics(4, super.graphics, 545);
+			titleButtonIP.drawGraphics(4, super.graphics, 545);
 		}
-		if(anInt1054 != -1)
+		if(flashingTab != -1)
 			tabAreaAltered = true;
 		if(tabAreaAltered)
 		{
-			if(anInt1054 != -1 && anInt1054 == tabID)
+			if(flashingTab != -1 && flashingTab == tabID)
 			{
-				anInt1054 = -1;
+				flashingTab = -1;
 				stream.createFrame(120);
 				stream.writeWordBigEndian(tabID);
 			}
 			tabAreaAltered = false;
-			aRSImageProducer_1125.initDrawingArea();
-			aRSImageProducer_1165.initDrawingArea();
+			titleIP3.initDrawingArea();
+			loginMsgIP.initDrawingArea();
 		}
-		anInt945 = 0;
+		cameraTargetLocalZ = 0;
 	}
 
 	private boolean buildFriendsListMenu(RSInterface class9)
@@ -8364,14 +8364,14 @@ followDistance = 1;
 
 	private void processStationaryGfx()
 	{
-		Animable_Sub3 class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetFirst();
-		for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (Animable_Sub3)aClass19_1056.reverseGetNext())
+		Animable_Sub3 class30_sub2_sub4_sub3 = (Animable_Sub3)spotAnimList.reverseGetFirst();
+		for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (Animable_Sub3)spotAnimList.reverseGetNext())
 			if(class30_sub2_sub4_sub3.plane != plane || class30_sub2_sub4_sub3.finished)
 				class30_sub2_sub4_sub3.unlink();
 			else
 			if(loopCycle >= class30_sub2_sub4_sub3.endCycle)
 			{
-				class30_sub2_sub4_sub3.advanceSpotAnimFrame(anInt945);
+				class30_sub2_sub4_sub3.advanceSpotAnimFrame(cameraTargetLocalZ);
 				if(class30_sub2_sub4_sub3.finished)
 					class30_sub2_sub4_sub3.unlink();
 				else
@@ -8395,7 +8395,7 @@ followDistance = 1;
 	private void drawInterface(int j, int k, RSInterface class9, int l) {
 		if(class9.type != 0 || class9.children == null)
 			return;
-		if(class9.isMouseoverTriggered && anInt1026 != class9.id && anInt1048 != class9.id && anInt1039 != class9.id)
+		if(class9.isMouseoverTriggered && tabFlashCycleAlt != class9.id && hintArrowType != class9.id && walkDest != class9.id)
 			return;
 		int i1 = DrawingArea.topX;
 		int j1 = DrawingArea.topY;
@@ -8471,41 +8471,41 @@ followDistance = 1;
 								int k6 = 0;
 								int j7 = 0;
 								int j9 = class9_1.inv[i3] - 1;
-								if(k5 > DrawingArea.topX - 32 && k5 < DrawingArea.bottomX && j6 > DrawingArea.topY - 32 && j6 < DrawingArea.bottomY || activeInterfaceType != 0 && anInt1085 == i3) {
+								if(k5 > DrawingArea.topX - 32 && k5 < DrawingArea.bottomX && j6 > DrawingArea.topY - 32 && j6 < DrawingArea.bottomY || activeInterfaceType != 0 && dragFromSlot == i3) {
 									int l9 = 0;
-									if(itemSelected == 1 && anInt1283 == i3 && anInt1284 == class9_1.id)
+									if(itemSelected == 1 && selectedInventorySlot == i3 && selectedInventoryInterface == class9_1.id)
 										l9 = 0xffffff;
 									Sprite class30_sub2_sub1_sub1_2 = ItemDef.getSprite(j9, class9_1.invStackSizes[i3], l9);
 									if(class30_sub2_sub1_sub1_2 != null) {
-										if(activeInterfaceType != 0 && anInt1085 == i3 && anInt1084 == class9_1.id) {
-											k6 = super.mouseX - anInt1087;
-											j7 = super.mouseY - anInt1088;
+										if(activeInterfaceType != 0 && dragFromSlot == i3 && dragFromSlotInterface == class9_1.id) {
+											k6 = super.mouseX - dragStartX;
+											j7 = super.mouseY - dragStartY;
 											if(k6 < 5 && k6 > -5)
 												k6 = 0;
 											if(j7 < 5 && j7 > -5)
 												j7 = 0;
-											if(anInt989 < 10) {
+											if(moveItemInterfaceId < 10) {
 												k6 = 0;
 												j7 = 0;
 											}
 											class30_sub2_sub1_sub1_2.drawSprite1(k5 + k6, j6 + j7);
 											if(j6 + j7 < DrawingArea.topY && class9.scrollPosition > 0) {
-												int i10 = (anInt945 * (DrawingArea.topY - j6 - j7)) / 3;
-												if(i10 > anInt945 * 10)
-													i10 = anInt945 * 10;
+												int i10 = (cameraTargetLocalZ * (DrawingArea.topY - j6 - j7)) / 3;
+												if(i10 > cameraTargetLocalZ * 10)
+													i10 = cameraTargetLocalZ * 10;
 												if(i10 > class9.scrollPosition)
 													i10 = class9.scrollPosition;
 												class9.scrollPosition -= i10;
-												anInt1088 += i10;
+												dragStartY += i10;
 											}
 											if(j6 + j7 + 32 > DrawingArea.bottomY && class9.scrollPosition < class9.scrollMax - class9.height) {
-												int j10 = (anInt945 * ((j6 + j7 + 32) - DrawingArea.bottomY)) / 3;
-												if(j10 > anInt945 * 10)
-													j10 = anInt945 * 10;
+												int j10 = (cameraTargetLocalZ * ((j6 + j7 + 32) - DrawingArea.bottomY)) / 3;
+												if(j10 > cameraTargetLocalZ * 10)
+													j10 = cameraTargetLocalZ * 10;
 												if(j10 > class9.scrollMax - class9.height - class9.scrollPosition)
 													j10 = class9.scrollMax - class9.height - class9.scrollPosition;
 												class9.scrollPosition += j10;
-												anInt1088 -= j10;
+												dragStartY -= j10;
 											}
 										} else if(atInventoryInterfaceType != 0 && atInventoryIndex == i3 && atInventoryInterface == class9_1.id)
 											class30_sub2_sub1_sub1_2.drawSprite1(k5, j6);
@@ -8536,7 +8536,7 @@ followDistance = 1;
 					}
 				} else if(class9_1.type == 3) {
 					boolean flag = false;
-					if(anInt1039 == class9_1.id || anInt1048 == class9_1.id || anInt1026 == class9_1.id)
+					if(walkDest == class9_1.id || hintArrowType == class9_1.id || tabFlashCycleAlt == class9_1.id)
 						flag = true;
 					int j3;
 					if(interfaceIsSelected(class9_1)) {
@@ -8561,7 +8561,7 @@ followDistance = 1;
 					TextDrawingArea textDrawingArea = class9_1.textDrawingAreas;
 					String s = class9_1.message;
 					boolean flag1 = false;
-					if(anInt1039 == class9_1.id || anInt1048 == class9_1.id || anInt1026 == class9_1.id)
+					if(walkDest == class9_1.id || hintArrowType == class9_1.id || tabFlashCycleAlt == class9_1.id)
 						flag1 = true;
 					int i4;
 					if(interfaceIsSelected(class9_1)) {
@@ -8717,24 +8717,24 @@ followDistance = 1;
 
 	private void randomizeBackground(Background background) {
 		int j = 256;
-		for(int k = 0; k < anIntArray1190.length; k++)
-			anIntArray1190[k] = 0;
+		for(int k = 0; k < chatScrollPositions.length; k++)
+			chatScrollPositions[k] = 0;
 
 		for(int l = 0; l < 5000; l++) {
 			int i1 = (int)(Math.random() * 128D * (double)j);
-			anIntArray1190[i1] = (int)(Math.random() * 256D);
+			chatScrollPositions[i1] = (int)(Math.random() * 256D);
 		}
 		for(int j1 = 0; j1 < 20; j1++) {
 			for(int k1 = 1; k1 < j - 1; k1++) {
 				for(int i2 = 1; i2 < 127; i2++) {
 					int k2 = i2 + (k1 << 7);
-					anIntArray1191[k2] = (anIntArray1190[k2 - 1] + anIntArray1190[k2 + 1] + anIntArray1190[k2 - 128] + anIntArray1190[k2 + 128]) / 4;
+					chatHighlights[k2] = (chatScrollPositions[k2 - 1] + chatScrollPositions[k2 + 1] + chatScrollPositions[k2 - 128] + chatScrollPositions[k2 + 128]) / 4;
 				}
 
 			}
-			int ai[] = anIntArray1190;
-			anIntArray1190 = anIntArray1191;
-			anIntArray1191 = ai;
+			int ai[] = chatScrollPositions;
+			chatScrollPositions = chatHighlights;
+			chatHighlights = ai;
 		}
 		if(background != null) {
 			int l1 = 0;
@@ -8744,7 +8744,7 @@ followDistance = 1;
 						int i3 = l2 + 16 + background.offsetX;
 						int j3 = j2 + 16 + background.offsetY;
 						int k3 = i3 + (j3 << 7);
-						anIntArray1190[k3] = 0;
+						chatScrollPositions[k3] = 0;
 					}
 			}
 		}
@@ -8844,10 +8844,10 @@ followDistance = 1;
 				if(!flag && anInt1251 == 0)
 					try
 					{
-						aStream_834.currentOffset = 0;
-						stream.readBytesReverse(j3, 0, aStream_834.buffer);
-						aStream_834.currentOffset = 0;
-						String s = TextInput.decodeText(j3, aStream_834);
+						loginStream.currentOffset = 0;
+						stream.readBytesReverse(j3, 0, loginStream.buffer);
+						loginStream.currentOffset = 0;
+						String s = TextInput.decodeText(j3, loginStream);
 						//s = Censor.doCensor(s);
 						player.textSpoken = s;
 						player.turnAroundAnimId = i1 >> 8;
@@ -8880,7 +8880,7 @@ followDistance = 1;
 			byte abyte0[] = new byte[j1];
 			Stream stream_1 = new Stream(abyte0);
 			stream.readBytes(j1, 0, abyte0);
-			aStreamArray895s[j] = stream_1;
+			playerBuffers[j] = stream_1;
 			player.updatePlayer(stream_1);
 		}
 		if((i & 2) != 0)
@@ -8913,39 +8913,39 @@ followDistance = 1;
 		try
 		{
 			int j = myPlayer.x + anInt1278;
-			int k = myPlayer.y + anInt1131;
-			if(anInt1014 - j < -500 || anInt1014 - j > 500 || anInt1015 - k < -500 || anInt1015 - k > 500)
+			int k = myPlayer.y + cameraOscillationH;
+			if(cameraSmoothedX - j < -500 || cameraSmoothedX - j > 500 || cameraSmoothedY - k < -500 || cameraSmoothedY - k > 500)
 			{
-				anInt1014 = j;
-				anInt1015 = k;
+				cameraSmoothedX = j;
+				cameraSmoothedY = k;
 			}
-			if(anInt1014 != j)
-				anInt1014 += (j - anInt1014) / 16;
-			if(anInt1015 != k)
-				anInt1015 += (k - anInt1015) / 16;
+			if(cameraSmoothedX != j)
+				cameraSmoothedX += (j - cameraSmoothedX) / 16;
+			if(cameraSmoothedY != k)
+				cameraSmoothedY += (k - cameraSmoothedY) / 16;
 			if(super.keyArray[1] == 1)
-				anInt1186 += (-24 - anInt1186) / 2;
+				minimapZoomTarget += (-24 - minimapZoomTarget) / 2;
 			else
 			if(super.keyArray[2] == 1)
-				anInt1186 += (24 - anInt1186) / 2;
+				minimapZoomTarget += (24 - minimapZoomTarget) / 2;
 			else
-				anInt1186 /= 2;
+				minimapZoomTarget /= 2;
 			if(super.keyArray[3] == 1)
-				anInt1187 += (12 - anInt1187) / 2;
+				minimapZoom += (12 - minimapZoom) / 2;
 			else
 			if(super.keyArray[4] == 1)
-				anInt1187 += (-12 - anInt1187) / 2;
+				minimapZoom += (-12 - minimapZoom) / 2;
 			else
-				anInt1187 /= 2;
-			  minimapInt1 = minimapInt1 + anInt1186 / 2 & 0x7ff;
-			  anInt1184 += anInt1187 / 2;
-			if(anInt1184 < 128)
-				anInt1184 = 128;
-			if(anInt1184 > 383)
-				anInt1184 = 383;
-			int l = anInt1014 >> 7;
-			int i1 = anInt1015 >> 7;
-			int j1 = getTileHeight(plane, anInt1015, anInt1014);
+				minimapZoom /= 2;
+			  minimapInt1 = minimapInt1 + minimapZoomTarget / 2 & 0x7ff;
+			  selectedArea += minimapZoom / 2;
+			if(selectedArea < 128)
+				selectedArea = 128;
+			if(selectedArea > 383)
+				selectedArea = 383;
+			int l = cameraSmoothedX >> 7;
+			int i1 = cameraSmoothedY >> 7;
+			int j1 = getTileHeight(plane, cameraSmoothedY, cameraSmoothedX);
 			int k1 = 0;
 			if(l > 3 && i1 > 3 && l < 100 && i1 < 100)
 			{
@@ -8964,10 +8964,10 @@ followDistance = 1;
 				}
 
 			}
-			anInt1005++;
-			if(anInt1005 > 1512)
+			anInt1005_static++;
+			if(anInt1005_static > 1512)
 			{
-				anInt1005 = 0;
+				anInt1005_static = 0;
 				stream.createFrame(77);
 				stream.writeWordBigEndian(0);
 				int i2 = stream.currentOffset;
@@ -8989,19 +8989,19 @@ followDistance = 1;
 				j2 = 0x17f00;
 			if(j2 < 32768)
 				j2 = 32768;
-			if(j2 > anInt984)
+			if(j2 > moveItemSlotStart)
 			{
-				anInt984 += (j2 - anInt984) / 24;
+				moveItemSlotStart += (j2 - moveItemSlotStart) / 24;
 				return;
 			}
-			if(j2 < anInt984)
+			if(j2 < moveItemSlotStart)
 			{
-				anInt984 += (j2 - anInt984) / 80;
+				moveItemSlotStart += (j2 - moveItemSlotStart) / 80;
 			}
 		}
 		catch(Exception _ex)
 		{
-			signlink.reporterror("glfc_ex " + myPlayer.x + "," + myPlayer.y + "," + anInt1014 + "," + anInt1015 + "," + anInt1069 + "," + anInt1070 + "," + baseX + "," + baseY);
+			signlink.reporterror("glfc_ex " + myPlayer.x + "," + myPlayer.y + "," + cameraSmoothedX + "," + cameraSmoothedY + "," + mapRegionX + "," + mapRegionY + "," + baseX + "," + baseY);
 			throw new RuntimeException("eek");
 		}
 	}
@@ -9013,12 +9013,12 @@ followDistance = 1;
 			showErrorScreen();
 			return;
 		}
-		anInt1061++;
+		anInt1061_static++;
 		if(!loggedIn)
 			drawLoginScreen(false);
 		else
 			drawGameScreen();
-		anInt1213 = 0;
+		menuActionCounter = 0;
 	}
 
 	private boolean isFriendOrSelf(String s)
@@ -9065,10 +9065,10 @@ followDistance = 1;
 		if(crossType == 1)
 		{
 			crosses[crossIndex / 100].drawSprite(crossX - 8 - 4, crossY - 8 - 4);
-			anInt1142++;
-			if(anInt1142 > 67)
+			anInt1142_static++;
+			if(anInt1142_static > 67)
 			{
-				anInt1142 = 0;
+				anInt1142_static = 0;
 				stream.createFrame(78);
 			}
 		}
@@ -9076,12 +9076,12 @@ followDistance = 1;
 			crosses[4 + crossIndex / 100].drawSprite(crossX - 8 - 4, crossY - 8 - 4);
 		if(anInt1018 != -1)
 		{
-			animateInterface(anInt945, anInt1018);
+			animateInterface(cameraTargetLocalZ, anInt1018);
 			drawInterface(0, 0, RSInterface.interfaceCache[anInt1018], 0);
 		}
 		if(openInterfaceID != -1)
 		{
-			animateInterface(anInt945, openInterfaceID);
+			animateInterface(cameraTargetLocalZ, openInterfaceID);
 			drawInterface(0, 0, RSInterface.interfaceCache[openInterfaceID], 0);
 		}
 		checkWildernessStatus();
@@ -9092,7 +9092,7 @@ followDistance = 1;
 		} else
 		if(menuScreenArea == 0)
 			drawMenu();
-		if(anInt1055 == 1)
+		if(flashingSideicon == 1)
 			multiOverlay.drawSprite(472, 296);
 		if(fpsOn)
 		{
@@ -9101,14 +9101,14 @@ followDistance = 1;
 			int i1 = 0xffff00;
 			if(super.fps < 15)
 				i1 = 0xff0000;
-			aTextDrawingArea_1271.drawCenteredText("Fps:" + super.fps, c, i1, k);
+			boldFont.drawCenteredText("Fps:" + super.fps, c, i1, k);
 			k += 15;
 			Runtime runtime = Runtime.getRuntime();
 			int j1 = (int)((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
 			i1 = 0xffff00;
 			if(j1 > 0x2000000 && lowMem)
 				i1 = 0xff0000;
-			aTextDrawingArea_1271.drawCenteredText("Mem:" + j1 + "k", c, 0xffff00, k);
+			boldFont.drawCenteredText("Mem:" + j1 + "k", c, 0xffff00, k);
 			k += 15;
 		}
 		int i1 = 0xffff00;
@@ -9120,16 +9120,16 @@ followDistance = 1;
 			int k = 20;
 			if(super.fps < 15)
 			i1 = 0xff0000;
-			aTextDrawingArea_1271.drawText(0xffff00, "Fps: " + super.fps, 285, 5);
+			boldFont.drawText(0xffff00, "Fps: " + super.fps, 285, 5);
 			Runtime runtime = Runtime.getRuntime();
 			int j1 = (int)((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
 			i1 = 0xffff00;
 			if(j1 > 0x2000000 && lowMem)
 			i1 = 0xff0000;
 			k += 15;
-			aTextDrawingArea_1271.drawText(0xffff00, "Mem: " + j1 + "k", 299, 5);
-			aTextDrawingArea_1271.drawText(0xffff00, "Mouse X: " + super.mouseX + " , Mouse Y: " + super.mouseY, 314, 5);
-			aTextDrawingArea_1271.drawText(0xffff00, "Coords: " + x + ", " + y, 329, 5);
+			boldFont.drawText(0xffff00, "Mem: " + j1 + "k", 299, 5);
+			boldFont.drawText(0xffff00, "Mouse X: " + super.mouseX + " , Mouse Y: " + super.mouseY, 314, 5);
+			boldFont.drawText(0xffff00, "Coords: " + x + ", " + y, 329, 5);
 		}
 		if(anInt1104 != 0)
 		{
@@ -9137,13 +9137,13 @@ followDistance = 1;
 			int l = j / 60;
 			j %= 60;
 			if(j < 10)
-				aTextDrawingArea_1271.drawText(0xffff00, "System update in: " + l + ":0" + j, 329, 4);
+				boldFont.drawText(0xffff00, "System update in: " + l + ":0" + j, 329, 4);
 			else
-				aTextDrawingArea_1271.drawText(0xffff00, "System update in: " + l + ":" + j, 329, 4);
-			anInt849++;
-			if(anInt849 > 75)
+				boldFont.drawText(0xffff00, "System update in: " + l + ":" + j, 329, 4);
+			lastKnownPlane++;
+			if(lastKnownPlane > 75)
 			{
-				anInt849 = 0;
+				lastKnownPlane = 0;
 				stream.createFrame(148);
 			}
 		}
@@ -9207,7 +9207,7 @@ followDistance = 1;
 	{
 		if(loadingStage == 2)
 		{
-			for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
+			for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetNext())
 			{
 				if(spawnObjectNode.delay > 0)
 					spawnObjectNode.delay--;
@@ -9324,7 +9324,7 @@ followDistance = 1;
 		int k = stream.readBits(2);
 		if(k == 0)
 		{
-			anIntArray894[anInt893++] = myPlayerIndex;
+			entityIndices[entityCount++] = myPlayerIndex;
 			return;
 		}
 		if(k == 1)
@@ -9333,7 +9333,7 @@ followDistance = 1;
 			myPlayer.moveInDir(false, l);
 			int k1 = stream.readBits(1);
 			if(k1 == 1)
-				anIntArray894[anInt893++] = myPlayerIndex;
+				entityIndices[entityCount++] = myPlayerIndex;
 			return;
 		}
 		if(k == 2)
@@ -9344,7 +9344,7 @@ followDistance = 1;
 			myPlayer.moveInDir(true, l1);
 			int j2 = stream.readBits(1);
 			if(j2 == 1)
-				anIntArray894[anInt893++] = myPlayerIndex;
+				entityIndices[entityCount++] = myPlayerIndex;
 			return;
 		}
 		if(k == 3)
@@ -9353,7 +9353,7 @@ followDistance = 1;
 			int j1 = stream.readBits(1);
 			int i2 = stream.readBits(1);
 			if(i2 == 1)
-				anIntArray894[anInt893++] = myPlayerIndex;
+				entityIndices[entityCount++] = myPlayerIndex;
 			int k2 = stream.readBits(7);
 			int l2 = stream.readBits(7);
 			myPlayer.setPos(l2, k2, j1 == 1);
@@ -9362,29 +9362,29 @@ followDistance = 1;
 
 	private void nullLoader()
 	{
-		aBoolean831 = false;
+		midiFading = false;
 		while(drawingFlames)
 		{
-			aBoolean831 = false;
+			midiFading = false;
 			try
 			{
 				Thread.sleep(50L);
 			}
 			catch(Exception _ex) { }
 		}
-		aBackground_966 = null;
-		aBackground_967 = null;
-		aBackgroundArray1152s = null;
-		anIntArray850 = null;
-		anIntArray851 = null;
-		anIntArray852 = null;
-		anIntArray853 = null;
-		anIntArray1190 = null;
-		anIntArray1191 = null;
-		anIntArray828 = null;
-		anIntArray829 = null;
-		aClass30_Sub2_Sub1_Sub1_1201 = null;
-		aClass30_Sub2_Sub1_Sub1_1202 = null;
+		loginFireLeft = null;
+		loginFireRight = null;
+		loginScreenSprites = null;
+		entityUpdateX = null;
+		entityUpdateY = null;
+		entityUpdateId = null;
+		entityUpdateFace = null;
+		chatScrollPositions = null;
+		chatHighlights = null;
+		npcUpdateTypes = null;
+		npcLocalIndices = null;
+		chatAreaBackground = null;
+		chatSettingsBackground = null;
 	}
 
 	private boolean animateInterface(int i, int j)
@@ -9631,7 +9631,7 @@ followDistance = 1;
 				if(j1 == 5)
 					k1 = variousSettings[ai[l++]];
 				if(j1 == 6)
-					k1 = anIntArray1019[maxStats[ai[l++]] - 1];
+					k1 = XP_TABLE[maxStats[ai[l++]] - 1];
 				if(j1 == 7)
 					k1 = (variousSettings[ai[l++]] * 100) / 46875;
 				if(j1 == 8)
@@ -9730,27 +9730,27 @@ followDistance = 1;
 	}
 
 	private void drawMinimap() {
-		aRSImageProducer_1164.initDrawingArea();
-		if(anInt1021 == 2) {
+		titleButtonIP.initDrawingArea();
+		if(chatAreaScrollPos == 2) {
 			byte abyte0[] = mapBack.aByteArray1450;
 			int ai[] = DrawingArea.pixels;
 			int k2 = abyte0.length;
 			for(int i5 = 0; i5 < k2; i5++)
 				if(abyte0[i5] == 0)
 					ai[i5] = 0;
-			compass.drawClipped(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
-			aRSImageProducer_1165.initDrawingArea();
+			compass.drawClipped(33, minimapInt1, minimapHintY, 256, flameLeftX, 25, 0, 0, 33, 25);
+			loginMsgIP.initDrawingArea();
 			return;
 		}
 		int i = minimapInt1 + minimapInt2 & 0x7ff;
 		int j = 48 + myPlayer.x / 32;
 		int l2 = 464 - myPlayer.y / 32;
-		aClass30_Sub2_Sub1_Sub1_1263.drawClipped(151, i, anIntArray1229, 256 + minimapInt3, anIntArray1052, l2, 5, 25, 146, j);
-		compass.drawClipped(33, minimapInt1, anIntArray1057, 256, anIntArray968, 25, 0, 0, 33, 25);
-		for(int j5 = 0; j5 < anInt1071; j5++) {
-			int k = (anIntArray1072[j5] * 4 + 2) - myPlayer.x / 32;
-			int i3 = (anIntArray1073[j5] * 4 + 2) - myPlayer.y / 32;
-			markMinimap(aClass30_Sub2_Sub1_Sub1Array1140[j5], k, i3);
+		minimapSprite.drawClipped(151, i, chatFilterOffsets, 256 + minimapInt3, minimapHintX, l2, 5, 25, 146, j);
+		compass.drawClipped(33, minimapInt1, minimapHintY, 256, flameLeftX, 25, 0, 0, 33, 25);
+		for(int j5 = 0; j5 < mapFunctionCount; j5++) {
+			int k = (mapFunctionX[j5] * 4 + 2) - myPlayer.x / 32;
+			int i3 = (mapFunctionY[j5] * 4 + 2) - myPlayer.y / 32;
+			markMinimap(minimapImages[j5], k, i3);
 		}
 		for(int k5 = 0; k5 < 104; k5++) {
 			for(int l5 = 0; l5 < 104; l5++) {
@@ -9810,22 +9810,22 @@ followDistance = 1;
 					markMinimap(mapDotPlayer, j1, l3);
 			}
 		}
-		if(anInt855 != 0 && loopCycle % 20 < 10) {
-			if(anInt855 == 1 && anInt1222 >= 0 && anInt1222 < npcArray.length) {
-				NPC class30_sub2_sub4_sub1_sub1_1 = npcArray[anInt1222];
+		if(minimapRotation != 0 && loopCycle % 20 < 10) {
+			if(minimapRotation == 1 && hintIconNpcIndex >= 0 && hintIconNpcIndex < npcArray.length) {
+				NPC class30_sub2_sub4_sub1_sub1_1 = npcArray[hintIconNpcIndex];
 				if(class30_sub2_sub4_sub1_sub1_1 != null) {
 					int k1 = class30_sub2_sub4_sub1_sub1_1.x / 32 - myPlayer.x / 32;
 					int i4 = class30_sub2_sub4_sub1_sub1_1.y / 32 - myPlayer.y / 32;
 					drawMinimapEdgeSprite(mapMarker, i4, k1);
 				}
 			}
-			if(anInt855 == 2) {
-				int l1 = ((anInt934 - baseX) * 4 + 2) - myPlayer.x / 32;
-				int j4 = ((anInt935 - baseY) * 4 + 2) - myPlayer.y / 32;
+			if(minimapRotation == 2) {
+				int l1 = ((cameraTargetTileX - baseX) * 4 + 2) - myPlayer.x / 32;
+				int j4 = ((cameraTargetTileY - baseY) * 4 + 2) - myPlayer.y / 32;
 				drawMinimapEdgeSprite(mapMarker, j4, l1);
 			}
-			if(anInt855 == 10 && anInt933 >= 0 && anInt933 < playerArray.length) {
-				Player class30_sub2_sub4_sub1_sub2_1 = playerArray[anInt933];
+			if(minimapRotation == 10 && cameraTargetIndex >= 0 && cameraTargetIndex < playerArray.length) {
+				Player class30_sub2_sub4_sub1_sub2_1 = playerArray[cameraTargetIndex];
 				if(class30_sub2_sub4_sub1_sub2_1 != null) {
 					int i2 = class30_sub2_sub4_sub1_sub2_1.x / 32 - myPlayer.x / 32;
 					int k4 = class30_sub2_sub4_sub1_sub2_1.y / 32 - myPlayer.y / 32;
@@ -9841,7 +9841,7 @@ followDistance = 1;
 		DrawingArea.drawPixels(3, 78, 97, 0xffffff, 3);
 		mapBack.drawBackground(0, 0);
 		loadOrbs();
-		aRSImageProducer_1165.initDrawingArea();
+		loginMsgIP.initDrawingArea();
 	}
 
 	private void npcScreenPos(Entity entity, int i) {
@@ -9905,7 +9905,7 @@ followDistance = 1;
 					int l = 329 - i * 13;
 					if(super.mouseX > 4 && super.mouseY - 4 > l - 10 && super.mouseY - 4 <= l + 3)
 					{
-						int i1 = aTextDrawingArea_1271.getTextWidth("From:  " + s + chatMessages[j]) + 25;
+						int i1 = boldFont.getTextWidth("From:  " + s + chatMessages[j]) + 25;
 						if(i1 > 450)
 							i1 = 450;
 						if(super.mouseX < 4 + i1)
@@ -9937,7 +9937,7 @@ followDistance = 1;
 						   int l1, int i2, int j2)
 	{
 		SpawnObjectNode spawnObjectNode = null;
-		for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetNext())
+		for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)spawnObjectList.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)spawnObjectList.reverseGetNext())
 		{
 			if(spawnObjectNode_1.objectPlane != l1 || spawnObjectNode_1.objectX != i2 || spawnObjectNode_1.objectY != j1 || spawnObjectNode_1.group != i1)
 				continue;
@@ -9953,7 +9953,7 @@ followDistance = 1;
 			spawnObjectNode.objectX = i2;
 			spawnObjectNode.objectY = j1;
 			updateSpawnObjectInfo(spawnObjectNode);
-			aClass19_1179.insertHead(spawnObjectNode);
+			spawnObjectList.insertHead(spawnObjectNode);
 		}
 		spawnObjectNode.objectId = k;
 		spawnObjectNode.objectOrientation = k1;
@@ -9995,7 +9995,7 @@ followDistance = 1;
 	private DataInputStream openJagGrabInputStream(String s)
 		throws IOException
 	{
- //	   if(!aBoolean872)
+ //	   if(!continuedDialogue)
  //		   if(signlink.mainapp != null)
  //			   return signlink.openurl(s);
  //		   else
@@ -10020,55 +10020,55 @@ followDistance = 1;
 	private void doFlamesDrawing()
 	{
 		char c = '\u0100';
-		if(anInt1040 > 0)
+		if(walkDestX > 0)
 		{
 			for(int i = 0; i < 256; i++)
-				if(anInt1040 > 768)
-					anIntArray850[i] = blendColors(anIntArray851[i], anIntArray852[i], 1024 - anInt1040);
+				if(walkDestX > 768)
+					entityUpdateX[i] = blendColors(entityUpdateY[i], entityUpdateId[i], 1024 - walkDestX);
 				else
-				if(anInt1040 > 256)
-					anIntArray850[i] = anIntArray852[i];
+				if(walkDestX > 256)
+					entityUpdateX[i] = entityUpdateId[i];
 				else
-					anIntArray850[i] = blendColors(anIntArray852[i], anIntArray851[i], 256 - anInt1040);
+					entityUpdateX[i] = blendColors(entityUpdateId[i], entityUpdateY[i], 256 - walkDestX);
 
 		} else
-		if(anInt1041 > 0)
+		if(walkDestY > 0)
 		{
 			for(int j = 0; j < 256; j++)
-				if(anInt1041 > 768)
-					anIntArray850[j] = blendColors(anIntArray851[j], anIntArray853[j], 1024 - anInt1041);
+				if(walkDestY > 768)
+					entityUpdateX[j] = blendColors(entityUpdateY[j], entityUpdateFace[j], 1024 - walkDestY);
 				else
-				if(anInt1041 > 256)
-					anIntArray850[j] = anIntArray853[j];
+				if(walkDestY > 256)
+					entityUpdateX[j] = entityUpdateFace[j];
 				else
-					anIntArray850[j] = blendColors(anIntArray853[j], anIntArray851[j], 256 - anInt1041);
+					entityUpdateX[j] = blendColors(entityUpdateFace[j], entityUpdateY[j], 256 - walkDestY);
 
 		} else
 		{
-			System.arraycopy(anIntArray851, 0, anIntArray850, 0, 256);
+			System.arraycopy(entityUpdateY, 0, entityUpdateX, 0, 256);
 
 		}
-		System.arraycopy(aClass30_Sub2_Sub1_Sub1_1201.myPixels, 0, aRSImageProducer_1110.anIntArray315, 0, 33920);
+		System.arraycopy(chatAreaBackground.myPixels, 0, chatAreaIP.pixelData, 0, 33920);
 
 		int i1 = 0;
 		int j1 = 1152;
 		for(int k1 = 1; k1 < c - 1; k1++)
 		{
-			int l1 = (anIntArray969[k1] * (c - k1)) / c;
+			int l1 = (flameRightX[k1] * (c - k1)) / c;
 			int j2 = 22 + l1;
 			if(j2 < 0)
 				j2 = 0;
 			i1 += j2;
 			for(int l2 = j2; l2 < 128; l2++)
 			{
-				int j3 = anIntArray828[i1++];
+				int j3 = npcUpdateTypes[i1++];
 				if(j3 != 0)
 				{
 					int l3 = j3;
 					int j4 = 256 - j3;
-					j3 = anIntArray850[j3];
-					int l4 = aRSImageProducer_1110.anIntArray315[j1];
-					aRSImageProducer_1110.anIntArray315[j1++] = ((j3 & 0xff00ff) * l3 + (l4 & 0xff00ff) * j4 & 0xff00ff00) + ((j3 & 0xff00) * l3 + (l4 & 0xff00) * j4 & 0xff0000) >> 8;
+					j3 = entityUpdateX[j3];
+					int l4 = chatAreaIP.pixelData[j1];
+					chatAreaIP.pixelData[j1++] = ((j3 & 0xff00ff) * l3 + (l4 & 0xff00ff) * j4 & 0xff00ff00) + ((j3 & 0xff00) * l3 + (l4 & 0xff00) * j4 & 0xff0000) >> 8;
 				} else
 				{
 					j1++;
@@ -10078,26 +10078,26 @@ followDistance = 1;
 			j1 += j2;
 		}
 
-		aRSImageProducer_1110.drawGraphics(0, super.graphics, 0);
-		System.arraycopy(aClass30_Sub2_Sub1_Sub1_1202.myPixels, 0, aRSImageProducer_1111.anIntArray315, 0, 33920);
+		chatAreaIP.drawGraphics(0, super.graphics, 0);
+		System.arraycopy(chatSettingsBackground.myPixels, 0, chatSettingIP.pixelData, 0, 33920);
 
 		i1 = 0;
 		j1 = 1176;
 		for(int k2 = 1; k2 < c - 1; k2++)
 		{
-			int i3 = (anIntArray969[k2] * (c - k2)) / c;
+			int i3 = (flameRightX[k2] * (c - k2)) / c;
 			int k3 = 103 - i3;
 			j1 += i3;
 			for(int i4 = 0; i4 < k3; i4++)
 			{
-				int k4 = anIntArray828[i1++];
+				int k4 = npcUpdateTypes[i1++];
 				if(k4 != 0)
 				{
 					int i5 = k4;
 					int j5 = 256 - k4;
-					k4 = anIntArray850[k4];
-					int k5 = aRSImageProducer_1111.anIntArray315[j1];
-					aRSImageProducer_1111.anIntArray315[j1++] = ((k4 & 0xff00ff) * i5 + (k5 & 0xff00ff) * j5 & 0xff00ff00) + ((k4 & 0xff00) * i5 + (k5 & 0xff00) * j5 & 0xff0000) >> 8;
+					k4 = entityUpdateX[k4];
+					int k5 = chatSettingIP.pixelData[j1];
+					chatSettingIP.pixelData[j1++] = ((k4 & 0xff00ff) * i5 + (k5 & 0xff00ff) * j5 & 0xff00ff00) + ((k4 & 0xff00) * i5 + (k5 & 0xff00) * j5 & 0xff0000) >> 8;
 				} else
 				{
 					j1++;
@@ -10108,7 +10108,7 @@ followDistance = 1;
 			j1 += 128 - k3 - i3;
 		}
 
-		aRSImageProducer_1111.drawGraphics(0, super.graphics, 637);
+		chatSettingIP.drawGraphics(0, super.graphics, 637);
 	}
 
 	private void parsePlayerRemovals(Stream stream)
@@ -10117,7 +10117,7 @@ followDistance = 1;
 		if(j < playerCount)
 		{
 			for(int k = j; k < playerCount; k++)
-				anIntArray840[anInt839++] = playerIndices[k];
+				entityUpdateIndices[npcUpdateCount++] = playerIndices[k];
 
 		}
 		if(j > playerCount)
@@ -10142,7 +10142,7 @@ followDistance = 1;
 				{
 					playerIndices[playerCount++] = i1;
 					player.textColor = loopCycle;
-					anIntArray894[anInt893++] = i1;
+					entityIndices[entityCount++] = i1;
 				} else
 				if(k1 == 1)
 				{
@@ -10152,7 +10152,7 @@ followDistance = 1;
 					player.moveInDir(false, l1);
 					int j2 = stream.readBits(1);
 					if(j2 == 1)
-						anIntArray894[anInt893++] = i1;
+						entityIndices[entityCount++] = i1;
 				} else
 				if(k1 == 2)
 				{
@@ -10164,10 +10164,10 @@ followDistance = 1;
 					player.moveInDir(true, k2);
 					int l2 = stream.readBits(1);
 					if(l2 == 1)
-						anIntArray894[anInt893++] = i1;
+						entityIndices[entityCount++] = i1;
 				} else
 				if(k1 == 3)
-					anIntArray840[anInt839++] = i1;
+					entityUpdateIndices[npcUpdateCount++] = i1;
 			}
 		}
 	}
@@ -10175,8 +10175,8 @@ followDistance = 1;
 	private void drawLoginScreen(boolean flag)
 	{
 		resetImageProducers();
-		aRSImageProducer_1109.initDrawingArea();
-		aBackground_966.drawBackground(0, 0);
+		gameScreenIP.initDrawingArea();
+		loginFireLeft.drawBackground(0, 0);
 		char c = '\u0168';
 		char c1 = '\310';
 		if(loginScreenState == 0)
@@ -10188,10 +10188,10 @@ followDistance = 1;
 			i += 30;
 			int l = c / 2 - 80;
 			int k1 = c1 / 2 + 20;
-			aBackground_967.drawBackground(l - 73, k1 - 20);
+			loginFireRight.drawBackground(l - 73, k1 - 20);
 			chatTextDrawingArea.drawRightAligned(0xffffff, l, "New User", k1 + 5, true);
 			l = c / 2 + 80;
-			aBackground_967.drawBackground(l - 73, k1 - 20);
+			loginFireRight.drawBackground(l - 73, k1 - 20);
 			chatTextDrawingArea.drawRightAligned(0xffffff, l, "Existing User", k1 + 5, true);
 		}
 		if(loginScreenState == 2)
@@ -10215,10 +10215,10 @@ followDistance = 1;
 			{
 				int i1 = c / 2 - 80;
 				int l1 = c1 / 2 + 50;
-				aBackground_967.drawBackground(i1 - 73, l1 - 20);
+				loginFireRight.drawBackground(i1 - 73, l1 - 20);
 				chatTextDrawingArea.drawRightAligned(0xffffff, i1, "Login", l1 + 5, true);
 				i1 = c / 2 + 80;
-				aBackground_967.drawBackground(i1 - 73, l1 - 20);
+				loginFireRight.drawBackground(i1 - 73, l1 - 20);
 				chatTextDrawingArea.drawRightAligned(0xffffff, i1, "Cancel", l1 + 5, true);
 			}
 		}
@@ -10236,19 +10236,19 @@ followDistance = 1;
 			k += 15;
 			int j1 = c / 2;
 			int i2 = c1 / 2 + 50;
-			aBackground_967.drawBackground(j1 - 73, i2 - 20);
+			loginFireRight.drawBackground(j1 - 73, i2 - 20);
 			chatTextDrawingArea.drawRightAligned(0xffffff, j1, "Cancel", i2 + 5, true);
 		}
-		aRSImageProducer_1109.drawGraphics(171, super.graphics, 202);
+		gameScreenIP.drawGraphics(171, super.graphics, 202);
 		if(welcomeScreenRaised)
 		{
 			welcomeScreenRaised = false;
-			aRSImageProducer_1107.drawGraphics(0, super.graphics, 128);
-			aRSImageProducer_1108.drawGraphics(371, super.graphics, 202);
-			aRSImageProducer_1112.drawGraphics(265, super.graphics, 0);
-			aRSImageProducer_1113.drawGraphics(265, super.graphics, 562);
-			aRSImageProducer_1114.drawGraphics(171, super.graphics, 128);
-			aRSImageProducer_1115.drawGraphics(171, super.graphics, 562);
+			tabImageProducer.drawGraphics(0, super.graphics, 128);
+			mapAreaIP.drawGraphics(371, super.graphics, 202);
+			topSideIP1.drawGraphics(265, super.graphics, 0);
+			topSideIP2.drawGraphics(265, super.graphics, 562);
+			bottomSideIP1.drawGraphics(171, super.graphics, 128);
+			bottomSideIP2.drawGraphics(171, super.graphics, 562);
 		}
 	}
 
@@ -10260,9 +10260,9 @@ followDistance = 1;
 			long l = System.currentTimeMillis();
 			int i = 0;
 			int j = 20;
-			while(aBoolean831) 
+			while(midiFading) 
 			{
-				anInt1208++;
+				lastMapRegionY++;
 				calcFlamesPosition();
 				calcFlamesPosition();
 				doFlamesDrawing();
@@ -10297,8 +10297,8 @@ followDistance = 1;
 		if(j == 84)
 		{
 			int k = stream.readUnsignedByte();
-			int j3 = anInt1268 + (k >> 4 & 7);
-			int i6 = anInt1269 + (k & 7);
+			int j3 = hintIconDrawX + (k >> 4 & 7);
+			int i6 = hintIconDrawY + (k & 7);
 			int l8 = stream.readUnsignedWord();
 			int k11 = stream.readUnsignedWord();
 			int l13 = stream.readUnsignedWord();
@@ -10323,26 +10323,26 @@ followDistance = 1;
 		if(j == 105)
 		{
 			int l = stream.readUnsignedByte();
-			int k3 = anInt1268 + (l >> 4 & 7);
-			int j6 = anInt1269 + (l & 7);
+			int k3 = hintIconDrawX + (l >> 4 & 7);
+			int j6 = hintIconDrawY + (l & 7);
 			int i9 = stream.readUnsignedWord();
 			int l11 = stream.readUnsignedByte();
 			int i14 = l11 >> 4 & 0xf;
 			int i16 = l11 & 7;
-			if(myPlayer.smallX[0] >= k3 - i14 && myPlayer.smallX[0] <= k3 + i14 && myPlayer.smallY[0] >= j6 - i14 && myPlayer.smallY[0] <= j6 + i14 && aBoolean848 && !lowMem && anInt1062 < 50)
+			if(myPlayer.smallX[0] >= k3 - i14 && myPlayer.smallX[0] <= k3 + i14 && myPlayer.smallY[0] >= j6 - i14 && myPlayer.smallY[0] <= j6 + i14 && pendingInput && !lowMem && lastMapRegionX < 50)
 			{
-				anIntArray1207[anInt1062] = i9;
-				anIntArray1241[anInt1062] = i16;
-				anIntArray1250[anInt1062] = Sounds.delays[i9];
-				anInt1062++;
+				tabAreaY[lastMapRegionX] = i9;
+				menuActionCmd5[lastMapRegionX] = i16;
+				mapObjectIds[lastMapRegionX] = Sounds.delays[i9];
+				lastMapRegionX++;
 			}
 		}
 		if(j == 215)
 		{
 			int i1 = stream.readWordBigA();
 			int l3 = stream.readUnsignedByteSub();
-			int k6 = anInt1268 + (l3 >> 4 & 7);
-			int j9 = anInt1269 + (l3 & 7);
+			int k6 = hintIconDrawX + (l3 >> 4 & 7);
+			int j9 = hintIconDrawY + (l3 & 7);
 			int i12 = stream.readWordBigA();
 			int j14 = stream.readUnsignedWord();
 			if(k6 >= 0 && j9 >= 0 && k6 < 104 && j9 < 104 && i12 != unknownInt10)
@@ -10360,8 +10360,8 @@ followDistance = 1;
 		if(j == 156)
 		{
 			int j1 = stream.readUnsignedByteAdd();
-			int i4 = anInt1268 + (j1 >> 4 & 7);
-			int l6 = anInt1269 + (j1 & 7);
+			int i4 = hintIconDrawX + (j1 >> 4 & 7);
+			int l6 = hintIconDrawY + (j1 & 7);
 			int k9 = stream.readUnsignedWord();
 			if(i4 >= 0 && l6 >= 0 && i4 < 104 && l6 < 104)
 			{
@@ -10386,12 +10386,12 @@ followDistance = 1;
 		if(j == 160)
 		{
 			int k1 = stream.readUnsignedByteSub();
-			int j4 = anInt1268 + (k1 >> 4 & 7);
-			int i7 = anInt1269 + (k1 & 7);
+			int j4 = hintIconDrawX + (k1 >> 4 & 7);
+			int i7 = hintIconDrawY + (k1 & 7);
 			int l9 = stream.readUnsignedByteSub();
 			int j12 = l9 >> 2;
 			int k14 = l9 & 3;
-			int j16 = anIntArray1177[j12];
+			int j16 = mapChunkX[j12];
 			int j17 = stream.readWordBigA();
 			if(j4 >= 0 && i7 >= 0 && j4 < 103 && i7 < 103)
 			{
@@ -10441,8 +10441,8 @@ followDistance = 1;
 		if(j == 147)
 		{
 			int l1 = stream.readUnsignedByteSub();
-			int k4 = anInt1268 + (l1 >> 4 & 7);
-			int j7 = anInt1269 + (l1 & 7);
+			int k4 = hintIconDrawX + (l1 >> 4 & 7);
+			int j7 = hintIconDrawY + (l1 & 7);
 			int i10 = stream.readUnsignedWord();
 			byte byte0 = stream.readSubByte();
 			int l14 = stream.readWordLE();
@@ -10451,7 +10451,7 @@ followDistance = 1;
 			int k18 = stream.readUnsignedByteSub();
 			int j19 = k18 >> 2;
 			int i20 = k18 & 3;
-			int l20 = anIntArray1177[j19];
+			int l20 = mapChunkX[j19];
 			byte byte2 = stream.readSignedByte();
 			int l21 = stream.readUnsignedWord();
 			byte byte3 = stream.readNegByte();
@@ -10506,13 +10506,13 @@ followDistance = 1;
 		if(j == 151)
 		{
 			int i2 = stream.readUnsignedByteAdd();
-			int l4 = anInt1268 + (i2 >> 4 & 7);
-			int k7 = anInt1269 + (i2 & 7);
+			int l4 = hintIconDrawX + (i2 >> 4 & 7);
+			int k7 = hintIconDrawY + (i2 & 7);
 			int j10 = stream.readWordLE();
 			int k12 = stream.readUnsignedByteSub();
 			int i15 = k12 >> 2;
 			int k16 = k12 & 3;
-			int l17 = anIntArray1177[i15];
+			int l17 = mapChunkX[i15];
 			if(l4 >= 0 && k7 >= 0 && l4 < 104 && k7 < 104)
 				handleObjectSpawn(-1, j10, k16, l17, k7, i15, plane, l4, 0);
 			return;
@@ -10520,8 +10520,8 @@ followDistance = 1;
 		if(j == 4)
 		{
 			int j2 = stream.readUnsignedByte();
-			int i5 = anInt1268 + (j2 >> 4 & 7);
-			int l7 = anInt1269 + (j2 & 7);
+			int i5 = hintIconDrawX + (j2 >> 4 & 7);
+			int l7 = hintIconDrawY + (j2 & 7);
 			int k10 = stream.readUnsignedWord();
 			int l12 = stream.readUnsignedByte();
 			int j15 = stream.readUnsignedWord();
@@ -10530,7 +10530,7 @@ followDistance = 1;
 				i5 = i5 * 128 + 64;
 				l7 = l7 * 128 + 64;
 				Animable_Sub3 class30_sub2_sub4_sub3 = new Animable_Sub3(plane, loopCycle, j15, k10, getTileHeight(plane, l7, i5) - l12, l7, i5);
-				aClass19_1056.insertHead(class30_sub2_sub4_sub3);
+				spotAnimList.insertHead(class30_sub2_sub4_sub3);
 			}
 			return;
 		}
@@ -10539,8 +10539,8 @@ followDistance = 1;
 			int k2 = stream.readWordLEBigA();
 			int j5 = stream.readUnsignedWord();
 			int i8 = stream.readUnsignedByte();
-			int l10 = anInt1268 + (i8 >> 4 & 7);
-			int i13 = anInt1269 + (i8 & 7);
+			int l10 = hintIconDrawX + (i8 >> 4 & 7);
+			int i13 = hintIconDrawY + (i8 & 7);
 			if(l10 >= 0 && i13 >= 0 && l10 < 104 && i13 < 104)
 			{
 				Item class30_sub2_sub4_sub2_1 = new Item();
@@ -10558,10 +10558,10 @@ followDistance = 1;
 			int l2 = stream.readUnsignedByteNeg();
 			int k5 = l2 >> 2;
 			int j8 = l2 & 3;
-			int i11 = anIntArray1177[k5];
+			int i11 = mapChunkX[k5];
 			int j13 = stream.readUnsignedByte();
-			int k15 = anInt1268 + (j13 >> 4 & 7);
-			int l16 = anInt1269 + (j13 & 7);
+			int k15 = hintIconDrawX + (j13 >> 4 & 7);
+			int l16 = hintIconDrawY + (j13 & 7);
 			if(k15 >= 0 && l16 >= 0 && k15 < 104 && l16 < 104)
 				handleObjectSpawn(-1, -1, j8, i11, l16, k5, plane, k15, 0);
 			return;
@@ -10569,8 +10569,8 @@ followDistance = 1;
 		if(j == 117)
 		{
 			int i3 = stream.readUnsignedByte();
-			int l5 = anInt1268 + (i3 >> 4 & 7);
-			int k8 = anInt1269 + (i3 & 7);
+			int l5 = hintIconDrawX + (i3 >> 4 & 7);
+			int k8 = hintIconDrawY + (i3 & 7);
 			int j11 = l5 + stream.readSignedByte();
 			int k13 = k8 + stream.readSignedByte();
 			int l15 = stream.readSignedWord();
@@ -10589,7 +10589,7 @@ followDistance = 1;
 				k13 = k13 * 128 + 64;
 				Animable_Sub4 class30_sub2_sub4_sub4 = new Animable_Sub4(i21, l18, k19 + loopCycle, j20 + loopCycle, j21, plane, getTileHeight(plane, k8, l5) - i18, k8, l5, l15, i17);
 				class30_sub2_sub4_sub4.trackTarget(k19 + loopCycle, k13, getTileHeight(plane, k13, j11) - l18, j11);
-				aClass19_1013.insertHead(class30_sub2_sub4_sub4);
+				projectileList.insertHead(class30_sub2_sub4_sub4);
 			}
 		}
 	}
@@ -10610,7 +10610,7 @@ followDistance = 1;
 		if(k < npcCount)
 		{
 			for(int l = k; l < npcCount; l++)
-				anIntArray840[anInt839++] = npcIndices[l];
+				entityUpdateIndices[npcUpdateCount++] = npcIndices[l];
 
 		}
 		if(k > npcCount)
@@ -10635,7 +10635,7 @@ followDistance = 1;
 				{
 					npcIndices[npcCount++] = j1;
 					npc.textColor = loopCycle;
-					anIntArray894[anInt893++] = j1;
+					entityIndices[entityCount++] = j1;
 				} else
 				if(l1 == 1)
 				{
@@ -10645,7 +10645,7 @@ followDistance = 1;
 					npc.moveInDir(false, i2);
 					int k2 = stream.readBits(1);
 					if(k2 == 1)
-						anIntArray894[anInt893++] = j1;
+						entityIndices[entityCount++] = j1;
 				} else
 				if(l1 == 2)
 				{
@@ -10657,10 +10657,10 @@ followDistance = 1;
 					npc.moveInDir(true, l2);
 					int i3 = stream.readBits(1);
 					if(i3 == 1)
-						anIntArray894[anInt893++] = j1;
+						entityIndices[entityCount++] = j1;
 				} else
 				if(l1 == 3)
-					anIntArray840[anInt839++] = j1;
+					entityUpdateIndices[npcUpdateCount++] = j1;
 			}
 		}
 
@@ -10844,15 +10844,15 @@ followDistance = 1;
 
 	private void updatePlayers(int i, Stream stream)
 	{
-		anInt839 = 0;
-		anInt893 = 0;
+		npcUpdateCount = 0;
+		entityCount = 0;
 		parseLocalPlayerMovement(stream);
 		parsePlayerRemovals(stream);
 		parseNewPlayers(stream, i);
 		parsePlayerUpdateMasks(stream);
-		for(int k = 0; k < anInt839; k++)
+		for(int k = 0; k < npcUpdateCount; k++)
 		{
-			int l = anIntArray840[k];
+			int l = entityUpdateIndices[k];
 			if(playerArray[l].textColor != loopCycle)
 				playerArray[l] = null;
 		}
@@ -10983,7 +10983,7 @@ followDistance = 1;
 	}
 
 	public void sendFrame36(int id,int state) {
-		anIntArray1045[id] = state;
+		tabFlashTimer[id] = state;
 		if(variousSettings[id] != state) {
 			variousSettings[id] = state;
 			applyVarpSetting(id);
@@ -11063,10 +11063,10 @@ followDistance = 1;
 				return false;
 			inStream.currentOffset = 0;
 			socketStream.flushInputStream(inStream.buffer, pktSize);
-			anInt1009 = 0;
-			anInt843 = anInt842;
-			anInt842 = anInt841;
-			anInt841 = pktType;
+			idleTime = 0;
+			chatScrollMax = entityUpdateIndex;
+			entityUpdateIndex = entityUpdateCount;
+			entityUpdateCount = pktType;
 			switch(pktType) {
 				case 81:
 					updatePlayers(pktSize, inStream);
@@ -11078,10 +11078,10 @@ followDistance = 1;
 					daysSinceRecovChange = inStream.readUnsignedByteNeg();
 					unreadMessages = inStream.readWordBigA();
 					membersInt = inStream.readUnsignedByte();
-					anInt1193 = inStream.readDWordMixed2();
+					walkQueueLength = inStream.readDWordMixed2();
 					daysSinceLastLogin = inStream.readUnsignedWord();
-					if(anInt1193 != 0 && openInterfaceID == -1) {
-						signlink.dnslookup(TextClass.intToIpAddress(anInt1193));
+					if(walkQueueLength != 0 && openInterfaceID == -1) {
+						signlink.dnslookup(TextClass.intToIpAddress(walkQueueLength));
 						clearTopInterfaces();
 						char c = '\u028A';
 						if(daysSinceRecovChange != 201 || membersInt == 1)
@@ -11099,17 +11099,17 @@ followDistance = 1;
 					return true;
 					
 				case 64:
-					anInt1268 = inStream.readUnsignedByteNeg();
-					anInt1269 = inStream.readUnsignedByteSub();
-					for(int j = anInt1268; j < anInt1268 + 8; j++) {
-						for(int l9 = anInt1269; l9 < anInt1269 + 8; l9++)
+					hintIconDrawX = inStream.readUnsignedByteNeg();
+					hintIconDrawY = inStream.readUnsignedByteSub();
+					for(int j = hintIconDrawX; j < hintIconDrawX + 8; j++) {
+						for(int l9 = hintIconDrawY; l9 < hintIconDrawY + 8; l9++)
 							if(groundArray[plane][j][l9] != null) {
 								groundArray[plane][j][l9] = null;
 								spawnGroundItem(j, l9);
 							}
 					}
-					for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)aClass19_1179.reverseGetNext())
-						if(spawnObjectNode.objectX >= anInt1268 && spawnObjectNode.objectX < anInt1268 + 8 && spawnObjectNode.objectY >= anInt1269 && spawnObjectNode.objectY < anInt1269 + 8 && spawnObjectNode.objectPlane == plane)
+					for(SpawnObjectNode spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetFirst(); spawnObjectNode != null; spawnObjectNode = (SpawnObjectNode)spawnObjectList.reverseGetNext())
+						if(spawnObjectNode.objectX >= hintIconDrawX && spawnObjectNode.objectX < hintIconDrawX + 8 && spawnObjectNode.objectY >= hintIconDrawY && spawnObjectNode.objectY < hintIconDrawY + 8 && spawnObjectNode.objectPlane == plane)
 							spawnObjectNode.delay = 0;
 					pktType = -1;
 					return true;
@@ -11144,7 +11144,7 @@ followDistance = 1;
 				case 107:
 					aBoolean1160 = false;
 					for(int l = 0; l < 5; l++)
-						aBooleanArray876[l] = false;
+						sidebarFlashing[l] = false;
 					pktType = -1;
 					return true;
 					
@@ -11167,15 +11167,15 @@ followDistance = 1;
 					
 				case 166:
 					aBoolean1160 = true;
-					anInt1098 = inStream.readUnsignedByte();
-					anInt1099 = inStream.readUnsignedByte();
-					anInt1100 = inStream.readUnsignedWord();
-					anInt1101 = inStream.readUnsignedByte();
-					anInt1102 = inStream.readUnsignedByte();
-					if(anInt1102 >= 100) {
-						xCameraPos = anInt1098 * 128 + 64;
-						yCameraPos = anInt1099 * 128 + 64;
-						zCameraPos = getTileHeight(plane, yCameraPos, xCameraPos) - anInt1100;
+					cameraLocX = inStream.readUnsignedByte();
+					cameraLocY = inStream.readUnsignedByte();
+					cameraLocHeight = inStream.readUnsignedWord();
+					cameraLocSpeed = inStream.readUnsignedByte();
+					cameraLocAccel = inStream.readUnsignedByte();
+					if(cameraLocAccel >= 100) {
+						xCameraPos = cameraLocX * 128 + 64;
+						yCameraPos = cameraLocY * 128 + 64;
+						zCameraPos = getTileHeight(plane, yCameraPos, xCameraPos) - cameraLocHeight;
 					}
 					pktType = -1;
 					return true;
@@ -11189,7 +11189,7 @@ followDistance = 1;
 					currentStats[k1] = l15;
 					maxStats[k1] = 1;
 					for(int k20 = 0; k20 < 98; k20++)
-						if(i10 >= anIntArray1019[k20])
+						if(i10 >= XP_TABLE[k20])
 							maxStats[k1] = k20 + 2;
 					pktType = -1;
 					return true;
@@ -11247,8 +11247,8 @@ followDistance = 1;
 					
 				case 73:
 				case 241:
-					int l2 = anInt1069;
-					int i11 = anInt1070;
+					int l2 = mapRegionX;
+					int i11 = mapRegionY;
 					if(pktType == 73) {
 						l2 = inStream.readWordBigA();
 						i11 = inStream.readUnsignedWord();
@@ -11262,9 +11262,9 @@ followDistance = 1;
 								for(int j23 = 0; j23 < 13; j23++) {
 									int i26 = inStream.readBits(1);
 									if(i26 == 1)
-										anIntArrayArrayArray1129[j16][l20][j23] = inStream.readBits(26);
+										tileFlags[j16][l20][j23] = inStream.readBits(26);
 									else
-										anIntArrayArrayArray1129[j16][l20][j23] = -1;
+										tileFlags[j16][l20][j23] = -1;
 								}
 							}
 						}
@@ -11272,47 +11272,47 @@ followDistance = 1;
 						l2 = inStream.readUnsignedWord();
 						aBoolean1159 = true;
 					}
-					if(anInt1069 == l2 && anInt1070 == i11 && loadingStage == 2) {
+					if(mapRegionX == l2 && mapRegionY == i11 && loadingStage == 2) {
 						pktType = -1;
 						return true;
 					}
-					anInt1069 = l2;
-					anInt1070 = i11;
-					baseX = (anInt1069 - 6) * 8;
-					baseY = (anInt1070 - 6) * 8;
-					aBoolean1141 = (anInt1069 / 8 == 48 || anInt1069 / 8 == 49) && anInt1070 / 8 == 48;
-					if(anInt1069 / 8 == 48 && anInt1070 / 8 == 148)
+					mapRegionX = l2;
+					mapRegionY = i11;
+					baseX = (mapRegionX - 6) * 8;
+					baseY = (mapRegionY - 6) * 8;
+					aBoolean1141 = (mapRegionX / 8 == 48 || mapRegionX / 8 == 49) && mapRegionY / 8 == 48;
+					if(mapRegionX / 8 == 48 && mapRegionY / 8 == 148)
 						aBoolean1141 = true;
 					loadingStage = 1;
-					aLong824 = System.currentTimeMillis();
-					aRSImageProducer_1165.initDrawingArea();
-					aTextDrawingArea_1271.drawText(0, "Loading - please wait.", 151, 257);
-					aTextDrawingArea_1271.drawText(0xffffff, "Loading - please wait.", 150, 256);
-					aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
+					serverSeed = System.currentTimeMillis();
+					loginMsgIP.initDrawingArea();
+					boldFont.drawText(0, "Loading - please wait.", 151, 257);
+					boldFont.drawText(0xffffff, "Loading - please wait.", 150, 256);
+					loginMsgIP.drawGraphics(4, super.graphics, 4);
 					if(pktType == 73) {
 						int k16 = 0;
-						for(int i21 = (anInt1069 - 6) / 8; i21 <= (anInt1069 + 6) / 8; i21++) {
-							for(int k23 = (anInt1070 - 6) / 8; k23 <= (anInt1070 + 6) / 8; k23++)
+						for(int i21 = (mapRegionX - 6) / 8; i21 <= (mapRegionX + 6) / 8; i21++) {
+							for(int k23 = (mapRegionY - 6) / 8; k23 <= (mapRegionY + 6) / 8; k23++)
 								k16++;
 						}
-						aByteArrayArray1183 = new byte[k16][];
-						aByteArrayArray1247 = new byte[k16][];
-						anIntArray1234 = new int[k16];
-						anIntArray1235 = new int[k16];
-						anIntArray1236 = new int[k16];
+						mapLandscapeData = new byte[k16][];
+						mapObjectData = new byte[k16][];
+						chatFilterTypes = new int[k16];
+						chatFilterNames = new int[k16];
+						chatFilterMessages = new int[k16];
 						k16 = 0;
-						for(int l23 = (anInt1069 - 6) / 8; l23 <= (anInt1069 + 6) / 8; l23++) {
-							for(int j26 = (anInt1070 - 6) / 8; j26 <= (anInt1070 + 6) / 8; j26++) {
-								anIntArray1234[k16] = (l23 << 8) + j26;
+						for(int l23 = (mapRegionX - 6) / 8; l23 <= (mapRegionX + 6) / 8; l23++) {
+							for(int j26 = (mapRegionY - 6) / 8; j26 <= (mapRegionY + 6) / 8; j26++) {
+								chatFilterTypes[k16] = (l23 << 8) + j26;
 								if(aBoolean1141 && (j26 == 49 || j26 == 149 || j26 == 147 || l23 == 50 || l23 == 49 && j26 == 47)) {
-									anIntArray1235[k16] = -1;
-									anIntArray1236[k16] = -1;
+									chatFilterNames[k16] = -1;
+									chatFilterMessages[k16] = -1;
 									k16++;
 								} else {
-									int k28 = anIntArray1235[k16] = onDemandFetcher.getMapFile(0, j26, l23);
+									int k28 = chatFilterNames[k16] = onDemandFetcher.getMapFile(0, j26, l23);
 									if(k28 != -1)
 										onDemandFetcher.requestFile(3, k28);
-									int j30 = anIntArray1236[k16] = onDemandFetcher.getMapFile(1, j26, l23);
+									int j30 = chatFilterMessages[k16] = onDemandFetcher.getMapFile(1, j26, l23);
 									if(j30 != -1)
 										onDemandFetcher.requestFile(3, j30);
 									k16++;
@@ -11326,7 +11326,7 @@ followDistance = 1;
 						for(int i24 = 0; i24 < 4; i24++) {
 							for(int k26 = 0; k26 < 13; k26++) {
 								for(int l28 = 0; l28 < 13; l28++) {
-									int k30 = anIntArrayArrayArray1129[i24][k26][l28];
+									int k30 = tileFlags[i24][k26][l28];
 									if(k30 != -1) {
 										int k31 = k30 >> 14 & 0x3ff;
 										int i32 = k30 >> 3 & 0x7ff;
@@ -11343,27 +11343,27 @@ followDistance = 1;
 								}
 							}
 						}
-						aByteArrayArray1183 = new byte[l16][];
-						aByteArrayArray1247 = new byte[l16][];
-						anIntArray1234 = new int[l16];
-						anIntArray1235 = new int[l16];
-						anIntArray1236 = new int[l16];
+						mapLandscapeData = new byte[l16][];
+						mapObjectData = new byte[l16][];
+						chatFilterTypes = new int[l16];
+						chatFilterNames = new int[l16];
+						chatFilterMessages = new int[l16];
 						for(int l26 = 0; l26 < l16; l26++) {
-							int i29 = anIntArray1234[l26] = ai[l26];
+							int i29 = chatFilterTypes[l26] = ai[l26];
 							int l30 = i29 >> 8 & 0xff;
 							int l31 = i29 & 0xff;
-							int j32 = anIntArray1235[l26] = onDemandFetcher.getMapFile(0, l31, l30);
+							int j32 = chatFilterNames[l26] = onDemandFetcher.getMapFile(0, l31, l30);
 							if(j32 != -1)
 								onDemandFetcher.requestFile(3, j32);
-							int i33 = anIntArray1236[l26] = onDemandFetcher.getMapFile(1, l31, l30);
+							int i33 = chatFilterMessages[l26] = onDemandFetcher.getMapFile(1, l31, l30);
 							if(i33 != -1)
 								onDemandFetcher.requestFile(3, i33);
 						}
 					}
-					int i17 = baseX - anInt1036;
-					int j21 = baseY - anInt1037;
-					anInt1036 = baseX;
-					anInt1037 = baseY;
+					int i17 = baseX - regionAbsBaseX;
+					int j21 = baseY - regionAbsBaseY;
+					regionAbsBaseX = baseX;
+					regionAbsBaseY = baseY;
 					for(int j24 = 0; j24 < 16384; j24++) {
 						NPC npc = npcArray[j24];
 						if(npc != null) {
@@ -11414,7 +11414,7 @@ followDistance = 1;
 									groundArray[k34][k33][l33] = null;
 						}
 					}
-					for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)aClass19_1179.reverseGetNext()) {
+					for(SpawnObjectNode spawnObjectNode_1 = (SpawnObjectNode)spawnObjectList.reverseGetFirst(); spawnObjectNode_1 != null; spawnObjectNode_1 = (SpawnObjectNode)spawnObjectList.reverseGetNext()) {
 						spawnObjectNode_1.objectX -= i17;
 						spawnObjectNode_1.objectY -= j21;
 						if(spawnObjectNode_1.objectX < 0 || spawnObjectNode_1.objectY < 0 || spawnObjectNode_1.objectX >= 104 || spawnObjectNode_1.objectY >= 104)
@@ -11437,7 +11437,7 @@ followDistance = 1;
 					return true;
 					
 				case 99:
-					anInt1021 = inStream.readUnsignedByte();
+					chatAreaScrollPos = inStream.readUnsignedByte();
 					pktType = -1;
 					return true;
 					
@@ -11455,8 +11455,8 @@ followDistance = 1;
 					return true;
 					
 				case 60:
-					anInt1269 = inStream.readUnsignedByte();
-					anInt1268 = inStream.readUnsignedByteNeg();
+					hintIconDrawY = inStream.readUnsignedByte();
+					hintIconDrawX = inStream.readUnsignedByteNeg();
 					while(inStream.currentOffset < pktSize) {
 						int k3 = inStream.readUnsignedByte();
 						parseGroupPacket(inStream, k3);
@@ -11469,11 +11469,11 @@ followDistance = 1;
 					int k11 = inStream.readUnsignedByte();
 					int j17 = inStream.readUnsignedByte();
 					int k21 = inStream.readUnsignedByte();
-					aBooleanArray876[l3] = true;
-					anIntArray873[l3] = k11;
-					anIntArray1203[l3] = j17;
-					anIntArray928[l3] = k21;
-					anIntArray1030[l3] = 0;
+					sidebarFlashing[l3] = true;
+					tabAreaFlashCycle[l3] = k11;
+					tabAreaX[l3] = j17;
+					walkingQueueX[l3] = k21;
+					chatRights[l3] = 0;
 					pktType = -1;
 					return true;
 					
@@ -11647,37 +11647,37 @@ case 174:
 					return true;
 					
 				case 254:
-					anInt855 = inStream.readUnsignedByte();
-					if(anInt855 == 1)
-						anInt1222 = inStream.readUnsignedWord();
-					if(anInt855 >= 2 && anInt855 <= 6) {
-						if(anInt855 == 2) {
-							anInt937 = 64;
-							anInt938 = 64;
+					minimapRotation = inStream.readUnsignedByte();
+					if(minimapRotation == 1)
+						hintIconNpcIndex = inStream.readUnsignedWord();
+					if(minimapRotation >= 2 && minimapRotation <= 6) {
+						if(minimapRotation == 2) {
+							cameraTargetLocalX = 64;
+							cameraTargetLocalY = 64;
 						}
-						if(anInt855 == 3) {
-							anInt937 = 0;
-							anInt938 = 64;
+						if(minimapRotation == 3) {
+							cameraTargetLocalX = 0;
+							cameraTargetLocalY = 64;
 						}
-						if(anInt855 == 4) {
-							anInt937 = 128;
-							anInt938 = 64;
+						if(minimapRotation == 4) {
+							cameraTargetLocalX = 128;
+							cameraTargetLocalY = 64;
 						}
-						if(anInt855 == 5) {
-							anInt937 = 64;
-							anInt938 = 0;
+						if(minimapRotation == 5) {
+							cameraTargetLocalX = 64;
+							cameraTargetLocalY = 0;
 						}
-						if(anInt855 == 6) {
-							anInt937 = 64;
-							anInt938 = 128;
+						if(minimapRotation == 6) {
+							cameraTargetLocalX = 64;
+							cameraTargetLocalY = 128;
 						}
-						anInt855 = 2;
-						anInt934 = inStream.readUnsignedWord();
-						anInt935 = inStream.readUnsignedWord();
-						anInt936 = inStream.readUnsignedByte();
+						minimapRotation = 2;
+						cameraTargetTileX = inStream.readUnsignedWord();
+						cameraTargetTileY = inStream.readUnsignedWord();
+						cameraTargetHeight = inStream.readUnsignedByte();
 					}
-					if(anInt855 == 10)
-						anInt933 = inStream.readUnsignedWord();
+					if(minimapRotation == 10)
+						cameraTargetIndex = inStream.readUnsignedWord();
 					pktType = -1;
 					return true;
 					
@@ -11716,8 +11716,8 @@ case 174:
 					
 				case 68:
 					for(int k5 = 0; k5 < variousSettings.length; k5++)
-						if(variousSettings[k5] != anIntArray1045[k5]) {
-							variousSettings[k5] = anIntArray1045[k5];
+						if(variousSettings[k5] != tabFlashTimer[k5]) {
+							variousSettings[k5] = tabFlashTimer[k5];
 							applyVarpSetting(k5);
 							needDrawTabArea = true;
 						}
@@ -11730,7 +11730,7 @@ case 174:
 					int l21 = inStream.readUnsignedByte();
 					boolean flag5 = false;
 					for(int i28 = 0; i28 < 100; i28++) {
-						if(anIntArray1240[i28] != j18)
+						if(menuActionCmd4[i28] != j18)
 							continue;
 						flag5 = true;
 						
@@ -11745,8 +11745,8 @@ case 174:
 					}
 					if(!flag5 && anInt1251 == 0)
 						try {
-							anIntArray1240[anInt1169] = j18;
-							anInt1169 = (anInt1169 + 1) % 100;
+							menuActionCmd4[walkPathLength] = j18;
+							walkPathLength = (walkPathLength + 1) % 100;
 							String s9 = TextInput.decodeText(pktSize - 13, inStream);
 							//if(l21 != 3)
 								//s9 = Censor.doCensor(s9);
@@ -11764,15 +11764,15 @@ case 174:
 					return true;
 					
 				case 85:
-					anInt1269 = inStream.readUnsignedByteNeg();
-					anInt1268 = inStream.readUnsignedByteNeg();
+					hintIconDrawY = inStream.readUnsignedByteNeg();
+					hintIconDrawX = inStream.readUnsignedByteNeg();
 					pktType = -1;
 					return true;
 					
 				case 24:
-					anInt1054 = inStream.readUnsignedByteSub();
-					if(anInt1054 == tabID) {
-						if(anInt1054 == 3)
+					flashingTab = inStream.readUnsignedByteSub();
+					if(flashingTab == tabID) {
+						if(flashingTab == 3)
 							tabID = 1;
 						else
 							tabID = 3;
@@ -11907,22 +11907,22 @@ case 174:
 					return true;
 					
 				case 221:
-					anInt900 = inStream.readUnsignedByte();
+					mapRegionCount = inStream.readUnsignedByte();
 					needDrawTabArea = true;
 					pktType = -1;
 					return true;
 					
 				case 177:
 					aBoolean1160 = true;
-					anInt995 = inStream.readUnsignedByte();
-					anInt996 = inStream.readUnsignedByte();
-					anInt997 = inStream.readUnsignedWord();
-					anInt998 = inStream.readUnsignedByte();
-					anInt999 = inStream.readUnsignedByte();
-					if(anInt999 >= 100) {
-						int k7 = anInt995 * 128 + 64;
-						int k14 = anInt996 * 128 + 64;
-						int i20 = getTileHeight(plane, k14, k7) - anInt997;
+					cameraPosX = inStream.readUnsignedByte();
+					cameraPosY = inStream.readUnsignedByte();
+					cameraPosHeight = inStream.readUnsignedWord();
+					cameraSpeed = inStream.readUnsignedByte();
+					cameraAcceleration = inStream.readUnsignedByte();
+					if(cameraAcceleration >= 100) {
+						int k7 = cameraPosX * 128 + 64;
+						int k14 = cameraPosY * 128 + 64;
+						int i20 = getTileHeight(plane, k14, k7) - cameraPosHeight;
 						int l22 = k7 - xCameraPos;
 						int k25 = i20 - zCameraPos;
 						int j28 = k14 - yCameraPos;
@@ -11995,7 +11995,7 @@ case 174:
 				case 87:
 					int j8 = inStream.readWordLE();
 					int l14 = inStream.readDWordMixed1();
-					anIntArray1045[j8] = l14;
+					tabFlashTimer[j8] = l14;
 					if(variousSettings[j8] != l14) {
 						variousSettings[j8] = l14;
 						applyVarpSetting(j8);
@@ -12009,7 +12009,7 @@ case 174:
 				case 36:
 					int k8 = inStream.readWordLE();
 					byte byte0 = inStream.readSignedByte();
-					anIntArray1045[k8] = byte0;
+					tabFlashTimer[k8] = byte0;
 					if(variousSettings[k8] != byte0) {
 						variousSettings[k8] = byte0;
 						applyVarpSetting(k8);
@@ -12021,7 +12021,7 @@ case 174:
 					return true;
 					
 				case 61:
-					anInt1055 = inStream.readUnsignedByte();
+					flashingSideicon = inStream.readUnsignedByte();
 					pktType = -1;
 					return true;
 					
@@ -12112,12 +12112,12 @@ case 174:
 					return true;
 					
 			}
-			signlink.reporterror("T1 - " + pktType + "," + pktSize + " - " + anInt842 + "," + anInt843);
+			signlink.reporterror("T1 - " + pktType + "," + pktSize + " - " + entityUpdateIndex + "," + chatScrollMax);
 			//resetLogout();
 		} catch(IOException _ex) {
 			dropClient();
 		} catch(Exception exception) {
-			String s2 = "T2 - " + pktType + "," + anInt842 + "," + anInt843 + " - " + pktSize + "," + (baseX + myPlayer.smallX[0]) + "," + (baseY + myPlayer.smallY[0]) + " - ";
+			String s2 = "T2 - " + pktType + "," + entityUpdateIndex + "," + chatScrollMax + " - " + pktSize + "," + (baseX + myPlayer.smallX[0]) + "," + (baseY + myPlayer.smallY[0]) + " - ";
 			for(int j15 = 0; j15 < pktSize && j15 < 50; j15++)
 				s2 = s2 + inStream.buffer[j15] + ",";
 			signlink.reporterror(s2);
@@ -12128,7 +12128,7 @@ case 174:
 	}
 
 	private void processSceneEntities() {
-		anInt1265++;
+		hintIconY++;
 		renderPlayersOnScene(true);
 		renderNPCsOnScene(true);
 		renderPlayersOnScene(false);
@@ -12136,13 +12136,13 @@ case 174:
 		processProjectiles();
 		processStationaryGfx();
 		if(!aBoolean1160) {
-			int i = anInt1184;
-			if(anInt984 / 256 > i)
-				i = anInt984 / 256;
-			if(aBooleanArray876[4] && anIntArray1203[4] + 128 > i)
-				i = anIntArray1203[4] + 128;
-			int k = minimapInt1 + anInt896 & 0x7ff;
-			setCameraPos(600 + i * 3, i, anInt1014, getTileHeight(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
+			int i = selectedArea;
+			if(moveItemSlotStart / 256 > i)
+				i = moveItemSlotStart / 256;
+			if(sidebarFlashing[4] && tabAreaX[4] + 128 > i)
+				i = tabAreaX[4] + 128;
+			int k = minimapInt1 + lastItemSelectedInterface & 0x7ff;
+			setCameraPos(600 + i * 3, i, cameraSmoothedX, getTileHeight(plane, myPlayer.y, myPlayer.x) - 50, k, cameraSmoothedY);
 		}
 		int j;
 		if(!aBoolean1160)
@@ -12155,8 +12155,8 @@ case 174:
 		int k1 = yCameraCurve;
 		int l1 = xCameraCurve;
 		for(int i2 = 0; i2 < 5; i2++)
-			if(aBooleanArray876[i2]) {
-				int j2 = (int)((Math.random() * (double)(anIntArray873[i2] * 2 + 1) - (double)anIntArray873[i2]) + Math.sin((double)anIntArray1030[i2] * ((double)anIntArray928[i2] / 100D)) * (double)anIntArray1203[i2]);
+			if(sidebarFlashing[i2]) {
+				int j2 = (int)((Math.random() * (double)(tabAreaFlashCycle[i2] * 2 + 1) - (double)tabAreaFlashCycle[i2]) + Math.sin((double)chatRights[i2] * ((double)walkingQueueX[i2] / 100D)) * (double)tabAreaX[i2]);
 				if(i2 == 0)
 					xCameraPos += j2;
 				if(i2 == 1)
@@ -12185,7 +12185,7 @@ case 174:
 		drawHeadIcon();
 		animateTexture(k2);
 		draw3dScreen();
-		aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
+		loginMsgIP.drawGraphics(4, super.graphics, 4);
 		xCameraPos = l;
 		zCameraPos = i1;
 		yCameraPos = j1;
@@ -12295,22 +12295,22 @@ case 174:
 		cButtonHCPos = -1;
 		cButtonCPos = 0;
 		if (server == null || server.isEmpty()) server = "127.0.0.1";
-		anIntArrayArray825 = new int[104][104];
+		constructMapTiles = new int[104][104];
 		friendsNodeIDs = new int[200];
 		groundArray = new NodeList[4][104][104];
-		aBoolean831 = false;
-		aStream_834 = new Stream(new byte[5000]);
+		midiFading = false;
+		loginStream = new Stream(new byte[5000]);
 		npcArray = new NPC[16384];
 		npcIndices = new int[16384];
-		anIntArray840 = new int[1000];
-		aStream_847 = Stream.create();
-		aBoolean848 = true;
+		entityUpdateIndices = new int[1000];
+		outStream = Stream.create();
+		pendingInput = true;
 		openInterfaceID = -1;
 		currentExp = new int[Skills.skillsCount];
-		aBoolean872 = false;
-		anIntArray873 = new int[5];
-		anInt874 = -1;
-		aBooleanArray876 = new boolean[5];
+		continuedDialogue = false;
+		tabAreaFlashCycle = new int[5];
+		tabFlashIndex = -1;
+		sidebarFlashing = new boolean[5];
 		drawFlames = false;
 		reportAbuseInput = "";
 		unknownInt10 = -1;
@@ -12320,71 +12320,70 @@ case 174:
 		myPlayerIndex = 2047;
 		playerArray = new Player[maxPlayers];
 		playerIndices = new int[maxPlayers];
-		anIntArray894 = new int[maxPlayers];
-		aStreamArray895s = new Stream[maxPlayers];
-		anInt897 = 1;
-		anIntArrayArray901 = new int[104][104];
-		anInt902 = 0x766654;
-		aByteArray912 = new byte[16384];
+		entityIndices = new int[maxPlayers];
+		playerBuffers = new Stream[maxPlayers];
+		lastChatId = 1;
+		mapRegions = new int[104][104];
+		mapSize = 0x766654;
+		terrainData = new byte[16384];
 		currentStats = new int[Skills.skillsCount];
 		ignoreListAsLongs = new long[100];
 		loadingError = false;
-		anInt927 = 0x332d25;
-		anIntArray928 = new int[5];
-		anIntArrayArray929 = new int[104][104];
+		walkingQueueSize = 0x332d25;
+		walkingQueueX = new int[5];
+		constructRegionData = new int[104][104];
 		chatTypes = new int[500];
 		chatNames = new String[500];
 		chatMessages = new String[500];
 		chatButtons = new Sprite[4];
 		sideIcons = new Sprite[15];
 		redStones = new Sprite[5];
-		aBoolean954 = true;
+		scrollBarDrag = true;
 		friendsListAsLongs = new long[200];
 		currentSong = -1;
 		drawingFlames = false;
 		spriteDrawX = -1;
 		spriteDrawY = -1;
-		anIntArray968 = new int[33];
-		anIntArray969 = new int[256];
+		flameLeftX = new int[33];
+		flameRightX = new int[256];
 		decompressors = new Decompressor[5];
 		variousSettings = new int[2000];
 		aBoolean972 = false;
-		anInt975 = 50;
-		anIntArray976 = new int[anInt975];
-		anIntArray977 = new int[anInt975];
-		anIntArray978 = new int[anInt975];
-		anIntArray979 = new int[anInt975];
-		anIntArray980 = new int[anInt975];
-		anIntArray981 = new int[anInt975];
-		anIntArray982 = new int[anInt975];
-		aStringArray983 = new String[anInt975];
-		anInt985 = -1;
+		maxOverheadCount = 50;
+		overheadX = new int[maxOverheadCount];
+		overheadY = new int[maxOverheadCount];
+		overheadHeight = new int[maxOverheadCount];
+		overheadWidth = new int[maxOverheadCount];
+		overheadTextColor = new int[maxOverheadCount];
+		overheadTextEffect = new int[maxOverheadCount];
+		overheadTextCycle = new int[maxOverheadCount];
+		overheadTextStr = new String[maxOverheadCount];
+		activeInterfaceId = -1;
 		hitMarks = new Sprite[20];
 		hitMark = new Sprite[4];
-		anIntArray990 = new int[5];
+		walkingQueueY = new int[5];
 		aBoolean994 = false;
-		anInt1002 = 0x23201b;
+		compassWidth = 0x23201b;
 		amountOrNameInput = "";
-		aClass19_1013 = new NodeList();
-		aBoolean1017 = false;
+		projectileList = new NodeList();
+		songSwitching = false;
 		anInt1018 = -1;
-		anIntArray1030 = new int[5];
 		aBoolean1031 = false;
 		mapFunctions = new Sprite[100];
 		dialogID = -1;
 		maxStats = new int[Skills.skillsCount];
-		anIntArray1045 = new int[2000];
+		tabFlashTimer = new int[2000];
 		aBoolean1047 = true;
-		anIntArray1052 = new int[151];
-		anInt1054 = -1;
-		aClass19_1056 = new NodeList();
-		anIntArray1057 = new int[33];
-		aClass9_1059 = new RSInterface();
+		minimapHintX = new int[151];
+		flashingTab = -1;
+		spotAnimList = new NodeList();
+		minimapHintY = new int[33];
+		chatboxInterface = new RSInterface();
 		mapScenes = new Background[100];
 		barFillColor = 0x4d4233;
-		anIntArray1065 = new int[7];
-		anIntArray1072 = new int[1000];
-		anIntArray1073 = new int[1000];
+		menuActionTypes = new int[7];
+		mapFunctionX = new int[1000];
+		mapFunctionY = new int[1000];
 		aBoolean1080 = false;
 		friendsList = new String[200];
 		inStream = Stream.create();
@@ -12397,12 +12396,12 @@ case 174:
 		skullIcons = new Sprite[20];
 		headIconsHint = new Sprite[20];
 		tabAreaAltered = false;
-		aString1121 = "";
+		inputTitle = "";
 		atPlayerActions = new String[5];
 		atPlayerArray = new boolean[5];
-		anIntArrayArrayArray1129 = new int[4][13][13];
-		anInt1132 = 2;
-		aClass30_Sub2_Sub1_Sub1Array1140 = new Sprite[1000];
+		tileFlags = new int[4][13][13];
+		cameraOscillationSpeed = 2;
+		minimapImages = new Sprite[1000];
 		aBoolean1141 = false;
 		aBoolean1149 = false;
 		crosses = new Sprite[8];
@@ -12412,32 +12411,32 @@ case 174:
 		canMute = false;
 		aBoolean1159 = false;
 		aBoolean1160 = false;
-		anInt1171 = 1;
+		minimapZoomDelta = 1;
 		myUsername = "";
 		myPassword = "";
 		genericLoadingError = false;
 		reportAbuseInterfaceID = -1;
-		aClass19_1179 = new NodeList();
-		anInt1184 = 128;
+		spawnObjectList = new NodeList();
+		selectedArea = 128;
 		invOverlayInterfaceID = -1;
 		stream = Stream.create();
 		menuActionName = new String[500];
-		anIntArray1203 = new int[5];
-		anIntArray1207 = new int[50];
-		anInt1210 = 2;
-		anInt1211 = 78;
+		tabAreaX = new int[5];
+		tabAreaY = new int[50];
+		minimapRotationDelta = 2;
+		chatFilterScrollMax = 78;
 		promptInput = "";
 		modIcons = new Background[2];
 		tabID = 3;
 		inputTaken = false;
 		songChanging = true;
-		anIntArray1229 = new int[151];
+		chatFilterOffsets = new int[151];
 		aCollisionMapArray1230 = new CollisionMap[4];
 		aBoolean1233 = false;
-		anIntArray1240 = new int[100];
-		anIntArray1241 = new int[50];
+		menuActionCmd4 = new int[100];
+		menuActionCmd5 = new int[50];
 		aBoolean1242 = false;
-		anIntArray1250 = new int[50];
+		mapObjectIds = new int[50];
 		rsAlreadyLoaded = false;
 		welcomeScreenRaised = false;
 		messagePromptRaised = false;
@@ -12478,35 +12477,35 @@ case 174:
 	private RSImageProducer topFrame;
 	private RSImageProducer rightFrame;
 	private int ignoreCount;
-	private long aLong824;
-	private int[][] anIntArrayArray825;
+	private long serverSeed;
+	private int[][] constructMapTiles;
 	private int[] friendsNodeIDs;
 	private NodeList[][][] groundArray;
-	private int[] anIntArray828;
-	private int[] anIntArray829;
-	private volatile boolean aBoolean831;
+	private int[] npcUpdateTypes;
+	private int[] npcLocalIndices;
+	private volatile boolean midiFading;
 	private Socket aSocket832;
 	private int loginScreenState;
-	private Stream aStream_834;
+	private Stream loginStream;
 	private NPC[] npcArray;
 	private int npcCount;
 	private int[] npcIndices;
-	private int anInt839;
-	private int[] anIntArray840;
-	private int anInt841;
-	private int anInt842;
-	private int anInt843;
-	private String aString844;
+	private int npcUpdateCount;
+	private int[] entityUpdateIndices;
+	private int entityUpdateCount;
+	private int entityUpdateIndex;
+	private int chatScrollMax;
+	private String clickToContinueString;
 	private int privateChatMode;
-	private Stream aStream_847;
-	private boolean aBoolean848;
-	private static int anInt849;
-	private int[] anIntArray850;
-	private int[] anIntArray851;
-	private int[] anIntArray852;
-	private int[] anIntArray853;
-	private static int anInt854;
-	private int anInt855;
+	private Stream outStream;
+	private boolean pendingInput;
+	private static int lastKnownPlane;
+	private int[] entityUpdateX;
+	private int[] entityUpdateY;
+	private int[] entityUpdateId;
+	private int[] entityUpdateFace;
+	private static int cameraAngle;
+	private int minimapRotation;
 	private int openInterfaceID;
 	private int xCameraPos;
 	private int zCameraPos;
@@ -12518,59 +12517,59 @@ case 174:
 	private Sprite[] redStones;
 	private Sprite mapFlag;
 	private Sprite mapMarker;
-	private boolean aBoolean872;
-	private final int[] anIntArray873;
-	private int anInt874;
-	private final boolean[] aBooleanArray876;
+	private boolean continuedDialogue;
+	private final int[] tabAreaFlashCycle;
+	private int tabFlashIndex;
+	private final boolean[] sidebarFlashing;
 	private int weight;
 	private MouseDetection mouseDetection;
 	private volatile boolean drawFlames;
 	private String reportAbuseInput;
 	private int unknownInt10;
 	private boolean menuOpen;
-	private int anInt886;
+	private int lastItemSelectedSlot;
 	private String inputString;
 	private final int maxPlayers;
 	private final int myPlayerIndex;
 	private Player[] playerArray;
 	private int playerCount;
 	private int[] playerIndices;
-	private int anInt893;
-	private int[] anIntArray894;
-	private Stream[] aStreamArray895s;
-	private int anInt896;
-	private int anInt897;
+	private int entityCount;
+	private int[] entityIndices;
+	private Stream[] playerBuffers;
+	private int lastItemSelectedInterface;
+	private int lastChatId;
 	private int friendsCount;
-	private int anInt900;
-	private int[][] anIntArrayArray901;
-	private final int anInt902;
-	private byte[] aByteArray912;
-	private int anInt913;
+	private int mapRegionCount;
+	private int[][] mapRegions;
+	private final int mapSize;
+	private byte[] terrainData;
+	private int terrainDataIndex;
 	private int crossX;
 	private int crossY;
 	private int crossIndex;
 	private int crossType;
 	private int plane;
 	private final int[] currentStats;
-	private static int anInt924;
+	private static int anInt924_static;
 	private final long[] ignoreListAsLongs;
 	private boolean loadingError;
-	private final int anInt927;
-	private final int[] anIntArray928;
-	private int[][] anIntArrayArray929;
-	private Sprite aClass30_Sub2_Sub1_Sub1_931;
-	private Sprite aClass30_Sub2_Sub1_Sub1_932;
-	private int anInt933;
-	private int anInt934;
-	private int anInt935;
-	private int anInt936;
-	private int anInt937;
-	private int anInt938;
-	private static int anInt940;
+	private final int walkingQueueSize;
+	private final int[] walkingQueueX;
+	private int[][] constructRegionData;
+	private Sprite loginBoxSprite;
+	private Sprite loginDetailSprite;
+	private int cameraTargetIndex;
+	private int cameraTargetTileX;
+	private int cameraTargetTileY;
+	private int cameraTargetHeight;
+	private int cameraTargetLocalX;
+	private int cameraTargetLocalY;
+	private static int anInt940_static;
 	private final int[] chatTypes;
 	private final String[] chatNames;
 	private final String[] chatMessages;
-	private int anInt945;
+	private int cameraTargetLocalZ;
 	private WorldController worldController;
 	private Sprite[] sideIcons;
 	private int menuScreenArea;
@@ -12578,8 +12577,8 @@ case 174:
 	private int menuOffsetY;
 	private int menuWidth;
 	private int menuHeight;
-	private long aLong953;
-	private boolean aBoolean954;
+	private long lastClickTime;
+	private boolean scrollBarDrag;
 	private long[] friendsListAsLongs;
 	private String[] clanList = new String[100];
 	private int currentSong;
@@ -12591,44 +12590,44 @@ case 174:
 	private volatile boolean drawingFlames;
 	private int spriteDrawX;
 	private int spriteDrawY;
-	private final int[] anIntArray965 = {
+	private final int[] chatColors = {
 		0xffff00, 0xff0000, 65280, 65535, 0xff00ff, 0xffffff
 	};
-	private Background aBackground_966;
-	private Background aBackground_967;
-	private final int[] anIntArray968;
-	private final int[] anIntArray969;
+	private Background loginFireLeft;
+	private Background loginFireRight;
+	private final int[] flameLeftX;
+	private final int[] flameRightX;
 	final Decompressor[] decompressors;
 	public int variousSettings[];
 	private boolean aBoolean972;
-	private final int anInt975;
-	private final int[] anIntArray976;
-	private final int[] anIntArray977;
-	private final int[] anIntArray978;
-	private final int[] anIntArray979;
-	private final int[] anIntArray980;
-	private final int[] anIntArray981;
-	private final int[] anIntArray982;
-	private final String[] aStringArray983;
-	private int anInt984;
-	private int anInt985;
-	private static int anInt986;
+	private final int maxOverheadCount;
+	private final int[] overheadX;
+	private final int[] overheadY;
+	private final int[] overheadHeight;
+	private final int[] overheadWidth;
+	private final int[] overheadTextColor;
+	private final int[] overheadTextEffect;
+	private final int[] overheadTextCycle;
+	private final String[] overheadTextStr;
+	private int moveItemSlotStart;
+	private int activeInterfaceId;
+	private static int anInt986_static;
 	private Sprite[] hitMarks;
 	private Sprite[] hitMark;
-	private int anInt988;
-	private int anInt989;
-	private final int[] anIntArray990;
-	private static boolean aBoolean993;
+	private int moveItemSlotEnd;
+	private int moveItemInterfaceId;
+	private final int[] walkingQueueY;
+	private static boolean aBoolean993_static;
 	private final boolean aBoolean994;
-	private int anInt995;
-	private int anInt996;
-	private int anInt997;
-	private int anInt998;
-	private int anInt999;
+	private int cameraPosX;
+	private int cameraPosY;
+	private int cameraPosHeight;
+	private int cameraSpeed;
+	private int cameraAcceleration;
 	private ISAACRandomGen encryption;
 	private Sprite mapEdge;
 	private Sprite multiOverlay;
-	private final int anInt1002;
+	private final int compassWidth;
 	static final int[][] anIntArrayArray1003 = {
 		{
 			6798, 107, 10283, 16, 4797, 7744, 5799, 4634, 33697, 22433, 
@@ -12646,69 +12645,68 @@ case 174:
 		}
 	};
 	private String amountOrNameInput;
-	private static int anInt1005;
+	private static int anInt1005_static;
 	private int daysSinceLastLogin;
 	private int pktSize;
 	private int pktType;
-	private int anInt1009;
-	private int anInt1010;
-	private int anInt1011;
-	private NodeList aClass19_1013;
-	private int anInt1014;
-	private int anInt1015;
-	private int anInt1016;
-	private boolean aBoolean1017;
+	private int idleTime;
+	private int idleLogout;
+	private int hintIconDelay;
+	private NodeList projectileList;
+	private int cameraSmoothedX;
+	private int cameraSmoothedY;
+	private int songSwitchDelay;
+	private boolean songSwitching;
 	private int anInt1018;
-	private static final int[] anIntArray1019;
-	private int anInt1021;
-	private int anInt1022;
+	private static final int[] XP_TABLE;
+	private int chatAreaScrollPos;
+	private int chatAreaScrollMax;
 	private int loadingStage;
 	private Sprite scrollBar1;
 	private Sprite scrollBar2;
-	private int anInt1026;
+	private int tabFlashCycleAlt;
 	private Background backBase1;
 	private Background backBase2;
 	private Background backHmid1;
-	private final int[] anIntArray1030;
 	private boolean aBoolean1031;
 	private Sprite[] mapFunctions;
 	private int baseX;
 	private int baseY;
-	private int anInt1036;
-	private int anInt1037;
+	private int regionAbsBaseX;
+	private int regionAbsBaseY;
 	private int loginFailures;
-	private int anInt1039;
-	private int anInt1040;
-	private int anInt1041;
+	private int walkDest;
+	private int walkDestX;
+	private int walkDestY;
 	private int dialogID;
 	private final int[] maxStats;
-	private final int[] anIntArray1045;
+	private final int[] tabFlashTimer;
 	private int anInt1046;
 	private boolean aBoolean1047;
-	private int anInt1048;
-	private String aString1049;
-	private static int anInt1051;
-	private final int[] anIntArray1052;
+	private int hintArrowType;
+	private String hintText;
+	private static int anInt1051_counter;
+	private final int[] minimapHintX;
 	private StreamLoader titleStreamLoader;
-	private int anInt1054;
-	private int anInt1055;
-	private NodeList aClass19_1056;
-	private final int[] anIntArray1057;
-	public final RSInterface aClass9_1059;
+	private int flashingTab;
+	private int flashingSideicon;
+	private NodeList spotAnimList;
+	private final int[] minimapHintY;
+	public final RSInterface chatboxInterface;
 	private Background[] mapScenes;
-	private static int anInt1061;
-	private int anInt1062;
+	private static int anInt1061_static;
+	private int lastMapRegionX;
 	private final int barFillColor;
 	private int friendsListAction;
-	private final int[] anIntArray1065;
+	private final int[] menuActionTypes;
 	private int mouseInvInterfaceIndex;
 	private int lastActiveInvInterface;
 	private OnDemandFetcher onDemandFetcher;
-	private int anInt1069;
-	private int anInt1070;
-	private int anInt1071;
-	private int[] anIntArray1072;
-	private int[] anIntArray1073;
+	private int mapRegionX;
+	private int mapRegionY;
+	private int mapFunctionCount;
+	private int[] mapFunctionX;
+	private int[] mapFunctionY;
 	private Sprite mapDotItem;
 	private Sprite mapDotNPC;
 	private Sprite mapDotPlayer;
@@ -12719,12 +12717,12 @@ case 174:
 	private boolean aBoolean1080;
 	private String[] friendsList;
 	private Stream inStream;
-	private int anInt1084;
-	private int anInt1085;
+	private int dragFromSlotInterface;
+	private int dragFromSlot;
 	private int activeInterfaceType;
-	private int anInt1087;
-	private int anInt1088;
-	public static int anInt1089;
+	private int dragStartX;
+	private int dragStartY;
+	public static int chatScrollAmount;
 	private final int[] expectedCRCs;
 	private int[] menuActionCmd2;
 	private int[] menuActionCmd3;
@@ -12733,57 +12731,57 @@ case 174:
 	private Sprite[] headIcons;
 	private Sprite[] skullIcons;
 	private Sprite[] headIconsHint;
-	private static int anInt1097;
-	private int anInt1098;
-	private int anInt1099;
-	private int anInt1100;
-	private int anInt1101;
-	private int anInt1102;
+	private static int anInt1097_counter;
+	private int cameraLocX;
+	private int cameraLocY;
+	private int cameraLocHeight;
+	private int cameraLocSpeed;
+	private int cameraLocAccel;
 	private static boolean tabAreaAltered;
 	private int anInt1104;
-	private RSImageProducer aRSImageProducer_1107;
-	private RSImageProducer aRSImageProducer_1108;
-	private RSImageProducer aRSImageProducer_1109;
-	private RSImageProducer aRSImageProducer_1110;
-	private RSImageProducer aRSImageProducer_1111;
-	private RSImageProducer aRSImageProducer_1112;
-	private RSImageProducer aRSImageProducer_1113;
-	private RSImageProducer aRSImageProducer_1114;
-	private RSImageProducer aRSImageProducer_1115;
-	private static int anInt1117;
+	private RSImageProducer tabImageProducer;
+	private RSImageProducer mapAreaIP;
+	private RSImageProducer gameScreenIP;
+	private RSImageProducer chatAreaIP;
+	private RSImageProducer chatSettingIP;
+	private RSImageProducer topSideIP1;
+	private RSImageProducer topSideIP2;
+	private RSImageProducer bottomSideIP1;
+	private RSImageProducer bottomSideIP2;
+	private static int anInt1117_static;
 	private int membersInt;
-	private String aString1121;
+	private String inputTitle;
 	private Sprite compass;
-	private RSImageProducer aRSImageProducer_1123;
-	private RSImageProducer aRSImageProducer_1124;
-	private RSImageProducer aRSImageProducer_1125;
+	private RSImageProducer titleIP1;
+	private RSImageProducer titleIP2;
+	private RSImageProducer titleIP3;
 	public static Player myPlayer;
 	private final String[] atPlayerActions;
 	private final boolean[] atPlayerArray;
-	private final int[][][] anIntArrayArrayArray1129;
+	private final int[][][] tileFlags;
 	private final int[] tabInterfaceIDs = {
 		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
 		-1, -1, -1, -1,-1
 	};
-	private int anInt1131;
-	private int anInt1132;
+	private int cameraOscillationH;
+	private int cameraOscillationSpeed;
 	private int menuActionRow;
-	private static int anInt1134;
+	private static int anInt1134_static;
 	private int spellSelected;
-	private int anInt1137;
+	private int spellCastOnType;
 	private int spellUsableOn;
 	private String spellTooltip;
-	private Sprite[] aClass30_Sub2_Sub1_Sub1Array1140;
+	private Sprite[] minimapImages;
 	private boolean aBoolean1141;
-	private static int anInt1142;
+	private static int anInt1142_static;
 	private int energy;
 	private boolean aBoolean1149;
 	private Sprite[] crosses;
 	private boolean musicEnabled;
-	private Background[] aBackgroundArray1152s;
+	private Background[] loginScreenSprites;
 	private static boolean needDrawTabArea;
 	private int unreadMessages;
-	private static int anInt1155;
+	private static int anInt1155_static;
 	private static boolean fpsOn;
 	public boolean loggedIn;
 	private boolean canMute;
@@ -12791,96 +12789,96 @@ case 174:
 	private boolean aBoolean1160;
 	static int loopCycle;
 	private static final String validUserPassChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ";
-	private RSImageProducer aRSImageProducer_1163;
+	private RSImageProducer titleMuralIP;
 	private RSImageProducer mapEdgeIP;
-	private RSImageProducer aRSImageProducer_1164;
-	private RSImageProducer aRSImageProducer_1165;
-	private RSImageProducer aRSImageProducer_1166;
+	private RSImageProducer titleButtonIP;
+	private RSImageProducer loginMsgIP;
+	private RSImageProducer topCenterIP;
 	private int daysSinceRecovChange;
 	private RSSocket socketStream;
-	private int anInt1169;
+	private int walkPathLength;
 	private int minimapInt3;
-	private int anInt1171;
-	private long aLong1172;
+	private int minimapZoomDelta;
+	private long loginTimer;
 	private String myUsername;
 	private String myPassword;
-	private static int anInt1175;
+	private static int anInt1175_static;
 	private boolean genericLoadingError;
-	private final int[] anIntArray1177 = {
+	private final int[] mapChunkX = {
 		0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 
 		2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 		2, 2, 3
 	};
 	private int reportAbuseInterfaceID;
-	private NodeList aClass19_1179;
-	private int[] anIntArray1180;
-	private int[] anIntArray1181;
-	private int[] anIntArray1182;
-	private byte[][] aByteArrayArray1183;
-	private int anInt1184;
+	private NodeList spawnObjectList;
+	private int[] mapChunkX2;
+	private int[] mapChunkY2;
+	private int[] mapChunkLandscapeIds;
+	private byte[][] mapLandscapeData;
+	private int selectedArea;
 	private int minimapInt1;
-	private int anInt1186;
-	private int anInt1187;
-	private static int anInt1188;
+	private int minimapZoomTarget;
+	private int minimapZoom;
+	private static int anInt1188_static;
 	private int invOverlayInterfaceID;
-	private int[] anIntArray1190;
-	private int[] anIntArray1191;
+	private int[] chatScrollPositions;
+	private int[] chatHighlights;
 	private Stream stream;
-	private int anInt1193;
+	private int walkQueueLength;
 	private int splitPrivateChat;
 	private Background mapBack;
 	private String[] menuActionName;
-	private Sprite aClass30_Sub2_Sub1_Sub1_1201;
-	private Sprite aClass30_Sub2_Sub1_Sub1_1202;
-	private final int[] anIntArray1203;
+	private Sprite chatAreaBackground;
+	private Sprite chatSettingsBackground;
+	private final int[] tabAreaX;
 	static final int[] anIntArray1204 = {
 		9104, 10275, 7595, 3610, 7975, 8526, 918, 38802, 24466, 10145, 
 		58654, 5027, 1457, 16565, 34991, 25486
 	};
 	private static boolean flagged;
-	private final int[] anIntArray1207;
-	private int anInt1208;
+	private final int[] tabAreaY;
+	private int lastMapRegionY;
 	private int minimapInt2;
-	private int anInt1210;
-	private int anInt1211;
+	private int minimapRotationDelta;
+	private int chatFilterScrollMax;
 	private String promptInput;
-	private int anInt1213;
+	private int menuActionCounter;
 	private int[][][] intGroundArray;
-	private long aLong1215;
+	private long chatLastTyped;
 	private int loginScreenCursorPos;
 	private final Background[] modIcons;
 	private long aLong1220;
 	private static int tabID;
-	private int anInt1222;
+	private int hintIconNpcIndex;
 	public static boolean inputTaken;
 	private int inputDialogState;
-	private static int anInt1226;
+	private static int anInt1226_static;
 	private int nextSong;
 	private boolean songChanging;
-	private final int[] anIntArray1229;
+	private final int[] chatFilterOffsets;
 	private CollisionMap[] aCollisionMapArray1230;
 	public static int BIT_MASKS[];
 	private boolean aBoolean1233;
-	private int[] anIntArray1234;
-	private int[] anIntArray1235;
-	private int[] anIntArray1236;
-	private int anInt1237;
-	private int anInt1238;
-	public final int anInt1239 = 100;
-	private final int[] anIntArray1240;
-	private final int[] anIntArray1241;
+	private int[] chatFilterTypes;
+	private int[] chatFilterNames;
+	private int[] chatFilterMessages;
+	private int mapLoadProgress;
+	private int mapLoadState;
+	public final int maxMenuEntries = 100;
+	private final int[] menuActionCmd4;
+	private final int[] menuActionCmd5;
 	private boolean aBoolean1242;
 	private int atInventoryLoopCycle;
 	private int atInventoryInterface;
 	private int atInventoryIndex;
 	private int atInventoryInterfaceType;
-	private byte[][] aByteArrayArray1247;
+	private byte[][] mapObjectData;
 	private int tradeMode;
-	private int anInt1249;
-	private final int[] anIntArray1250;
+	private int actionType;
+	private final int[] mapObjectIds;
 	private int anInt1251;
 	private final boolean rsAlreadyLoaded;
-	private int anInt1253;
+	private int clickMode;
 	private int anInt1254;
 	private boolean welcomeScreenRaised;
 	private boolean messagePromptRaised;
@@ -12889,15 +12887,15 @@ case 174:
 	private int prevSong;
 	private int destX;
 	private int destY;
-	private Sprite aClass30_Sub2_Sub1_Sub1_1263;
-	private int anInt1264;
-	private int anInt1265;
+	private Sprite minimapSprite;
+	private int hintIconX;
+	private int hintIconY;
 	private String loginMessage1;
 	private String loginMessage2;
-	private int anInt1268;
-	private int anInt1269;
+	private int hintIconDrawX;
+	private int hintIconDrawY;
 	private TextDrawingArea smallText;
-	private TextDrawingArea aTextDrawingArea_1271;
+	private TextDrawingArea boldFont;
 	private TextDrawingArea chatTextDrawingArea;
 	private int anInt1275;
 	private int backDialogID;
@@ -12906,14 +12904,14 @@ case 174:
 	private int[] bigX;
 	private int[] bigY;
 	private int itemSelected;
-	private int anInt1283;
-	private int anInt1284;
+	private int selectedInventorySlot;
+	private int selectedInventoryInterface;
 	private int anInt1285;
 	private String selectedItemName;
 	private int publicChatMode;
-	private static int anInt1288;
+	private static int anInt1288_static;
 	private int anInt1289;
-	public static int anInt1290;
+	public static int anInt1290_public;
 	public static String server = "";
 	public int drawCount;
 	public int fullscreenInterfaceID;
@@ -12927,22 +12925,22 @@ case 174:
 		if (super.fullGameScreen != null) {
 			return;
 		}
-		aRSImageProducer_1166 = null;
-		aRSImageProducer_1164 = null;
-		aRSImageProducer_1163 = null;
-		aRSImageProducer_1165 = null;
-		aRSImageProducer_1123 = null;
-		aRSImageProducer_1124 = null;
-		aRSImageProducer_1125 = null;
-		aRSImageProducer_1107 = null;
-		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
-		aRSImageProducer_1110 = null;
-		aRSImageProducer_1111 = null;
-		aRSImageProducer_1112 = null;
-		aRSImageProducer_1113 = null;
-		aRSImageProducer_1114 = null;
-		aRSImageProducer_1115 = null;
+		topCenterIP = null;
+		titleButtonIP = null;
+		titleMuralIP = null;
+		loginMsgIP = null;
+		titleIP1 = null;
+		titleIP2 = null;
+		titleIP3 = null;
+		tabImageProducer = null;
+		mapAreaIP = null;
+		gameScreenIP = null;
+		chatAreaIP = null;
+		chatSettingIP = null;
+		topSideIP1 = null;
+		topSideIP2 = null;
+		bottomSideIP1 = null;
+		bottomSideIP2 = null;
 		super.fullGameScreen = new RSImageProducer(765, 503, getGameComponent());
 		welcomeScreenRaised = true;
 	}
@@ -12974,13 +12972,13 @@ case 174:
 	}
 
 	static  {
-		anIntArray1019 = new int[99];
+		XP_TABLE = new int[99];
 		int i = 0;
 		for(int j = 0; j < 99; j++) {
 			int l = j + 1;
 			int i1 = (int)((double)l + 300D * Math.pow(2D, (double)l / 7D));
 			i += i1;
-			anIntArray1019[j] = i / 4;
+			XP_TABLE[j] = i / 4;
 		}
 		BIT_MASKS = new int[32];
 		i = 2;
