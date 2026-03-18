@@ -106,74 +106,75 @@ public int followDistance = 1;
 	}
 	
 	public void drawChannelButtons() {
+		int btnY = (clientSize == 0) ? 0 : clientHeight - 165;
 		String text[] = { "On", "Friends", "Off", "Hide" };
 		int textColor[] = { 65280, 0xffff00, 0xff0000, 65535 };
 		switch(cButtonCPos) {
 			case 0:
-				chatButtons[1].drawSprite(5, 142);
+				chatButtons[1].drawSprite(5, btnY + 142);
 				break;
 			case 1:
-				chatButtons[1].drawSprite(71, 142);
+				chatButtons[1].drawSprite(71, btnY + 142);
 				break;
 			case 2:
-				chatButtons[1].drawSprite(137, 142);
+				chatButtons[1].drawSprite(137, btnY + 142);
 				break;
 			case 3:
-				chatButtons[1].drawSprite(203, 142);
+				chatButtons[1].drawSprite(203, btnY + 142);
 				break;
 			case 4:
-				chatButtons[1].drawSprite(269, 142);
+				chatButtons[1].drawSprite(269, btnY + 142);
 				break;
 			case 5:
-				chatButtons[1].drawSprite(335, 142);
+				chatButtons[1].drawSprite(335, btnY + 142);
 				break;
 		}
 		if(cButtonHPos == cButtonCPos) {
 			switch(cButtonHPos) {
 				case 0:
-					chatButtons[2].drawSprite(5, 142);
+					chatButtons[2].drawSprite(5, btnY + 142);
 					break;
 				case 1:
-					chatButtons[2].drawSprite(71, 142);
+					chatButtons[2].drawSprite(71, btnY + 142);
 					break;
 				case 2:
-					chatButtons[2].drawSprite(137, 142);
+					chatButtons[2].drawSprite(137, btnY + 142);
 					break;
 				case 3:
-					chatButtons[2].drawSprite(203, 142);
+					chatButtons[2].drawSprite(203, btnY + 142);
 					break;
 				case 4:
-					chatButtons[2].drawSprite(269, 142);
+					chatButtons[2].drawSprite(269, btnY + 142);
 					break;
 				case 5:
-					chatButtons[2].drawSprite(335, 142);
+					chatButtons[2].drawSprite(335, btnY + 142);
 					break;
 				case 6:
-					chatButtons[3].drawSprite(404, 142);
+					chatButtons[3].drawSprite(404, btnY + 142);
 					break;
 			}
 		} else {
 			switch(cButtonHPos) {
 				case 0:
-					chatButtons[0].drawSprite(5, 142);
+					chatButtons[0].drawSprite(5, btnY + 142);
 					break;
 				case 1:
-					chatButtons[0].drawSprite(71, 142);
+					chatButtons[0].drawSprite(71, btnY + 142);
 					break;
 				case 2:
-					chatButtons[0].drawSprite(137, 142);
+					chatButtons[0].drawSprite(137, btnY + 142);
 					break;
 				case 3:
-					chatButtons[0].drawSprite(203, 142);
+					chatButtons[0].drawSprite(203, btnY + 142);
 					break;
 				case 4:
-					chatButtons[0].drawSprite(269, 142);
+					chatButtons[0].drawSprite(269, btnY + 142);
 					break;
 				case 5:
-					chatButtons[0].drawSprite(335, 142);
+					chatButtons[0].drawSprite(335, btnY + 142);
 					break;
 				case 6:
-					chatButtons[3].drawSprite(404, 142);
+					chatButtons[3].drawSprite(404, btnY + 142);
 					break;
 			}
 		}
@@ -191,35 +192,40 @@ public int followDistance = 1;
 	}
 
 	private void drawChatArea() {
-		topCenterIP.initDrawingArea();
-		Texture.scanlineOffset = mapChunkX2;
-		chatArea.drawSprite(0, 0);
+		int chatY = 0;
+		if (clientSize == 0) {
+			topCenterIP.initDrawingArea();
+			Texture.scanlineOffset = mapChunkX2;
+			chatArea.drawSprite(0, 0);
+		} else {
+			chatY = clientHeight - 165;
+		}
 		drawChannelButtons();
 		TextDrawingArea textDrawingArea = boldFont;
 		if(messagePromptRaised) {
-			chatTextDrawingArea.drawText(0, inputTitle, 60, 259);
-			chatTextDrawingArea.drawText(128, promptInput + "*", 80, 259);
+			chatTextDrawingArea.drawText(0, inputTitle, chatY + 60, 259);
+			chatTextDrawingArea.drawText(128, promptInput + "*", chatY + 80, 259);
 		} else if(inputDialogState == 1) {
-			chatTextDrawingArea.drawText(0, "Enter amount:", 60, 259);
-			chatTextDrawingArea.drawText(128, amountOrNameInput + "*", 80, 259);
+			chatTextDrawingArea.drawText(0, "Enter amount:", chatY + 60, 259);
+			chatTextDrawingArea.drawText(128, amountOrNameInput + "*", chatY + 80, 259);
 		} else if(inputDialogState == 2) {
-			chatTextDrawingArea.drawText(0, "Enter name:", 60, 259);
-			chatTextDrawingArea.drawText(128, amountOrNameInput + "*", 80, 259);
+			chatTextDrawingArea.drawText(0, "Enter name:", chatY + 60, 259);
+			chatTextDrawingArea.drawText(128, amountOrNameInput + "*", chatY + 80, 259);
 		} else if(clickToContinueString != null) {
-			chatTextDrawingArea.drawText(0, clickToContinueString, 60, 259);
-			chatTextDrawingArea.drawText(128, "Click to continue", 80, 259);
+			chatTextDrawingArea.drawText(0, clickToContinueString, chatY + 60, 259);
+			chatTextDrawingArea.drawText(128, "Click to continue", chatY + 80, 259);
 		} else if(backDialogID != -1) {
-			drawInterface(0, 20, RSInterface.interfaceCache[backDialogID], 20);
+			drawInterface(0, 20, RSInterface.interfaceCache[backDialogID], chatY + 20);
 		} else if(dialogID != -1) {
-			drawInterface(0, 20, RSInterface.interfaceCache[dialogID], 20);
+			drawInterface(0, 20, RSInterface.interfaceCache[dialogID], chatY + 20);
 		} else {
 			int j77 = -3;
 			int j = 0;
-			DrawingArea.setDrawingArea(122, 8, 497, 7);
+			DrawingArea.setDrawingArea(chatY + 122, 8, 497, chatY + 7);
 			for(int k = 0; k < 500; k++)
 			if(chatMessages[k] != null) {
 				int chatType = chatTypes[k];
-				int yPos = (70 - j77 * 14) + chatScrollAmount + 5;
+				int yPos = (70 - j77 * 14) + chatScrollAmount + 5 + chatY;
 				String s1 = chatNames[k];
 				byte byte0 = 0;
 				if(s1 != null && s1.startsWith("@cr1@")) {
@@ -234,7 +240,7 @@ public int followDistance = 1;
 				}
 				if(chatType == 0) {
 					if (chatTypeView == 5 || chatTypeView == 0) {
-					if(yPos > 0 && yPos < 210)
+					if(yPos > chatY && yPos < chatY + 210)
 						textDrawingArea.drawWaving(false, 11, 0, chatMessages[k], yPos);//chat color enabled
 					j++;
 					j77++;
@@ -242,7 +248,7 @@ public int followDistance = 1;
 				}
 				if((chatType == 1 || chatType == 2) && (chatType == 1 || publicChatMode == 0 || publicChatMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 1 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210) {
+						if(yPos > chatY && yPos < chatY + 210) {
 							int xPos = 11;
 							if(byte0 == 1) {
 								modIcons[0].drawBackground(xPos + 1, yPos - 12);
@@ -264,7 +270,7 @@ public int followDistance = 1;
 				}
 				if((chatType == 3 || chatType == 7) && (splitPrivateChat == 0 || chatTypeView == 2) && (chatType == 7 || privateChatMode == 0 || privateChatMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 2 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210) {
+						if(yPos > chatY && yPos < chatY + 210) {
 							int k1 = 11;
 							textDrawingArea.drawText(0, "From", yPos, k1);
 							k1 += textDrawingArea.getTextWidth("From ");
@@ -288,7 +294,7 @@ public int followDistance = 1;
 				}
 				if(chatType == 4 && (tradeMode == 0 || tradeMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 3 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210)
+						if(yPos > chatY && yPos < chatY + 210)
 							textDrawingArea.drawText(0x800080, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
@@ -296,7 +302,7 @@ public int followDistance = 1;
 				}
 				if(chatType == 5 && splitPrivateChat == 0 && privateChatMode < 2) {
 					if (chatTypeView == 2 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210)
+						if(yPos > chatY && yPos < chatY + 210)
 							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, 11);
 						j++;
 						j77++;
@@ -304,7 +310,7 @@ public int followDistance = 1;
 				}
 				if(chatType == 6 && (splitPrivateChat == 0 || chatTypeView == 2) && privateChatMode < 2) {
 					if (chatTypeView == 2 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210) {
+						if(yPos > chatY && yPos < chatY + 210) {
 							textDrawingArea.drawText(0, "To " + s1 + ":", yPos, 11);
 							textDrawingArea.drawText(0x800000, chatMessages[k], yPos, 15 + textDrawingArea.getTextWidth("To :" + s1));
 						}
@@ -314,20 +320,20 @@ public int followDistance = 1;
 				}
 				if(chatType == 8 && (tradeMode == 0 || tradeMode == 1 && isFriendOrSelf(s1))) {
 					if (chatTypeView == 3 || chatTypeView == 0) {
-						if(yPos > 0 && yPos < 210)
+						if(yPos > chatY && yPos < chatY + 210)
 							textDrawingArea.drawText(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
 					if(chatType == 11 && (clanChatMode == 0)) {
 						if (chatTypeView == 11) {
-						if(yPos > 0 && yPos < 210)
+						if(yPos > chatY && yPos < chatY + 210)
 							textDrawingArea.drawText(0x7e3200, s1 + " " + chatMessages[k], yPos, 11);
 						j++;
 						j77++;
 					}
 					if(chatType == 12) {
-						if(yPos > 0 && yPos < 110)
+						if(yPos > chatY && yPos < chatY + 110)
 							textDrawingArea.drawText(0x7e3200, chatMessages[k] + " @blu@" + s1, yPos, 11);
 							j++;
 						}
@@ -337,7 +343,7 @@ public int followDistance = 1;
 					int j2 = 40;
 					int clanNameWidth = textDrawingArea.getTextWidth(clanname);
 					if(chatTypeView == 11 || chatTypeView == 0) {
-						if(yPos > 3 && yPos < 130)
+						if(yPos > chatY + 3 && yPos < chatY + 130)
 							switch(chatRights[k]) {
 								case 1:
 									j2 += clanNameWidth;
@@ -377,20 +383,20 @@ public int followDistance = 1;
 			chatFilterScrollMax = j * 14 + 7 + 5;
 			if(chatFilterScrollMax < 111)
 				chatFilterScrollMax = 111;
-			drawScrollbar(114, chatFilterScrollMax - chatScrollAmount - 113, 7, 496, chatFilterScrollMax);
+			drawScrollbar(114, chatFilterScrollMax - chatScrollAmount - 113, chatY + 7, 496, chatFilterScrollMax);
 			String s;
 			if(myPlayer != null && myPlayer.name != null)
 				s = myPlayer.name;
 			else
 				s = TextClass.fixName(myUsername);
-			textDrawingArea.drawText(0, s + ":", 133, 11);
-			textDrawingArea.drawChatInput(255, 12 + textDrawingArea.getTextWidth(s + ": "), inputString + "*", 133, false);
-			DrawingArea.drawVerticalLine(121, 0x807660, 506, 7);
+			textDrawingArea.drawText(0, s + ":", chatY + 133, 11);
+			textDrawingArea.drawChatInput(255, 12 + textDrawingArea.getTextWidth(s + ": "), inputString + "*", chatY + 133, false);
+			DrawingArea.drawVerticalLine(chatY + 121, 0x807660, 506, 7);
 		}
 		if(menuOpen && menuScreenArea == 2) {
 			drawMenu();
 		}
-		topCenterIP.drawGraphics(clientSize == 0 ? 338 : clientHeight - 165, super.graphics, 0);
+		if (clientSize == 0) topCenterIP.drawGraphics(338, super.graphics, 0);
 		loginMsgIP.initDrawingArea();
 		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
@@ -1898,24 +1904,30 @@ public int followDistance = 1;
 	}
 
 	private void drawTabArea() {
-		titleMuralIP.initDrawingArea();
-		Texture.scanlineOffset = mapChunkY2;
-		tabArea.drawSprite(0, 0);
-		if(invOverlayInterfaceID == -1) {
+		int tabX = 0, tabY = 0;
+		if (clientSize == 0) {
+			titleMuralIP.initDrawingArea();
+			Texture.scanlineOffset = mapChunkY2;
+			tabArea.drawSprite(0, 0);
+		} else {
+			tabX = clientWidth - 225;
+			tabY = clientHeight - 340;
+		}
+		if(invOverlayInterfaceID == -1 && clientSize == 0) {
 			drawRedStones();
 			drawSideIcons();
 		}
 		if(invOverlayInterfaceID != -1) {
 			if(invOverlayInterfaceID >= 0 && invOverlayInterfaceID < RSInterface.interfaceCache.length && RSInterface.interfaceCache[invOverlayInterfaceID] != null)
-				drawInterface(0, 28, RSInterface.interfaceCache[invOverlayInterfaceID], 37);
+				drawInterface(0, (clientSize == 0 ? 28 : tabX + 28), RSInterface.interfaceCache[invOverlayInterfaceID], (clientSize == 0 ? 37 : tabY + 37));
 		} else if(tabInterfaceIDs[tabID] != -1) {
 			int tid = tabInterfaceIDs[tabID];
 			if(tid >= 0 && tid < RSInterface.interfaceCache.length && RSInterface.interfaceCache[tid] != null)
-				drawInterface(0, 28, RSInterface.interfaceCache[tid], 37);
+				drawInterface(0, (clientSize == 0 ? 28 : tabX + 28), RSInterface.interfaceCache[tid], (clientSize == 0 ? 37 : tabY + 37));
 		}
 		if(menuOpen && menuScreenArea == 1)
 			drawMenu();
-		titleMuralIP.drawGraphics(clientSize == 0 ? 168 : clientHeight - 335, super.graphics, clientSize == 0 ? 519 : clientWidth - 246);
+		if (clientSize == 0) titleMuralIP.drawGraphics(168, super.graphics, 519);
 		loginMsgIP.initDrawingArea();
 		Texture.scanlineOffset = mapChunkLandscapeIds;
 	}
@@ -13143,29 +13155,37 @@ case 174:
 	 * on top of the 3D viewport. Called from processSceneEntities.
 	 */
 	public void drawUnfixedGame() {
-		if (clientSize == 0 || cacheSprite == null) return;
-		try {
-			if (cacheSprite[30] != null)
-				cacheSprite[30].drawSprite(0, clientHeight - 166);
-			if (cacheSprite[31] != null)
-				cacheSprite[31].drawSprite(0, clientHeight - 22);
-			if (cacheSprite[33] != null)
-				cacheSprite[33].drawSprite(clientWidth - 238, 3);
-			boolean wideTabs = clientWidth >= 1000;
-			if (wideTabs) {
-				if (cacheSprite[27] != null)
-					cacheSprite[27].drawSprite(clientWidth - 461, clientHeight - 36);
-			} else {
-				if (cacheSprite[28] != null)
-					cacheSprite[28].drawSprite(clientWidth - 241, clientHeight - 73);
-			}
-			if (cacheSprite[29] != null) {
-				if (wideTabs)
-					cacheSprite[29].drawSprite(clientWidth - 204, clientHeight - 310);
-				else
-					cacheSprite[29].drawSprite(clientWidth - 222, clientHeight - 346);
-			}
-		} catch (Exception e) { }
+		if (clientSize == 0) return;
+		// Sprite overlays (backgrounds)
+		if (cacheSprite != null) {
+			try {
+				if (cacheSprite[30] != null)
+					cacheSprite[30].drawSprite(0, clientHeight - 166);
+				if (cacheSprite[31] != null)
+					cacheSprite[31].drawSprite(0, clientHeight - 22);
+				if (cacheSprite[33] != null)
+					cacheSprite[33].drawSprite(clientWidth - 238, 3);
+				boolean wideTabs = clientWidth >= 1000;
+				if (wideTabs) {
+					if (cacheSprite[27] != null)
+						cacheSprite[27].drawSprite(clientWidth - 461, clientHeight - 36);
+				} else {
+					if (cacheSprite[28] != null)
+						cacheSprite[28].drawSprite(clientWidth - 241, clientHeight - 73);
+				}
+				if (cacheSprite[29] != null) {
+					if (wideTabs)
+						cacheSprite[29].drawSprite(clientWidth - 204, clientHeight - 310);
+					else
+						cacheSprite[29].drawSprite(clientWidth - 222, clientHeight - 346);
+				}
+			} catch (Exception e) { }
+		}
+		// UI content on top of sprites
+		// Parchment fill for chat area
+		DrawingArea.drawPixels(129, clientHeight - 165 + 6, 7, 0xccbb9a, 506);
+		drawChatArea();
+		drawTabArea();
 	}
 
 	public boolean isFixed() {
