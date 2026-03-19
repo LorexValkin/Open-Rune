@@ -252,22 +252,85 @@ class Player(
     //  Login initialization
     // ================================================================
     fun initialize() {
-        sendSidebar(0, 2423); sendSidebar(1, 3917); sendSidebar(2, 638); sendSidebar(3, 3213)
-        sendSidebar(4, 1644); sendSidebar(5, 5608); sendSidebar(6, 1151); sendSidebar(8, 5065)
-        sendSidebar(9, 5715); sendSidebar(10, 2449); sendSidebar(11, 904); sendSidebar(12, 147); sendSidebar(13, 962)
+        // === Sidebar Interfaces (Project51/Anguish) ===
+        sendSidebar(0, 2423)    // Attack styles
+        sendSidebar(1, 13917)   // Skills tab
+        sendSidebar(2, 10220)   // Quest tab
+        sendSidebar(3, 3213)    // Inventory
+        sendSidebar(4, 1644)    // Equipment
+        sendSidebar(5, 15608)   // Prayer
+        sendSidebar(6, 938)     // Magic (modern)
+        sendSidebar(7, 18128)   // Clan chat
+        sendSidebar(8, 5065)    // Friends
+        sendSidebar(9, 5715)    // Ignores
+        sendSidebar(10, 2449)   // Logout
+        sendSidebar(11, 42500)  // Settings (wrench)
+        sendSidebar(12, 147)    // Emotes
+        sendSidebar(13, 47500)  // Monster tab
+
+        // === Configs ===
+        sendConfig(108, 0)   // Brightness
+        sendConfig(172, 1)   // Auto-retaliate
+        sendConfig(173, if (walkingQueue.running) 1 else 0) // Run orb
+        sendConfig(427, 0)   // Accept aid
+
+        // === Reset screen ===
+        resetScreen()
+
+        // === Skill updates (opcode 134) ===
         for (i in levels.indices) sendSkillUpdate(i)
-        sendConfig(173, if (walkingQueue.running) 1 else 0) // Run orb state
+
+        // === Skill tab text (interface text for each skill) ===
+        for (i in levels.indices) refreshSkillText(i)
+
+        // === HP / Prayer / Run orb text ===
+        sendInterfaceText("" + levels[Skills.HITPOINTS], 4016)
+        sendInterfaceText("" + getLevelForXP(experience[Skills.HITPOINTS].toInt()), 4017)
+        sendInterfaceText("" + levels[Skills.PRAYER], 4012)
+        sendInterfaceText("" + getLevelForXP(experience[Skills.PRAYER].toInt()), 4013)
+        sendInterfaceText("100%", 149)
+
+        // === Combat / Total level text ===
+        val combatLvl = getCombatLevel()
+        sendInterfaceText("Combat Level: $combatLvl", 3983)
+        sendInterfaceText("Total level:", 19209)
+        var totalLevel = 0
+        for (i in levels.indices) totalLevel += getLevelForXP(experience.getOrElse(i) { 0.0 }.toInt())
+        sendInterfaceText("$totalLevel", 3984)
+
+        // === Player right-click options ===
+        showOption(4, 0, "Follow")
+        showOption(5, 0, "Trade with")
+
+        // === Friends list + Chat modes ===
+        sendFriendsStatus(2)
+        sendChatModes(0, 0, 0)
+
+        // === Welcome message ===
+        sendMessage("Welcome to OpenRune.")
+
+        // === Map region + teleport flag ===
         sendMapRegion()
-        // Signal the update protocol to send placement (type 3) on the first tick.
-        // Without this, the client never receives setPos() and the player stays at (0,0).
         walkingQueue.didTeleport = true
+
+        // === Appearance ===
         flagAppearanceUpdate()
     }
 
-    fun sendSkillUpdate(skill: Int) { val p = PacketBuilder(134); p.addByte(skill); p.addInt(experience.getOrElse(skill) { 0.0 }.toInt()); p.addByte(levels.getOrElse(skill) { 1 }); send(p) }
+    fun sendSkillUpdate(skill: Int) { val p = PacketBuilder(134); p.addByte(skill); p.addIntME1(experience.getOrElse(skill) { 0.0 }.toInt()); p.addByte(levels.getOrElse(skill) { 1 }); send(p) }
 
     /** Send a client config/varp (opcode 36). */
     fun sendConfig(id: Int, value: Int) { val p = PacketBuilder(36); p.addLEShort(id); p.addByte(value); send(p) }
+
+    /** Send interface text (opcode 126, variable short/word size). */
+    fun sendInterfaceText(text: String, interfaceId: Int) {
+        val p = PacketBuilder(126)
+        p.startVariableShortSize()
+        p.addString(text)
+        p.addShortA(interfaceId)
+        p.endVariableShortSize()
+        send(p)
+    }
 
     /**
      * Send map region packet (opcode 73).
@@ -286,6 +349,114 @@ class Player(
     // ================================================================
     //  End-of-tick reset
     // ================================================================
+
+    // ================================================================
+    //  UI Packet Methods (Patch 006)
+    // ================================================================
+
+    /** Reset/close all interfaces (opcode 107). */
+    fun resetScreen() { send(PacketBuilder(107)) }
+
+    /** Send player right-click option (opcode 104, variable byte). */
+    fun showOption(slot: Int, topOfList: Int, text: String) {
+        val p = PacketBuilder(104)
+        p.startVariableSize()
+        p.addByteC(slot)
+        p.addByteA(topOfList)
+        p.addString(text)
+        p.endVariableSize()
+        send(p)
+    }
+
+    /** Send friends list loading status (opcode 221). 2 = loaded. */
+    fun sendFriendsStatus(status: Int) {
+        val p = PacketBuilder(221)
+        p.addByte(status)
+        send(p)
+    }
+
+    /** Send chat mode settings (opcode 206). */
+    fun sendChatModes(publicChat: Int = 0, privateChat: Int = 0, tradeChat: Int = 0) {
+        val p = PacketBuilder(206)
+        p.addByte(publicChat)
+        p.addByte(privateChat)
+        p.addByte(tradeChat)
+        send(p)
+    }
+
+    /**
+     * Send full skill tab text refresh for a given skill.
+     * Each skill has 4 interface texts: current level, max level, current XP, XP to next level.
+     * Interface IDs match the Project51/Anguish client.
+     */
+    fun refreshSkillText(skill: Int) {
+        val level = levels.getOrElse(skill) { 1 }
+        val xp = experience.getOrElse(skill) { 0.0 }.toInt()
+        val maxLevel = getLevelForXP(xp)
+        val nextLevelXp = getXPForLevel(maxLevel + 1)
+
+        // Interface IDs: [currentLevel, maxLevel, currentXP, xpToNextLevel]
+        val ids = SKILL_INTERFACE_IDS.getOrNull(skill) ?: return
+        sendInterfaceText("$level", ids[0])
+        sendInterfaceText("$maxLevel", ids[1])
+        if (ids.size > 2) sendInterfaceText("$xp", ids[2])
+        if (ids.size > 3) sendInterfaceText("$nextLevelXp", ids[3])
+    }
+
+    /** Get level for XP amount. */
+    fun getLevelForXP(xp: Int): Int {
+        var points = 0; var output = 0
+        for (lvl in 1..99) {
+            points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0)).toInt()
+            output = points / 4
+            if (output >= xp) return lvl
+        }
+        return 99
+    }
+
+    /** Get XP required for a level. */
+    fun getXPForLevel(level: Int): Int {
+        var points = 0; var output = 0
+        for (lvl in 1..level) {
+            points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0)).toInt()
+            if (lvl >= level) return output
+            output = points / 4
+        }
+        return 0
+    }
+
+    companion object {
+        /**
+         * Skill interface ID mapping: [currentLevel, maxLevel, currentXP, nextLevelXP]
+         * Indices match Skills.ATTACK (0) through Skills.CONSTRUCTION (22).
+         */
+        val SKILL_INTERFACE_IDS = arrayOf(
+            intArrayOf(4004, 4005, 4044, 4045),  // 0:  Attack
+            intArrayOf(4008, 4009, 4056, 4057),  // 1:  Defence
+            intArrayOf(4006, 4007, 4050, 4051),  // 2:  Strength
+            intArrayOf(4016, 4017, 4080, 4081),  // 3:  Hitpoints
+            intArrayOf(4010, 4011, 4062, 4063),  // 4:  Ranged
+            intArrayOf(4012, 4013, 4068, 4069),  // 5:  Prayer
+            intArrayOf(4014, 4015, 4074, 4075),  // 6:  Magic
+            intArrayOf(4034, 4035, 4134, 4135),  // 7:  Cooking
+            intArrayOf(4038, 4039, 4146, 4147),  // 8:  Woodcutting
+            intArrayOf(4026, 4027, 4110, 4111),  // 9:  Fletching
+            intArrayOf(4032, 4033, 4128, 4129),  // 10: Fishing
+            intArrayOf(4036, 4037, 4140, 4141),  // 11: Firemaking
+            intArrayOf(4024, 4025, 4104, 4105),  // 12: Crafting
+            intArrayOf(4030, 4031, 4122, 4123),  // 13: Smithing
+            intArrayOf(4028, 4029, 4116, 4117),  // 14: Mining
+            intArrayOf(4020, 4021, 4092, 4093),  // 15: Herblore
+            intArrayOf(4018, 4019, 4086, 4087),  // 16: Agility
+            intArrayOf(4022, 4023, 4098, 4099),  // 17: Thieving
+            intArrayOf(12166, 12167, 12171, 12172), // 18: Slayer
+            intArrayOf(13926, 13927, 13921, 13922), // 19: Farming
+            intArrayOf(4152, 4153, 4157, 4159),  // 20: Runecrafting
+            intArrayOf(18799, 18800),             // 21: Hunter (no XP interfaces)
+            intArrayOf(18797, 18798)              // 22: Construction (no XP interfaces)
+        )
+    }
+
     fun resetUpdateFlags() {
         updateRequired = false; appearanceUpdateRequired = false; chatUpdateRequired = false
         animationUpdateRequired = false; graphicUpdateRequired = false; forceChatUpdateRequired = false

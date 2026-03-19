@@ -7,9 +7,18 @@ out/
 .idea/
 *.iml
 
+# Compiled Java classes (client builds locally)
+*.class
+
 # Cache data (too large for git)
 cache-data/
 data/saves/
+
+# Client cache (local only)
+.openrune/
+
+# Backup files from patches
+*.bak_*
 
 # OS junk
 Thumbs.db
@@ -17,3 +26,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Old archived client zip (removed)
+client.zip

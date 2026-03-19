@@ -103,6 +103,16 @@ class PacketBuilder(private val opcode: Int = -1) {
         return this
     }
 
+    /** Middle-endian int (type 1): wire order [8, 0, 24, 16]. Client reads with method439(). */
+    fun addIntME1(value: Int): PacketBuilder {
+        ensureCapacity(4)
+        buffer[position++] = (value shr 8).toByte()
+        buffer[position++] = value.toByte()
+        buffer[position++] = (value shr 24).toByte()
+        buffer[position++] = (value shr 16).toByte()
+        return this
+    }
+
     fun addLong(value: Long): PacketBuilder {
         addInt((value shr 32).toInt())
         addInt(value.toInt())

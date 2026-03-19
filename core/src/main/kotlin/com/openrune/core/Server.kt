@@ -106,7 +106,7 @@ class OpenRuneServer {
 
         // Load NPC spawns from data
         log.info("Loading NPC spawns...")
-        engine.npcManager.loadSpawns(dataStore)
+        engine.npcManager.loadSpawns(dataStore, engine.cacheNpcDefs)
 
         // Discover and load plugins
         log.info("Loading plugins...")

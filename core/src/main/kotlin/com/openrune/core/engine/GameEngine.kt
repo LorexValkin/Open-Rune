@@ -18,6 +18,8 @@ import com.openrune.core.world.ObjectManager
 import com.openrune.core.world.GroundItemManager
 import com.openrune.core.world.interaction.ObjectInteractionHandler
 import com.openrune.cache.io.CacheReader
+import com.openrune.cache.def.CacheNpcDefinition
+import com.openrune.cache.def.NpcDefinitionDecoder
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -70,6 +72,8 @@ class GameEngine(
     val objectManager = ObjectManager(collisionMap)
     val groundItemManager = GroundItemManager()
     val npcManager: NpcManager
+    var cacheNpcDefs: Map<Int, CacheNpcDefinition> = emptyMap()
+        private set
     val regionLoader: RegionLoader
     val objectInteractionHandler: ObjectInteractionHandler
 
@@ -85,6 +89,11 @@ class GameEngine(
                 cacheReader = null
             }
         }
+        // Load NPC definitions from cache
+        if (cacheReader != null) {
+            cacheNpcDefs = NpcDefinitionDecoder.load(cacheReader)
+        }
+
         regionLoader = RegionLoader(collisionMap, cacheReader)
         regionLoader.initialize()  // Build map index from cache versionlist
         npcManager = NpcManager(16384, eventBus, collisionMap, movementProcessor)

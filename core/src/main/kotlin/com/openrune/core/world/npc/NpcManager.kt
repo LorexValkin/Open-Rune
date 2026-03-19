@@ -1,6 +1,7 @@
 package com.openrune.core.world.npc
 
 import com.openrune.api.config.NpcDef
+import com.openrune.cache.def.CacheNpcDefinition
 import com.openrune.api.config.SpawnDef
 import com.openrune.api.event.NpcDespawnEvent
 import com.openrune.api.event.NpcSpawnEvent
@@ -46,7 +47,7 @@ class NpcManager(
     /**
      * Load spawns from the data store and create all NPCs.
      */
-    fun loadSpawns(dataStore: JsonDataStore) {
+    fun loadSpawns(dataStore: JsonDataStore, cacheDefs: Map<Int, CacheNpcDefinition> = emptyMap()) {
         val spawns = dataStore.getAllTyped("spawns", SpawnDef::class.java)
         val npcDefs = dataStore.getAllTyped("npcs", NpcDef::class.java)
 
@@ -55,25 +56,29 @@ class NpcManager(
             val position = Position(spawn.x, spawn.y, spawn.z)
             val npcDef = npcDefs[spawn.npcId]
 
-            val definition = if (npcDef != null) {
-                NpcDefinition(
-                    name = npcDef.name,
-                    combatLevel = npcDef.combatLevel,
-                    hitpoints = npcDef.hitpoints,
-                    maxHit = npcDef.maxHit,
-                    attackSpeed = npcDef.attackSpeed,
-                    respawnTicks = npcDef.respawnTicks,
-                    aggressive = npcDef.aggressive,
-                    aggroRange = npcDef.aggroRange,
-                    size = npcDef.size,
-                    walkRange = spawn.walkRange,
-                    attackAnim = npcDef.attackAnim,
-                    defenceAnim = npcDef.defenceAnim,
-                    deathAnim = npcDef.deathAnim
-                )
-            } else {
-                NpcDefinition(name = "NPC #${spawn.npcId}", walkRange = spawn.walkRange)
-            }
+            // Layer 1: Cache definition (name, size, anims, combat level, examine, actions)
+            val cacheDef = cacheDefs[spawn.npcId]
+
+            // Layer 2: JSON override (HP, max hit, aggro, attack speed, etc.)
+            val definition = NpcDefinition(
+                name = npcDef?.name ?: cacheDef?.name ?: "NPC #${spawn.npcId}",
+                examine = cacheDef?.examine ?: "",
+                combatLevel = npcDef?.combatLevel ?: cacheDef?.combatLevel ?: 0,
+                hitpoints = npcDef?.hitpoints ?: 7,
+                maxHit = npcDef?.maxHit ?: 1,
+                attackSpeed = npcDef?.attackSpeed ?: 4,
+                respawnTicks = npcDef?.respawnTicks ?: 25,
+                aggressive = npcDef?.aggressive ?: false,
+                aggroRange = npcDef?.aggroRange ?: 0,
+                size = cacheDef?.size ?: npcDef?.size ?: 1,
+                walkRange = spawn.walkRange,
+                attackAnim = npcDef?.attackAnim ?: cacheDef?.standAnim ?: -1,
+                defenceAnim = npcDef?.defenceAnim ?: -1,
+                deathAnim = npcDef?.deathAnim ?: -1,
+                standAnim = cacheDef?.standAnim ?: -1,
+                walkAnim = cacheDef?.walkAnim ?: -1,
+                actions = cacheDef?.actions?.toList() ?: emptyList()
+            )
 
             val npc = spawn(spawn.npcId, position, definition)
             if (npc != null) {

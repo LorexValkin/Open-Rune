@@ -25,11 +25,6 @@ object EquipmentSlot {
 
 /**
  * Body part indices for the default player model.
- * These map to the IDK (Identity Kit) definitions in the cache.
- *
- * Plugins can extend the available IDK set (e.g. adding new hairstyles)
- * by registering additional entries in the data store. The appearance
- * system reads from there when building the block.
  */
 object BodyPart {
     const val HEAD  = 0
@@ -45,11 +40,10 @@ object BodyPart {
 
 /**
  * Default IDK (Identity Kit) values for male and female characters.
- * Index = BodyPart constant. Value = cache IDK ID.
  */
 object DefaultAppearance {
     val MALE   = intArrayOf(0, 10, 18, 26, 33, 36, 42)
-    val FEMALE = intArrayOf(45, -1, 56, 61, 67, 70, 79) // -1 = no beard for female
+    val FEMALE = intArrayOf(45, -1, 56, 61, 67, 70, 79)
 }
 
 /**
@@ -66,7 +60,6 @@ object BodyColor {
 
 /**
  * Default standing/walking animation set.
- * These are the idle/movement animation IDs used for the appearance block.
  */
 object DefaultAnimations {
     const val STAND       = 0x328  // 808
@@ -79,21 +72,15 @@ object DefaultAnimations {
 }
 
 /**
- * Builds the appearance update block for the 317 player update protocol.
+ * Builds the appearance update block for the Project51/Anguish client.
  *
- * The appearance block tells other clients how to render this player:
- *   - Gender
- *   - Head icon (skull, prayer)
- *   - Equipment or body model for each slot
- *   - Body colors
- *   - Stand/walk/run animation IDs
- *   - Player name (encoded as long)
- *   - Combat level
- *   - Total level
+ * This variant includes extra fields not present in the stock 317 protocol:
+ *   - Title string + title color string (after gender)
+ *   - Health status mask byte
+ *   - Invisible flag (after name)
+ *   - Player rights byte (after combat level)
  *
  * ENGINE-LEVEL system. The block format is protocol-defined and not pluggable.
- * Plugins can modify appearance state (equipment, body parts, colors) through
- * the player API, and those changes are reflected in the next update block.
  */
 object AppearanceBuilder {
 
@@ -104,45 +91,56 @@ object AppearanceBuilder {
     fun build(player: Player): ByteArray {
         val out = ByteArrayOutputStream(128)
 
-        // Gender (0 = male, 1 = female)
+        // === Gender (0 = male, 1 = female) ===
         out.write(player.gender)
 
-        // Overhead icon: prayer (-1 = none, 0+ = prayer icon)
-        // Client reads this as "headIcon" (byte 2 of the appearance block)
+        // === Title string (Project51 extension) ===
+        // Empty string for now — just write the terminator
+        writeString(out, "")
+
+        // === Title color string (Project51 extension) ===
+        // Empty string for now — just write the terminator
+        writeString(out, "")
+
+        // === Health status mask (Project51 extension) ===
+        // 0 = normal
+        out.write(0)
+
+        // === Overhead icon: prayer (-1 = none, 0+ = prayer icon) ===
         out.write(player.prayerIcon)
 
-        // Overhead icon: skull (-1 = none, 0 = skull, 1 = red skull)
-        // Client reads this as "skullIcon" (byte 3 of the appearance block)
+        // === Overhead icon: skull (-1 = none, 0 = skull, 1 = red skull) ===
         out.write(player.skullIcon)
 
-        // === Equipment / Body model slots (12 slots: 0-11) ===
-        // For each slot, we either send:
-        //   0x0000            = nothing visible (1 byte: 0)
-        //   0x0200 + equipId  = show equipment model (2 bytes: short)
-        //   0x0100 + idkId    = show body part model (2 bytes: short)
+        // === NPC transform check ===
+        // If player is transformed to an NPC, send -1 + npcId instead of equipment
+        val npcTransformId = -1  // No NPC transform support yet
+        if (npcTransformId >= 0) {
+            writeShort(out, 65535) // -1 as unsigned short
+            writeShort(out, npcTransformId)
+        } else {
+            // === Equipment / Body model slots (12 slots: 0-11) ===
+            for (slot in 0 until 12) {
+                val equipId = player.equipment.getOrElse(mapSlot(slot)) { -1 }
 
-        for (slot in 0 until 12) {
-            val equipId = player.equipment.getOrElse(mapSlot(slot)) { -1 }
-
-            if (equipId > 0) {
-                // Show equipment model
-                writeShort(out, 0x200 + equipId)
-            } else {
-                // Show body part (if this slot has one)
-                val bodyPart = slotToBodyPart(slot, player.gender)
-                if (bodyPart >= 0) {
-                    val idkId = player.appearance.getOrElse(bodyPart) {
-                        if (player.gender == 0) DefaultAppearance.MALE[bodyPart]
-                        else DefaultAppearance.FEMALE[bodyPart]
-                    }
-
-                    if (idkId >= 0) {
-                        writeShort(out, 0x100 + idkId)
-                    } else {
-                        out.write(0) // No model for this slot
-                    }
+                if (equipId > 0) {
+                    writeShort(out, 0x200 + equipId)
                 } else {
-                    out.write(0) // No body part mapped to this slot
+                    val bodyPart = slotToBodyPart(slot, player.gender)
+                    if (bodyPart >= 0) {
+                        val idkId = player.appearance.getOrElse(bodyPart) {
+                            if (player.gender == 0) DefaultAppearance.MALE[bodyPart]
+                            else DefaultAppearance.FEMALE[bodyPart]
+                        }
+
+                        if (idkId >= 0) {
+                            writeShort(out, 0x100 + idkId)
+                        } else {
+                            out.write(0)
+                        }
+                    } else {
+                        out.write(0)
+                    }
                 }
             }
         }
@@ -164,8 +162,15 @@ object AppearanceBuilder {
         // === Name (encoded as long) ===
         writeLong(out, nameToLong(player.name))
 
+        // === Invisible flag (Project51 extension) ===
+        out.write(0) // 0 = visible, 1 = invisible
+
         // === Combat level ===
         out.write(player.getCombatLevel())
+
+        // === Player rights (Project51 extension) ===
+        // 0 = regular, 1 = mod, 2 = admin, etc.
+        out.write(player.rights.value)
 
         // === Total level (for skill total worlds, usually 0) ===
         writeShort(out, 0)
@@ -175,7 +180,6 @@ object AppearanceBuilder {
 
     /**
      * Map the 12 appearance update slots to equipment slot indices.
-     * The update protocol uses slots 0-11, equipment uses different indices.
      */
     private fun mapSlot(updateSlot: Int): Int = when (updateSlot) {
         0  -> EquipmentSlot.HEAD
@@ -184,18 +188,17 @@ object AppearanceBuilder {
         3  -> EquipmentSlot.WEAPON
         4  -> EquipmentSlot.CHEST
         5  -> EquipmentSlot.SHIELD
-        6  -> -1  // Not an equipment slot (arms follow chest)
+        6  -> -1  // Arms (follow chest)
         7  -> EquipmentSlot.LEGS
-        8  -> -1  // Not an equipment slot (head model)
+        8  -> -1  // Head model
         9  -> EquipmentSlot.HANDS
         10 -> EquipmentSlot.FEET
-        11 -> -1  // Not an equipment slot (beard)
+        11 -> -1  // Beard
         else -> -1
     }
 
     /**
      * Map the 12 update protocol slots to body part indices.
-     * Returns -1 if the slot doesn't have a body part model.
      */
     private fun slotToBodyPart(updateSlot: Int, gender: Int): Int = when (updateSlot) {
         0  -> -1   // Head slot (hat hides head)
@@ -211,6 +214,16 @@ object AppearanceBuilder {
         10 -> BodyPart.FEET
         11 -> if (gender == 0) BodyPart.BEARD else -1
         else -> -1
+    }
+
+    /**
+     * Write a null-terminated string (terminated with 10 / 0x0A).
+     */
+    private fun writeString(out: ByteArrayOutputStream, s: String) {
+        for (c in s) {
+            out.write(c.code)
+        }
+        out.write(10) // 0x0A terminator
     }
 
     private fun writeShort(out: ByteArrayOutputStream, value: Int) {

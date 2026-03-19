@@ -244,6 +244,7 @@ class Npc(
  */
 data class NpcDefinition(
     val name: String = "null",
+    val examine: String = "",
     val combatLevel: Int = 0,
     val hitpoints: Int = 1,
     val maxHit: Int = 0,
@@ -255,5 +256,8 @@ data class NpcDefinition(
     val walkRange: Int = 5,
     val attackAnim: Int = -1,
     val defenceAnim: Int = -1,
-    val deathAnim: Int = -1
+    val deathAnim: Int = -1,
+    val standAnim: Int = -1,
+    val walkAnim: Int = -1,
+    val actions: List<String?> = emptyList()
 )
