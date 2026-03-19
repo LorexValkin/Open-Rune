@@ -106,6 +106,7 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
             } catch (InterruptedException _ex) {
                 j1++;
             }
+            saveEntityPositions();
             for (; i1 < 256; i1 += j) {
                 clickMode3 = clickMode1;
                 saveClickX = clickX;
@@ -116,6 +117,7 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
                 readIndex = writeIndex;
             }
 
+            lastTickNanos = System.nanoTime();
             i1 &= 0xff;
             if (delayTime > 0)
                 fps = (1000 * j) / (delayTime * 256);
@@ -387,6 +389,8 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
     // --- Overridable hooks ---
 
     void startUp() { }
+    void saveEntityPositions() { }
+
     void processGameLoop() { }
     void cleanUpForQuit() { }
     void processDrawing() { }
@@ -459,6 +463,8 @@ public class RSApplet extends JPanel implements Runnable, MouseListener, MouseMo
     private int delayTime;
     int minDelay;
     private final long[] aLongArray7;
+	public long lastTickNanos = System.nanoTime();
+	public static boolean smoothAnimation = true;
     int fps;
     boolean shouldDebug;
     int myWidth;

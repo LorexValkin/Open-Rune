@@ -191,6 +191,10 @@ public class Entity extends Animable {
 	int forceMoveDirection;
 	public int x;
 	public int y;
+	public int prevX;
+	public int prevY;
+	public int trueX;
+	public int trueY;
 	int faceAngle;
 	final boolean[] pathRunning;
 	int walkBackAnimId;
