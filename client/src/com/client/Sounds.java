@@ -2,13 +2,13 @@ package com.client;
 final class Sounds {
 
 	private Sounds() {
-		aClass6Array329 = new Class6[10];
+		aClass6Array329 = new SoundSynthesizer[10];
 	}
 
-	public static void unpack(Stream stream) {
+	public static void unpack(Buffer stream) {
 		aByteArray327 = new byte[0x6baa8];
-		aStream_328 = new Stream(aByteArray327);
-		Class6.method166();
+		aStream_328 = new Buffer(aByteArray327);
+		SoundSynthesizer.method166();
 		do {
 			int j = stream.readUnsignedWord();
 			if (j == 65535)
@@ -19,7 +19,7 @@ final class Sounds {
 		} while (true);
 	}
 
-	public static Stream method241(int i, int j) {
+	public static Buffer method241(int i, int j) {
 		if (aSoundsArray325s[j] != null) {
 			Sounds sounds = aSoundsArray325s[j];
 			return sounds.method244(i);
@@ -28,12 +28,12 @@ final class Sounds {
 		}
 	}
 
-	private void method242(Stream stream) {
+	private void method242(Buffer stream) {
 		for (int i = 0; i < 10; i++) {
 			int j = stream.readUnsignedByte();
 			if (j != 0) {
 				stream.currentOffset--;
-				aClass6Array329[i] = new Class6();
+				aClass6Array329[i] = new SoundSynthesizer();
 				aClass6Array329[i].method169(stream);
 			}
 		}
@@ -63,22 +63,22 @@ final class Sounds {
 		return j;
 	}
 
-	private Stream method244(int i) {
+	private Buffer method244(int i) {
 		int k = method245(i);
 		aStream_328.currentOffset = 0;
 		aStream_328.writeDWord(0x52494646);
-		aStream_328.method403(36 + k);
+		aStream_328.writeLEInt(36 + k);
 		aStream_328.writeDWord(0x57415645);
 		aStream_328.writeDWord(0x666d7420);
-		aStream_328.method403(16);
-		aStream_328.method400(1);
-		aStream_328.method400(1);
-		aStream_328.method403(22050);
-		aStream_328.method403(22050);
-		aStream_328.method400(1);
-		aStream_328.method400(8);
+		aStream_328.writeLEInt(16);
+		aStream_328.writeLEShort(1);
+		aStream_328.writeLEShort(1);
+		aStream_328.writeLEInt(22050);
+		aStream_328.writeLEInt(22050);
+		aStream_328.writeLEShort(1);
+		aStream_328.writeLEShort(8);
 		aStream_328.writeDWord(0x64617461);
-		aStream_328.method403(k);
+		aStream_328.writeLEInt(k);
 		aStream_328.currentOffset += k;
 		return aStream_328;
 	}
@@ -136,8 +136,8 @@ final class Sounds {
 	private static final Sounds[] aSoundsArray325s = new Sounds[5000];
 	public static final int[] anIntArray326 = new int[5000];
 	private static byte[] aByteArray327;
-	private static Stream aStream_328;
-	private final Class6[] aClass6Array329;
+	private static Buffer aStream_328;
+	private final SoundSynthesizer[] aClass6Array329;
 	private int anInt330;
 	private int anInt331;
 

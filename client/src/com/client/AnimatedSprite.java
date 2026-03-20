@@ -302,7 +302,7 @@ public final class AnimatedSprite extends Sprite
 	}
 
 	@Override
-	public void method351(int srcPtr, int scanSize, int[] dst, int[] src, int srcOff, int height, int dstOff, int alpha, int dstPtr)
+	public void copyPixelsTransparent(int srcPtr, int scanSize, int[] dst, int[] src, int srcOff, int height, int dstOff, int alpha, int dstPtr)
 	{
 		int scanSizeHigh = -(scanSize >> 2);
 		scanSize = -(scanSize & 3);
@@ -327,7 +327,7 @@ public final class AnimatedSprite extends Sprite
 	}
 
 	@Override
-	public void method347(int dstPtr, int scanSize, int height, int srcOff, int srcPtr, int dstOff, int[] src, int[] dst)
+	public void copyPixelsOpaque(int dstPtr, int scanSize, int height, int srcOff, int srcPtr, int dstOff, int[] src, int[] dst)
 	{
 		int scanSizeHigh = -(scanSize >> 2);
 		scanSize = -(scanSize & 3);
@@ -352,7 +352,7 @@ public final class AnimatedSprite extends Sprite
 	}
 
 	@Override
-	public void method349(int[] dst, int[] src, int srcPtr, int dstPtr, int scanSize, int height, int dstOff, int srcOff)
+	public void copyPixelsAlpha(int[] dst, int[] src, int srcPtr, int dstPtr, int scanSize, int height, int dstOff, int srcOff)
 	{
 		int scanSizeHigh = -(scanSize >> 2);
 		scanSize = -(scanSize & 3);

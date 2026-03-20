@@ -10,7 +10,7 @@ final class Item extends Renderable {
 	@Override
 	public final Model getRotatedModel() {
 		ItemDefinition itemDef = ItemDefinition.forID(ID);
-		return itemDef.method201(anInt1559);
+		return itemDef.getInventoryModel(anInt1559);
 	}
 
 	public Item() {

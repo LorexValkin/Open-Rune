@@ -1,12 +1,12 @@
 package com.client.definitions;
 
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 
 public final class VarBit {
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		Stream stream = new Stream(streamLoader.getDataForName("varbit.dat"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		Buffer stream = new Buffer(streamLoader.getDataForName("varbit.dat"));
 		int cacheSize = stream.readUnsignedWord();
 		if (cache == null)
 			cache = new VarBit[cacheSize];
@@ -20,10 +20,10 @@ public final class VarBit {
 			System.out.println("varbit load mismatch");
 	}
 
-	private void readValues(Stream stream) {
-		anInt648 = stream.readUnsignedWord();
-		anInt649 = stream.readUnsignedByte();
-		anInt650 = stream.readUnsignedByte();
+	private void readValues(Buffer stream) {
+		settingIndex = stream.readUnsignedWord();
+		lowBit = stream.readUnsignedByte();
+		highBit = stream.readUnsignedByte();
 	}
 
 	private VarBit() {
@@ -31,8 +31,8 @@ public final class VarBit {
 	}
 
 	public static VarBit cache[];
-	public int anInt648;
-	public int anInt649;
-	public int anInt650;
+	public int settingIndex;
+	public int lowBit;
+	public int highBit;
 	
 }

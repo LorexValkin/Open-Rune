@@ -283,7 +283,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input Stream to be fully buffered.
+     * @param input Buffer to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
      * @since 2.0
@@ -309,7 +309,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input Stream to be fully buffered.
+     * @param input Buffer to be fully buffered.
      * @param size the initial buffer size
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
@@ -325,7 +325,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the current contents of this byte stream as a Input Stream. The
+     * Gets the current contents of this byte stream as a Input Buffer. The
      * returned stream is backed by buffers of <code>this</code> stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *

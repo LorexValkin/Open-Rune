@@ -15,7 +15,7 @@ public final class Texture extends DrawingArea {
             return null;
         }
         if (cache[index] == null) {
-            Client.instance.onDemandFetcher.method558(TEXTURE_IDX - 1, index);
+            Client.instance.onDemandFetcher.requestFile(TEXTURE_IDX - 1, index);
             return null;
         }
         return cache[index];
@@ -23,7 +23,7 @@ public final class Texture extends DrawingArea {
 
     public static final void decode(int index, byte[] data) {
         Texture texture = cache[index] = new Texture();
-        Stream buffer = new Stream(data);
+        Buffer buffer = new Buffer(data);
         int width = buffer.readUnsignedWord();
         int height = buffer.readUnsignedWord();
         texture.mipmaps[0] = new int[16384];

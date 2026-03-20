@@ -312,7 +312,7 @@ public class DeferredFileOutputStream
         // but we should force the habit of closing wether we are working with
         // a file or memory.
         if (!closed) {
-            throw new IOException("Stream not closed");
+            throw new IOException("Buffer not closed");
         }
 
         if (isInMemory()) {

@@ -1,13 +1,13 @@
 package com.client.definitions;
 
-import com.client.Class36;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.AnimationFrame;
+import com.client.Buffer;
+import com.client.JagArchive;
 
 public final class AnimationDefinition {
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		Stream stream = new Stream(streamLoader.getDataForName("seq.dat"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		Buffer stream = new Buffer(streamLoader.getDataForName("seq.dat"));
 		int length = stream.readUnsignedWord();
 		if (anims == null)
 			anims = new AnimationDefinition[length];
@@ -541,19 +541,19 @@ public final class AnimationDefinition {
 		}
 	}
 
-	public int method258(int i) {
+	public int getFrameDuration(int i) {
 		int j = durations[i];
 		if (j == 0) {
-			Class36 class36 = Class36.forId(primaryFrames[i]);
+			AnimationFrame class36 = AnimationFrame.forId(primaryFrames[i]);
 			if (class36 != null)
-				j = durations[i] = class36.anInt636;
+				j = durations[i] = class36.frameLength;
 		}
 		if (j == 0)
 			j = 1;
 		return j;
 	}
 
-/*	private void readValues(Stream stream) {
+/*	private void readValues(Buffer stream) {
 		int i;
 		while ((i = stream.readUnsignedByte()) != 0) {
 
@@ -630,7 +630,7 @@ public final class AnimationDefinition {
 			anInt364 = 0;
 		}
 	}*/
-	private void readValues(Stream stream) {
+	private void readValues(Buffer stream) {
 		int i;
 		while ((i = stream.readUnsignedByte()) != 0) {
 

@@ -18,6 +18,11 @@ import java.nio.ByteBuffer
  * npc.dat structure:
  *   Sequential opcode-encoded blocks, one per NPC.
  *   Opcodes match the client's NpcDefinition.readValues().
+ *
+ * Supports both stock 317 opcodes AND OSRS-era opcodes (rev 194+)
+ * used by the Anguish/Project51 cache. Unknown opcodes are safely
+ * skipped using block-size boundaries from the index, so one bad
+ * opcode never corrupts subsequent NPC decodes.
  */
 object NpcDefinitionDecoder {
 
@@ -54,26 +59,41 @@ object NpcDefinitionDecoder {
         val idxBuf = ByteBuffer.wrap(npcIdxBytes)
         val totalNpcs = idxBuf.short.toInt() and 0xFFFF
 
-        // Build offset table
+        // Build offset + size table so we know each NPC's exact block boundaries
         val offsets = IntArray(totalNpcs)
-        var currentOffset = 2 // npc.dat starts after the index data stream position
-        // Actually npc.dat is a separate byte array, offsets start at 0
+        val blockSizes = IntArray(totalNpcs)
         var datOffset = 0
         for (i in 0 until totalNpcs) {
             offsets[i] = datOffset
-            datOffset += idxBuf.short.toInt() and 0xFFFF
+            val sz = idxBuf.short.toInt() and 0xFFFF
+            blockSizes[i] = sz
+            datOffset += sz
         }
 
-        // Decode each NPC
+        // Decode each NPC using block boundaries for safety
         val definitions = mutableMapOf<Int, CacheNpcDefinition>()
         val datBuf = ByteBuffer.wrap(npcDatBytes)
+        var skippedCount = 0
+        val unknownOpcodeHits = mutableMapOf<Int, Int>() // opcode -> count
 
         for (id in 0 until totalNpcs) {
             datBuf.position(offsets[id])
-            val def = decodeNpc(id, datBuf)
-            if (def.name != "null") {
-                definitions[id] = def
+            val blockEnd = offsets[id] + blockSizes[id]
+            val result = decodeNpc(id, datBuf, blockEnd, unknownOpcodeHits)
+            if (result.name != "null") {
+                definitions[id] = result
             }
+        }
+
+        // Log summary of unknown opcodes for diagnostics
+        if (unknownOpcodeHits.isNotEmpty()) {
+            val sorted = unknownOpcodeHits.entries.sortedByDescending { it.value }
+            val top10 = sorted.take(10).joinToString(", ") { "op${it.key}(x${it.value})" }
+            log.warn(
+                "Unknown NPC opcodes encountered — top hits: {}. " +
+                "These NPCs decoded with partial data (fields before the unknown opcode are preserved).",
+                top10
+            )
         }
 
         log.info("Loaded {} NPC definitions from cache ({} total entries)", definitions.size, totalNpcs)
@@ -82,9 +102,21 @@ object NpcDefinitionDecoder {
 
     /**
      * Decode a single NPC definition from the data buffer.
-     * Opcode format matches the client's NpcDefinition.readValues().
+     *
+     * Handles all stock 317 opcodes plus OSRS-era opcodes from the
+     * Anguish/Project51 cache (rev 194). Unknown opcodes cause a skip
+     * to [blockEnd] rather than corrupting the stream — fields parsed
+     * before the unknown opcode are preserved.
+     *
+     * Opcode reference: client/src/com/client/definitions/NpcDefinition.java
+     * + standard OSRS NPC definition format (RuneLite/OpenRS2).
      */
-    private fun decodeNpc(id: Int, buf: ByteBuffer): CacheNpcDefinition {
+    private fun decodeNpc(
+        id: Int,
+        buf: ByteBuffer,
+        blockEnd: Int,
+        unknownOpcodeHits: MutableMap<Int, Int>
+    ): CacheNpcDefinition {
         var name = "null"
         var examine = ""
         var size = 1
@@ -104,23 +136,33 @@ object NpcDefinitionDecoder {
         var dialogueModels = intArrayOf()
         var childrenIds: IntArray? = null
 
-        while (true) {
+        while (buf.position() < blockEnd) {
             val opcode = buf.get().toInt() and 0xFF
             if (opcode == 0) break
 
             when (opcode) {
+                // ── 317 + OSRS: Core identity ────────────────────────────
                 1 -> {
                     // Model IDs
                     val count = buf.get().toInt() and 0xFF
                     models = IntArray(count) { buf.short.toInt() and 0xFFFF }
                 }
-                2 -> name = readString(buf)
-                3 -> examine = readString(buf)
+                2 -> name = readString(buf, blockEnd)
+                3 -> examine = readString(buf, blockEnd)
+
+                // ── OSRS: Additional/secondary models (same format as 1) ─
+                5 -> {
+                    val count = buf.get().toInt() and 0xFF
+                    repeat(count) { buf.short } // skip model IDs
+                }
+
+                // ── 317 + OSRS: Physical properties ─────────────────────
                 12 -> size = buf.get().toInt()  // signed byte
                 13 -> standAnim = buf.short.toInt() and 0xFFFF
                 14 -> walkAnim = buf.short.toInt() and 0xFFFF
-                15, 16 -> { buf.short } // unknown anim, skip
+                15, 16 -> { buf.short } // idle rotate anims (u16), skip
                 17 -> {
+                    // Walk + 3 turn animations
                     walkAnim = buf.short.toInt() and 0xFFFF
                     turnAround = buf.short.toInt() and 0xFFFF
                     turnRight = buf.short.toInt() and 0xFFFF
@@ -129,37 +171,70 @@ object NpcDefinitionDecoder {
                     if (turnRight == 65535) turnRight = -1
                     if (turnLeft == 65535) turnLeft = -1
                 }
+
+                // ── OSRS: Category ──────────────────────────────────────
+                18 -> { buf.short } // category ID (u16), skip
+
+                // ── 317 + OSRS: Right-click actions ─────────────────────
                 in 30..39 -> {
-                    // Actions (right-click options)
-                    val action = readString(buf)
+                    val action = readString(buf, blockEnd)
                     actions[opcode - 30] = if (action.equals("hidden", ignoreCase = true)) null else action
                 }
+
+                // ── 317 + OSRS: Recolor pairs ───────────────────────────
                 40 -> {
-                    // Recolor pairs
                     val count = buf.get().toInt() and 0xFF
                     repeat(count) { buf.short; buf.short }
                 }
+
+                // ── OSRS: Retexture pairs ───────────────────────────────
                 41 -> {
-                    // Retexture pairs
                     val count = buf.get().toInt() and 0xFF
                     repeat(count) { buf.short; buf.short }
                 }
+
+                // ── 317 + OSRS: Dialogue / chathead models ──────────────
                 60 -> {
-                    // Dialogue head models
                     val count = buf.get().toInt() and 0xFF
                     dialogueModels = IntArray(count) { buf.short.toInt() and 0xFFFF }
                 }
+
+                // ── 317 + OSRS: Flags (0 data bytes) ────────────────────
                 93 -> onMinimap = false
+                99 -> {} // hasRenderPriority = true
+                107 -> {} // isInteractable = false
+                109 -> {} // rotationFlag = false
+                111 -> {} // isPet / isFollower = true
+
+                // ── 317 + OSRS: Combat & scale ──────────────────────────
                 95 -> combatLevel = buf.short.toInt() and 0xFFFF
                 97 -> scaleXZ = buf.short.toInt() and 0xFFFF
                 98 -> scaleY = buf.short.toInt() and 0xFFFF
-                99 -> {} // aBoolean93 = true (render priority)
-                100 -> buf.get() // light modifier (signed byte)
-                101 -> buf.get() // shadow modifier (signed byte)
+                100 -> buf.get() // ambient light (signed byte)
+                101 -> buf.get() // contrast/shadow (signed byte)
                 102 -> headIcon = buf.short.toInt() and 0xFFFF
                 103 -> degreesToTurn = buf.short.toInt() and 0xFFFF
+
+                // ── OSRS: Extra render params (u16 each) ────────────────
+                104 -> { buf.short } // render param (u16)
+                105 -> { buf.short } // render param (u16)
+
+                // ── OSRS: Extended flags (0 data bytes) ─────────────────
+                108 -> {} // some revisions: isResizeToMapDot flag
+                110 -> {} // boolean flag (some revisions)
+
+                // ── OSRS: Render modifiers (single byte) ────────────────
+                112 -> buf.get() // render type modifier (u8)
+                113 -> buf.get() // render flag (u8)
+
+                // ── OSRS: Run animations ────────────────────────────────
+                114 -> { buf.short } // runSequence (u16)
+                115 -> { buf.short } // runRotate180Sequence (u16)
+                116 -> { buf.short } // runRotateCWSequence (u16)
+                117 -> { buf.short } // runRotateCCWSequence (u16)
+
+                // ── 317 + OSRS: Morphism / children (varbit transforms) ─
                 106, 118 -> {
-                    // Morphism / children (varbit + varp + child IDs)
                     var varbitId = buf.short.toInt() and 0xFFFF
                     if (varbitId == 65535) varbitId = -1
                     var varpId = buf.short.toInt() and 0xFFFF
@@ -179,18 +254,39 @@ object NpcDefinitionDecoder {
                     ids[count + 1] = extraChild
                     childrenIds = ids
                 }
-                107 -> {} // aBoolean84 = false (clickable)
-                109, 111 -> {} // empty opcodes
+
+                // ── OSRS: Follower priority ─────────────────────────────
+                119 -> buf.get() // lowPriorityFollowerOps (u8)
+
+                // ── OSRS: Params / attributes (key-value map) ───────────
+                249 -> {
+                    val count = buf.get().toInt() and 0xFF
+                    for (i in 0 until count) {
+                        val isString = (buf.get().toInt() and 0xFF) == 1
+                        readMedium(buf) // param key (u24), skip
+                        if (isString) {
+                            readString(buf, blockEnd) // param string value, skip
+                        } else {
+                            buf.int // param int value (4 bytes), skip
+                        }
+                    }
+                }
+
+                // ── Unknown opcode: skip to block end ───────────────────
+                // Safety net: jump to end of this NPC's index block rather
+                // than misinterpreting data bytes as opcodes. All fields
+                // parsed before this point are preserved.
                 else -> {
-                    // Unknown opcode — can't safely skip without knowing size
-                    // Log and break to avoid corrupting subsequent reads
-                    log.debug("Unknown NPC opcode {} for NPC {}, stopping decode", opcode, id)
-                    break
+                    unknownOpcodeHits[opcode] = (unknownOpcodeHits[opcode] ?: 0) + 1
+                    if (blockEnd <= buf.limit()) {
+                        buf.position(blockEnd)
+                    }
+                    // Loop condition (position >= blockEnd) will terminate
                 }
             }
         }
 
-        // Normalize 65535 to -1
+        // Normalize 65535 sentinel to -1
         if (standAnim == 65535) standAnim = -1
         if (walkAnim == 65535) walkAnim = -1
 
@@ -209,14 +305,26 @@ object NpcDefinitionDecoder {
     /**
      * Read a newline-terminated string from the buffer.
      * RS2 strings are terminated with byte 10 (0x0A).
+     * Bounded by [blockEnd] to prevent runaway reads on malformed data.
      */
-    private fun readString(buf: ByteBuffer): String {
+    private fun readString(buf: ByteBuffer, blockEnd: Int): String {
         val sb = StringBuilder()
-        while (buf.hasRemaining()) {
+        while (buf.position() < blockEnd && buf.hasRemaining()) {
             val b = buf.get().toInt() and 0xFF
             if (b == 10) break
             sb.append(b.toChar())
         }
         return sb.toString()
+    }
+
+    /**
+     * Read a 3-byte unsigned medium (u24) from the buffer.
+     * Format: (byte << 16) | unsigned_short
+     * Used by opcode 249 (params) for param keys.
+     */
+    private fun readMedium(buf: ByteBuffer): Int {
+        val high = (buf.get().toInt() and 0xFF) shl 16
+        val low = buf.short.toInt() and 0xFFFF
+        return high or low
     }
 }

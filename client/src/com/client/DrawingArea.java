@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.awt.image.Raster;
 
-public class DrawingArea extends NodeSub {
+public class DrawingArea extends DualNode {
 
 	public static void initDrawingArea(int i, int j, int[] ai, float[] depth) {
 		pixels = ai;
@@ -113,8 +113,8 @@ public class DrawingArea extends NodeSub {
             }
             method340(color, width - 4, y, alpha, x + 2);// method340
             method340(color, width - 4, y + height - 1, alpha, x + 2);// method340
-            method342(color, x, alpha, y + 2, height - 4);// method342
-            method342(color, x + width - 1, alpha, y + 2, height - 4);// method342
+            drawVerticalLineTranslucent(color, x, alpha, y + 2, height - 4);// drawVerticalLineTranslucent
+            drawVerticalLineTranslucent(color, x + width - 1, alpha, y + 2, height - 4);// drawVerticalLineTranslucent
             method335(color, y + 1, 1, 1, alpha, x + 1);// method335
             method335(color, y + 1, 1, 1, alpha, x + width - 2);// method335
             method335(color, y + height - 2, 1, 1, alpha, x + 1);// method335
@@ -163,8 +163,8 @@ public class DrawingArea extends NodeSub {
 		method340(l, i1, i, k, j1);
 		method340(l, i1, (i + j) - 1, k, j1);
 		if (j >= 3) {
-			method342(l, j1, k, i + 1, j - 2);
-			method342(l, (j1 + i1) - 1, k, i + 1, j - 2);
+			drawVerticalLineTranslucent(l, j1, k, i + 1, j - 2);
+			drawVerticalLineTranslucent(l, (j1 + i1) - 1, k, i + 1, j - 2);
 		}
 	}
 
@@ -222,7 +222,7 @@ public class DrawingArea extends NodeSub {
 
 	}
 
-	private static void method342(int i, int j, int k, int l, int i1) {
+	private static void drawVerticalLineTranslucent(int i, int j, int k, int l, int i1) {
 		if (j < topX || j >= bottomX)
 			return;
 		if (l < topY) {

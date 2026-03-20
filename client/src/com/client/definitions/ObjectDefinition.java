@@ -5,13 +5,13 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.client.Class36;
+import com.client.AnimationFrame;
 import com.client.Client;
-import com.client.MRUNodes;
+import com.client.LRUCache;
 import com.client.Model;
 import com.client.OnDemandFetcher;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 import com.client.utilities.ReflectionUtil;
 
 public final class ObjectDefinition {
@@ -428,11 +428,11 @@ public final class ObjectDefinition {
 		childrenIDs = null;
 	}
 
-	public void method574(OnDemandFetcher class42_sub1) {
+	public void requestModels(OnDemandFetcher class42_sub1) {
 		if (anIntArray773 == null)
 			return;
 		for (int j = 0; j < anIntArray773.length; j++)
-			class42_sub1.method560(anIntArray773[j] & 0xffff, 0);
+			class42_sub1.prefetchFile(anIntArray773[j] & 0xffff, 0);
 	}
 
 	public static void nullLoader() {
@@ -445,9 +445,9 @@ public final class ObjectDefinition {
 
 	public static int totalObjects;
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		stream = new Stream(streamLoader.getDataForName("loc.dat"));
-		Stream stream = new Stream(streamLoader.getDataForName("loc.idx"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		stream = new Buffer(streamLoader.getDataForName("loc.dat"));
+		Buffer stream = new Buffer(streamLoader.getDataForName("loc.idx"));
 		totalObjects = stream.readUnsignedWord();
 		streamIndices = new int[totalObjects];
 		int i = 2;
@@ -461,7 +461,7 @@ public final class ObjectDefinition {
 		//dumpList();
 	}
 
-	public boolean method577(int i) {
+	public boolean isModelReadyForType(int i) {
 		if (anIntArray776 == null) {
 			if (anIntArray773 == null)
 				return true;
@@ -470,20 +470,20 @@ public final class ObjectDefinition {
 			boolean flag1 = true;
 			Model model = (Model) mruNodes2.insertFromCache(type);
 			for (int k = 0; k < anIntArray773.length; k++)
-				flag1 &= Model.method463(anIntArray773[k] & 0xffff);
+				flag1 &= Model.isModelLoaded(anIntArray773[k] & 0xffff);
 			applyTexturing(model, type);
 			return flag1;
 		}
 		Model model = (Model) mruNodes2.insertFromCache(type);
 		for (int j = 0; j < anIntArray776.length; j++)
 			if (anIntArray776[j] == i)
-				return Model.method463(anIntArray773[j] & 0xffff);
+				return Model.isModelLoaded(anIntArray773[j] & 0xffff);
 		applyTexturing(model, type);
 		return true;
 	}
 
 	public Model modelAt(int i, int j, int k, int l, int i1, int j1, int k1) {
-		Model model = method581(i, k1, j);
+		Model model = getModelForType(i, k1, j);
 		if (model == null)
 			return null;
 		if (aBoolean762 || aBoolean769)
@@ -499,27 +499,27 @@ public final class ObjectDefinition {
 				model.vertexY[i2] += j3 - l1;
 			}
 
-			model.method467();
+			model.calculateBoundsY();
 		}
 		return model;
 	}
 
-	public boolean method579() {
+	public boolean areAllModelsReady() {
 		if (anIntArray773 == null)
 			return true;
 		boolean flag1 = true;
 		for (int i = 0; i < anIntArray773.length; i++)
-			flag1 &= Model.method463(anIntArray773[i] & 0xffff);
+			flag1 &= Model.isModelLoaded(anIntArray773[i] & 0xffff);
 		return flag1;
 	}
 
-	public ObjectDefinition method580() {
+	public ObjectDefinition getMorphedDefinition() {
 		int i = -1;
 		if (anInt774 != -1) {
 			VarBit varBit = VarBit.cache[anInt774];
-			int j = varBit.anInt648;
-			int k = varBit.anInt649;
-			int l = varBit.anInt650;
+			int j = varBit.settingIndex;
+			int k = varBit.lowBit;
+			int l = varBit.highBit;
 			int i1 = Client.anIntArray1232[l - k];
 			i = clientInstance.variousSettings[j] >> k & i1;
 		} else if (anInt749 != -1)
@@ -533,7 +533,7 @@ public final class ObjectDefinition {
 			return var2 == -1 ? null : forID(var2);
 	}
 
-	private Model method581(int j, int k, int l) {
+	private Model getModelForType(int j, int k, int l) {
 		Model model = null;
 		long l1;
 		if (anIntArray776 == null) {
@@ -554,12 +554,12 @@ public final class ObjectDefinition {
 					l2 += 0x10000;
 				model = (Model) mruNodes1.insertFromCache(l2);
 				if (model == null) {
-					model = Model.method462(l2 & 0xffff);
+					model = Model.getModel(l2 & 0xffff);
 					applyTexture(model, type);
 					if (model == null)
 						return null;
 					if (flag1)
-						model.method477();
+						model.mirrorZ();
 					mruNodes1.removeFromCache(model, l2);
 				}
 				if (k1 > 1)
@@ -589,12 +589,12 @@ public final class ObjectDefinition {
 				j2 += 0x10000;
 			model = (Model) mruNodes1.insertFromCache(j2);
 			if (model == null) {
-				model = Model.method462(j2 & 0xffff);
+				model = Model.getModel(j2 & 0xffff);
 				applyTexture(model, type);// try
 				if (model == null)
 					return null;
 				if (flag3)
-					model.method477();
+					model.mirrorZ();
 				mruNodes1.removeFromCache(model, j2);
 			}
 		}
@@ -602,19 +602,19 @@ public final class ObjectDefinition {
 		flag = thickness != 128 || height != 128 || width != 128;
 		boolean flag2;
 		flag2 = anInt738 != 0 || anInt745 != 0 || anInt783 != 0;
-		Model model_3 = new Model(modifiedModelColors == null && modifiedTexture == null, Class36.method532(k),
+		Model model_3 = new Model(modifiedModelColors == null && modifiedTexture == null, AnimationFrame.method532(k),
 				l == 0 && k == -1 && !flag && !flag2, model);
 		if (k != -1) {
-			model_3.method469();
-			model_3.method470(k);
+			model_3.buildVertexGroups();
+			model_3.applyFrame(k);
 			model_3.faceGroups = null;
 			model_3.vertexGroups = null;
 		}
 		while (l-- > 0)
-			model_3.method473();
+			model_3.rotateY90();
 		if (modifiedModelColors != null) {
 			for (int k2 = 0; k2 < modifiedModelColors.length; k2++)
-				model_3.method476(modifiedModelColors[k2], originalModelColors[k2]);
+				model_3.recolor(modifiedModelColors[k2], originalModelColors[k2]);
 
 		}
 		
@@ -635,14 +635,14 @@ public final class ObjectDefinition {
 
 		//}
 		if (flag)
-			model_3.method478(thickness, width, height);
+			model_3.scale(thickness, width, height);
 		if (flag2)
-			model_3.method475(anInt738, anInt745, anInt783);
-		// model_3.method479(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50,
+			model_3.translate(anInt738, anInt745, anInt783);
+		// model_3.applyLighting(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50,
 		// !aBoolean769);
 		// ORIGINAL^
 
-		model_3.method479(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50, !aBoolean769);
+		model_3.applyLighting(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50, !aBoolean769);
 
 		if (anInt760 == 1)
 			model_3.itemDropHeight = model_3.modelHeight;
@@ -651,7 +651,7 @@ public final class ObjectDefinition {
 	}
 
 	/*
-	 * private void readValues(Stream stream) { int i = -1; label0: do { int j; do {
+	 * private void readValues(Buffer stream) { int i = -1; label0: do { int j; do {
 	 * j = stream.readUnsignedByte(); if (j == 0) break label0; if (j == 1) { int k
 	 * = stream.readUnsignedByte(); if (k > 0) if (anIntArray773 == null || lowMem)
 	 * { anIntArray776 = new int[k]; anIntArray773 = new int[k]; for (int k1 = 0; k1
@@ -711,7 +711,7 @@ public final class ObjectDefinition {
 	 * : 0; }
 	 */
 
-	public void readValues(Stream stream) {
+	public void readValues(Buffer stream) {
 		int flag = -1;
 		do {
 			int type = stream.readUnsignedByte();
@@ -904,7 +904,7 @@ public final class ObjectDefinition {
 	public int anInt749;
 	private boolean aBoolean751;
 	public static boolean lowMem;
-	private static Stream stream;
+	private static Buffer stream;
 	public int type;
 	public static int[] streamIndices;
 	public boolean aBoolean757;
@@ -928,12 +928,12 @@ public final class ObjectDefinition {
 	public String description;
 	public boolean hasActions;
 	public boolean aBoolean779;
-	public static MRUNodes mruNodes2 = new MRUNodes(30);
+	public static LRUCache mruNodes2 = new LRUCache(30);
 	public int animation;
 	private static ObjectDefinition[] cache;
 	private int anInt783;
 	private int[] modifiedModelColors;
-	public static MRUNodes mruNodes1 = new MRUNodes(500);
+	public static LRUCache mruNodes1 = new LRUCache(500);
 	public String actions[];
 
 }

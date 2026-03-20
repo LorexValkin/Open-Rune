@@ -1,14 +1,14 @@
 package com.client.definitions;
 
-import com.client.MRUNodes;
+import com.client.LRUCache;
 import com.client.Model;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 
 public final class GraphicsDefinition {
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		Stream stream = new Stream(streamLoader.getDataForName("spotanim.dat"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		Buffer stream = new Buffer(streamLoader.getDataForName("spotanim.dat"));
 		int length = stream.readUnsignedWord();
 		if (cache == null)
 			cache = new GraphicsDefinition[length + 15000];
@@ -30,7 +30,7 @@ public final class GraphicsDefinition {
 		cache[1282].aAnimation_407 = AnimationDefinition.anims[cache[1282].anInt406];
 	}
 
-	private void readValues(Stream stream) {
+	private void readValues(Buffer stream) {
 		while(true) {
 			int i = stream.readUnsignedByte();
 			if (i == 0) {
@@ -82,7 +82,7 @@ public final class GraphicsDefinition {
 		Model model = (Model) aMRUNodes_415.insertFromCache(index);
 		if (model != null)
 			return model;
-		model = Model.method462(modelId);
+		model = Model.getModel(modelId);
 		if (model == null)
 			return null;
 		for (int i = 0; i < anIntArray408.length; i++)
@@ -135,6 +135,6 @@ public final class GraphicsDefinition {
 	public int anInt412;
 	public int anInt413;
 	public int anInt414;
-	public static MRUNodes aMRUNodes_415 = new MRUNodes(30);
+	public static LRUCache aMRUNodes_415 = new LRUCache(30);
 
 }

@@ -650,7 +650,7 @@ public class Interfaces extends RSInterface {
 		addText(39004, "Old Gameframe", tda, 2, 0xFFA500, false, true);
 		addText(39005, "Game Timers", tda, 2, 0xFFA500, false, true);
 		addText(39006, "Anti-aliasing", tda, 2, 0xFFA500, false, true);
-		addText(39007, "Ground item names", tda, 2, 0xFFA500, false, true);
+		addText(39007, "SceneTile item names", tda, 2, 0xFFA500, false, true);
 		addText(39008, "Fog", tda, 2, 0xFFA500, false, true);
 		addText(39009, "Smooth shading", tda, 2, 0xFFA500, false, true);
 		addText(39010, "Tile blending", tda, 2, 0xFFA500, false, true);
@@ -1852,7 +1852,7 @@ public class Interfaces extends RSInterface {
 	public static void groundItemCustomizing(TextDrawingArea[] tda) {
 		RSInterface r = addInterface(37700);
 		addSprite(37701, 2, "Interfaces/GroundItems/IMAGE");// they got saved as jpgs, need 2 convert lol il plz do
-		addText(37702, "Ground items customizer", tda, 2, 0xFE9624, true, true);
+		addText(37702, "SceneTile items customizer", tda, 2, 0xFE9624, true, true);
 		addHoverButton(37703, "Interfaces/GroundItems/IMAGE", 0, 16, 16, "Close", -1, 37704, 3);
 		addHoveredButton(37704, "Interfaces/GroundItems/IMAGE", 1, 16, 16, 37705);
 		addButton(37706, 4, "Interfaces/GroundItems/IMAGE", "Choose color");
@@ -2557,7 +2557,7 @@ public class Interfaces extends RSInterface {
 		addConfigButton(23113, 904, 31, 30, "Interfaces/Options/SPRITE", 40, 40, "Toggle-Target tracking", 0, 5, 23113);
 		addSprite(23114, 51, "Interfaces/Options/SPRITE");
 		
-		addConfigButton(23115, 904, 31, 30, "Interfaces/Options/SPRITE", 40, 40, "Toggle-Ground Item Names", 0, 5, 23115);
+		addConfigButton(23115, 904, 31, 30, "Interfaces/Options/SPRITE", 40, 40, "Toggle-SceneTile Item Names", 0, 5, 23115);
 		addSprite(23116, 52, "Interfaces/Options/SPRITE");
 		addConfigButton(23117, 904, 31, 30, "Interfaces/Options/SPRITE", 40, 40, "Configure", 0, 5, 23117);
 		

@@ -10,18 +10,18 @@ import com.client.definitions.GraphicsDefinition;
 public final class NPC extends Entity {
 
 	private Model method450() {
-		if (super.anim >= 0 && super.anInt1529 == 0) {
-			int k = AnimationDefinition.anims[super.anim].primaryFrames[super.anInt1527];
+		if (super.anim >= 0 && super.animEndCycle == 0) {
+			int k = AnimationDefinition.anims[super.anim].primaryFrames[super.animDelayCycle];
 			int i1 = -1;
-			if (super.anInt1517 >= 0 && super.anInt1517 != super.anInt1511)
-				i1 = AnimationDefinition.anims[super.anInt1517].primaryFrames[super.anInt1518];
-			return desc.method164(i1, k,
+			if (super.currentAnimId >= 0 && super.currentAnimId != super.standAnimId)
+				i1 = AnimationDefinition.anims[super.currentAnimId].primaryFrames[super.animFrameIndex];
+			return desc.getAnimatedModel(i1, k,
 					AnimationDefinition.anims[super.anim].anIntArray357);
 		}
 		int l = -1;
-		if (super.anInt1517 >= 0)
-			l = AnimationDefinition.anims[super.anInt1517].primaryFrames[super.anInt1518];
-		return desc.method164(-1, l, null);
+		if (super.currentAnimId >= 0)
+			l = AnimationDefinition.anims[super.currentAnimId].primaryFrames[super.animFrameIndex];
+		return desc.getAnimatedModel(-1, l, null);
 	}
 
 	@Override
@@ -32,21 +32,21 @@ public final class NPC extends Entity {
 		if (model == null)
 			return null;
 		super.height = model.modelHeight;
-		if (super.anInt1520 != -1 && super.anInt1521 != -1) {
-			GraphicsDefinition spotAnim = GraphicsDefinition.cache[super.anInt1520];
+		if (super.spotAnimId != -1 && super.spotAnimFrame != -1) {
+			GraphicsDefinition spotAnim = GraphicsDefinition.cache[super.spotAnimId];
 			Model model_1 = spotAnim.getModel();
 			if (model_1 != null) {
-				int j = spotAnim.aAnimation_407.primaryFrames[super.anInt1521];
-				Model model_2 = new Model(true, Class36.method532(j), false, model_1);
-				model_2.method475(0, -super.anInt1524, 0);
-				model_2.method469();
-				model_2.method470(j);
+				int j = spotAnim.aAnimation_407.primaryFrames[super.spotAnimFrame];
+				Model model_2 = new Model(true, AnimationFrame.method532(j), false, model_1);
+				model_2.translate(0, -super.spotAnimHeight, 0);
+				model_2.buildVertexGroups();
+				model_2.applyFrame(j);
 				model_2.faceGroups = null;
 				model_2.vertexGroups = null;
 				if (spotAnim.anInt410 != 128 || spotAnim.anInt411 != 128)
-					model_2.method478(spotAnim.anInt410, spotAnim.anInt410,
+					model_2.scale(spotAnim.anInt410, spotAnim.anInt410,
 							spotAnim.anInt411);
-				model_2.method479(64 + spotAnim.anInt413,
+				model_2.applyLighting(64 + spotAnim.anInt413,
 						850 + spotAnim.anInt414, -30, -50, -30, true);
 				Model aModel[] = { model, model_2 };
 				model = new Model(aModel);

@@ -2,14 +2,14 @@ package com.client.definitions;
 
 import com.client.Client;
 import com.client.utilities.FileOperations;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 import com.client.sign.Signlink;
 
 public final class FloorUnderlayDefinition {
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		Stream stream = new Stream(streamLoader.getDataForName("flo.dat"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		Buffer stream = new Buffer(streamLoader.getDataForName("flo.dat"));
 		int cacheSize = stream.readUnsignedWord();
 		if (underlays == null)
 			underlays = new FloorUnderlayDefinition[cacheSize];
@@ -23,7 +23,7 @@ public final class FloorUnderlayDefinition {
 		FloorOverlayDefinition.unpackConfig(stream);
 	}
 
-	private void readValues(Stream stream) {
+	private void readValues(Buffer stream) {
 		while(true) {
 		int opcode = stream.readUnsignedByte();
 		if(opcode == 0) {

@@ -5,7 +5,7 @@ package com.client;
 
 final class TextInput {
 
-	public static String method525(int i, Stream stream) {
+	public static String method525(int i, Buffer stream) {
 		int j = 0;
 		for (int l = 0; l < i; l++) {
 			int i1 = stream.readUnsignedByte();// recieved from server
@@ -25,7 +25,7 @@ final class TextInput {
 		return new String(aCharArray631, 0, j);
 	}
 
-	public static void method526(String s, Stream stream) {
+	public static void method526(String s, Buffer stream) {
 		if (s.length() > 80)
 			s = s.substring(0, 80);
 		s = s.toLowerCase();
@@ -52,7 +52,7 @@ final class TextInput {
 	}
 
 	private static final char[] aCharArray631 = new char[100];
-	private static final Stream stream = new Stream(new byte[100]);
+	private static final Buffer stream = new Buffer(new byte[100]);
 	/*
 	 * private static char validChars[] = { ' ', 'e', 't', 'a', 'o', 'i', 'h',
 	 * 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b',

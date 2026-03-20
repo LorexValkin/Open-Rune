@@ -140,7 +140,7 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if(!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 	
@@ -177,7 +177,7 @@ public class Sprite extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(horizSize <= 0 || vertSize <= 0)) {
-			method349(DrawingArea.pixels, myPixels, i1, l, horizSize, vertSize,
+			copyPixelsAlpha(DrawingArea.pixels, myPixels, i1, l, horizSize, vertSize,
 					l1, i2);
 		}
 	}
@@ -480,9 +480,9 @@ public class Sprite extends DrawingArea {
 		}
 	}
 
-	public Sprite(StreamLoader streamLoader, String s, int i) {
-		Stream stream = new Stream(streamLoader.getDataForName(s + ".dat"));
-		Stream stream_1 = new Stream(streamLoader.getDataForName("index.dat"));
+	public Sprite(JagArchive streamLoader, String s, int i) {
+		Buffer stream = new Buffer(streamLoader.getDataForName(s + ".dat"));
+		Buffer stream_1 = new Buffer(streamLoader.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord();
 		maxWidth = stream_1.readUnsignedWord();
 		maxHeight = stream_1.readUnsignedWord();
@@ -537,11 +537,11 @@ public class Sprite extends DrawingArea {
 		setTransparency(255, 0, 255);
 	}
 
-	public void method343() {
+	public void initAsDrawingArea() {
 		DrawingArea.initDrawingArea(myHeight, myWidth, myPixels, new float[1024]);
 	}
 
-	public void method344(int i, int j, int k) {
+	public void adjustRGB(int i, int j, int k) {
 		autoUpdate();
 		for (int i1 = 0; i1 < myPixels.length; i1++) {
 			int j1 = myPixels[i1];
@@ -570,7 +570,7 @@ public class Sprite extends DrawingArea {
 
 	}
 
-	public void method345() {
+	public void expandToFull() {
 		autoUpdate();
 		int ai[] = new int[maxWidth * maxHeight];
 		for (int j = 0; j < myHeight; j++) {
@@ -585,7 +585,7 @@ public class Sprite extends DrawingArea {
 		anInt1443 = 0;
 	}
 
-	public void method346(int i, int j) {
+	public void drawOpaque(int i, int j) {
 		autoUpdate();
 		i += anInt1442;
 		j += anInt1443;
@@ -621,11 +621,11 @@ public class Sprite extends DrawingArea {
 		}
 		if (k1 <= 0 || j1 <= 0) {
 		} else {
-			method347(l, k1, j1, i2, i1, l1, myPixels, DrawingArea.pixels);
+			copyPixelsOpaque(l, k1, j1, i2, i1, l1, myPixels, DrawingArea.pixels);
 		}
 	}
 
-	public void method347(int i, int j, int k, int l, int i1, int k1,
+	public void copyPixelsOpaque(int i, int j, int k, int l, int i1, int k1,
 			int ai[], int ai1[]) {
 		int l1 = -(j >> 2);
 		j = -(j & 3);
@@ -682,7 +682,7 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 
@@ -763,7 +763,7 @@ public class Sprite extends DrawingArea {
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
 			try {
-				method349(DrawingArea.pixels, raster, i1, l, k1, j1, l1, i2);
+				copyPixelsAlpha(DrawingArea.pixels, raster, i1, l, k1, j1, l1, i2);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -811,7 +811,7 @@ public class Sprite extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method349(DrawingArea.pixels, myPixels, i1, l, k1, j1, l1, i2);
+			copyPixelsAlpha(DrawingArea.pixels, myPixels, i1, l, k1, j1, l1, i2);
 		}
 	}
 	
@@ -852,7 +852,7 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 
@@ -932,7 +932,7 @@ public class Sprite extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method349(DrawingArea.pixels, tempArray, i1, l, k1, j1, l1, i2);
+			copyPixelsAlpha(DrawingArea.pixels, tempArray, i1, l, k1, j1, l1, i2);
 		}
 	}
 
@@ -970,12 +970,12 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 	public Sprite() { }
 	public void autoUpdate() { }
-	public void method349(int ai[], int ai1[], int j, int k, int l, int i1,
+	public void copyPixelsAlpha(int ai[], int ai1[], int j, int k, int l, int i1,
 			int j1, int k1) {
 		int i;// was parameter
 		int l1 = -(l >> 2);
@@ -1059,11 +1059,11 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 
-	public void method351(int i, int j, int ai[], int ai1[], int l, int i1,
+	public void copyPixelsTransparent(int i, int j, int ai[], int ai1[], int l, int i1,
 			int j1, int k1, int l1) {
 		int k;// was parameter
 		int j2 = 256 - k1;
@@ -1083,7 +1083,7 @@ public class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method352(int i, int j, int ai[], int k, int ai1[], int i1,
+	public void copyPixelsShadow(int i, int j, int ai[], int k, int ai1[], int i1,
 			int j1, int k1, int l1, int i2) {
 		autoUpdate();
 		try {
@@ -1117,7 +1117,7 @@ public class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method353(int i, double d, int l1) {
+	public void drawRotated(int i, double d, int l1) {
 		autoUpdate();
 		// all of the following were parameters
 		int j = 15;
@@ -1159,7 +1159,7 @@ public class Sprite extends DrawingArea {
 		}
 	}
 
-	public void method354(Background background, int i, int j) {
+	public void drawMasked(Background background, int i, int j) {
 		autoUpdate();
 		j += anInt1442;
 		i += anInt1443;
@@ -1275,7 +1275,7 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, o, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, o, i1);
 		}
 	}
 	
@@ -1326,7 +1326,7 @@ public class Sprite extends DrawingArea {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
+			copyPixelsTransparent(j1, l1, DrawingArea.pixels, myPixels, j2, k1, i2, k, i1);
 		}
 	}
 }

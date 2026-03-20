@@ -64,7 +64,7 @@ public final class Rasterizer extends DrawingArea {
         currentPalette = null;
     }
 
-    public static void method364() {
+    public static void initScanlineOffsets() {
         anIntArray1472 = new int[DrawingArea.height];
         for (int j = 0; j < DrawingArea.height; j++) {
             anIntArray1472[j] = DrawingArea.width * j;
@@ -73,7 +73,7 @@ public final class Rasterizer extends DrawingArea {
         textureInt2 = DrawingArea.height / 2;
     }
 
-    public static void method365(int width, int height) {
+    public static void initScanlineOffsetsCustom(int width, int height) {
         anIntArray1472 = new int[height];
         for (int l = 0; l < height; l++) {
             anIntArray1472[l] = width * l;
@@ -166,14 +166,14 @@ public final class Rasterizer extends DrawingArea {
         }
     }
 
-    public static void method366() {
+    public static void clearTextureCache() {
         anIntArrayArray1478 = null;
         for (int j = 0; j < textureAmount; j++) {
             texturesPixelBuffer[j] = null;
         }
     }
 
-    public static void method367() {
+    public static void allocateTextureBuffers() {
         if (anIntArrayArray1478 == null) {
             textureRequestBufferPointer = 20;
             anIntArrayArray1478 = new int[textureRequestBufferPointer][0x10000];
@@ -183,12 +183,12 @@ public final class Rasterizer extends DrawingArea {
         }
     }
 
-    public static void method368(StreamLoader streamLoader) {
+    public static void loadTextures(JagArchive streamLoader) {
         textureCount = 0;
         for (int index = 0; index < textureAmount; index++) {
             try {
                 textures[index] = new Background(streamLoader, String.valueOf(index), 0);
-                textures[index].method357();
+                textures[index].expandToFullPalette();
                 textures[index].setTransparency(255, 0, 255);
                 textureCount++;
             } catch (Exception ex) {
@@ -197,7 +197,7 @@ public final class Rasterizer extends DrawingArea {
         }
     }
 
-    public static int method369(int texture) {
+    public static int getAverageTextureColor(int texture) {
         if (averageTextureColours[texture] != 0) {
             return averageTextureColours[texture];
         }
@@ -219,7 +219,7 @@ public final class Rasterizer extends DrawingArea {
         return color;
     }
 
-    public static void method370(int texture) {
+    public static void releaseTextureBuffer(int texture) {
         try {
             if (texturesPixelBuffer[texture] == null) {
                 return;

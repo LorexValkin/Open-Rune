@@ -1,6 +1,6 @@
 package com.client;
 
-public class Renderable extends NodeSub {
+public class Renderable extends DualNode {
 
     public void renderAtPoint(int i, int j, int k, int l, int i1, int j1, int k1,
                               int l1, int i2) {

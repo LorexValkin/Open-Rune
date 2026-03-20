@@ -18,22 +18,22 @@ public final class Player extends Entity {
 		model.aBoolean1659 = true;
 		if (aBoolean1699)
 			return model;
-		if (super.anInt1520 != -1 && super.anInt1521 != -1) {
-			GraphicsDefinition spotAnim = GraphicsDefinition.cache[super.anInt1520];
+		if (super.spotAnimId != -1 && super.spotAnimFrame != -1) {
+			GraphicsDefinition spotAnim = GraphicsDefinition.cache[super.spotAnimId];
 			Model model_2 = spotAnim.getModel();
 			if (model_2 != null) {
-				Model model_3 = new Model(true, Class36.method532(super.anInt1521), false, model_2);
-				model_3.method475(0, -super.anInt1524, 0);
-				model_3.method469();
-				model_3.method470(spotAnim.aAnimation_407.primaryFrames[super.anInt1521]);
+				Model model_3 = new Model(true, AnimationFrame.method532(super.spotAnimFrame), false, model_2);
+				model_3.translate(0, -super.spotAnimHeight, 0);
+				model_3.buildVertexGroups();
+				model_3.applyFrame(spotAnim.aAnimation_407.primaryFrames[super.spotAnimFrame]);
 				model_3.faceGroups = null;
 				model_3.vertexGroups = null;
 				if (spotAnim.anInt410 != 128 || spotAnim.anInt411 != 128)
-					model_3.method478(spotAnim.anInt410, spotAnim.anInt410,
+					model_3.scale(spotAnim.anInt410, spotAnim.anInt410,
 							spotAnim.anInt411);
-				// model_3.method479(64 + spotAnim.anInt413, 850 +
+				// model_3.applyLighting(64 + spotAnim.anInt413, 850 +
 				// spotAnim.anInt414, -30, -50, -30, true);
-				model_3.method479(84 + spotAnim.anInt413,
+				model_3.applyLighting(84 + spotAnim.anInt413,
 						1550 + spotAnim.anInt414, -50, -110, -50, true);
 				Model aclass30_sub2_sub4_sub6_1s[] = { model, model_3 };
 				model = new Model(aclass30_sub2_sub4_sub6_1s);
@@ -44,30 +44,30 @@ public final class Player extends Entity {
 				aModel_1714 = null;
 			if (Client.loopCycle >= anInt1707 && Client.loopCycle < anInt1708) {
 				Model model_1 = aModel_1714;
-				model_1.method475(anInt1711 - super.x, anInt1712 - anInt1709,
+				model_1.translate(anInt1711 - super.x, anInt1712 - anInt1709,
 						anInt1713 - super.y);
 				if (super.turnDirection == 512) {
-					model_1.method473();
-					model_1.method473();
-					model_1.method473();
+					model_1.rotateY90();
+					model_1.rotateY90();
+					model_1.rotateY90();
 				} else if (super.turnDirection == 1024) {
-					model_1.method473();
-					model_1.method473();
+					model_1.rotateY90();
+					model_1.rotateY90();
 				} else if (super.turnDirection == 1536)
-					model_1.method473();
+					model_1.rotateY90();
 				Model aclass30_sub2_sub4_sub6s[] = { model, model_1 };
 				model = new Model(aclass30_sub2_sub4_sub6s);
 				if (super.turnDirection == 512)
-					model_1.method473();
+					model_1.rotateY90();
 				else if (super.turnDirection == 1024) {
-					model_1.method473();
-					model_1.method473();
+					model_1.rotateY90();
+					model_1.rotateY90();
 				} else if (super.turnDirection == 1536) {
-					model_1.method473();
-					model_1.method473();
-					model_1.method473();
+					model_1.rotateY90();
+					model_1.rotateY90();
+					model_1.rotateY90();
 				}
-				model_1.method475(super.x - anInt1711, anInt1709 - anInt1712,
+				model_1.translate(super.x - anInt1711, anInt1709 - anInt1712,
 						super.y - anInt1713);
 			}
 		}
@@ -78,7 +78,7 @@ public final class Player extends Entity {
 	public String title;
 	public String titleColor;
 
-	public void updatePlayer(Stream stream) {
+	public void updatePlayer(Buffer stream) {
 		stream.currentOffset = 0;
 		anInt1702 = stream.readUnsignedByte();
 		title = stream.readString();
@@ -114,28 +114,28 @@ public final class Player extends Entity {
 			anIntArray1700[l] = j1;
 		}
 
-		super.anInt1511 = stream.readUnsignedWord();
-		if (super.anInt1511 == 65535)
-			super.anInt1511 = -1;
-		super.anInt1512 = stream.readUnsignedWord();
-		if (super.anInt1512 == 65535)
-			super.anInt1512 = -1;
-		super.anInt1554 = stream.readUnsignedWord();
-		if (super.anInt1554 == 65535)
-			super.anInt1554 = -1;
-		super.anInt1555 = stream.readUnsignedWord();
-		if (super.anInt1555 == 65535)
-			super.anInt1555 = -1;
-		super.anInt1556 = stream.readUnsignedWord();
-		if (super.anInt1556 == 65535)
-			super.anInt1556 = -1;
-		super.anInt1557 = stream.readUnsignedWord();
-		if (super.anInt1557 == 65535)
-			super.anInt1557 = -1;
-		super.anInt1505 = stream.readUnsignedWord();
-		if (super.anInt1505 == 65535)
-			super.anInt1505 = -1;
-		name = TextClass.fixName(TextClass.nameForLong(stream.readQWord()));
+		super.standAnimId = stream.readUnsignedWord();
+		if (super.standAnimId == 65535)
+			super.standAnimId = -1;
+		super.standTurnAnimId = stream.readUnsignedWord();
+		if (super.standTurnAnimId == 65535)
+			super.standTurnAnimId = -1;
+		super.walkAnimId = stream.readUnsignedWord();
+		if (super.walkAnimId == 65535)
+			super.walkAnimId = -1;
+		super.turnAroundAnimId = stream.readUnsignedWord();
+		if (super.turnAroundAnimId == 65535)
+			super.turnAroundAnimId = -1;
+		super.turnRightAnimId = stream.readUnsignedWord();
+		if (super.turnRightAnimId == 65535)
+			super.turnRightAnimId = -1;
+		super.turnLeftAnimId = stream.readUnsignedWord();
+		if (super.turnLeftAnimId == 65535)
+			super.turnLeftAnimId = -1;
+		super.forcedAnimId = stream.readUnsignedWord();
+		if (super.forcedAnimId == 65535)
+			super.forcedAnimId = -1;
+		name = Base37Encoder.fixName(Base37Encoder.nameForLong(stream.readQWord()));
 		visible = stream.readUnsignedByte() == 0 ? true : false;
 		combatLevel = stream.readUnsignedByte();
 		rights = stream.readUnsignedByte();
@@ -163,11 +163,11 @@ public final class Player extends Entity {
 	public Model method452() {
 		if (desc != null) {
 			int j = -1;
-			if (super.anim >= 0 && super.anInt1529 == 0)
-				j = AnimationDefinition.anims[super.anim].primaryFrames[super.anInt1527];
-			else if (super.anInt1517 >= 0)
-				j = AnimationDefinition.anims[super.anInt1517].primaryFrames[super.anInt1518];
-			Model model = desc.method164(-1, j, null);
+			if (super.anim >= 0 && super.animEndCycle == 0)
+				j = AnimationDefinition.anims[super.anim].primaryFrames[super.animDelayCycle];
+			else if (super.currentAnimId >= 0)
+				j = AnimationDefinition.anims[super.currentAnimId].primaryFrames[super.animFrameIndex];
+			Model model = desc.getAnimatedModel(-1, j, null);
 			return model;
 		}
 		long l = aLong1718;
@@ -175,11 +175,11 @@ public final class Player extends Entity {
 		int i1 = -1;
 		int j1 = -1;
 		int k1 = -1;
-		if (super.anim >= 0 && super.anInt1529 == 0) {
+		if (super.anim >= 0 && super.animEndCycle == 0) {
 			AnimationDefinition animation = AnimationDefinition.anims[super.anim];
-			k = animation.primaryFrames[super.anInt1527];
-			if (super.anInt1517 >= 0 && super.anInt1517 != super.anInt1511)
-				i1 = AnimationDefinition.anims[super.anInt1517].primaryFrames[super.anInt1518];
+			k = animation.primaryFrames[super.animDelayCycle];
+			if (super.currentAnimId >= 0 && super.currentAnimId != super.standAnimId)
+				i1 = AnimationDefinition.anims[super.currentAnimId].primaryFrames[super.animFrameIndex];
 			if (animation.anInt360 >= 0) {
 				j1 = animation.anInt360;
 				l += j1 - equipment[5] << 40;
@@ -188,8 +188,8 @@ public final class Player extends Entity {
 				k1 = animation.anInt361;
 				l += k1 - equipment[3] << 48;
 			}
-		} else if (super.anInt1517 >= 0)
-			k = AnimationDefinition.anims[super.anInt1517].primaryFrames[super.anInt1518];
+		} else if (super.currentAnimId >= 0)
+			k = AnimationDefinition.anims[super.currentAnimId].primaryFrames[super.animFrameIndex];
 		Model model_1 = (Model) mruNodes.insertFromCache(l);
 		if (model_1 == null) {
 			boolean flag = false;
@@ -199,9 +199,9 @@ public final class Player extends Entity {
 					k2 = k1;
 				if (j1 >= 0 && i2 == 5)
 					k2 = j1;
-				if (k2 >= 256 && k2 < 512 && !IDK.cache[k2 - 256].method537())
+				if (k2 >= 256 && k2 < 512 && !IdentityKit.cache[k2 - 256].method537())
 					flag = true;
-				if (k2 >= 512 && !ItemDefinition.forID(k2 - 512).method195(anInt1702))
+				if (k2 >= 512 && !ItemDefinition.forID(k2 - 512).isWornModelReady(anInt1702))
 					flag = true;
 			}
 
@@ -222,13 +222,13 @@ public final class Player extends Entity {
 				if (j1 >= 0 && l2 == 5)
 					i3 = j1;
 				if (i3 >= 256 && i3 < 512) {
-					Model model_3 = IDK.cache[i3 - 256].method538();
+					Model model_3 = IdentityKit.cache[i3 - 256].method538();
 					if (model_3 != null)
 						aclass30_sub2_sub4_sub6s[j2++] = model_3;
 				}
 				if (i3 >= 512) {
 					Model model_4 = ItemDefinition.forID(i3 - 512)
-							.method196(anInt1702);
+							.getWornModel(anInt1702);
 					if (model_4 != null)
 						aclass30_sub2_sub4_sub6s[j2++] = model_4;
 				}
@@ -244,21 +244,21 @@ public final class Player extends Entity {
 								Client.anIntArray1204[anIntArray1700[j3]]);
 				}
 
-			model_1.method469();
-			 model_1.method479(64, 850, -30, -50, -30, true);
-			//model_1.method479(84, 1000, -90, -580, -90, true);
+			model_1.buildVertexGroups();
+			 model_1.applyLighting(64, 850, -30, -50, -30, true);
+			//model_1.applyLighting(84, 1000, -90, -580, -90, true);
 			mruNodes.removeFromCache(model_1, l);
 			aLong1697 = l;
 		}
 		if (aBoolean1699)
 			return model_1;
 		Model model_2 = Model.EMPTY_MODEL;
-		model_2.method464(model_1, Class36.method532(k) & Class36.method532(i1));
+		model_2.copyTransformed(model_1, AnimationFrame.method532(k) & AnimationFrame.method532(i1));
 		if (k != -1 && i1 != -1)
-			model_2.method471(AnimationDefinition.anims[super.anim].anIntArray357, i1, k);
+			model_2.applyFrames(AnimationDefinition.anims[super.anim].anIntArray357, i1, k);
 		else if (k != -1)
-			model_2.method470(k);
-		model_2.method466();
+			model_2.applyFrame(k);
+		model_2.calculateBounds();
 		model_2.faceGroups = null;
 		model_2.vertexGroups = null;
 		return model_2;
@@ -275,13 +275,13 @@ public final class Player extends Entity {
 		if (!visible)
 			return null;
 		if (desc != null)
-			return desc.method160();
+			return desc.getHeadModel();
 		boolean flag = false;
 		for (int i = 0; i < 12; i++) {
 			int j = equipment[i];
-			if (j >= 256 && j < 512 && !IDK.cache[j - 256].method539())
+			if (j >= 256 && j < 512 && !IdentityKit.cache[j - 256].method539())
 				flag = true;
-			if (j >= 512 && !ItemDefinition.forID(j - 512).method192(anInt1702))
+			if (j >= 512 && !ItemDefinition.forID(j - 512).isEquipModelReady(anInt1702))
 				flag = true;
 		}
 
@@ -292,12 +292,12 @@ public final class Player extends Entity {
 		for (int l = 0; l < 12; l++) {
 			int i1 = equipment[l];
 			if (i1 >= 256 && i1 < 512) {
-				Model model_1 = IDK.cache[i1 - 256].method540();
+				Model model_1 = IdentityKit.cache[i1 - 256].method540();
 				if (model_1 != null)
 					aclass30_sub2_sub4_sub6s[k++] = model_1;
 			}
 			if (i1 >= 512) {
-				Model model_2 = ItemDefinition.forID(i1 - 512).method194(anInt1702);
+				Model model_2 = ItemDefinition.forID(i1 - 512).getEquipModel(anInt1702);
 				if (model_2 != null)
 					aclass30_sub2_sub4_sub6s[k++] = model_2;
 			}
@@ -340,7 +340,7 @@ public final class Player extends Entity {
 	public int team;
 	private int anInt1702;
 	public String name;
-	static MRUNodes mruNodes = new MRUNodes(260);
+	static LRUCache mruNodes = new LRUCache(260);
 	public int combatLevel;
 	public int headIcon;
 	public int skullIcon;

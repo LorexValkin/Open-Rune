@@ -8,7 +8,7 @@ import java.util.Random;
 
 public final class TextDrawingArea extends DrawingArea {
 
-	public TextDrawingArea(boolean flag, String s, StreamLoader streamLoader) {
+	public TextDrawingArea(boolean flag, String s, JagArchive streamLoader) {
 		aByteArrayArray1491 = new byte[256][];
 		anIntArray1492 = new int[256];
 		anIntArray1493 = new int[256];
@@ -17,8 +17,8 @@ public final class TextDrawingArea extends DrawingArea {
 		anIntArray1496 = new int[256];
 		aRandom1498 = new Random();
 		aBoolean1499 = false;
-		Stream stream = new Stream(streamLoader.getDataForName(s + ".dat"));
-		Stream stream_1 = new Stream(streamLoader.getDataForName("index.dat"));
+		Buffer stream = new Buffer(streamLoader.getDataForName(s + ".dat"));
+		Buffer stream_1 = new Buffer(streamLoader.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord() + 4;
 		int k = stream_1.readUnsignedByte();
 		if (k > 0)
@@ -65,20 +65,20 @@ public final class TextDrawingArea extends DrawingArea {
 		}
 	}
 
-	public void method380(String s, int i, int j, int k) {
-		method385(j, s, k, i - method384(s));
+	public void drawRightAligned(String s, int i, int j, int k) {
+		drawTextColored(j, s, k, i - getTextWidthRaw(s));
 	}
 
 	public void drawText(int i, String s, int k, int l) {
-		method385(i, s, k, l - method384(s) / 2);
+		drawTextColored(i, s, k, l - getTextWidthRaw(s) / 2);
 	}
 
-	public void method382(int i, int j, String s, int l, boolean flag) {
-		method389(flag, j - getTextWidth(s) / 2, i, s, l);
+	public void drawCenteredShadowed(int i, int j, String s, int l, boolean flag) {
+		drawTextShadowed(flag, j - getTextWidth(s) / 2, i, s, l);
 	}
 
 	public void drawChatInput(int i, int j, String s, int l, boolean flag) {
-		method389(flag, j, i, s, l);
+		drawTextShadowed(flag, j, i, s, l);
 	}
 
 	public int getTextWidth(String s) {
@@ -93,7 +93,7 @@ public final class TextDrawingArea extends DrawingArea {
 		return j;
 	}
 
-	public int method384(String s) {
+	public int getTextWidthRaw(String s) {
 		if (s == null)
 			return 0;
 		int j = 0;
@@ -102,28 +102,28 @@ public final class TextDrawingArea extends DrawingArea {
 		return j;
 	}
 
-	public void method385(int color, String s, int yPosition, int xPosition) {
+	public void drawTextColored(int color, String s, int yPosition, int xPosition) {
 		if (s == null)
 			return;
 		yPosition -= anInt1497;
 		for (int i1 = 0; i1 < s.length(); i1++) {
 			char c = s.charAt(i1);
 			if (c != ' ')
-				method392(aByteArrayArray1491[c], xPosition + anIntArray1494[c], yPosition + anIntArray1495[c],
+				drawGlyph(aByteArrayArray1491[c], xPosition + anIntArray1494[c], yPosition + anIntArray1495[c],
 						anIntArray1492[c], anIntArray1493[c], color);
 			xPosition += anIntArray1496[c];
 		}
 	}
 
-	public void method386(int i, String s, int j, int k, int l) {
+	public void drawTextWithShadow(int i, String s, int j, int k, int l) {
 		if (s == null)
 			return;
-		j -= method384(s) / 2;
+		j -= getTextWidthRaw(s) / 2;
 		l -= anInt1497;
 		for (int i1 = 0; i1 < s.length(); i1++) {
 			char c = s.charAt(i1);
 			if (c != ' ')
-				method392(aByteArrayArray1491[c], j + anIntArray1494[c],
+				drawGlyph(aByteArrayArray1491[c], j + anIntArray1494[c],
 						l + anIntArray1495[c] + (int) (Math.sin(i1 / 2D + k / 5D) * 5D), anIntArray1492[c],
 						anIntArray1493[c], i);
 			j += anIntArray1496[c];
@@ -133,12 +133,12 @@ public final class TextDrawingArea extends DrawingArea {
 	public void method387(int i, String s, int j, int k, int l) {
 		if (s == null)
 			return;
-		i -= method384(s) / 2;
+		i -= getTextWidthRaw(s) / 2;
 		k -= anInt1497;
 		for (int i1 = 0; i1 < s.length(); i1++) {
 			char c = s.charAt(i1);
 			if (c != ' ')
-				method392(aByteArrayArray1491[c], i + anIntArray1494[c] + (int) (Math.sin(i1 / 5D + j / 5D) * 5D),
+				drawGlyph(aByteArrayArray1491[c], i + anIntArray1494[c] + (int) (Math.sin(i1 / 5D + j / 5D) * 5D),
 						k + anIntArray1495[c] + (int) (Math.sin(i1 / 3D + j / 5D) * 5D), anIntArray1492[c],
 						anIntArray1493[c], l);
 			i += anIntArray1496[c];
@@ -151,19 +151,19 @@ public final class TextDrawingArea extends DrawingArea {
 		double d = 7D - i / 8D;
 		if (d < 0.0D)
 			d = 0.0D;
-		l -= method384(s) / 2;
+		l -= getTextWidthRaw(s) / 2;
 		k -= anInt1497;
 		for (int k1 = 0; k1 < s.length(); k1++) {
 			char c = s.charAt(k1);
 			if (c != ' ')
-				method392(aByteArrayArray1491[c], l + anIntArray1494[c],
+				drawGlyph(aByteArrayArray1491[c], l + anIntArray1494[c],
 						k + anIntArray1495[c] + (int) (Math.sin(k1 / 1.5D + j) * d), anIntArray1492[c],
 						anIntArray1493[c], i1);
 			l += anIntArray1496[c];
 		}
 	}
 
-	public void method389(boolean flag1, int i, int j, String s, int k) {
+	public void drawTextShadowed(boolean flag1, int i, int j, String s, int k) {
 		aBoolean1499 = false;
 		int l = i;
 		if (s == null)
@@ -179,9 +179,9 @@ public final class TextDrawingArea extends DrawingArea {
 				char c = s.charAt(i1);
 				if (c != ' ') {
 					if (flag1)
-						method392(aByteArrayArray1491[c], i + anIntArray1494[c] + 1, k + anIntArray1495[c] + 1,
+						drawGlyph(aByteArrayArray1491[c], i + anIntArray1494[c] + 1, k + anIntArray1495[c] + 1,
 								anIntArray1492[c], anIntArray1493[c], 0);
-					method392(aByteArrayArray1491[c], i + anIntArray1494[c], k + anIntArray1495[c], anIntArray1492[c],
+					drawGlyph(aByteArrayArray1491[c], i + anIntArray1494[c], k + anIntArray1495[c], anIntArray1492[c],
 							anIntArray1493[c], j);
 				}
 				i += anIntArray1496[c];
@@ -266,7 +266,7 @@ public final class TextDrawingArea extends DrawingArea {
 		return -1;
 	}
 
-	private void method392(byte abyte0[], int i, int j, int k, int l, int i1) {
+	private void drawGlyph(byte abyte0[], int i, int j, int k, int l, int i1) {
 		int j1 = i + j * DrawingArea.width;
 		int k1 = DrawingArea.width - k;
 		int l1 = 0;

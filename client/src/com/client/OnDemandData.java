@@ -3,7 +3,7 @@ package com.client;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-public final class OnDemandData extends NodeSub {
+public final class OnDemandData extends DualNode {
 
 	public OnDemandData() {
 		incomplete = true;

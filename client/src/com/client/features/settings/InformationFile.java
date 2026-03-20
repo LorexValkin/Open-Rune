@@ -3,8 +3,8 @@ package com.client.features.settings;
 import com.client.utilities.FileOperations;
 import com.client.Client;
 import com.client.Configuration;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 import com.client.sign.Signlink;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class InformationFile {
         Files.createFile(FILE_LOCATION);
 
         // Create a new stream to store information in
-        Stream stream = Stream.create();
+        Buffer stream = Buffer.create();
 
         // Writes the opcode '0' and a string of characters that make up the players user name
         stream.writeByte(0);
@@ -92,7 +92,7 @@ public class InformationFile {
     /**
      * Reads some information from the file, if the file exists.
      *
-     * @throws IOException           refer to the function {@link StreamLoader#getBytesFromFile(File)}
+     * @throws IOException           refer to the function {@link JagArchive#getBytesFromFile(File)}
      * @throws IllegalStateException thrown if an opcode read cannot be found
      */
     public void read() throws IOException, IllegalStateException {
@@ -106,10 +106,10 @@ public class InformationFile {
         }
 
         // Creates a new byte array with the information from the file
-        byte[] buffer = StreamLoader.getBytesFromFile(file);
+        byte[] buffer = JagArchive.getBytesFromFile(file);
 
         // Creates a new stream using the byte buffer as the backing array
-        Stream stream = new Stream(buffer);
+        Buffer stream = new Buffer(buffer);
 
         // Continues to read from the buffer until it can no longer
         while (stream.currentOffset < buffer.length) {

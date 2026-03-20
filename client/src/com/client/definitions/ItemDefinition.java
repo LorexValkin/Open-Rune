@@ -13,22 +13,22 @@ import java.net.URLConnection;
 import java.util.Arrays;
 
 import com.client.DrawingArea;
-import com.client.MRUNodes;
+import com.client.LRUCache;
 import com.client.Model;
 import com.client.Rasterizer;
 import com.client.Sprite;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 import com.client.sign.Signlink;
 import com.client.utilities.FileOperations;
 
 public final class ItemDefinition {
 	public byte[] customSpriteLocation;
-	public static void unpackConfig(final StreamLoader streamLoader) {
-		 stream = new Stream(streamLoader.getDataForName("obj.dat"));
-		 Stream stream = new Stream(streamLoader.getDataForName("obj.idx"));
-		//stream = new Stream(FileOperations.readFile(Signlink.getCacheDirectory() + "/data/obj.dat"));
-		//final Stream stream = new Stream(FileOperations.readFile(Signlink.getCacheDirectory() + "/data/obj.idx"));
+	public static void unpackConfig(final JagArchive streamLoader) {
+		 stream = new Buffer(streamLoader.getDataForName("obj.dat"));
+		 Buffer stream = new Buffer(streamLoader.getDataForName("obj.idx"));
+		//stream = new Buffer(FileOperations.readFile(Signlink.getCacheDirectory() + "/data/obj.dat"));
+		//final Buffer stream = new Buffer(FileOperations.readFile(Signlink.getCacheDirectory() + "/data/obj.idx"));
 
 		totalItems = stream.readUnsignedWord();
 		streamIndices = new int[totalItems + 10000];
@@ -69,11 +69,11 @@ public final class ItemDefinition {
 		}
 
 		if (itemDef.opcode140 != -1) {
-			itemDef.method2789(forID(itemDef.opcode140), forID(itemDef.opcode139));
+			itemDef.applyNoteProperties(forID(itemDef.opcode140), forID(itemDef.opcode139));
 		}
 
 		if (itemDef.opcode149 != -1) {
-			itemDef.method2790(forID(itemDef.opcode149), forID(itemDef.opcode148));
+			itemDef.applyPlaceholderProps(forID(itemDef.opcode149), forID(itemDef.opcode148));
 		}
 
 		customItems(itemDef.id);
@@ -1155,7 +1155,7 @@ break;
 		}
 	}
 
-	void method2789(ItemDefinition var1, ItemDefinition var2) {
+	void applyNoteProperties(ItemDefinition var1, ItemDefinition var2) {
 		modelId = var1.modelId * 1;
 		modelZoom = var1.modelZoom * 1;
 		modelRotation1 = 1 * var1.modelRotation1;
@@ -1194,7 +1194,7 @@ break;
 		value = 0;
 	}
 
-	void method2790(ItemDefinition var1, ItemDefinition var2) {
+	void applyPlaceholderProps(ItemDefinition var1, ItemDefinition var2) {
 		modelId = var1.modelId * 1;
 		modelZoom = 1 * var1.modelZoom;
 		modelRotation1 = var1.modelRotation1 * 1;
@@ -1212,7 +1212,7 @@ break;
 	}
 
 
-	private void readValues(Stream stream) {
+	private void readValues(Buffer stream) {
 		while (true) {
 			int opcode = stream.readUnsignedByte();
 			if (opcode == 0)
@@ -1342,7 +1342,7 @@ break;
 		stream = null;
 	}
 
-	public boolean method192(int j) {
+	public boolean isEquipModelReady(int j) {
 		int k = anInt175;
 		int l = anInt166;
 		if (j == 1) {
@@ -1352,14 +1352,14 @@ break;
 		if (k == -1)
 			return true;
 		boolean flag = true;
-		if (!Model.method463(k))
+		if (!Model.isModelLoaded(k))
 			flag = false;
-		if (l != -1 && !Model.method463(l))
+		if (l != -1 && !Model.isModelLoaded(l))
 			flag = false;
 		return flag;
 	}
 
-	public Model method194(int j) {
+	public Model getEquipModel(int j) {
 		int k = anInt175;
 		int l = anInt166;
 		if (j == 1) {
@@ -1368,21 +1368,21 @@ break;
 		}
 		if (k == -1)
 			return null;
-		Model model = Model.method462(k);
+		Model model = Model.getModel(k);
 		if (l != -1) {
-			Model model_1 = Model.method462(l);
+			Model model_1 = Model.getModel(l);
 			Model aclass30_sub2_sub4_sub6s[] = { model, model_1 };
 			model = new Model(2, aclass30_sub2_sub4_sub6s);
 		}
 		if (modifiedModelColors != null) {
 			for (int i1 = 0; i1 < modifiedModelColors.length; i1++)
-				model.method476(modifiedModelColors[i1], originalModelColors[i1]);
+				model.recolor(modifiedModelColors[i1], originalModelColors[i1]);
 
 		}
 		return model;
 	}
 
-	public boolean method195(int j) {
+	public boolean isWornModelReady(int j) {
 		int k = maleModel;
 		int l = anInt188;
 		int i1 = anInt185;
@@ -1394,16 +1394,16 @@ break;
 		if (k == -1)
 			return true;
 		boolean flag = true;
-		if (!Model.method463(k))
+		if (!Model.isModelLoaded(k))
 			flag = false;
-		if (l != -1 && !Model.method463(l))
+		if (l != -1 && !Model.isModelLoaded(l))
 			flag = false;
-		if (i1 != -1 && !Model.method463(i1))
+		if (i1 != -1 && !Model.isModelLoaded(i1))
 			flag = false;
 		return flag;
 	}
 
-	public Model method196(int i) {
+	public Model getWornModel(int i) {
 		int j = maleModel;
 		int k = anInt188;
 		int l = anInt185;
@@ -1414,25 +1414,25 @@ break;
 		}
 		if (j == -1)
 			return null;
-		Model model = Model.method462(j);
+		Model model = Model.getModel(j);
 		if (k != -1)
 			if (l != -1) {
-				Model model_1 = Model.method462(k);
-				Model model_3 = Model.method462(l);
+				Model model_1 = Model.getModel(k);
+				Model model_3 = Model.getModel(l);
 				Model aclass30_sub2_sub4_sub6_1s[] = { model, model_1, model_3 };
 				model = new Model(3, aclass30_sub2_sub4_sub6_1s);
 			} else {
-				Model model_2 = Model.method462(k);
+				Model model_2 = Model.getModel(k);
 				Model aclass30_sub2_sub4_sub6s[] = { model, model_2 };
 				model = new Model(2, aclass30_sub2_sub4_sub6s);
 			}
 		if (i == 0 && aByte205 != 0)
-			model.method475(0, aByte205, 0);
+			model.translate(0, aByte205, 0);
 		if (i == 1 && aByte154 != 0)
-			model.method475(0, aByte154, 0);
+			model.translate(0, aByte154, 0);
 		if (modifiedModelColors != null) {
 			for (int i1 = 0; i1 < modifiedModelColors.length; i1++)
-				model.method476(modifiedModelColors[i1], originalModelColors[i1]);
+				model.recolor(modifiedModelColors[i1], originalModelColors[i1]);
 
 		}
 		return model;
@@ -1908,7 +1908,7 @@ break;
 
 	public static Sprite getSmallSprite(int itemId) {
 		ItemDefinition itemDef = forID(itemId);
-		Model model = itemDef.method201(1);
+		Model model = itemDef.getInventoryModel(1);
 		if (model == null) {
 			return null;
 		}
@@ -1933,11 +1933,11 @@ break;
 		Rasterizer.aBoolean1464 = false;
 		DrawingArea.initDrawingArea(18, 18, enabledSprite.myPixels, new float[1024]);
 		DrawingArea.method336(18, 0, 0, 0, 18);
-		Rasterizer.method364();
+		Rasterizer.initScanlineOffsets();
 		int k3 = (int) (itemDef.modelZoom * 1.6D);
 		int l3 = Rasterizer.anIntArray1470[itemDef.modelRotation1] * k3 >> 16;
 		int i4 = Rasterizer.anIntArray1471[itemDef.modelRotation1] * k3 >> 16;
-		model.method482(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1,
+		model.renderModel(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1,
 				l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
 		if (itemDef.certTemplateID != -1) {
 			int l5 = sprite1.maxWidth;
@@ -1983,7 +1983,7 @@ break;
 			if (i1 != -1)
 				itemDef = forID(i1);
 		}
-		Model model = itemDef.method201(1);
+		Model model = itemDef.getInventoryModel(1);
 		if (model == null)
 			return null;
 		Sprite sprite = null;
@@ -2014,7 +2014,7 @@ break;
 		Rasterizer.aBoolean1464 = false;
 		DrawingArea.initDrawingArea(32, 32, sprite2.myPixels, new float[1024]);
 		DrawingArea.method336(32, 0, 0, 0, 32);
-		Rasterizer.method364();
+		Rasterizer.initScanlineOffsets();
 		if (itemDef.opcode149 != -1) {
 			int l5 = sprite.maxWidth;
 			int j6 = sprite.maxHeight;
@@ -2031,7 +2031,7 @@ break;
 			k3 = (int) ((double) k3 * 1.04D);
 		int l3 = Rasterizer.anIntArray1470[itemDef.modelRotation1] * k3 >> 16;
 		int i4 = Rasterizer.anIntArray1471[itemDef.modelRotation1] * k3 >> 16;
-		model.method482(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1,
+		model.renderModel(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1,
 				l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
 		if (itemDef.opcode140 != -1) {
 			int l5 = sprite.maxWidth;
@@ -2106,7 +2106,7 @@ break;
 		return sprite2;
 	}
 
-	public Model method201(int i) {
+	public Model getInventoryModel(int i) {
 		if (stackIDs != null && i > 1) {
 			int j = -1;
 			for (int k = 0; k < 10; k++)
@@ -2114,28 +2114,28 @@ break;
 					j = stackIDs[k];
 
 			if (j != -1)
-				return forID(j).method201(1);
+				return forID(j).getInventoryModel(1);
 		}
 		Model model = (Model) mruNodes2.insertFromCache(id);
 		if (model != null)
 			return model;
-		model = Model.method462(modelId);
+		model = Model.getModel(modelId);
 		if (model == null)
 			return null;
 		if (anInt167 != 128 || anInt192 != 128 || anInt191 != 128)
-			model.method478(anInt167, anInt191, anInt192);
+			model.scale(anInt167, anInt191, anInt192);
 		if (modifiedModelColors != null) {
 			for (int l = 0; l < modifiedModelColors.length; l++)
-				model.method476(modifiedModelColors[l], originalModelColors[l]);
+				model.recolor(modifiedModelColors[l], originalModelColors[l]);
 
 		}
-		model.method479(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
+		model.applyLighting(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
 		model.aBoolean1659 = true;
 		mruNodes2.removeFromCache(model, id);
 		return model;
 	}
 
-	public Model method202(int i) {
+	public Model getGroundModel(int i) {
 		if (stackIDs != null && i > 1) {
 			int j = -1;
 			for (int k = 0; k < 10; k++)
@@ -2143,14 +2143,14 @@ break;
 					j = stackIDs[k];
 
 			if (j != -1)
-				return forID(j).method202(1);
+				return forID(j).getGroundModel(1);
 		}
-		Model model = Model.method462(modelId);
+		Model model = Model.getModel(modelId);
 		if (model == null)
 			return null;
 		if (modifiedModelColors != null) {
 			for (int l = 0; l < modifiedModelColors.length; l++)
-				model.method476(modifiedModelColors[l], originalModelColors[l]);
+				model.recolor(modifiedModelColors[l], originalModelColors[l]);
 
 		}
 		return model;
@@ -2169,8 +2169,8 @@ break;
 	private short[] modifiedTextureColors;
 
 	public int id;
-	public static MRUNodes mruNodes1 = new MRUNodes(100);
-	public static MRUNodes mruNodes2 = new MRUNodes(50);
+	public static LRUCache mruNodes1 = new LRUCache(100);
+	public static LRUCache mruNodes2 = new LRUCache(50);
 
 	public boolean membersObject;
 	private int anInt162;
@@ -2191,7 +2191,7 @@ break;
 	public int certID;
 	private static int cacheIndex;
 	public int modelZoom;
-	private static Stream stream;
+	private static Buffer stream;
 	private int anInt184;
 	private int anInt185;
 	private int anInt188;

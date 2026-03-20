@@ -39,7 +39,7 @@ import java.nio.charset.Charset;
  * assumptions about the streams' origin and further use. This means that both
  * streams' <code>close()</code> methods must be called after copying. if one
  * omits this step, then the stream resources (sockets, file descriptors) are
- * released when the associated Stream is garbage-collected. It is not a good
+ * released when the associated Buffer is garbage-collected. It is not a good
  * idea to rely on this mechanism. For a good overview of the distinction
  * between "memory management" and "resource management", see
  * <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this

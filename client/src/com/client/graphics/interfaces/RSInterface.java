@@ -3,18 +3,18 @@ package com.client.graphics.interfaces;
 import java.awt.Dimension;
 import java.util.Objects;
 
-import com.client.Class36;
+import com.client.AnimationFrame;
 import com.client.Client;
 import com.client.Configuration;
 import com.client.DrawingArea;
-import com.client.MRUNodes;
+import com.client.LRUCache;
 import com.client.Model;
 import com.client.RSFont;
 import com.client.RSMenuItem;
 import com.client.Sprite;
-import com.client.Stream;
-import com.client.StreamLoader;
-import com.client.TextClass;
+import com.client.Buffer;
+import com.client.JagArchive;
+import com.client.Base37Encoder;
 import com.client.TextDrawingArea;
 import com.client.definitions.ItemDefinition;
 import com.client.definitions.NpcDefinition;
@@ -28,10 +28,10 @@ public class RSInterface {
 	public static boolean showIds = false;
 	public static RSFont[] newFonts;
 
-	public static void unpack(StreamLoader streamLoader, TextDrawingArea textDrawingAreas[],
-			StreamLoader streamLoader_1, RSFont[] newFontSystem) {
-		aMRUNodes_238 = new MRUNodes(50000);
-		Stream stream = new Stream(streamLoader.getDataForName("data"));
+	public static void unpack(JagArchive streamLoader, TextDrawingArea textDrawingAreas[],
+			JagArchive streamLoader_1, RSFont[] newFontSystem) {
+		aMRUNodes_238 = new LRUCache(50000);
+		Buffer stream = new Buffer(streamLoader.getDataForName("data"));
 		newFonts = newFontSystem;
 		int i = -1;
 		int j = stream.readUnsignedWord();
@@ -5131,7 +5131,7 @@ public class RSInterface {
 	}
 
 	protected static Sprite CustomSpriteLoader(int id, String s) {
-		long l = (TextClass.method585(s) << 8) + id;
+		long l = (Base37Encoder.method585(s) << 8) + id;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null) {
 			return sprite;
@@ -5501,7 +5501,7 @@ public class RSInterface {
 	}
 
 	protected static Sprite imageLoader(int i, String s) {
-		long l = (TextClass.method585(s) << 8) + i;
+		long l = (Base37Encoder.method585(s) << 8) + i;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null)
 			return sprite;
@@ -5537,13 +5537,13 @@ public class RSInterface {
 		if (model != null)
 			return model;
 		if (i == 1)
-			model = Model.method462(j);
+			model = Model.getModel(j);
 		if (i == 2)
-			model = NpcDefinition.forID(j).method160();
+			model = NpcDefinition.forID(j).getHeadModel();
 		if (i == 3)
 			model = Client.myPlayer.method453();
 		if (i == 4)
-			model = ItemDefinition.forID(j).method202(50);
+			model = ItemDefinition.forID(j).getGroundModel(50);
 		if (i == 5)
 			model = null;
 		if (model != null)
@@ -5551,8 +5551,8 @@ public class RSInterface {
 		return model;
 	}
 
-	private static Sprite method207(int i, StreamLoader streamLoader, String s) {
-		long l = (TextClass.method585(s) << 8) + (long) i;
+	private static Sprite method207(int i, JagArchive streamLoader, String s) {
+		long l = (Base37Encoder.method585(s) << 8) + (long) i;
 		Sprite sprite = (Sprite) aMRUNodes_238.insertFromCache(l);
 		if (sprite != null)
 			return sprite;
@@ -5585,14 +5585,14 @@ public class RSInterface {
 			return null;
 		if (k == -1 && j == -1 && model.face_color == null)
 			return model;
-		Model model_1 = new Model(true, Class36.method532(k) & Class36.method532(j), false, model);
+		Model model_1 = new Model(true, AnimationFrame.method532(k) & AnimationFrame.method532(j), false, model);
 		if (k != -1 || j != -1)
-			model_1.method469();
+			model_1.buildVertexGroups();
 		if (k != -1)
-			model_1.method470(k);
+			model_1.applyFrame(k);
 		if (j != -1)
-			model_1.method470(j);
-		model_1.method479(64, 768, -50, -10, -50, true);
+			model_1.applyFrame(j);
+		model_1.applyLighting(64, 768, -50, -10, -50, true);
 		return model_1;
 	}
 
@@ -5617,7 +5617,7 @@ public class RSInterface {
 	public RSInterface() {
 	}
 
-	public static StreamLoader aClass44;
+	public static JagArchive aClass44;
 	public boolean drawsTransparent;
 	public Sprite sprite1;
 	public int anInt208;
@@ -5649,7 +5649,7 @@ public class RSInterface {
 	public boolean aBoolean235;
 	public int parentID;
 	public int spellUsableOn;
-	private static MRUNodes aMRUNodes_238;
+	private static LRUCache aMRUNodes_238;
 	public int anInt239;
 	public int children[];
 	public int childX[];
@@ -5674,7 +5674,7 @@ public class RSInterface {
 	public int scrollMax;
 	public int type;
 	public int anInt263;
-	private static final MRUNodes aMRUNodes_264 = new MRUNodes(30);
+	private static final LRUCache aMRUNodes_264 = new LRUCache(30);
 	public int transparency = 0;
 	public int anInt265;
 	public boolean isMouseoverTriggered;

@@ -56,15 +56,15 @@ public class RSFont extends DrawingArea {
 	public static int transparency;
 	public static int textColor;
 
-	public RSFont(boolean TypeFont, String s, StreamLoader archive) {
+	public RSFont(boolean TypeFont, String s, JagArchive archive) {
 		fontPixels = new byte[256][];
 		characterWidths = new int[256];
 		characterHeights = new int[256];
 		characterDrawXOffsets = new int[256];
 		characterDrawYOffsets = new int[256];
 		characterScreenWidths = new int[256];
-		Stream stream = new Stream(archive.getDataForName(s + ".dat"));
-		Stream stream_1 = new Stream(archive.getDataForName("index.dat"));
+		Buffer stream = new Buffer(archive.getDataForName(s + ".dat"));
+		Buffer stream_1 = new Buffer(archive.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord() + 4;
 		int k = stream_1.readUnsignedByte();
 		if (k > 0) {

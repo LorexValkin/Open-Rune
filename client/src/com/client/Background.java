@@ -5,9 +5,9 @@ package com.client;
 
 public final class Background extends DrawingArea {
 
-	public Background(StreamLoader streamLoader, String s, int i) {
-		Stream stream = new Stream(streamLoader.getDataForName(s + ".dat"));
-		Stream stream_1 = new Stream(streamLoader.getDataForName("index.dat"));
+	public Background(JagArchive streamLoader, String s, int i) {
+		Buffer stream = new Buffer(streamLoader.getDataForName(s + ".dat"));
+		Buffer stream_1 = new Buffer(streamLoader.getDataForName("index.dat"));
 		stream_1.currentOffset = stream.readUnsignedWord();
 		anInt1456 = stream_1.readUnsignedWord();
 		anInt1457 = stream_1.readUnsignedWord();
@@ -47,7 +47,7 @@ public final class Background extends DrawingArea {
 		}
 	}
 
-	public void method356() {
+	public void downscaleHalf() {
 		anInt1456 /= 2;
 		anInt1457 /= 2;
 		byte abyte0[] = new byte[anInt1456 * anInt1457];
@@ -65,7 +65,7 @@ public final class Background extends DrawingArea {
 		anInt1455 = 0;
 	}
 
-	public void method357() {
+	public void expandToFullPalette() {
 		if (width == anInt1456 && anInt1453 == anInt1457)
 			return;
 		byte abyte0[] = new byte[anInt1456 * anInt1457];
@@ -83,7 +83,7 @@ public final class Background extends DrawingArea {
 		anInt1455 = 0;
 	}
 
-	public void method358() {
+	public void flipHorizontal() {
 		byte abyte0[] = new byte[width * anInt1453];
 		int j = 0;
 		for (int k = 0; k < anInt1453; k++) {
@@ -96,7 +96,7 @@ public final class Background extends DrawingArea {
 		anInt1454 = anInt1456 - width - anInt1454;
 	}
 
-	public void method359() {
+	public void flipVertical() {
 		byte abyte0[] = new byte[width * anInt1453];
 		int i = 0;
 		for (int j = anInt1453 - 1; j >= 0; j--) {
@@ -109,7 +109,7 @@ public final class Background extends DrawingArea {
 		anInt1455 = anInt1457 - anInt1453 - anInt1455;
 	}
 
-	public void method360(int i, int j, int k) {
+	public void adjustPaletteRGB(int i, int j, int k) {
 		for (int i1 = 0; i1 < palette.length; i1++) {
 			int j1 = palette[i1] >> 16 & 0xff;
 			j1 += i;
@@ -167,12 +167,12 @@ public final class Background extends DrawingArea {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method362(j1, DrawingArea.pixels, palettePixels, l1, l, k1, i1,
+			copyPalettePixels(j1, DrawingArea.pixels, palettePixels, l1, l, k1, i1,
                     palette, i2);
 		}
 	}
 
-	private void method362(int i, int ai[], byte abyte0[], int j, int k, int l,
+	private void copyPalettePixels(int i, int ai[], byte abyte0[], int j, int k, int l,
 			int i1, int ai1[], int j1) {
 		int k1 = -(l >> 2);
 		l = -(l & 3);

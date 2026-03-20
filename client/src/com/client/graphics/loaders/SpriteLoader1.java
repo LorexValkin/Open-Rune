@@ -10,7 +10,7 @@ import com.client.utilities.FileOperations;
 import com.client.Configuration;
 import com.client.DataUtils;
 import com.client.Sprite;
-import com.client.Stream;
+import com.client.Buffer;
 import com.client.sign.Signlink;
 
 public class SpriteLoader1 {
@@ -22,8 +22,8 @@ public class SpriteLoader1 {
 	 */
 	public static void loadSprites() {
 		try {
-			Stream index = new Stream(FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive1.idx"));
-			Stream data = new Stream(FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive1.dat"));
+			Buffer index = new Buffer(FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive1.idx"));
+			Buffer data = new Buffer(FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive1.dat"));
 		    DataInputStream indexFile = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(index.buffer)));
 		    DataInputStream dataFile = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(data.buffer)));
 			int totalSprites = indexFile.readInt();

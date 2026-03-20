@@ -9,7 +9,7 @@ import java.util.zip.GZIPInputStream;
 import com.client.Configuration;
 import com.client.DataUtils;
 import com.client.Sprite;
-import com.client.Stream;
+import com.client.Buffer;
 import com.client.sign.Signlink;
 import com.client.utilities.FileOperations;
 
@@ -23,9 +23,9 @@ public class SpriteLoader3 {
 	 */
 	public static void loadSprites() {
 		try {
-			Stream index = new Stream(
+			Buffer index = new Buffer(
 					FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive3.idx"));
-			Stream data = new Stream(
+			Buffer data = new Buffer(
 					FileOperations.readFile(Signlink.getCacheDirectory() + "media_archives/media_archive3.dat"));
 			DataInputStream indexFile = new DataInputStream(
 					new GZIPInputStream(new ByteArrayInputStream(index.buffer)));

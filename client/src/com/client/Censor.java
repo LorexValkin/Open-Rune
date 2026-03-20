@@ -5,25 +5,25 @@ package com.client;
 
 final class Censor {
 
-	public static void loadConfig(StreamLoader streamLoader) {
-		Stream stream = new Stream(
+	public static void loadConfig(JagArchive streamLoader) {
+		Buffer stream = new Buffer(
 				streamLoader.getDataForName("fragmentsenc.txt"));
-		Stream stream_1 = new Stream(streamLoader.getDataForName("badenc.txt"));
-		Stream stream_2 = new Stream(
+		Buffer stream_1 = new Buffer(streamLoader.getDataForName("badenc.txt"));
+		Buffer stream_2 = new Buffer(
 				streamLoader.getDataForName("domainenc.txt"));
-		Stream stream_3 = new Stream(streamLoader.getDataForName("tldlist.txt"));
+		Buffer stream_3 = new Buffer(streamLoader.getDataForName("tldlist.txt"));
 		readValues(stream, stream_1, stream_2, stream_3);
 	}
 
-	private static void readValues(Stream stream, Stream stream_1,
-			Stream stream_2, Stream stream_3) {
+	private static void readValues(Buffer stream, Buffer stream_1,
+			Buffer stream_2, Buffer stream_3) {
 		readBadEnc(stream_1);
 		readDomainEnc(stream_2);
 		readFragmentsEnc(stream);
 		readTldList(stream_3);
 	}
 
-	private static void readTldList(Stream stream) {
+	private static void readTldList(Buffer stream) {
 		int i = stream.readDWord();
 		aCharArrayArray624 = new char[i][];
 		anIntArray625 = new int[i];
@@ -38,26 +38,26 @@ final class Censor {
 
 	}
 
-	private static void readBadEnc(Stream stream) {
+	private static void readBadEnc(Buffer stream) {
 		int j = stream.readDWord();
 		aCharArrayArray621 = new char[j][];
 		aByteArrayArrayArray622 = new byte[j][][];
 		method493(stream, aCharArrayArray621, aByteArrayArrayArray622);
 	}
 
-	private static void readDomainEnc(Stream stream) {
+	private static void readDomainEnc(Buffer stream) {
 		int i = stream.readDWord();
 		aCharArrayArray623 = new char[i][];
 		method494(aCharArrayArray623, stream);
 	}
 
-	private static void readFragmentsEnc(Stream stream) {
+	private static void readFragmentsEnc(Buffer stream) {
 		anIntArray620 = new int[stream.readDWord()];
 		for (int i = 0; i < anIntArray620.length; i++)
 			anIntArray620[i] = stream.readUnsignedWord();
 	}
 
-	private static void method493(Stream stream, char ac[][], byte abyte0[][][]) {
+	private static void method493(Buffer stream, char ac[][], byte abyte0[][][]) {
 		for (int j = 0; j < ac.length; j++) {
 			char ac1[] = new char[stream.readUnsignedByte()];
 			for (int k = 0; k < ac1.length; k++)
@@ -76,7 +76,7 @@ final class Censor {
 
 	}
 
-	private static void method494(char ac[][], Stream stream) {
+	private static void method494(char ac[][], Buffer stream) {
 		for (int j = 0; j < ac.length; j++) {
 			char ac1[] = new char[stream.readUnsignedByte()];
 			for (int k = 0; k < ac1.length; k++)

@@ -214,21 +214,21 @@ public class ObjectUtils {
      * ObjectUtils.equals(Boolean.TRUE, Boolean.FALSE) = false
      * </pre>
      *
-     * @param object1  the first object, may be {@code null}
-     * @param object2  the second object, may be {@code null}
+     * @param WallObject  the first object, may be {@code null}
+     * @param WallDecoration  the second object, may be {@code null}
      * @return {@code true} if the values of both objects are the same
      * @deprecated this method has been replaced by {@code java.util.Objects.equals(Object, Object)} in Java 7 and will
      * be removed from future releases.
      */
     @Deprecated
-    public static boolean equals(final Object object1, final Object object2) {
-        if (object1 == object2) {
+    public static boolean equals(final Object WallObject, final Object WallDecoration) {
+        if (WallObject == WallDecoration) {
             return true;
         }
-        if (object1 == null || object2 == null) {
+        if (WallObject == null || WallDecoration == null) {
             return false;
         }
-        return object1.equals(object2);
+        return WallObject.equals(WallDecoration);
     }
 
     /**
@@ -246,12 +246,12 @@ public class ObjectUtils {
      * ObjectUtils.notEqual(Boolean.TRUE, Boolean.FALSE) = true
      * </pre>
      *
-     * @param object1  the first object, may be {@code null}
-     * @param object2  the second object, may be {@code null}
+     * @param WallObject  the first object, may be {@code null}
+     * @param WallDecoration  the second object, may be {@code null}
      * @return {@code false} if the values of both objects are the same
      */
-    public static boolean notEqual(final Object object1, final Object object2) {
-        return ObjectUtils.equals(object1, object2) == false;
+    public static boolean notEqual(final Object WallObject, final Object WallDecoration) {
+        return ObjectUtils.equals(WallObject, WallDecoration) == false;
     }
 
     /**
@@ -309,7 +309,7 @@ public class ObjectUtils {
         return hash;
     }
 
-    // Identity ToString
+    // MachineIdentity ToString
     //-----------------------------------------------------------------------
     /**
      * <p>Gets the toString that would be produced by {@code Object}

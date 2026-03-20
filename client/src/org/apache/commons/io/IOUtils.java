@@ -554,7 +554,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input Stream to be fully buffered.
+     * @param input Buffer to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
      * @since 2.0
@@ -579,7 +579,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input Stream to be fully buffered.
+     * @param input Buffer to be fully buffered.
      * @param size the initial buffer size
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs

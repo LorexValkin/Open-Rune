@@ -95,9 +95,9 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		}
 	}
 //fuck you if you think you can ddos LMFAO
-	public void start(StreamLoader streamLoader, Client client) {
+	public void start(JagArchive streamLoader, Client client) {
 		byte[] fileData = streamLoader.getDataForName("map_index");
-		Stream stream = new Stream(fileData);
+		Buffer stream = new Buffer(fileData);
 		int length = stream.readUnsignedWord();
 		mapIndices1 = new int[length];
 		mapIndices2 = new int[length];
@@ -108,7 +108,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 			mapIndices3[i2] = stream.readUnsignedWord();
 		}
 		fileData = streamLoader.getDataForName("midi_index");
-		stream = new Stream(fileData);
+		stream = new Buffer(fileData);
 		length = fileData.length;
 		anIntArray1348 = new int[length];
 		for (int k2 = 0; k2 < length; k2++)
@@ -159,12 +159,12 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		running = false;
 	}
 
-	public void method554(boolean flag) {
+	public void requestMaps(boolean flag) {
 		int j = mapIndices1.length;
 		for (int k = 0; k < j; k++)
 			if (flag || mapIndices4[k] != 0) {
-				method563((byte) 2, 3, mapIndices3[k]);
-				method563((byte) 2, 3, mapIndices2[k]);
+				requestRegionFile((byte) 2, 3, mapIndices3[k]);
+				requestRegionFile((byte) 2, 3, mapIndices2[k]);
 			}
 
 	}
@@ -220,7 +220,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		return 30999;
 	}
 
-	public void method558(int i, int j) {
+	public void requestFile(int i, int j) {
 		synchronized (nodeSubList) {
 			for (OnDemandData onDemandData = (OnDemandData) nodeSubList
 					.reverseGetFirst(); onDemandData != null; onDemandData = (OnDemandData) nodeSubList
@@ -265,7 +265,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 					handleFailed();
 					if (uncompletedCount == 0 && j >= 5)
 						break;
-					method568();
+					processResponse();
 					if (inputStream != null)
 						readData();
 				}
@@ -334,7 +334,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		}
 	}
 
-	public void method560(int i, int j) {
+	public void prefetchFile(int i, int j) {
 		if (clientInstance.decompressors[0] == null)
 			return;
 		if (anInt1332 == 0)
@@ -383,7 +383,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		return onDemandData;
 	}
 
-	public int method562(int i, int k, int l) {
+	public int getMapFile(int i, int k, int l) {
 		int i1 = (l << 8) + k;
 		for (int j1 = 0; j1 < mapIndices1.length; j1++) {
 			if (mapIndices1[j1] == i1) {
@@ -397,11 +397,11 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 	}
 
 	@Override
-	public void method548(int i) {
-		method558(0, i);
+	public void requestModel(int i) {
+		requestFile(0, i);
 	}
 
-	public void method563(byte byte0, int i, int j) {
+	public void requestRegionFile(byte byte0, int i, int j) {
 		if (clientInstance.decompressors[0] == null)
 			return;
 		if (versions[i][j] == 0)
@@ -413,7 +413,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		totalFiles++;
 	}
 
-	public boolean method564(int i) {
+	public boolean isFileReady(int i) {
 		for (int k = 0; k < mapIndices1.length; k++)
 			if (mapIndices3[k] == i)
 				return true;
@@ -451,7 +451,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		}
 	}
 
-	public void method566() {
+	public void clearPrefetch() {
 		synchronized (aClass19_1344) {
 			aClass19_1344.removeAll();
 		}
@@ -481,7 +481,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		}
 	}
 
-	private void method568() {
+	private void processResponse() {
 		while (uncompletedCount == 0 && completedCount < 10) {
 			if (anInt1332 == 0)
 				break;
@@ -533,29 +533,29 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		}
 	}
 
-	public boolean method569(int i) {
+	public boolean isPrefetchComplete(int i) {
 		return anIntArray1348[i] == 1;
 	}
 
 	public OnDemandFetcher() {
-		requested = new NodeList();
+		requested = new DoublyLinkedList();
 		statusString = "";
 		new CRC32();
 		ioBuffer = new byte[500];
 		fileStatus = new byte[4][];
-		aClass19_1344 = new NodeList();
+		aClass19_1344 = new DoublyLinkedList();
 		running = true;
 		waiting = false;
-		aClass19_1358 = new NodeList();
+		aClass19_1358 = new DoublyLinkedList();
 		gzipInputBuffer = new byte[0x71868];
-		nodeSubList = new NodeSubList();
+		nodeSubList = new DualLinkedList();
 		versions = new int[4][];
-		aClass19_1368 = new NodeList();
-		aClass19_1370 = new NodeList();
+		aClass19_1368 = new DoublyLinkedList();
+		aClass19_1370 = new DoublyLinkedList();
 	}
 
 	private int totalFiles;
-	private final NodeList requested;
+	private final DoublyLinkedList requested;
 	private int anInt1332;
 	public String statusString;
 	private int writeLoopCycle;
@@ -565,7 +565,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 	public int onDemandCycle;
 	private final byte[][] fileStatus;
 	private Client clientInstance;
-	private final NodeList aClass19_1344;
+	private final DoublyLinkedList aClass19_1344;
 	private int completedSize;
 	private int expectedSize;
 	private int[] anIntArray1348;
@@ -576,17 +576,17 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 	private OutputStream outputStream;
 	private int[] mapIndices4;
 	private boolean waiting;
-	private final NodeList aClass19_1358;
+	private final DoublyLinkedList aClass19_1358;
 	private final byte[] gzipInputBuffer;
-	private final NodeSubList nodeSubList;
+	private final DualLinkedList nodeSubList;
 	private InputStream inputStream;
 	private Socket socket;
 	private final int[][] versions;
 	private int uncompletedCount;
 	private int completedCount;
-	private final NodeList aClass19_1368;
+	private final DoublyLinkedList aClass19_1368;
 	private OnDemandData current;
-	private final NodeList aClass19_1370;
+	private final DoublyLinkedList aClass19_1370;
 	private int[] mapIndices1;
 	private byte[] modelIndices;
 	private int loopCycle;

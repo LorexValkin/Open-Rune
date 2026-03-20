@@ -23,7 +23,7 @@ public class AccountManager {
 	/**
 	 * Stores the accounts
 	 */
-	public static List<AccountData> accounts = new LinkedList<AccountData>();
+	public static List<AccountData> accounts = new java.util.LinkedList<AccountData>();
 	
 	/**
 	 * Gets all the stored accounts in the map

@@ -200,7 +200,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public boolean hasBOM(final ByteOrderMark bom) throws IOException {
         if (!boms.contains(bom)) {
-            throw new IllegalArgumentException("Stream not configure to detect " + bom);
+            throw new IllegalArgumentException("Buffer not configure to detect " + bom);
         }
         getBOM();
         return byteOrderMark != null && byteOrderMark.equals(bom);

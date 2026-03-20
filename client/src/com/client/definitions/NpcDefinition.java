@@ -12,13 +12,13 @@ import java.io.FileWriter;
 //
 //import org.apache.commons.io.FileUtils;
 
-import com.client.Class36;
+import com.client.AnimationFrame;
 import com.client.Client;
 import com.client.Configuration;
-import com.client.MRUNodes;
+import com.client.LRUCache;
 import com.client.Model;
-import com.client.Stream;
-import com.client.StreamLoader;
+import com.client.Buffer;
+import com.client.JagArchive;
 
 public final class NpcDefinition {
 
@@ -1270,9 +1270,9 @@ public final class NpcDefinition {
 
 	public static int totalAmount;
 
-	public static void unpackConfig(StreamLoader streamLoader) {
-		stream = new Stream(streamLoader.getDataForName("npc.dat"));
-		Stream stream = new Stream(streamLoader.getDataForName("npc.idx"));
+	public static void unpackConfig(JagArchive streamLoader) {
+		stream = new Buffer(streamLoader.getDataForName("npc.dat"));
+		Buffer stream = new Buffer(streamLoader.getDataForName("npc.idx"));
 		totalAmount = stream.readUnsignedWord();
 		streamIndices = new int[totalAmount];
 		int i = 2;
@@ -1294,7 +1294,7 @@ public final class NpcDefinition {
 	}
 
 	
-	private void readValues(Stream stream) {
+	private void readValues(Buffer stream) {
 		int last = -1;
 		while (true) {
 			int opcode = stream.readUnsignedByte();
@@ -1410,27 +1410,27 @@ public final class NpcDefinition {
 		}
 	}
 
-	public Model method160() {
+	public Model getHeadModel() {
 		if (childrenIDs != null) {
-			NpcDefinition entityDef = method161();
+			NpcDefinition entityDef = getMorphedNpc();
 			if (entityDef == null)
 				return null;
 			else
-				return entityDef.method160();
+				return entityDef.getHeadModel();
 		}
 		if (dialogueModels == null) {
 			return null;
 		}
 		boolean flag1 = false;
 		for (int i = 0; i < dialogueModels.length; i++)
-			if (!Model.method463(dialogueModels[i]))
+			if (!Model.isModelLoaded(dialogueModels[i]))
 				flag1 = true;
 
 		if (flag1)
 			return null;
 		Model aclass30_sub2_sub4_sub6s[] = new Model[dialogueModels.length];
 		for (int j = 0; j < dialogueModels.length; j++)
-			aclass30_sub2_sub4_sub6s[j] = Model.method462(dialogueModels[j]);
+			aclass30_sub2_sub4_sub6s[j] = Model.getModel(dialogueModels[j]);
 
 		Model model;
 		if (aclass30_sub2_sub4_sub6s.length == 1)
@@ -1445,13 +1445,13 @@ public final class NpcDefinition {
 		return model;
 	}
 
-	public NpcDefinition method161() {
+	public NpcDefinition getMorphedNpc() {
 		int j = -1;
 		if (anInt57 != -1) {
 			VarBit varBit = VarBit.cache[anInt57];
-			int k = varBit.anInt648;
-			int l = varBit.anInt649;
-			int i1 = varBit.anInt650;
+			int k = varBit.settingIndex;
+			int l = varBit.lowBit;
+			int i1 = varBit.highBit;
 			int j1 = Client.anIntArray1232[i1 - l];
 			j = clientInstance.variousSettings[k] >> l & j1;
 		} else if (anInt59 != -1)
@@ -1465,26 +1465,26 @@ public final class NpcDefinition {
 			return var2 == -1 ? null : forID(var2);
 	}
 
-	public Model method164(int j, int k, int ai[]) {
+	public Model getAnimatedModel(int j, int k, int ai[]) {
 		if (childrenIDs != null) {
-			NpcDefinition entityDef = method161();
+			NpcDefinition entityDef = getMorphedNpc();
 			if (entityDef == null)
 				return null;
 			else
-				return entityDef.method164(j, k, ai);
+				return entityDef.getAnimatedModel(j, k, ai);
 		}
 		Model model = (Model) mruNodes.insertFromCache(interfaceType);
 		if (model == null) {
 			boolean flag = false;
 			for (int i1 = 0; i1 < models.length; i1++)
-				if (!Model.method463(models[i1]))
+				if (!Model.isModelLoaded(models[i1]))
 					flag = true;
 
 			if (flag)
 				return null;
 			Model aclass30_sub2_sub4_sub6s[] = new Model[models.length];
 			for (int j1 = 0; j1 < models.length; j1++)
-				aclass30_sub2_sub4_sub6s[j1] = Model.method462(models[j1]);
+				aclass30_sub2_sub4_sub6s[j1] = Model.getModel(models[j1]);
 
 			if (aclass30_sub2_sub4_sub6s.length == 1)
 				model = aclass30_sub2_sub4_sub6s[0];
@@ -1495,20 +1495,20 @@ public final class NpcDefinition {
 					model.replaceColor(originalColors[k1], newColors[k1]);
 
 			}
-			model.method469();
-			model.method479(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
-			// model.method479(84 + anInt85, 1000 + anInt92, -90, -580, -90, true);
+			model.buildVertexGroups();
+			model.applyLighting(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
+			// model.applyLighting(84 + anInt85, 1000 + anInt92, -90, -580, -90, true);
 			mruNodes.removeFromCache(model, interfaceType);
 		}
 		Model model_1 = Model.EMPTY_MODEL;
-		model_1.method464(model, Class36.method532(k) & Class36.method532(j));
+		model_1.copyTransformed(model, AnimationFrame.method532(k) & AnimationFrame.method532(j));
 		if (k != -1 && j != -1)
-			model_1.method471(ai, j, k);
+			model_1.applyFrames(ai, j, k);
 		else if (k != -1)
-			model_1.method470(k);
+			model_1.applyFrame(k);
 		if (anInt91 != 128 || anInt86 != 128)
-			model_1.method478(anInt91, anInt91, anInt86);
-		model_1.method466();
+			model_1.scale(anInt91, anInt91, anInt86);
+		model_1.calculateBounds();
 		model_1.faceGroups = null;
 		model_1.vertexGroups = null;
 		if (boundDim == 1)
@@ -1598,7 +1598,7 @@ public final class NpcDefinition {
 	public int anInt57;
 	public int anInt58;
 	public int anInt59;
-	public static Stream stream;
+	public static Buffer stream;
 	public int combatLevel;
 	public final int anInt64;
 	public String name;
@@ -1626,6 +1626,6 @@ public final class NpcDefinition {
 	public int anInt92;
 	public boolean aBoolean93;
 	public int[] models;
-	public static MRUNodes mruNodes = new MRUNodes(30);
+	public static LRUCache mruNodes = new LRUCache(30);
 
 }
