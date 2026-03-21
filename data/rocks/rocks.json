@@ -1,0 +1,31 @@
+[
+  {"id": 7484, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+  {"id": 7452, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+  {"id": 7453, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+
+  {"id": 7485, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+  {"id": 7486, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+
+  {"id": 7455, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 7468},
+  {"id": 7488, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 7468},
+
+  {"id": 7457, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 7468},
+  {"id": 7490, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 7468},
+
+  {"id": 7456, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 7468},
+  {"id": 7489, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 7468},
+
+  {"id": 7458, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 7468},
+  {"id": 7491, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 7468},
+
+  {"id": 7459, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 7468},
+  {"id": 7492, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 7468},
+
+  {"id": 7460, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 7468},
+  {"id": 7493, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 7468},
+
+  {"id": 7461, "name": "Runite rock", "oreId": 451, "level": 85, "xp": 125.0, "respawnTicks": 1200, "emptyId": 7468},
+
+  {"id": 11388, "name": "Amethyst rock", "oreId": 21347, "level": 92, "xp": 240.0, "respawnTicks": 125, "emptyId": -1},
+  {"id": 11389, "name": "Amethyst rock", "oreId": 21347, "level": 92, "xp": 240.0, "respawnTicks": 125, "emptyId": -1}
+]

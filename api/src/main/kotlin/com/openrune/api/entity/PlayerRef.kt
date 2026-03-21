@@ -70,6 +70,33 @@ interface PlayerRef {
     fun flagAppearanceUpdate()
     fun flagChatUpdate()
 
+    // --- Client Sync (Admin Commands Patch) ---
+
+    /** Send inventory contents to the client (packet 53, interface 3214). */
+    fun sendInventory()
+
+    /** Send equipment contents to the client (packet 53, interface 1688). */
+    fun sendEquipment()
+
+    /** Send a single skill update to the client (opcode 134). */
+    fun sendSkillUpdate(skill: Int)
+
+    /** Refresh skill tab tooltip text (current/max level, XP, XP to next level). */
+    fun refreshSkillText(skill: Int)
+
+    /**
+     * Send XP drop packet (opcode 11) — triggers the floating XP drop overlay
+     * and feeds the XP counter in the corner. Separate from sendSkillUpdate
+     * which only updates the skill tab numbers.
+     */
+    fun sendXpDrop(skill: Int, amount: Int)
+
+    /** Send text to a client interface element (opcode 126). */
+    fun sendInterfaceText(text: String, interfaceId: Int)
+
+    /** Open a chatbox interface dialog (opcode 218) — used for level-up popups. */
+    fun sendChatboxInterface(interfaceId: Int)
+
     // --- Session ---
     fun disconnect(message: String = "")
     val isOnline: Boolean

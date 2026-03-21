@@ -1,0 +1,10 @@
+[
+  {"id": 1265,  "name": "Bronze pickaxe",  "miningLevel": 1,  "animId": 625,  "speed": 1.0},
+  {"id": 1267,  "name": "Iron pickaxe",    "miningLevel": 1,  "animId": 626,  "speed": 1.05},
+  {"id": 1269,  "name": "Steel pickaxe",   "miningLevel": 6,  "animId": 627,  "speed": 1.10},
+  {"id": 12297, "name": "Black pickaxe",   "miningLevel": 6,  "animId": 3873, "speed": 1.15},
+  {"id": 1273,  "name": "Mithril pickaxe", "miningLevel": 21, "animId": 629,  "speed": 1.20},
+  {"id": 1271,  "name": "Adamant pickaxe", "miningLevel": 31, "animId": 628,  "speed": 1.30},
+  {"id": 1275,  "name": "Rune pickaxe",    "miningLevel": 41, "animId": 624,  "speed": 1.50},
+  {"id": 11920, "name": "Dragon pickaxe",  "miningLevel": 61, "animId": 7139, "speed": 1.75}
+]

@@ -36,6 +36,13 @@ class ObjectManager(
 
     private val log = LoggerFactory.getLogger(ObjectManager::class.java)
 
+    /**
+     * PlayerManager reference for sending visual sync packets.
+     * Set by GameEngine after construction.
+     * Added by Gathering Skills Patch.
+     */
+    var playerManager: PlayerManager? = null
+
     /** All active custom (non-cache) objects, keyed by packed position. */
     private val customObjects = mutableMapOf<Long, GameObject>()
 
@@ -110,6 +117,9 @@ class ObjectManager(
             solid = true
         )
         pendingReverts.add(PendingRevert(position, original, ticks))
+
+        // Send visual update to all nearby players (Gathering Skills Patch)
+        sendObjectChangeToPlayers(position, originalId, replacementId, type, rotation)
     }
 
     // ================================================================
@@ -125,11 +135,87 @@ class ObjectManager(
             val revert = iterator.next()
             if (--revert.ticksRemaining <= 0) {
                 // Despawn the temporary and restore the original
+                val tempObj = customObjects[packPosition(revert.position)]
                 despawn(revert.position)
                 spawn(revert.originalObject)
                 iterator.remove()
+
+                // Send visual update to all nearby players (Gathering Skills Patch)
+                // Removes the depleted object and restores the original
+                if (tempObj != null) {
+                    sendObjectChangeToPlayers(
+                        revert.position,
+                        tempObj.id,
+                        revert.originalObject.id,
+                        revert.originalObject.type,
+                        revert.originalObject.rotation
+                    )
+                }
             }
         }
+    }
+
+    // ================================================================
+    //  Visual sync (Gathering Skills Patch)
+    // ================================================================
+
+    /**
+     * Send object replacement visual update to all nearby players.
+     * Uses opcode 85 (set reference) + 101 (remove) + 151 (spawn).
+     *
+     * This follows the same pattern as ObjectInteractionHandler's door system.
+     */
+    private fun sendObjectChangeToPlayers(position: Position, oldId: Int, newId: Int, type: Int, rotation: Int) {
+        val pm = playerManager ?: return
+        for (player in pm.allPlayers()) {
+            if (player.position.isWithinDistance(position, 60)) {
+                sendRefAndRemove(player, position, type, rotation)
+                sendRefAndSpawn(player, position, newId, type, rotation)
+            }
+        }
+    }
+
+    /**
+     * Send opcode 85 (set reference position) + opcode 101 (remove object).
+     */
+    private fun sendRefAndRemove(player: Player, pos: Position, type: Int, rotation: Int) {
+        val baseX = ((player.lastRegion.x shr 3) - 6) * 8
+        val baseY = ((player.lastRegion.y shr 3) - 6) * 8
+        val localX = pos.x - baseX
+        val localY = pos.y - baseY
+        if (localX < 0 || localX >= 104 || localY < 0 || localY >= 104) return
+
+        val ref = PacketBuilder(85)
+        ref.addByteC(localY)
+        ref.addByteC(localX)
+        player.send(ref)
+
+        val remove = PacketBuilder(101)
+        remove.addByteC((type shl 2) or (rotation and 3))
+        remove.addByte(0)
+        player.send(remove)
+    }
+
+    /**
+     * Send opcode 85 (set reference position) + opcode 151 (spawn object).
+     */
+    private fun sendRefAndSpawn(player: Player, pos: Position, objectId: Int, type: Int, rotation: Int) {
+        val baseX = ((player.lastRegion.x shr 3) - 6) * 8
+        val baseY = ((player.lastRegion.y shr 3) - 6) * 8
+        val localX = pos.x - baseX
+        val localY = pos.y - baseY
+        if (localX < 0 || localX >= 104 || localY < 0 || localY >= 104) return
+
+        val ref = PacketBuilder(85)
+        ref.addByteC(localY)
+        ref.addByteC(localX)
+        player.send(ref)
+
+        val spawn = PacketBuilder(151)
+        spawn.addByteA(0)
+        spawn.addLEShort(objectId)
+        spawn.addByteS((type shl 2) or (rotation and 3))
+        player.send(spawn)
     }
 
     // ================================================================

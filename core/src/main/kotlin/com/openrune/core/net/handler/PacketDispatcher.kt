@@ -172,6 +172,20 @@ class PacketDispatcher(
             eventBus.emit(ItemEquipEvent(player, itemId, slot))
         }
 
+        // Unequip item (first click on equipment interface 1688)
+        // Standard 317 opcode 145: LEShortA interfaceId, ShortA slot, ShortA itemId
+        // Only fires ItemUnequipEvent when interface is 1688 (equipment screen).
+        // Added by Gathering Skills Patch.
+        register(145) { index, pkt ->
+            val player = playerManager.getByIndex(index) ?: return@register
+            val interfaceId = pkt.readLEShortA(0)
+            val slot = pkt.readShortA(2)
+            val itemId = pkt.readShortA(4)
+            if (interfaceId == 1688) {
+                eventBus.emit(ItemUnequipEvent(player, itemId, slot))
+            }
+        }
+
         // Button click
         register(185) { index, pkt ->
             val player = playerManager.getByIndex(index) ?: return@register

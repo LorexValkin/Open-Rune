@@ -15741,6 +15741,7 @@ public class Client extends RSApplet {
 	}
 
 	public void sendFrame126(String str, int i) {
+		System.out.println("[DEBUG sendFrame126] id=" + i + " text=" + str + " component=" + (RSInterface.interfaceCache[i] != null ? "EXISTS" : "NULL"));
 		RSInterface component = RSInterface.interfaceCache[i];
 		if (component != null) {
 			component.message = str;

@@ -8,7 +8,10 @@
     "defenceAnim": 424,
     "specialBar": false,
     "twoHanded": false,
-    "bonuses": { "attackCrush": 0, "meleeStrength": 0 }
+    "bonuses": {
+      "attackCrush": 0,
+      "meleeStrength": 0
+    }
   },
   {
     "id": 4151,
@@ -20,7 +23,10 @@
     "specialBar": true,
     "specialCost": 50,
     "twoHanded": false,
-    "bonuses": { "attackSlash": 82, "meleeStrength": 82 }
+    "bonuses": {
+      "attackSlash": 82,
+      "meleeStrength": 82
+    }
   },
   {
     "id": 4587,
@@ -32,7 +38,10 @@
     "specialBar": true,
     "specialCost": 55,
     "twoHanded": false,
-    "bonuses": { "attackSlash": 67, "meleeStrength": 66 }
+    "bonuses": {
+      "attackSlash": 67,
+      "meleeStrength": 66
+    }
   },
   {
     "id": 1333,
@@ -43,7 +52,10 @@
     "defenceAnim": 388,
     "specialBar": false,
     "twoHanded": false,
-    "bonuses": { "attackSlash": 45, "meleeStrength": 44 }
+    "bonuses": {
+      "attackSlash": 45,
+      "meleeStrength": 44
+    }
   },
   {
     "id": 861,
@@ -55,7 +67,10 @@
     "specialBar": true,
     "specialCost": 55,
     "twoHanded": true,
-    "bonuses": { "attackRanged": 69, "rangedStrength": 0 }
+    "bonuses": {
+      "attackRanged": 69,
+      "rangedStrength": 0
+    }
   },
   {
     "id": 11235,
@@ -67,7 +82,10 @@
     "specialBar": true,
     "specialCost": 65,
     "twoHanded": true,
-    "bonuses": { "attackRanged": 95, "rangedStrength": 0 }
+    "bonuses": {
+      "attackRanged": 95,
+      "rangedStrength": 0
+    }
   },
   {
     "id": 1381,
@@ -78,6 +96,235 @@
     "defenceAnim": 420,
     "specialBar": false,
     "twoHanded": false,
-    "bonuses": { "attackMagic": 10, "magicDamage": 0 }
+    "bonuses": {
+      "attackMagic": 10,
+      "magicDamage": 0
+    }
+  },
+  {
+    "id": 1351,
+    "name": "Bronze axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 4,
+      "meleeStrength": 5
+    }
+  },
+  {
+    "id": 1349,
+    "name": "Iron axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 8,
+      "meleeStrength": 9
+    }
+  },
+  {
+    "id": 1353,
+    "name": "Steel axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 12,
+      "meleeStrength": 13
+    }
+  },
+  {
+    "id": 1361,
+    "name": "Black axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 14,
+      "meleeStrength": 16
+    }
+  },
+  {
+    "id": 1355,
+    "name": "Mithril axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 17,
+      "meleeStrength": 19
+    }
+  },
+  {
+    "id": 1357,
+    "name": "Adamant axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 24,
+      "meleeStrength": 27
+    }
+  },
+  {
+    "id": 1359,
+    "name": "Rune axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 32,
+      "meleeStrength": 36
+    }
+  },
+  {
+    "id": 6739,
+    "name": "Dragon axe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 395,
+    "defenceAnim": 424,
+    "specialBar": true,
+    "specialCost": 100,
+    "twoHanded": false,
+    "bonuses": {
+      "attackSlash": 38,
+      "meleeStrength": 42
+    }
+  },
+  {
+    "id": 1265,
+    "name": "Bronze pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 4,
+      "meleeStrength": 5
+    }
+  },
+  {
+    "id": 1267,
+    "name": "Iron pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 8,
+      "meleeStrength": 9
+    }
+  },
+  {
+    "id": 1269,
+    "name": "Steel pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 12,
+      "meleeStrength": 13
+    }
+  },
+  {
+    "id": 12297,
+    "name": "Black pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 14,
+      "meleeStrength": 16
+    }
+  },
+  {
+    "id": 1273,
+    "name": "Mithril pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 17,
+      "meleeStrength": 19
+    }
+  },
+  {
+    "id": 1271,
+    "name": "Adamant pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 24,
+      "meleeStrength": 27
+    }
+  },
+  {
+    "id": 1275,
+    "name": "Rune pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": false,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 32,
+      "meleeStrength": 36
+    }
+  },
+  {
+    "id": 11920,
+    "name": "Dragon pickaxe",
+    "speed": 5,
+    "style": "MELEE",
+    "attackAnim": 400,
+    "defenceAnim": 424,
+    "specialBar": true,
+    "specialCost": 100,
+    "twoHanded": false,
+    "bonuses": {
+      "attackStab": 38,
+      "meleeStrength": 42
+    }
   }
 ]

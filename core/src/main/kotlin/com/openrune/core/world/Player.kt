@@ -249,6 +249,55 @@ class Player(
     }
 
     // ================================================================
+    //  Inventory & Equipment Sync (Gathering Skills Patch)
+    // ================================================================
+
+    /**
+     * Send item container to a client interface.
+     * Opcode 53 — variable short size.
+     *
+     * Client reads: short interfaceId, short count,
+     *   then per slot: byte amount (255 = read int next), LEShortA (itemId + 1, 0 = empty).
+     *
+     * Standard 317 format, verified against PI reference.
+     */
+    fun sendInterfaceItems(interfaceId: Int, items: IntArray, amounts: IntArray, count: Int) {
+        val p = PacketBuilder(53)
+        p.startVariableShortSize()
+        p.addShort(interfaceId)
+        p.addShort(count)
+        for (i in 0 until count) {
+            val amount = amounts.getOrElse(i) { 0 }
+            if (amount > 254) {
+                p.addByte(255)
+                p.addInt(amount)
+            } else {
+                p.addByte(amount)
+            }
+            val itemId = items.getOrElse(i) { -1 }
+            p.addLEShortA(if (itemId >= 0) itemId + 1 else 0)
+        }
+        p.endVariableShortSize()
+        send(p)
+    }
+
+    /**
+     * Send full inventory refresh to client.
+     * Interface 3214 = inventory container.
+     */
+    override fun sendInventory() {
+        sendInterfaceItems(3214, inventoryItems, inventoryAmounts, 28)
+    }
+
+    /**
+     * Send full equipment refresh to client.
+     * Interface 1688 = equipment container.
+     */
+    override fun sendEquipment() {
+        sendInterfaceItems(1688, equipment, equipmentAmounts, 14)
+    }
+
+    // ================================================================
     //  Login initialization
     // ================================================================
     fun initialize() {
@@ -306,6 +355,10 @@ class Player(
         sendFriendsStatus(2)
         sendChatModes(0, 0, 0)
 
+        // === Inventory & Equipment sync (Gathering Skills Patch) ===
+        sendInventory()
+        sendEquipment()
+
         // === Welcome message ===
         sendMessage("Welcome to OpenRune.")
 
@@ -317,18 +370,44 @@ class Player(
         flagAppearanceUpdate()
     }
 
-    fun sendSkillUpdate(skill: Int) { val p = PacketBuilder(134); p.addByte(skill); p.addIntME1(experience.getOrElse(skill) { 0.0 }.toInt()); p.addByte(levels.getOrElse(skill) { 1 }); send(p) }
+    override fun sendSkillUpdate(skill: Int) { val p = PacketBuilder(134); p.addByte(skill); p.addIntME1(experience.getOrElse(skill) { 0.0 }.toInt()); p.addByte(levels.getOrElse(skill) { 1 }); send(p) }
+
+    /**
+     * Send XP drop packet (opcode 11, variable byte size).
+     * Client reads: long xpAmount, byte skillCount, byte[] skillIds.
+     * This triggers the floating XP drop overlay and the corner XP counter.
+     */
+    override fun sendXpDrop(skill: Int, amount: Int) {
+        val p = PacketBuilder(11)
+        p.startVariableSize()
+        p.addLong(amount.toLong())
+        p.addByte(1)       // 1 skill
+        p.addByte(skill)   // skill ID
+        p.endVariableSize()
+        send(p)
+    }
 
     /** Send a client config/varp (opcode 36). */
     fun sendConfig(id: Int, value: Int) { val p = PacketBuilder(36); p.addLEShort(id); p.addByte(value); send(p) }
 
     /** Send interface text (opcode 126, variable short/word size). */
-    fun sendInterfaceText(text: String, interfaceId: Int) {
+    override fun sendInterfaceText(text: String, interfaceId: Int) {
         val p = PacketBuilder(126)
         p.startVariableShortSize()
         p.addString(text)
         p.addShortA(interfaceId)
         p.endVariableShortSize()
+        send(p)
+    }
+
+    /**
+     * Open a chatbox interface dialog (opcode 218).
+     * Client reads: LEShortA interfaceId, sets dialogID.
+     * Used for level-up popups, NPC dialogue, etc.
+     */
+    override fun sendChatboxInterface(interfaceId: Int) {
+        val p = PacketBuilder(218)
+        p.addLEShortA(interfaceId)
         send(p)
     }
 
@@ -389,7 +468,7 @@ class Player(
      * Each skill has 4 interface texts: current level, max level, current XP, XP to next level.
      * Interface IDs match the Project51/Anguish client.
      */
-    fun refreshSkillText(skill: Int) {
+    override fun refreshSkillText(skill: Int) {
         val level = levels.getOrElse(skill) { 1 }
         val xp = experience.getOrElse(skill) { 0.0 }.toInt()
         val maxLevel = getLevelForXP(xp)

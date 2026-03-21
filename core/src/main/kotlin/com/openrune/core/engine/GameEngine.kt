@@ -17,6 +17,7 @@ import com.openrune.core.world.update.PlayerUpdateProtocol
 import com.openrune.core.world.ObjectManager
 import com.openrune.core.world.GroundItemManager
 import com.openrune.core.world.interaction.ObjectInteractionHandler
+import com.openrune.core.world.interaction.EquipmentHandler
 import com.openrune.cache.io.CacheReader
 import com.openrune.cache.def.CacheNpcDefinition
 import com.openrune.cache.def.NpcDefinitionDecoder
@@ -76,6 +77,7 @@ class GameEngine(
         private set
     val regionLoader: RegionLoader
     val objectInteractionHandler: ObjectInteractionHandler
+    val equipmentHandler: EquipmentHandler
 
     init {
         var cacheReader: CacheReader? = null
@@ -104,6 +106,30 @@ class GameEngine(
         // Object interactions (doors, stairs, ladders) - engine-level
         objectInteractionHandler = ObjectInteractionHandler(eventBus, playerManager)
         objectInteractionHandler.initialize()
+
+        // Equipment handler (equip, unequip, 2H conflicts) - engine-level
+        // Added by Gathering Skills Patch
+        equipmentHandler = EquipmentHandler(eventBus, playerManager)
+        equipmentHandler.initialize()
+
+        // Give ObjectManager access to PlayerManager for visual sync
+        objectManager.playerManager = playerManager
+
+        // Object replacement event handler — plugins emit ObjectReplaceEvent,
+        // engine handles collision + visual sync + respawn timer.
+        // Added by Gathering Skills Patch.
+        eventBus.subscribe(
+            ObjectReplaceEvent::class,
+            priority = com.openrune.api.event.EventPriority.NORMAL,
+            owner = "core:engine"
+        ) { event ->
+            if (!event.cancelled) {
+                objectManager.replaceTemporary(
+                    event.position, event.replacementId, event.respawnTicks,
+                    event.originalId, type = event.type, rotation = event.rotation
+                )
+            }
+        }
     }
 
     @Volatile var running = false; private set

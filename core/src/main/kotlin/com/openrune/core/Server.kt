@@ -126,8 +126,8 @@ class OpenRuneServer {
             pluginLoader.loadEnabled(toLoad)
         }
 
-        // Register built-in commands
-        registerBuiltinCommands()
+        // Register engine-level commands (needs internals not available to plugins)
+        registerEngineCommands()
 
         // Start the game engine
         engine.start()
@@ -203,26 +203,18 @@ class OpenRuneServer {
     }
 
     /**
-     * Built-in admin commands that are always available.
+     * Engine-level commands that need direct access to engine internals
+     * (NPC manager, plugin loader, player serializer, engine stats).
+     *
+     * Player-facing commands (::item, ::tele, ::setlevel, ::master, etc.)
+     * have been moved to the admin-commands plugin.
      */
-    private fun registerBuiltinCommands() {
+    private fun registerEngineCommands() {
         eventBus.on<com.openrune.api.event.CommandEvent>(owner = "core") { event ->
             val player = event.player
             if (player.rights.value < 2) return@on
 
             when (event.command) {
-                "reload" -> {
-                    if (event.args.isEmpty()) {
-                        dataStore.reloadAll()
-                        player.sendMessage("All data stores reloaded.")
-                    } else {
-                        val store = event.args[0]
-                        dataStore.reload(store)
-                        player.sendMessage("Reloaded data store: $store")
-                    }
-                    event.cancel()
-                }
-
                 "plugins" -> {
                     val enabled = pluginLoader.getEnabled()
                     val all = pluginLoader.getDescriptors()
@@ -271,31 +263,11 @@ class OpenRuneServer {
                     event.cancel()
                 }
 
-                "online" -> {
-                    player.sendMessage("Players online: ${playerManager.count}")
-                    event.cancel()
-                }
-
                 "save" -> {
                     for (p in playerManager.allPlayers()) {
                         playerSerializer.save(p)
                     }
                     player.sendMessage("All players saved.")
-                    event.cancel()
-                }
-
-                "tele" -> {
-                    if (event.args.size >= 2) {
-                        val x = event.args[0].toIntOrNull()
-                        val y = event.args[1].toIntOrNull()
-                        val z = event.args.getOrNull(2)?.toIntOrNull() ?: 0
-                        if (x != null && y != null) {
-                            player.teleport(x, y, z)
-                            player.sendMessage("Teleported to $x, $y, $z")
-                        }
-                    } else {
-                        player.sendMessage("Usage: ::tele x y [z]")
-                    }
                     event.cancel()
                 }
 
@@ -329,75 +301,6 @@ class OpenRuneServer {
                     event.cancel()
                 }
 
-                "item" -> {
-                    if (event.args.isEmpty()) {
-                        player.sendMessage("Usage: ::item <id> [amount]")
-                    } else {
-                        val itemId = event.args[0].toIntOrNull()
-                        val amount = event.args.getOrNull(1)?.toIntOrNull() ?: 1
-                        if (itemId != null) {
-                            if (player.addItem(itemId, amount)) {
-                                player.sendMessage("Added item $itemId x$amount")
-                            } else {
-                                player.sendMessage("Inventory full.")
-                            }
-                        }
-                    }
-                    event.cancel()
-                }
-
-                "pos" -> {
-                    player.sendMessage("Position: ${player.position} Region: ${player.regionId}")
-                    event.cancel()
-                }
-
-                "anim" -> {
-                    val animId = event.args.getOrNull(0)?.toIntOrNull()
-                    if (animId != null) {
-                        player.animate(animId)
-                        player.sendMessage("Playing animation $animId")
-                    } else {
-                        player.sendMessage("Usage: ::anim <id>")
-                    }
-                    event.cancel()
-                }
-
-                "gfx" -> {
-                    val gfxId = event.args.getOrNull(0)?.toIntOrNull()
-                    if (gfxId != null) {
-                        player.graphic(gfxId, 100, 0)
-                        player.sendMessage("Playing graphic $gfxId")
-                    } else {
-                        player.sendMessage("Usage: ::gfx <id>")
-                    }
-                    event.cancel()
-                }
-
-                "setlevel" -> {
-                    if (event.args.size >= 2) {
-                        val skill = event.args[0].toIntOrNull()
-                        val level = event.args[1].toIntOrNull()
-                        if (skill != null && level != null && skill in 0 until com.openrune.api.entity.Skills.SKILL_COUNT) {
-                            player.setLevel(skill, level)
-                            player.sendMessage("Set ${com.openrune.api.entity.Skills.NAMES[skill]} to level $level")
-                        }
-                    } else {
-                        player.sendMessage("Usage: ::setlevel <skill_id> <level>")
-                    }
-                    event.cancel()
-                }
-
-                "master" -> {
-                    for (i in 0 until com.openrune.api.entity.Skills.SKILL_COUNT) {
-                        player.setLevel(i, 99)
-                        player.addExperience(i, 13034431.0 - player.getExperience(i))
-                    }
-                    player.currentHealth = 99
-                    player.sendMessage("All skills set to 99.")
-                    player.flagAppearanceUpdate()
-                    event.cancel()
-                }
-
                 "engine" -> {
                     player.sendMessage("Tick: ${engine.currentTick}")
                     player.sendMessage("Players: ${playerManager.count}")
@@ -425,6 +328,59 @@ class OpenRuneServer {
                     player.send(config)
                 }
             }
+        }
+
+        // Item drop — remove from inventory, spawn ground item, sync client
+        eventBus.on<com.openrune.api.event.ItemDropEvent>(owner = "core") { event ->
+            if (event.cancelled) return@on
+            val player = event.player as? com.openrune.core.world.Player ?: return@on
+            val slot = event.slot
+            val itemId = player.inventoryItems.getOrElse(slot) { -1 }
+            if (itemId < 0 || itemId != event.itemId) return@on
+
+            val amount = player.inventoryAmounts[slot]
+
+            // Remove from inventory
+            player.inventoryItems[slot] = -1
+            player.inventoryAmounts[slot] = 0
+            player.sendInventory()
+
+            // Spawn ground item at player's feet
+            val groundItem = engine.groundItemManager.drop(
+                itemId, amount, player.position, player.name, engine.currentTick
+            )
+            // Send ground item to the player who dropped it
+            engine.groundItemManager.sendItemToPlayer(player, groundItem)
+
+            event.cancel()
+        }
+
+        // Item pickup — remove ground item, add to inventory, sync client
+        eventBus.on<com.openrune.api.event.ItemPickupEvent>(owner = "core") { event ->
+            if (event.cancelled) return@on
+            val player = event.player as? com.openrune.core.world.Player ?: return@on
+
+            if (player.inventoryFreeSlots() == 0) {
+                player.sendMessage("Your inventory is too full to hold any more items.")
+                event.cancel()
+                return@on
+            }
+
+            val removed = engine.groundItemManager.remove(event.itemId, event.position, player.name)
+            if (removed != null) {
+                player.addItem(removed.itemId, removed.amount)
+                player.sendInventory()
+                // Send remove packet to the picking-up player
+                engine.groundItemManager.sendRemoveToPlayer(player, removed)
+                // Also notify other nearby players
+                for (other in playerManager.allPlayers()) {
+                    if (other !== player && other.position.isWithinDistance(event.position, 60)) {
+                        engine.groundItemManager.sendRemoveToPlayer(other, removed)
+                    }
+                }
+            }
+
+            event.cancel()
         }
     }
 }

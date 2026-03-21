@@ -147,10 +147,12 @@ class GroundItemManager {
     fun sendItemToPlayer(player: Player, item: GroundItem) {
         sendPositionHint(player, item.position)
 
-        val pkt = PacketBuilder(44) // Create ground item
+        // Opcode 44: create ground item
+        // Client reads: LEUShortA (itemId), IntAlt1 (amount), UByte (offset)
+        val pkt = PacketBuilder(44)
         pkt.addLEShortA(item.itemId)
-        pkt.addShort(item.amount)
-        pkt.addByte(0) // Offset
+        pkt.addIntME1(item.amount)   // 4-byte middle-endian, NOT addShort
+        pkt.addByte(0) // Offset from position hint
         player.send(pkt)
     }
 
@@ -160,8 +162,10 @@ class GroundItemManager {
     fun sendRemoveToPlayer(player: Player, item: GroundItem) {
         sendPositionHint(player, item.position)
 
-        val pkt = PacketBuilder(156) // Remove ground item
-        pkt.addByteS(0) // Offset
+        // Opcode 156: remove ground item
+        // Client reads: UByteA (offset), UWord (itemId)
+        val pkt = PacketBuilder(156)
+        pkt.addByteA(0) // Offset from position hint
         pkt.addShort(item.itemId)
         player.send(pkt)
     }

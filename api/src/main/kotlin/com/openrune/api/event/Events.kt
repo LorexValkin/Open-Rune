@@ -102,6 +102,17 @@ class ItemEquipEvent(
     val slot: Int
 ) : GameEvent()
 
+/**
+ * Fired when a player removes an item from their equipment screen.
+ * [slot] is the equipment slot index (0=head, 3=weapon, etc.).
+ * Added by Gathering Skills Patch.
+ */
+class ItemUnequipEvent(
+    val player: PlayerRef,
+    val itemId: Int,
+    val slot: Int
+) : GameEvent()
+
 /** Fired when a player drops an item. */
 class ItemDropEvent(
     val player: PlayerRef,
@@ -185,3 +196,19 @@ class NpcSpawnEvent(val npc: NpcRef) : GameEvent()
 
 /** Fired when an NPC is removed from the world. */
 class NpcDespawnEvent(val npc: NpcRef) : GameEvent()
+
+/**
+ * Emitted by plugins to request a temporary object replacement.
+ * The engine handles collision, visual sync, and respawn.
+ *
+ * Example: tree → stump with 50-tick respawn timer.
+ * Added by Gathering Skills Patch.
+ */
+class ObjectReplaceEvent(
+    val position: Position,
+    val originalId: Int,
+    val replacementId: Int,
+    val respawnTicks: Int,
+    val type: Int = 10,
+    val rotation: Int = 0
+) : GameEvent()
