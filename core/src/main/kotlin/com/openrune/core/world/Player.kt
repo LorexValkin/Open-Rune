@@ -347,6 +347,14 @@ class Player(
         for (i in levels.indices) totalLevel += getLevelForXP(experience.getOrElse(i) { 0.0 }.toInt())
         sendInterfaceText("$totalLevel", 3984)
 
+        // === Seed XP counter with total XP so it persists across relogs ===
+        var totalXp = 0L
+        for (i in experience.indices) totalXp += experience.getOrElse(i) { 0.0 }.toLong()
+        if (totalXp > 0) {
+            // Skill ID 22 is skipped in the floating text renderer but still counts toward the counter
+            sendXpDrop(22, totalXp.toInt())
+        }
+
         // === Player right-click options ===
         showOption(4, 0, "Follow")
         showOption(5, 0, "Trade with")
@@ -408,6 +416,12 @@ class Player(
     override fun sendChatboxInterface(interfaceId: Int) {
         val p = PacketBuilder(218)
         p.addLEShortA(interfaceId)
+        send(p)
+    }
+
+    /** Close chatbox interface dialog (sends opcode 219 which clears dialogID + backDialogID). */
+    override fun closeChatboxInterface() {
+        val p = PacketBuilder(219)
         send(p)
     }
 

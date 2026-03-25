@@ -39,12 +39,14 @@ class SkillsPlugin : OpenRunePlugin() {
 
     private lateinit var woodcutting: WoodcuttingSkill
     private lateinit var mining: MiningSkill
+    private lateinit var fishing: FishingSkill
 
     override fun onEnable() {
         context.log("Loading gathering skill data...")
 
         woodcutting = WoodcuttingSkill(context.data)
         mining = MiningSkill(context.data)
+        fishing = FishingSkill(context.data)
 
         // Register woodcutting tree interactions
         context.events.on<ObjectInteractEvent>(owner = info.id) { event ->
@@ -54,6 +56,11 @@ class SkillsPlugin : OpenRunePlugin() {
         // Register mining rock interactions
         context.events.on<ObjectInteractEvent>(owner = info.id) { event ->
             if (!event.cancelled) mining.handleObjectClick(event, context)
+        }
+
+        // Register fishing spot interactions (NPC clicks)
+        context.events.on<NpcInteractEvent>(owner = info.id) { event ->
+            if (!event.cancelled) fishing.handleNpcClick(event, context)
         }
 
         // Register experience event for level-up checks
@@ -66,11 +73,13 @@ class SkillsPlugin : OpenRunePlugin() {
             when (event.store) {
                 "trees", "axes" -> { woodcutting.reload(context.data); context.log("Woodcutting data reloaded") }
                 "rocks", "pickaxes" -> { mining.reload(context.data); context.log("Mining data reloaded") }
+                "fishing" -> { fishing.reload(context.data); context.log("Fishing data reloaded") }
             }
         }
 
         context.log("Skills plugin v2.0.0 enabled: ${woodcutting.treeCount()} tree object IDs, " +
-                "${woodcutting.axeCount()} axes, ${mining.rockCount()} rock object IDs, ${mining.pickCount()} pickaxes")
+                "${woodcutting.axeCount()} axes, ${mining.rockCount()} rock object IDs, ${mining.pickCount()} pickaxes, " +
+                "${fishing.spotCount()} fishing spot NPC IDs")
     }
 
     override fun onDisable() {
@@ -106,11 +115,13 @@ class SkillsPlugin : OpenRunePlugin() {
             val interfaceId = LEVELUP_INTERFACES.getOrNull(skill)
 
             if (interfaceId != null && interfaceId > 0) {
-                // Open the chatbox dialog FIRST so the client has the interface active
+                // Each skill has unique text child IDs in the cache (NOT shared 4268/4269)
+                val textIds = LEVELUP_TEXT_CHILDREN.getOrNull(skill)
+                if (textIds != null) {
+                    player.sendInterfaceText("Congratulations, you've just advanced $article $skillName level!", textIds[0])
+                    player.sendInterfaceText("Your $skillName level is now $newLevel.", textIds[1])
+                }
                 player.sendChatboxInterface(interfaceId)
-                // THEN set the text lines (shared children 4268 and 4269)
-                player.sendInterfaceText("Congratulations, you've just advanced $article $skillName level!", 4268)
-                player.sendInterfaceText("Your $skillName level is now $newLevel.", 4269)
             } else {
                 // Fallback if no interface ID mapped — just send a chat message
                 player.sendMessage("Congratulations, you've advanced $article $skillName level! You are now level $newLevel.")
@@ -162,6 +173,35 @@ class SkillsPlugin : OpenRunePlugin() {
             12122,  // 18: Slayer
             5267,   // 19: Farming
             4267    // 20: Runecrafting
+        )
+
+        /**
+         * Per-skill text child IDs: [line1, line2].
+         * Each skill's level-up parent has unique children in the cache.
+         * Dumped from client: parent.children[0] = line1, children[1] = line2.
+         */
+        val LEVELUP_TEXT_CHILDREN = arrayOf(
+            intArrayOf(6248, 6249),     // 0:  Attack
+            intArrayOf(6254, 6255),     // 1:  Defence
+            intArrayOf(6207, 6208),     // 2:  Strength
+            intArrayOf(6217, 6218),     // 3:  Hitpoints
+            intArrayOf(5453, 6114),     // 4:  Ranged
+            intArrayOf(6243, 6244),     // 5:  Prayer
+            intArrayOf(6212, 6213),     // 6:  Magic
+            intArrayOf(6227, 6228),     // 7:  Cooking
+            intArrayOf(4273, 4274),     // 8:  Woodcutting
+            intArrayOf(6232, 6233),     // 9:  Fletching
+            intArrayOf(6259, 6260),     // 10: Fishing
+            intArrayOf(4283, 4284),     // 11: Firemaking
+            intArrayOf(6264, 6265),     // 12: Crafting
+            intArrayOf(6222, 6223),     // 13: Smithing
+            intArrayOf(4417, 4438),     // 14: Mining
+            intArrayOf(6238, 6239),     // 15: Herblore
+            intArrayOf(4278, 4279),     // 16: Agility
+            intArrayOf(4263, 4264),     // 17: Thieving
+            intArrayOf(12123, 12124),   // 18: Slayer
+            intArrayOf(6248, 6249),     // 19: Farming (fallback to Attack — not in cache)
+            intArrayOf(4268, 4269)      // 20: Runecrafting
         )
     }
 }
@@ -274,6 +314,13 @@ private fun waitForArrivalThen(player: PlayerRef, target: Position, ctx: PluginC
 
 /**
  * Data class for a tree definition, loaded from data/trees/trees.json.
+ *
+ * [depletionChance] = 1.0 for single-log trees (normal, dead, achey).
+ *                   = 0.125 (1/8) for multi-log trees (oak, willow, yew, magic, etc.).
+ *
+ * [chanceByAxe] maps axe tier name → [low, high] for the RS skilling formula:
+ *   chance = floor(low * (99 - level) / 98 + high * (level - 1) / 98 + 0.5)
+ *   probability = (1 + chance) / 256
  */
 data class TreeDef(
     val objectId: Int,
@@ -282,18 +329,21 @@ data class TreeDef(
     val level: Int,
     val xp: Double,
     val respawnTicks: Int,
-    val stumpId: Int
+    val stumpId: Int,
+    val depletionChance: Double = 1.0,
+    val chanceByAxe: Map<String, IntArray> = emptyMap()
 )
 
 /**
  * Data class for an axe definition, loaded from data/axes/axes.json.
+ * [tier] matches the keys in TreeDef.chanceByAxe (e.g. "bronze", "dragon").
  */
 data class AxeDef(
     val itemId: Int,
     val name: String,
     val wcLevel: Int,
     val animId: Int,
-    val speed: Double
+    val tier: String
 )
 
 class WoodcuttingSkill(data: DataStore) {
@@ -313,6 +363,21 @@ class WoodcuttingSkill(data: DataStore) {
         val treeEntries = data.getAll("trees")
         for ((_, json) in treeEntries) {
             val id = json.get("id")?.asInt ?: continue
+
+            // Parse chanceByAxe: {"bronze": [low, high], "iron": [low, high], ...}
+            val chances = mutableMapOf<String, IntArray>()
+            val chanceObj = json.getAsJsonObject("chanceByAxe")
+            if (chanceObj != null) {
+                for ((tier, arr) in chanceObj.entrySet()) {
+                    if (arr.isJsonArray) {
+                        val a = arr.asJsonArray
+                        if (a.size() >= 2) {
+                            chances[tier] = intArrayOf(a[0].asInt, a[1].asInt)
+                        }
+                    }
+                }
+            }
+
             val tree = TreeDef(
                 objectId = id,
                 name = json.get("name")?.asString ?: "Tree",
@@ -320,7 +385,9 @@ class WoodcuttingSkill(data: DataStore) {
                 level = json.get("level")?.asInt ?: 1,
                 xp = json.get("xp")?.asDouble ?: 25.0,
                 respawnTicks = json.get("respawnTicks")?.asInt ?: 30,
-                stumpId = json.get("stumpId")?.asInt ?: 1342
+                stumpId = json.get("stumpId")?.asInt ?: 1342,
+                depletionChance = json.get("depletionChance")?.asDouble ?: 1.0,
+                chanceByAxe = chances
             )
             trees[id] = tree
         }
@@ -333,7 +400,7 @@ class WoodcuttingSkill(data: DataStore) {
                 name = json.get("name")?.asString ?: "Axe",
                 wcLevel = json.get("wcLevel")?.asInt ?: 1,
                 animId = json.get("animId")?.asInt ?: 879,
-                speed = json.get("speed")?.asDouble ?: 1.0
+                tier = json.get("tier")?.asString ?: "bronze"
             )
             axes.add(axe)
         }
@@ -345,7 +412,7 @@ class WoodcuttingSkill(data: DataStore) {
             trees[1278] = TreeDef(1278, "Tree", 1511, 1, 25.0, 30, 1342)
         }
         if (axes.isEmpty()) {
-            axes.add(AxeDef(1351, "Bronze axe", 1, 879, 1.0))
+            axes.add(AxeDef(1351, "Bronze axe", 1, 879, "bronze"))
         }
     }
 
@@ -416,8 +483,9 @@ class WoodcuttingSkill(data: DataStore) {
             // Re-send animation every cycle to keep it looping
             player.animate(axe.animId)
 
-            // Roll success
-            val chance = successChance(player.getLevel(Skills.WOODCUTTING), tree.level, axe.speed)
+            // Roll success using the RS skilling formula
+            val debugGather = player.getAttribute<Boolean>("debug:gather") ?: false
+            val chance = if (debugGather) 1.0 else successChance(player.getLevel(Skills.WOODCUTTING), tree, axe)
             if (Math.random() < chance) {
                 // Success — give log
                 if (player.inventoryFreeSlots() == 0) {
@@ -433,8 +501,9 @@ class WoodcuttingSkill(data: DataStore) {
                 player.sendMessage("You get some $logName logs.")
                 ctx.events.emit(ExperienceEvent(player, Skills.WOODCUTTING, tree.xp))
 
-                // Deplete tree (if stumpId is valid)
-                if (tree.stumpId > 0) {
+                // Roll depletion: 1.0 = always (normal trees), 0.125 = 1/8 (multi-log trees)
+                val depleted = if (debugGather) false else (Math.random() < tree.depletionChance)
+                if (depleted && tree.stumpId > 0) {
                     ctx.events.emit(ObjectReplaceEvent(
                         position = event.position,
                         originalId = tree.objectId,
@@ -446,7 +515,7 @@ class WoodcuttingSkill(data: DataStore) {
                     return@schedule
                 }
 
-                // If no stump (e.g. hollow tree), keep chopping
+                // Check inventory after getting log (for multi-log trees that didn't deplete)
                 if (player.inventoryFreeSlots() == 0) {
                     player.sendMessage("Your inventory is too full to hold any more logs.")
                     cancelGathering(player)
@@ -471,17 +540,26 @@ class WoodcuttingSkill(data: DataStore) {
     }
 
     /**
-     * RS-style success chance per tick.
+     * RS skilling success formula (community reverse-engineered, OSRS Wiki sourced).
      *
-     * Simplified formula (close to wiki):
-     *   chance = (playerLevel - treeLevel + 20 + axeBonus) / 256
-     *   axeBonus = (speed - 1.0) * 40  (so bronze=0, dragon=30)
-     *   Clamped to [1/256, 255/256].
+     * Each tree defines per-axe [low, high] values. The formula interpolates
+     * between low (at level 1) and high (at level 99):
+     *
+     *   chance = floor(low * (99 - level) / 98 + high * (level - 1) / 98 + 0.5)
+     *   probability = (1 + chance) / 256
+     *
+     * Rolled every 4 game ticks (2.4 seconds).
      */
-    private fun successChance(playerLevel: Int, treeLevel: Int, axeSpeed: Double): Double {
-        val axeBonus = (axeSpeed - 1.0) * 40.0
-        val raw = (playerLevel - treeLevel + 20.0 + axeBonus) / 256.0
-        return raw.coerceIn(1.0 / 256.0, 255.0 / 256.0)
+    private fun successChance(playerLevel: Int, tree: TreeDef, axe: AxeDef): Double {
+        val lowHigh = tree.chanceByAxe[axe.tier]
+        if (lowHigh == null || lowHigh.size < 2) {
+            // Fallback if no data for this axe tier — use a simple formula
+            return ((playerLevel - tree.level + 20.0) / 256.0).coerceIn(1.0 / 256.0, 1.0)
+        }
+        val low = lowHigh[0]
+        val high = lowHigh[1]
+        val chance = Math.floor(low * (99.0 - playerLevel) / 98.0 + high * (playerLevel - 1.0) / 98.0 + 0.5).toInt()
+        return ((1 + chance) / 256.0).coerceIn(1.0 / 256.0, 1.0)
     }
 }
 
@@ -622,7 +700,8 @@ class MiningSkill(data: DataStore) {
             // Re-send animation every cycle to keep it looping
             player.animate(pick.animId)
 
-            val chance = successChance(player.getLevel(Skills.MINING), rock.level, pick.speed)
+            val debugGather = player.getAttribute<Boolean>("debug:gather") ?: false
+            val chance = if (debugGather) 1.0 else successChance(player.getLevel(Skills.MINING), rock.level, pick.speed)
             if (Math.random() < chance) {
                 if (player.inventoryFreeSlots() == 0) {
                     player.sendMessage("Your inventory is too full to hold any more ore.")
@@ -674,5 +753,252 @@ class MiningSkill(data: DataStore) {
         val pickBonus = (pickSpeed - 1.0) * 40.0
         val raw = (playerLevel - rockLevel + 20.0 + pickBonus) / 256.0
         return raw.coerceIn(1.0 / 256.0, 255.0 / 256.0)
+    }
+}
+
+// ============================================================
+//  Fishing
+// ============================================================
+
+/**
+ * A single catchable fish within a fishing option.
+ */
+data class FishDef(
+    val itemId: Int,
+    val name: String,
+    val level: Int,
+    val xp: Double,
+    val low: Int,
+    val high: Int
+)
+
+/**
+ * One of the two click options on a fishing spot (e.g. "Net" or "Bait").
+ */
+data class FishingOptionDef(
+    val action: String,
+    val toolId: Int,
+    val baitId: Int,
+    val animId: Int,
+    val fish: List<FishDef>
+)
+
+/**
+ * A fishing spot type. Multiple NPC IDs can share the same spot definition.
+ */
+data class FishingSpotDef(
+    val type: String,
+    val npcIds: Set<Int>,
+    val option1: FishingOptionDef?,
+    val option2: FishingOptionDef?
+)
+
+/**
+ * Fishing skill — data-driven from data/fishing/spots.json.
+ *
+ * Fishing spots are NPCs. When a player clicks option 1 or option 2 on a
+ * fishing spot NPC, we look up the spot definition and start a gathering loop.
+ *
+ * The cascade system: for spots with multiple fish, the highest-level fish
+ * is rolled first. If that fails, the next is rolled, and so on. This means
+ * at higher levels you catch better fish more often.
+ *
+ * Uses the standard RS skilling formula:
+ *   chance = floor(low * (99 - level) / 98 + high * (level - 1) / 98 + 0.5)
+ *   probability = (1 + chance) / 256
+ */
+class FishingSkill(data: DataStore) {
+
+    /** NPC ID → FishingSpotDef */
+    private var spots = mutableMapOf<Int, FishingSpotDef>()
+
+    init { loadData(data) }
+
+    fun reload(data: DataStore) { spots.clear(); loadData(data) }
+
+    private fun loadData(data: DataStore) {
+        val entries = data.getAll("fishing")
+        for ((_, json) in entries) {
+            val type = json.get("type")?.asString ?: continue
+            val npcIds = mutableSetOf<Int>()
+            json.getAsJsonArray("npcIds")?.forEach { npcIds.add(it.asInt) }
+            if (npcIds.isEmpty()) continue
+
+            val opt1 = parseOption(json.getAsJsonObject("option1"))
+            val opt2 = parseOption(json.getAsJsonObject("option2"))
+
+            val def = FishingSpotDef(type, npcIds, opt1, opt2)
+            for (npcId in npcIds) {
+                spots[npcId] = def
+            }
+        }
+    }
+
+    private fun parseOption(json: com.google.gson.JsonObject?): FishingOptionDef? {
+        if (json == null || json.isJsonNull) return null
+        val fishList = mutableListOf<FishDef>()
+        json.getAsJsonArray("fish")?.forEach { elem ->
+            val f = elem.asJsonObject
+            fishList.add(FishDef(
+                itemId = f.get("itemId")?.asInt ?: return@forEach,
+                name = f.get("name")?.asString ?: "Fish",
+                level = f.get("level")?.asInt ?: 1,
+                xp = f.get("xp")?.asDouble ?: 10.0,
+                low = f.get("low")?.asInt ?: 10,
+                high = f.get("high")?.asInt ?: 50
+            ))
+        }
+        return FishingOptionDef(
+            action = json.get("action")?.asString ?: "Fish",
+            toolId = json.get("toolId")?.asInt ?: 303,
+            baitId = json.get("baitId")?.asInt ?: -1,
+            animId = json.get("animId")?.asInt ?: 621,
+            fish = fishList
+        )
+    }
+
+    fun spotCount(): Int = spots.size
+
+    fun handleNpcClick(event: NpcInteractEvent, ctx: PluginContext) {
+        val npcId = event.npc.id
+        val spot = spots[npcId] ?: return
+        val option = when (event.option) {
+            1 -> spot.option1
+            2 -> spot.option2
+            else -> return
+        } ?: return
+
+        val player = event.player
+        cancelGathering(player)
+        event.cancel()
+
+        // Check tool
+        if (!player.hasItem(option.toolId) && player.getEquipment(WEAPON_SLOT) != option.toolId) {
+            val toolName = toolName(option.toolId)
+            player.sendMessage("You need a $toolName to fish here.")
+            return
+        }
+
+        // Check bait
+        if (option.baitId > 0 && !player.hasItem(option.baitId)) {
+            val baitName = baitName(option.baitId)
+            player.sendMessage("You don't have any $baitName to fish with.")
+            return
+        }
+
+        // Find highest fish the player can catch
+        val catchable = option.fish.filter { player.getLevel(Skills.FISHING) >= it.level }
+        if (catchable.isEmpty()) {
+            val required = option.fish.minByOrNull { it.level }?.level ?: 1
+            player.sendMessage("You need a Fishing level of $required to fish here.")
+            return
+        }
+
+        // Check inventory
+        if (player.inventoryFreeSlots() == 0) {
+            player.sendMessage("You can't carry any more fish.")
+            return
+        }
+
+        // Start fishing
+        player.sendMessage("You cast out your ${toolName(option.toolId).lowercase()}...")
+        player.animate(option.animId)
+
+        // Face the NPC
+        val npcPos = event.npc.position
+
+        val task = ctx.schedule(delayTicks = GATHER_TICK_INTERVAL, repeatTicks = GATHER_TICK_INTERVAL) {
+            if (!player.isOnline) { cancelGathering(player); return@schedule }
+
+            if (player.isMoving) {
+                cancelGathering(player)
+                player.resetAnimation()
+                return@schedule
+            }
+
+            // Re-send animation
+            player.animate(option.animId)
+
+            // Check bait still available
+            if (option.baitId > 0 && !player.hasItem(option.baitId)) {
+                player.sendMessage("You've run out of ${baitName(option.baitId).lowercase()}.")
+                cancelGathering(player)
+                player.resetAnimation()
+                return@schedule
+            }
+
+            // Debug mode
+            val debugGather = player.getAttribute<Boolean>("debug:gather") ?: false
+
+            // Cascade roll: try highest-level fish first
+            val level = player.getLevel(Skills.FISHING)
+            var caught: FishDef? = null
+            for (fish in catchable.sortedByDescending { it.level }) {
+                if (level < fish.level) continue
+                val chance = if (debugGather) 1.0 else successChance(level, fish)
+                if (Math.random() < chance) {
+                    caught = fish
+                    break
+                }
+            }
+
+            if (caught != null) {
+                if (player.inventoryFreeSlots() == 0) {
+                    player.sendMessage("You can't carry any more fish.")
+                    cancelGathering(player)
+                    player.resetAnimation()
+                    return@schedule
+                }
+
+                // Consume bait
+                if (option.baitId > 0) {
+                    player.removeItem(option.baitId, 1)
+                }
+
+                player.addItem(caught.itemId)
+                player.sendInventory()
+                player.sendMessage("You catch some ${caught.name.removePrefix("Raw ").lowercase()}.")
+                ctx.events.emit(ExperienceEvent(player, Skills.FISHING, caught.xp))
+
+                // Check inventory for next tick
+                if (player.inventoryFreeSlots() == 0) {
+                    player.sendMessage("You can't carry any more fish.")
+                    cancelGathering(player)
+                    player.resetAnimation()
+                    return@schedule
+                }
+            }
+            // Miss — keep fishing
+        }
+        player.setAttribute(ATTR_GATHER_TASK, task)
+    }
+
+    /**
+     * RS skilling success formula for fishing.
+     */
+    private fun successChance(playerLevel: Int, fish: FishDef): Double {
+        val chance = Math.floor(
+            fish.low * (99.0 - playerLevel) / 98.0 +
+            fish.high * (playerLevel - 1.0) / 98.0 + 0.5
+        ).toInt()
+        return ((1 + chance) / 256.0).coerceIn(1.0 / 256.0, 1.0)
+    }
+
+    private fun toolName(itemId: Int): String = when (itemId) {
+        303 -> "Small fishing net"
+        305 -> "Big fishing net"
+        307 -> "Fishing rod"
+        309 -> "Fly fishing rod"
+        311 -> "Harpoon"
+        301 -> "Lobster pot"
+        11323 -> "Barbarian rod"
+        else -> "Fishing tool"
+    }
+
+    private fun baitName(itemId: Int): String = when (itemId) {
+        313 -> "Fishing bait"
+        314 -> "Feathers"
+        10087 -> "Stripy feathers"
+        else -> "Bait"
     }
 }

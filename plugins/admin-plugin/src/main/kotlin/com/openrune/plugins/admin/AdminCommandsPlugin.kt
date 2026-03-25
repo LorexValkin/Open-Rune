@@ -55,6 +55,7 @@ class AdminCommandsPlugin : OpenRunePlugin() {
                 "bank" -> cmdBank(player, event)
                 "empty" -> cmdEmpty(player, event)
                 "cmds", "commands" -> cmdHelp(player, event)
+                "debuggather" -> cmdDebugGather(player, event)
             }
         }
 
@@ -251,10 +252,22 @@ class AdminCommandsPlugin : OpenRunePlugin() {
         player.sendMessage("::empty - Clear inventory")
         player.sendMessage("::bank - Open bank")
         player.sendMessage("::online / ::reload [store]")
+        player.sendMessage("::debuggather - Toggle instant gathering")
         player.sendMessage("--- Engine (Server.kt) ---")
         player.sendMessage("::npc / ::removenpc / ::plugins")
         player.sendMessage("::enableplugin / ::disableplugin")
         player.sendMessage("::save / ::engine")
+        event.cancel()
+    }
+
+    // ================================================================
+    //  ::debuggather — Toggle instant resource gathering
+    // ================================================================
+    private fun cmdDebugGather(player: PlayerRef, event: CommandEvent) {
+        val current = player.getAttribute<Boolean>("debug:gather") ?: false
+        val newState = !current
+        player.setAttribute("debug:gather", newState)
+        player.sendMessage("Debug gather mode: ${if (newState) "ON (instant resources)" else "OFF (normal rates)"}")
         event.cancel()
     }
 

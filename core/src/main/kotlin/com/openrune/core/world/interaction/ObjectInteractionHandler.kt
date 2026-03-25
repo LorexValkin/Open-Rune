@@ -35,6 +35,21 @@ class ObjectInteractionHandler(
 
     private val log = LoggerFactory.getLogger(ObjectInteractionHandler::class.java)
 
+    /** Object IDs known to be trees or rocks — skip stair/door handling for these. */
+    private val gatheringObjectIds = mutableSetOf<Int>()
+
+    /** Load tree/rock IDs from the DataStore so we don't confuse them with stairs. */
+    fun loadGatheringIds(dataStore: com.openrune.api.config.DataStore) {
+        gatheringObjectIds.clear()
+        for ((_, json) in dataStore.getAll("trees")) {
+            json.get("id")?.asInt?.let { gatheringObjectIds.add(it) }
+        }
+        for ((_, json) in dataStore.getAll("rocks")) {
+            json.get("id")?.asInt?.let { gatheringObjectIds.add(it) }
+        }
+        log.info("Loaded {} gathering object IDs (trees + rocks) for conflict avoidance", gatheringObjectIds.size)
+    }
+
     // ================================================================
     //  Door definitions
     // ================================================================
@@ -117,6 +132,16 @@ class ObjectInteractionHandler(
         val objectId = event.objectId
         val position = event.position
         val option = event.option
+
+        // Debug trace for diagnosing willow/climb issue (temporary — revert to log.debug after fix)
+        log.info("[OBJECT CLICK] id={} option={} pos={} inGathering={} inStairs={} inDoors={}",
+            objectId, option, position,
+            gatheringObjectIds.contains(objectId),
+            stairLookup.containsKey(objectId),
+            doorLookup.containsKey(objectId))
+
+        // Skip objects that are known trees/rocks — let the skills plugin handle them
+        if (gatheringObjectIds.contains(objectId)) return
 
         // Try door interaction (option 1 = "Open" / "Close")
         if (option == 1 && doorLookup.containsKey(objectId)) {
@@ -431,8 +456,11 @@ class ObjectInteractionHandler(
         }
 
         // Ladders - climb up
+        // NOTE: 1750, 1756, 1760 removed — they are trees in this cache, not ladders.
+        //       The gathering check (gatheringObjectIds) takes priority anyway,
+        //       but removing avoids confusion.
         val laddersUp = listOf(
-            1746, 1748, 1750, 1752, 1754, 1756, 1758, 1760, 1762, 1764,
+            1746, 1748, 1752, 1754, 1758, 1762, 1764,
             2884,
         )
         for (id in laddersUp) {
@@ -440,8 +468,9 @@ class ObjectInteractionHandler(
         }
 
         // Ladders - climb down
+        // NOTE: 1751 removed — it is a tree in this cache, not a ladder.
         val laddersDown = listOf(
-            1747, 1749, 1751, 1753, 1755, 1757, 1759, 1761, 1763, 1765,
+            1747, 1749, 1753, 1755, 1757, 1759, 1761, 1763, 1765,
             2885,
         )
         for (id in laddersDown) {
@@ -471,6 +500,8 @@ class ObjectInteractionHandler(
 
     fun doorCount(): Int = doorLookup.size / 2
     fun stairCount(): Int = stairLookup.size
+    fun gatheringIdCount(): Int = gatheringObjectIds.size
+    fun isGatheringObject(id: Int): Boolean = gatheringObjectIds.contains(id)
 
     // ================================================================
     //  Utility

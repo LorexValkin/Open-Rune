@@ -1,0 +1,59 @@
+[
+  {"id": 1, "type": "NET_BAIT", "npcIds": [316, 319, 320, 324, 325, 326, 327, 330, 332, 334],
+    "option1": {"action": "Net", "toolId": 303, "baitId": -1, "animId": 621,
+      "fish": [
+        {"itemId": 321, "name": "Raw anchovies", "level": 15, "xp": 40.0, "low": 24, "high": 128},
+        {"itemId": 317, "name": "Raw shrimps",   "level": 1,  "xp": 10.0, "low": 48, "high": 256}
+      ]},
+    "option2": {"action": "Bait", "toolId": 307, "baitId": 313, "animId": 622,
+      "fish": [
+        {"itemId": 345, "name": "Raw herring",  "level": 10, "xp": 30.0, "low": 24, "high": 128},
+        {"itemId": 327, "name": "Raw sardine",  "level": 5,  "xp": 20.0, "low": 32, "high": 192}
+      ]}
+  },
+
+  {"id": 2, "type": "LURE_BAIT", "npcIds": [233, 234, 235, 236, 309, 310, 311, 314, 315, 317, 318, 328, 329, 331],
+    "option1": {"action": "Lure", "toolId": 309, "baitId": 314, "animId": 623,
+      "fish": [
+        {"itemId": 331, "name": "Raw salmon", "level": 30, "xp": 70.0, "low": 16, "high": 96},
+        {"itemId": 335, "name": "Raw trout",  "level": 20, "xp": 50.0, "low": 32, "high": 192}
+      ]},
+    "option2": {"action": "Bait", "toolId": 307, "baitId": 313, "animId": 622,
+      "fish": [
+        {"itemId": 349, "name": "Raw pike", "level": 25, "xp": 60.0, "low": 16, "high": 96}
+      ]}
+  },
+
+  {"id": 3, "type": "CAGE_HARPOON", "npcIds": [312, 321, 333],
+    "option1": {"action": "Cage", "toolId": 301, "baitId": -1, "animId": 619,
+      "fish": [
+        {"itemId": 377, "name": "Raw lobster", "level": 40, "xp": 90.0, "low": 6, "high": 95}
+      ]},
+    "option2": {"action": "Harpoon", "toolId": 311, "baitId": -1, "animId": 618,
+      "fish": [
+        {"itemId": 371, "name": "Raw swordfish", "level": 50, "xp": 100.0, "low": 4, "high": 48},
+        {"itemId": 359, "name": "Raw tuna",      "level": 35, "xp": 80.0,  "low": 8, "high": 64}
+      ]}
+  },
+
+  {"id": 4, "type": "BIGNET_HARPOON", "npcIds": [313, 322, 323],
+    "option1": {"action": "Net", "toolId": 305, "baitId": -1, "animId": 620,
+      "fish": [
+        {"itemId": 363, "name": "Raw bass",     "level": 46, "xp": 100.0, "low": 3, "high": 40},
+        {"itemId": 341, "name": "Raw cod",       "level": 23, "xp": 45.0,  "low": 4, "high": 55},
+        {"itemId": 353, "name": "Raw mackerel",  "level": 16, "xp": 20.0,  "low": 5, "high": 65}
+      ]},
+    "option2": {"action": "Harpoon", "toolId": 311, "baitId": -1, "animId": 618,
+      "fish": [
+        {"itemId": 383, "name": "Raw shark", "level": 76, "xp": 110.0, "low": 3, "high": 40}
+      ]}
+  },
+
+  {"id": 5, "type": "MONKFISH", "npcIds": [1174, 1175],
+    "option1": {"action": "Net", "toolId": 303, "baitId": -1, "animId": 621,
+      "fish": [
+        {"itemId": 7944, "name": "Raw monkfish", "level": 62, "xp": 120.0, "low": 48, "high": 90}
+      ]},
+    "option2": null
+  }
+]

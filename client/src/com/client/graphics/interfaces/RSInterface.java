@@ -4452,6 +4452,15 @@ public class RSInterface {
 	}
 
 	public static void Levelup(TextDrawingArea[] tda) {
+		// 4268 and 4269 are shared text children loaded from the cache.
+		// Only create them if the cache didn't provide them.
+		if (interfaceCache[4268] == null) {
+			addText(4268, "", tda, 1, 0x000000);
+		}
+		if (interfaceCache[4269] == null) {
+			addText(4269, "", tda, 1, 0x000000);
+		}
+
 		// RSInterface text = interfaceCache[7202];
 		RSInterface attack = interfaceCache[6247];
 		RSInterface defence = interfaceCache[6253];

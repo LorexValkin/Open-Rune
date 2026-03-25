@@ -104,6 +104,9 @@ class OpenRuneServer {
         engine = GameEngine(eventBus, playerManager, packetDispatcher, playerSerializer, taskScheduler,
             resolvedCache)
 
+        // Load gathering object IDs so the object handler doesn't confuse trees/rocks with stairs
+        engine.objectInteractionHandler.loadGatheringIds(dataStore)
+
         // Load NPC spawns from data
         log.info("Loading NPC spawns...")
         engine.npcManager.loadSpawns(dataStore, engine.cacheNpcDefs)
@@ -312,6 +315,19 @@ class OpenRuneServer {
                     player.sendMessage("Events: ${eventBus.handlerCount()} handlers")
                     event.cancel()
                 }
+
+                "gatherids" -> {
+                    val handler = engine.objectInteractionHandler
+                    val size = handler.gatheringIdCount()
+                    player.sendMessage("Gathering object IDs loaded: $size")
+                    // Check specific willow IDs
+                    val willowIds = listOf(5551, 5552, 5553, 8481, 8482, 8483, 8484, 8485, 8486, 8487, 8488)
+                    for (id in willowIds) {
+                        player.sendMessage("  $id (willow): ${if (handler.isGatheringObject(id)) "YES" else "NO"}")
+                    }
+                    player.sendMessage("Stairs: ${handler.stairCount()}, Doors: ${handler.doorCount()}")
+                    event.cancel()
+                }
             }
         }
 
@@ -326,6 +342,10 @@ class OpenRuneServer {
                     config.addLEShort(173)
                     config.addByte(if (player.walkingQueue.running) 1 else 0)
                     player.send(config)
+                }
+                358 -> {
+                    // "Click here to continue" — close chatbox dialog
+                    player.closeChatboxInterface()
                 }
             }
         }

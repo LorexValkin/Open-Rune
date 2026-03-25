@@ -2,30 +2,87 @@
   {"id": 7484, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
   {"id": 7452, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
   {"id": 7453, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+  {"id": 2090, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 450},
+  {"id": 2091, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 450},
+  {"id": 11936, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11555},
+  {"id": 11937, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11556},
+  {"id": 11938, "name": "Copper rock", "oreId": 436, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11552},
 
   {"id": 7485, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
   {"id": 7486, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 7468},
+  {"id": 2094, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 450},
+  {"id": 2095, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 450},
+  {"id": 11933, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11555},
+  {"id": 11934, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11556},
+  {"id": 11935, "name": "Tin rock", "oreId": 438, "level": 1, "xp": 17.5, "respawnTicks": 4, "emptyId": 11552},
+
+  {"id": 2093, "name": "Blurite rock", "oreId": 668, "level": 10, "xp": 17.5, "respawnTicks": 42, "emptyId": 450},
 
   {"id": 7455, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 7468},
   {"id": 7488, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 7468},
+  {"id": 2092, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 450},
+  {"id": 2093, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 450},
+  {"id": 11954, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 11555},
+  {"id": 11955, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 11556},
+  {"id": 11956, "name": "Iron rock", "oreId": 440, "level": 15, "xp": 35.0, "respawnTicks": 9, "emptyId": 11552},
 
   {"id": 7457, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 7468},
   {"id": 7490, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 7468},
+  {"id": 2100, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 450},
+  {"id": 2101, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 450},
+  {"id": 11948, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 11555},
+  {"id": 11949, "name": "Silver rock", "oreId": 442, "level": 20, "xp": 40.0, "respawnTicks": 100, "emptyId": 11556},
 
   {"id": 7456, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 7468},
   {"id": 7489, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 7468},
+  {"id": 2096, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 450},
+  {"id": 2097, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 450},
+  {"id": 11930, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 11555},
+  {"id": 11931, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 11556},
+  {"id": 11932, "name": "Coal rock", "oreId": 453, "level": 30, "xp": 50.0, "respawnTicks": 49, "emptyId": 11552},
+
+  {"id": 2105, "name": "Gem rock", "oreId": 1625, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 450},
 
   {"id": 7458, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 7468},
   {"id": 7491, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 7468},
+  {"id": 2098, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 450},
+  {"id": 2099, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 450},
+  {"id": 11951, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 11555},
+  {"id": 11952, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 11556},
+  {"id": 11953, "name": "Gold rock", "oreId": 444, "level": 40, "xp": 65.0, "respawnTicks": 100, "emptyId": 11552},
 
   {"id": 7459, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 7468},
   {"id": 7492, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 7468},
+  {"id": 2102, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 450},
+  {"id": 2103, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 450},
+  {"id": 11942, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 11555},
+  {"id": 11943, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 11556},
+  {"id": 11944, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 11552},
+  {"id": 11945, "name": "Mithril rock", "oreId": 447, "level": 55, "xp": 80.0, "respawnTicks": 200, "emptyId": 11552},
 
   {"id": 7460, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 7468},
   {"id": 7493, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 7468},
+  {"id": 2104, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 450},
+  {"id": 11939, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 11555},
+  {"id": 11940, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 11556},
+  {"id": 11941, "name": "Adamantite rock", "oreId": 449, "level": 70, "xp": 95.0, "respawnTicks": 400, "emptyId": 11552},
 
   {"id": 7461, "name": "Runite rock", "oreId": 451, "level": 85, "xp": 125.0, "respawnTicks": 1200, "emptyId": 7468},
+  {"id": 14859, "name": "Runite rock", "oreId": 451, "level": 85, "xp": 125.0, "respawnTicks": 1200, "emptyId": 450},
+  {"id": 11946, "name": "Runite rock", "oreId": 451, "level": 85, "xp": 125.0, "respawnTicks": 1200, "emptyId": 11555},
+  {"id": 11947, "name": "Runite rock", "oreId": 451, "level": 85, "xp": 125.0, "respawnTicks": 1200, "emptyId": 11556},
 
-  {"id": 11388, "name": "Amethyst rock", "oreId": 21347, "level": 92, "xp": 240.0, "respawnTicks": 125, "emptyId": -1},
-  {"id": 11389, "name": "Amethyst rock", "oreId": 21347, "level": 92, "xp": 240.0, "respawnTicks": 125, "emptyId": -1}
+  {"id": 2111, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 450},
+  {"id": 2108, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 450},
+  {"id": 2109, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 450},
+  {"id": 11189, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 11555},
+  {"id": 11190, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 11556},
+  {"id": 11191, "name": "Clay rock", "oreId": 434, "level": 1, "xp": 5.0, "respawnTicks": 2, "emptyId": 11552},
+
+  {"id": 2110, "name": "Sandstone rock", "oreId": 6971, "level": 35, "xp": 30.0, "respawnTicks": 10, "emptyId": 450},
+
+  {"id": 3403, "name": "Dense essence", "oreId": 13445, "level": 38, "xp": 12.0, "respawnTicks": 50, "emptyId": -1},
+
+  {"id": 7494, "name": "Rune essence", "oreId": 1436, "level": 1, "xp": 5.0, "respawnTicks": -1, "emptyId": -1},
+  {"id": 7471, "name": "Rune essence", "oreId": 1436, "level": 1, "xp": 5.0, "respawnTicks": -1, "emptyId": -1}
 ]

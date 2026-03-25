@@ -26854,5 +26854,101 @@
     "z": 0,
     "walkRange": 5,
     "description": "Mith Dragon"
-  }
+  },
+
+  {"id": 2985, "npcId": 316, "x": 3240, "y": 3146, "z": 0, "walkRange": 0, "description": "Lumbridge Swamp net/bait fishing spot"},
+  {"id": 2986, "npcId": 316, "x": 3240, "y": 3147, "z": 0, "walkRange": 0, "description": "Lumbridge Swamp net/bait fishing spot"},
+  {"id": 2987, "npcId": 316, "x": 3244, "y": 3150, "z": 0, "walkRange": 0, "description": "Lumbridge Swamp net/bait fishing spot"},
+  {"id": 2988, "npcId": 316, "x": 3245, "y": 3152, "z": 0, "walkRange": 0, "description": "Lumbridge Swamp net/bait fishing spot"},
+  {"id": 2989, "npcId": 316, "x": 3246, "y": 3155, "z": 0, "walkRange": 0, "description": "Lumbridge Swamp net/bait fishing spot"},
+
+  {"id": 2990, "npcId": 320, "x": 3085, "y": 3230, "z": 0, "walkRange": 0, "description": "Draynor Village net/bait fishing spot"},
+  {"id": 2991, "npcId": 320, "x": 3086, "y": 3227, "z": 0, "walkRange": 0, "description": "Draynor Village net/bait fishing spot"},
+
+  {"id": 2992, "npcId": 326, "x": 3267, "y": 3148, "z": 0, "walkRange": 0, "description": "Al Kharid net/bait fishing spot"},
+  {"id": 2993, "npcId": 326, "x": 3276, "y": 3140, "z": 0, "walkRange": 0, "description": "Al Kharid net/bait fishing spot"},
+
+  {"id": 2994, "npcId": 324, "x": 2923, "y": 3179, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) net/bait fishing spot"},
+  {"id": 2995, "npcId": 324, "x": 2924, "y": 3181, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) net/bait fishing spot"},
+  {"id": 2996, "npcId": 324, "x": 2926, "y": 3180, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) net/bait fishing spot"},
+
+  {"id": 2997, "npcId": 319, "x": 2789, "y": 3273, "z": 0, "walkRange": 0, "description": "Port Sarim net/bait fishing spot"},
+  {"id": 2998, "npcId": 319, "x": 2790, "y": 3273, "z": 0, "walkRange": 0, "description": "Port Sarim net/bait fishing spot"},
+  {"id": 2999, "npcId": 319, "x": 2794, "y": 3283, "z": 0, "walkRange": 0, "description": "Port Sarim net/bait fishing spot"},
+  {"id": 3000, "npcId": 319, "x": 2795, "y": 3279, "z": 0, "walkRange": 0, "description": "Port Sarim net/bait fishing spot"},
+
+  {"id": 3001, "npcId": 330, "x": 3050, "y": 3704, "z": 0, "walkRange": 0, "description": "Wilderness Bandit Camp net/bait fishing spot"},
+
+  {"id": 3002, "npcId": 334, "x": 2836, "y": 3431, "z": 0, "walkRange": 0, "description": "Catherby net/bait fishing spot"},
+  {"id": 3003, "npcId": 334, "x": 2838, "y": 3431, "z": 0, "walkRange": 0, "description": "Catherby net/bait fishing spot"},
+
+  {"id": 3004, "npcId": 332, "x": 2875, "y": 3342, "z": 0, "walkRange": 0, "description": "Entrana net/bait fishing spot"},
+  {"id": 3005, "npcId": 332, "x": 2876, "y": 3331, "z": 0, "walkRange": 0, "description": "Entrana net/bait fishing spot"},
+  {"id": 3006, "npcId": 332, "x": 2877, "y": 3342, "z": 0, "walkRange": 0, "description": "Entrana net/bait fishing spot"},
+
+  {"id": 3007, "npcId": 327, "x": 2498, "y": 3547, "z": 0, "walkRange": 0, "description": "Rellekka net/bait fishing spot"},
+  {"id": 3008, "npcId": 327, "x": 2511, "y": 3562, "z": 0, "walkRange": 0, "description": "Rellekka net/bait fishing spot"},
+  {"id": 3009, "npcId": 327, "x": 2516, "y": 3575, "z": 0, "walkRange": 0, "description": "Rellekka net/bait fishing spot"},
+
+  {"id": 3010, "npcId": 309, "x": 3104, "y": 3424, "z": 0, "walkRange": 0, "description": "Barbarian Village lure/bait fishing spot"},
+  {"id": 3011, "npcId": 309, "x": 3110, "y": 3434, "z": 0, "walkRange": 0, "description": "Barbarian Village lure/bait fishing spot"},
+
+  {"id": 3012, "npcId": 310, "x": 3238, "y": 3252, "z": 0, "walkRange": 0, "description": "Lumbridge river lure/bait fishing spot"},
+  {"id": 3013, "npcId": 310, "x": 3239, "y": 3241, "z": 0, "walkRange": 0, "description": "Lumbridge river lure/bait fishing spot"},
+
+  {"id": 3014, "npcId": 314, "x": 2714, "y": 3532, "z": 0, "walkRange": 0, "description": "Seers Village lure/bait fishing spot"},
+  {"id": 3015, "npcId": 314, "x": 2714, "y": 3533, "z": 0, "walkRange": 0, "description": "Seers Village lure/bait fishing spot"},
+  {"id": 3016, "npcId": 314, "x": 2716, "y": 3530, "z": 0, "walkRange": 0, "description": "Seers Village lure/bait fishing spot"},
+  {"id": 3017, "npcId": 314, "x": 2718, "y": 3529, "z": 0, "walkRange": 0, "description": "Seers Village lure/bait fishing spot"},
+
+  {"id": 3018, "npcId": 317, "x": 2382, "y": 3414, "z": 0, "walkRange": 0, "description": "Tree Gnome Stronghold lure/bait fishing spot"},
+  {"id": 3019, "npcId": 317, "x": 2383, "y": 3418, "z": 0, "walkRange": 0, "description": "Tree Gnome Stronghold lure/bait fishing spot"},
+  {"id": 3020, "npcId": 317, "x": 2385, "y": 3410, "z": 0, "walkRange": 0, "description": "Tree Gnome Stronghold lure/bait fishing spot"},
+  {"id": 3021, "npcId": 317, "x": 2385, "y": 3423, "z": 0, "walkRange": 0, "description": "Tree Gnome Stronghold lure/bait fishing spot"},
+
+  {"id": 3022, "npcId": 233, "x": 2461, "y": 3150, "z": 0, "walkRange": 0, "description": "Shilo Village lure/bait fishing spot"},
+  {"id": 3023, "npcId": 233, "x": 2462, "y": 3145, "z": 0, "walkRange": 0, "description": "Shilo Village lure/bait fishing spot"},
+  {"id": 3024, "npcId": 233, "x": 2465, "y": 3156, "z": 0, "walkRange": 0, "description": "Shilo Village lure/bait fishing spot"},
+  {"id": 3025, "npcId": 233, "x": 2468, "y": 3157, "z": 0, "walkRange": 0, "description": "Shilo Village lure/bait fishing spot"},
+
+  {"id": 3026, "npcId": 318, "x": 2527, "y": 3412, "z": 0, "walkRange": 0, "description": "Baxtorian Falls lure/bait fishing spot"},
+  {"id": 3027, "npcId": 318, "x": 2530, "y": 3412, "z": 0, "walkRange": 0, "description": "Baxtorian Falls lure/bait fishing spot"},
+  {"id": 3028, "npcId": 318, "x": 2534, "y": 3403, "z": 0, "walkRange": 0, "description": "Baxtorian Falls lure/bait fishing spot"},
+
+  {"id": 3029, "npcId": 328, "x": 2561, "y": 3374, "z": 0, "walkRange": 0, "description": "Observatory lure/bait fishing spot"},
+  {"id": 3030, "npcId": 328, "x": 2566, "y": 3370, "z": 0, "walkRange": 0, "description": "Observatory lure/bait fishing spot"},
+
+  {"id": 3031, "npcId": 312, "x": 2923, "y": 3178, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) cage/harpoon fishing spot"},
+  {"id": 3032, "npcId": 312, "x": 2925, "y": 3180, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) cage/harpoon fishing spot"},
+  {"id": 3033, "npcId": 312, "x": 2926, "y": 3176, "z": 0, "walkRange": 0, "description": "Musa Point (Karamja) cage/harpoon fishing spot"},
+
+  {"id": 3034, "npcId": 321, "x": 2844, "y": 3429, "z": 0, "walkRange": 0, "description": "Catherby cage/harpoon fishing spot"},
+  {"id": 3035, "npcId": 321, "x": 2845, "y": 3429, "z": 0, "walkRange": 0, "description": "Catherby cage/harpoon fishing spot"},
+  {"id": 3036, "npcId": 321, "x": 2853, "y": 3423, "z": 0, "walkRange": 0, "description": "Catherby cage/harpoon fishing spot"},
+  {"id": 3037, "npcId": 321, "x": 2855, "y": 3423, "z": 0, "walkRange": 0, "description": "Catherby cage/harpoon fishing spot"},
+
+  {"id": 3038, "npcId": 312, "x": 2599, "y": 3419, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+  {"id": 3039, "npcId": 312, "x": 2602, "y": 3426, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+  {"id": 3040, "npcId": 312, "x": 2604, "y": 3417, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+  {"id": 3041, "npcId": 312, "x": 2604, "y": 3426, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+  {"id": 3042, "npcId": 312, "x": 2607, "y": 3410, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+  {"id": 3043, "npcId": 312, "x": 2612, "y": 3414, "z": 0, "walkRange": 0, "description": "Fishing Guild cage/harpoon fishing spot"},
+
+  {"id": 3044, "npcId": 333, "x": 2634, "y": 3694, "z": 0, "walkRange": 0, "description": "Rellekka cage/harpoon fishing spot"},
+  {"id": 3045, "npcId": 333, "x": 2636, "y": 3696, "z": 0, "walkRange": 0, "description": "Rellekka cage/harpoon fishing spot"},
+  {"id": 3046, "npcId": 333, "x": 2640, "y": 3699, "z": 0, "walkRange": 0, "description": "Rellekka cage/harpoon fishing spot"},
+  {"id": 3047, "npcId": 333, "x": 2644, "y": 3709, "z": 0, "walkRange": 0, "description": "Rellekka cage/harpoon fishing spot"},
+
+  {"id": 3048, "npcId": 313, "x": 2846, "y": 3429, "z": 0, "walkRange": 0, "description": "Catherby big net/harpoon fishing spot"},
+  {"id": 3049, "npcId": 313, "x": 2855, "y": 3424, "z": 0, "walkRange": 0, "description": "Catherby big net/harpoon fishing spot"},
+  {"id": 3050, "npcId": 313, "x": 2859, "y": 3426, "z": 0, "walkRange": 0, "description": "Catherby big net/harpoon fishing spot"},
+
+  {"id": 3051, "npcId": 322, "x": 2601, "y": 3422, "z": 0, "walkRange": 0, "description": "Fishing Guild big net/harpoon fishing spot"},
+  {"id": 3052, "npcId": 322, "x": 2602, "y": 3412, "z": 0, "walkRange": 0, "description": "Fishing Guild big net/harpoon fishing spot"},
+  {"id": 3053, "npcId": 322, "x": 2605, "y": 3420, "z": 0, "walkRange": 0, "description": "Fishing Guild big net/harpoon fishing spot"},
+  {"id": 3054, "npcId": 322, "x": 2605, "y": 3424, "z": 0, "walkRange": 0, "description": "Fishing Guild big net/harpoon fishing spot"},
+
+  {"id": 3055, "npcId": 323, "x": 2629, "y": 3694, "z": 0, "walkRange": 0, "description": "Rellekka big net/harpoon fishing spot"},
+  {"id": 3056, "npcId": 323, "x": 2633, "y": 3690, "z": 0, "walkRange": 0, "description": "Rellekka big net/harpoon fishing spot"},
+  {"id": 3057, "npcId": 323, "x": 2642, "y": 3700, "z": 0, "walkRange": 0, "description": "Rellekka big net/harpoon fishing spot"}
 ]

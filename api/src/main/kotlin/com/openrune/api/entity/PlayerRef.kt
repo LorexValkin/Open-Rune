@@ -97,6 +97,9 @@ interface PlayerRef {
     /** Open a chatbox interface dialog (opcode 218) — used for level-up popups. */
     fun sendChatboxInterface(interfaceId: Int)
 
+    /** Close the chatbox interface dialog. */
+    fun closeChatboxInterface()
+
     // --- Session ---
     fun disconnect(message: String = "")
     val isOnline: Boolean

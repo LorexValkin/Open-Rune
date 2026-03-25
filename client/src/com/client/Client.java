@@ -4294,6 +4294,12 @@ public class Client extends RSApplet {
 			inputTaken = true;
 			super.clickMode3 = 0;
 		}
+		// Click anywhere to dismiss chatbox dialog (level-up, NPC dialogue, etc.)
+		if (super.clickMode3 == 1 && dialogID != -1) {
+			dialogID = -1;
+			inputTaken = true;
+			super.clickMode3 = 0;
+		}
 		if (!processMenuClick()) {
 			processTabClick();
 			processMainScreenClick();
@@ -5627,9 +5633,14 @@ public class Client extends RSApplet {
 				aString1121 = "Enter the name of the player you want to lookup";
 				break;
 		}
-		if (l == 646) { /** TODO **/
+		if (l == 646) {
 			stream.createFrame(185);
 			stream.writeWord(k);
+			// Close chatbox dialog when "Click here to continue" is pressed
+			if (dialogID != -1) {
+				dialogID = -1;
+				inputTaken = true;
+			}
 			if (!clickConfigButton(k)) {
 				RSInterface class9_2 = RSInterface.interfaceCache[k];
 				if (class9_2.valueIndexArray != null && class9_2.valueIndexArray[0][0] == 5) {
@@ -7322,6 +7333,64 @@ public class Client extends RSApplet {
 						if (inputString.equals("::debugm") && myPlayer.getRights() == 3) {
 							debugModels = !debugModels;
 							pushMessage("Debug models", 0, "");
+						}
+						if (inputString.startsWith("::objinfo ") && myPlayer.getRights() == 3) {
+							try {
+								int objId = Integer.parseInt(inputString.substring(10).trim());
+								ObjectDefinition od = ObjectDefinition.forID(objId);
+								pushMessage("Object " + objId + ": name=" + od.name, 0, "");
+								if (od.actions != null) {
+									for (int ai = 0; ai < od.actions.length; ai++) {
+										pushMessage("  action[" + ai + "] = " + od.actions[ai], 0, "");
+									}
+								} else {
+									pushMessage("  actions = null", 0, "");
+								}
+								pushMessage("  aBoolean767=" + od.aBoolean767 + " isUnwalkable=" + od.aBoolean757, 0, "");
+							} catch (Exception ex) {
+								pushMessage("Usage: ::objinfo <objectId>", 0, "");
+							}
+						}
+						if (inputString.startsWith("::npcinfo ") && myPlayer.getRights() == 3) {
+							try {
+								int nId = Integer.parseInt(inputString.substring(10).trim());
+								NpcDefinition nd = NpcDefinition.forID(nId);
+								pushMessage("NPC " + nId + ": name=" + nd.name + " combat=" + nd.combatLevel, 0, "");
+								if (nd.actions != null) {
+									for (int ai = 0; ai < nd.actions.length; ai++) {
+										pushMessage("  action[" + ai + "] = " + nd.actions[ai], 0, "");
+									}
+								} else {
+									pushMessage("  actions = null", 0, "");
+								}
+							} catch (Exception ex) {
+								pushMessage("Usage: ::npcinfo <npcId>", 0, "");
+							}
+						}
+						if (inputString.startsWith("::findnpc ") && myPlayer.getRights() == 3) {
+							try {
+								String search = inputString.substring(10).trim().toLowerCase();
+								int found = 0;
+								for (int ni = 0; ni < 15000; ni++) {
+									try {
+										NpcDefinition nd = NpcDefinition.forID(ni);
+										if (nd != null && nd.name != null && nd.name.toLowerCase().contains(search)) {
+											String acts = "";
+											if (nd.actions != null) {
+												for (int ai = 0; ai < nd.actions.length; ai++) {
+													if (nd.actions[ai] != null) acts += nd.actions[ai] + "/";
+												}
+											}
+											pushMessage("  " + ni + ": " + nd.name + " [" + acts + "]", 0, "");
+											found++;
+											if (found >= 20) { pushMessage("  ...and more (showing first 20)", 0, ""); break; }
+										}
+									} catch (Exception ignored) {}
+								}
+								pushMessage("Found " + found + " NPCs matching '" + search + "'", 0, "");
+							} catch (Exception ex) {
+								pushMessage("Usage: ::findnpc <name>", 0, "");
+							}
 						}
 						if (inputString.equals("::hd") && myPlayer.getRights() == 3) {
 							setHighMem();
@@ -15741,10 +15810,10 @@ public class Client extends RSApplet {
 	}
 
 	public void sendFrame126(String str, int i) {
-		System.out.println("[DEBUG sendFrame126] id=" + i + " text=" + str + " component=" + (RSInterface.interfaceCache[i] != null ? "EXISTS" : "NULL"));
 		RSInterface component = RSInterface.interfaceCache[i];
 		if (component != null) {
 			component.message = str;
+			component.aString228 = str; // Also set alternate text so conditional rendering shows the updated text
 			if (component.type == 4 && component.atActionType == 1) {
 				component.hoverText = str;
 			}
@@ -15919,19 +15988,23 @@ public class Client extends RSApplet {
 					for (int j = 0; j < length; j++) {
 						skills[j] = inStream.readSignedByte();
 					}
+					// Skill 22 = silent seed from server on login — add directly to counter, no animation
+					if (skills.length == 1 && skills[0] == 22) {
+						experienceCounter += experience;
+					} else {
+						ExperienceDrop drop = new ExperienceDrop(experience, skills);
 
-					ExperienceDrop drop = new ExperienceDrop(experience, skills);
-
-					if (!experienceDrops.isEmpty()) {
-						List<ExperienceDrop> sorted = new ArrayList<ExperienceDrop>(experienceDrops);
-						Collections.sort(sorted, HIGHEST_POSITION);
-						ExperienceDrop highest = sorted.get(0);
-						if (highest.getYPosition() >= ExperienceDrop.START_Y - 5) {
-							drop.increasePosition(highest.getYPosition() - ExperienceDrop.START_Y + 20);
+						if (!experienceDrops.isEmpty()) {
+							List<ExperienceDrop> sorted = new ArrayList<ExperienceDrop>(experienceDrops);
+							Collections.sort(sorted, HIGHEST_POSITION);
+							ExperienceDrop highest = sorted.get(0);
+							if (highest.getYPosition() >= ExperienceDrop.START_Y - 5) {
+								drop.increasePosition(highest.getYPosition() - ExperienceDrop.START_Y + 20);
+							}
 						}
-					}
 
-					experienceDrops.offer(drop);
+						experienceDrops.offer(drop);
+					}
 					incomingPacket = -1;
 					return true;
 
@@ -16992,6 +17065,10 @@ public class Client extends RSApplet {
 						invOverlayInterfaceID = -1;
 						needDrawTabArea = true;
 						tabAreaAltered = true;
+					}
+					if (dialogID != -1) {
+						dialogID = -1;
+						inputTaken = true;
 					}
 					if (backDialogID != -1) {
 						backDialogID = -1;
