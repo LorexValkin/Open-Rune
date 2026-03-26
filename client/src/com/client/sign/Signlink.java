@@ -49,13 +49,33 @@ public final class Signlink implements Runnable {
 	public void run() {
 		active = true;
 		String s = getCacheDirectory();
+		String dataDir = getCacheDataDirectory();
 		uid = getuid(s);
 		try {
-			cache_dat = new RandomAccessFile(s + "main_file_cache.dat", "rw");
-			for (int j = 0; j < 5; j++)
-				cache_idx[j] = new RandomAccessFile(s + "main_file_cache.idx"
-						+ j, "rw");
-
+			// Try dat2 format first (rev 232+), then fall back to 317
+			File dat2File = new File(dataDir + "main_file_cache.dat2");
+			if (dat2File.exists()) {
+				isDat2 = true;
+				cache_dat = new RandomAccessFile(dat2File, "rw");
+				// Open index files 0-24 + 255
+				for (int j = 0; j <= 24; j++) {
+					File idxFile = new File(dataDir + "main_file_cache.idx" + j);
+					if (idxFile.exists()) {
+						cache_idx[j] = new RandomAccessFile(idxFile, "rw");
+					}
+				}
+				File idx255 = new File(dataDir + "main_file_cache.idx255");
+				if (idx255.exists()) {
+					cache_idx[255] = new RandomAccessFile(idx255, "rw");
+				}
+				System.out.println("[Signlink] Opened dat2 cache");
+			} else {
+				isDat2 = false;
+				cache_dat = new RandomAccessFile(s + "main_file_cache.dat", "rw");
+				for (int j = 0; j < 5; j++)
+					cache_idx[j] = new RandomAccessFile(s + "main_file_cache.idx" + j, "rw");
+				System.out.println("[Signlink] Opened legacy 317 cache");
+			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -116,17 +136,35 @@ public final class Signlink implements Runnable {
 	}
 
 	public static final String getCacheDirectory() {
-		File file = null;
+		// Always return the legacy cache directory for sprites, XML, and other non-dat files
 		String home = System.getProperty("user.home");
 		String separator = System.getProperty("file.separator");
 		String cacheName = Configuration.CACHE_NAME;
-		StringBuilder sb = new StringBuilder(home + separator + cacheName + separator);
-		String cacheDir = sb.toString();
-		file = new File(cacheDir);
+		String cacheDir = home + separator + cacheName + separator;
+		File file = new File(cacheDir);
 		if (file.exists() || file.mkdir()) {
 			return cacheDir;
 		}
 		return null;
+	}
+
+	/**
+	 * Returns the directory containing cache dat/idx files.
+	 * For dat2, this may differ from getCacheDirectory().
+	 */
+	public static String getCacheDataDirectory() {
+		String home = System.getProperty("user.home");
+		String separator = System.getProperty("file.separator");
+
+		// Check for dat2 cache
+		String dat2Dir = home + separator + ".openrune" + separator + "cache-232" + separator + "cache" + separator;
+		File dat2Check = new File(dat2Dir + "main_file_cache.dat2");
+		if (dat2Check.exists()) {
+			return dat2Dir;
+		}
+
+		// Fall back to legacy location
+		return getCacheDirectory();
 	}
 
 	public static String findcachedirORIG() {
@@ -263,7 +301,8 @@ public final class Signlink implements Runnable {
 	public static int uid;
 	public static int storeid = 32;
 	public static RandomAccessFile cache_dat = null;
-	public static final RandomAccessFile[] cache_idx = new RandomAccessFile[5];
+	public static final RandomAccessFile[] cache_idx = new RandomAccessFile[256]; // 0-24 + 255
+	public static boolean isDat2 = false;
 	public static boolean sunjava;
 	public static Applet mainapp = null;
 	public static boolean active;

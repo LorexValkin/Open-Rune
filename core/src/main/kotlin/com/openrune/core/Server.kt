@@ -93,8 +93,14 @@ class OpenRuneServer {
         // Check cache-data/ first (project root), fall back to client cache location
         val cachePath = Path.of("cache-data")
         val clientCachePath = Path.of(System.getProperty("user.home"), ".openrune", "cache")
+        val dat2CachePath = Path.of(System.getProperty("user.home"), ".openrune", "cache-232", "cache")
         val resolvedCache = when {
             java.nio.file.Files.exists(cachePath) -> cachePath
+            // Prefer dat2 cache if available (rev 232 with XTEA support)
+            java.nio.file.Files.exists(dat2CachePath.resolve("main_file_cache.dat2")) -> {
+                log.info("Using dat2 cache at: {}", dat2CachePath)
+                dat2CachePath
+            }
             java.nio.file.Files.exists(clientCachePath) -> {
                 log.info("Using client cache at: {}", clientCachePath)
                 clientCachePath

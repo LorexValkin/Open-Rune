@@ -1,0 +1,129 @@
+[
+  {
+    "id": 2030,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 4304,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 6189,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 11010,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 11978,
+    "name": "Lava forge",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 12100,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 12655,
+    "name": "Small furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 12809,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 16469,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 16657,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 21303,
+    "name": "Clay forge",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 24009,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 26300,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 28562,
+    "name": "Lovakite furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 28565,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 30158,
+    "name": "Furnace",
+    "actions": [
+      "Smelt",
+      "Coffer"
+    ]
+  },
+  {
+    "id": 33504,
+    "name": "Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  },
+  {
+    "id": 34342,
+    "name": "Volcanic Furnace",
+    "actions": [
+      "Smelt"
+    ]
+  }
+]

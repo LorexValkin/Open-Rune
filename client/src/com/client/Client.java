@@ -62,6 +62,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.Sun14ReflectionProvider;
 import org.apache.commons.lang3.SystemUtils;
 
+// Dat2ConfigLoader is in com.client package — no import needed
 import com.client.definitions.AnimationDefinition;
 import com.client.definitions.FloorOverlayDefinition;
 import com.client.definitions.FloorUnderlayDefinition;
@@ -4549,8 +4550,15 @@ public class Client extends RSApplet {
 	private JagArchive streamLoaderForName(int i, String s, String s1, int j, int k) {
 		byte abyte0[] = null;
 		try {
-			if (decompressors[0] != null) {
-				abyte0 = decompressors[0].decompress(i);
+			if (Signlink.isDat2) {
+				// In dat2 mode, use legacy 317 cache for jag archives
+				if (legacyDecompressors[0] != null) {
+					abyte0 = legacyDecompressors[0].decompress(i);
+				}
+			} else {
+				if (decompressors[0] != null) {
+					abyte0 = decompressors[0].decompress(i);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -11003,8 +11011,51 @@ public class Client extends RSApplet {
 		}
 		getDocumentBaseHost();
 		if (Signlink.cache_dat != null) {
-			for (int i = 0; i < 5; i++)
-				decompressors[i] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[i], i + 1);
+			if (Signlink.isDat2) {
+				// dat2: map decompressor indices to match 317 dataType conventions.
+				// 317 layout: [0]=jag archives, [1]=models, [2]=anims, [3]=sounds, [4]=maps
+				// OSRS layout: idx0=anim frames, idx1=anim bases, idx2=configs,
+				//              idx4=sounds, idx5=maps, idx7=models
+				// We keep decompressors[1-4] matching 317 expectations for OnDemandFetcher,
+				// and add dat2-specific indices at higher slots.
+				if (Signlink.cache_idx[7] != null) // models (OSRS idx7 → slot 1)
+					decompressors[1] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[7], 7);
+				if (Signlink.cache_idx[0] != null) // anims (OSRS idx0 → slot 2)
+					decompressors[2] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[0], 0);
+				if (Signlink.cache_idx[4] != null) // sounds (OSRS idx4 → slot 3)
+					decompressors[3] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[4], 4);
+				if (Signlink.cache_idx[5] != null) // maps (OSRS idx5 → slot 4)
+					decompressors[4] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[5], 5);
+				// Config index and meta-index for Dat2ConfigLoader
+				if (Signlink.cache_idx[2] != null)  // configs (OSRS idx2)
+					decompressors[5] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[2], 2);
+				if (Signlink.cache_idx[255] != null) // meta-index (idx255)
+					decompressors[25] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[255], 255);
+				// Mark decompressors[0] as non-null so null checks pass
+				decompressors[0] = decompressors[1];
+				// Also open the legacy 317 cache for sprites, interfaces, fonts etc.
+				try {
+					String legacyDir = System.getProperty("user.home") + System.getProperty("file.separator")
+							+ Configuration.CACHE_NAME + System.getProperty("file.separator");
+					java.io.File legacyDat = new java.io.File(legacyDir + "main_file_cache.dat");
+					if (legacyDat.exists()) {
+						java.io.RandomAccessFile legacyDataFile = new java.io.RandomAccessFile(legacyDat, "r");
+						for (int i = 0; i < 5; i++) {
+							java.io.File idxFile = new java.io.File(legacyDir + "main_file_cache.idx" + i);
+							if (idxFile.exists()) {
+								legacyDecompressors[i] = new Decompressor(legacyDataFile,
+										new java.io.RandomAccessFile(idxFile, "r"), i + 1);
+							}
+						}
+						System.out.println("[Client] Legacy 317 cache opened for sprites/interfaces");
+					}
+				} catch (Exception e) {
+					System.out.println("[Client] Could not open legacy cache: " + e.getMessage());
+				}
+			} else {
+				for (int i = 0; i < 5; i++)
+					decompressors[i] = new Decompressor(Signlink.cache_dat, Signlink.cache_idx[i], i + 1);
+			}
 		}
 		if (Configuration.repackIndexOne) {
 			repackCacheIndex(1);
@@ -11214,16 +11265,31 @@ public class Client extends RSApplet {
 			Rasterizer.setBrightness(0.80000000000000004D);
 			Rasterizer.allocateTextureBuffers();
 			drawLoadingText(83, "Unpacking config");
-			AnimationDefinition.unpackConfig(streamLoader);
-			ObjectDefinition.unpackConfig(streamLoader);
-			FloorUnderlayDefinition.unpackConfig(streamLoader);
-			//FloorOverlayDefinition.unpackConfig(streamLoader);
-			ItemDefinition.unpackConfig(streamLoader);
-			NpcDefinition.unpackConfig(streamLoader);
-			IdentityKit.unpackConfig(streamLoader);
-			GraphicsDefinition.unpackConfig(streamLoader);
-			VarPlayer.unpackConfig(streamLoader);
-			VarBit.unpackConfig(streamLoader);
+			if (Signlink.isDat2 && decompressors[5] != null && decompressors[25] != null) {
+				// dat2 path: load NPC/Item/Object from dat2, rest from legacy
+				System.out.println("[Client] Loading configs from dat2 cache");
+				dat2ConfigLoader = new Dat2ConfigLoader(decompressors[5], decompressors[25]);
+				NpcDefinition.unpackConfigDat2(dat2ConfigLoader);
+				ItemDefinition.unpackConfigDat2(dat2ConfigLoader);
+				ObjectDefinition.unpackConfigDat2(dat2ConfigLoader);
+				// These still use legacy jag archive (animations, floors, etc.)
+				AnimationDefinition.unpackConfig(streamLoader);
+				FloorUnderlayDefinition.unpackConfig(streamLoader);
+				IdentityKit.unpackConfig(streamLoader);
+				GraphicsDefinition.unpackConfig(streamLoader);
+				VarPlayer.unpackConfig(streamLoader);
+				VarBit.unpackConfig(streamLoader);
+			} else {
+				AnimationDefinition.unpackConfig(streamLoader);
+				ObjectDefinition.unpackConfig(streamLoader);
+				FloorUnderlayDefinition.unpackConfig(streamLoader);
+				ItemDefinition.unpackConfig(streamLoader);
+				NpcDefinition.unpackConfig(streamLoader);
+				IdentityKit.unpackConfig(streamLoader);
+				GraphicsDefinition.unpackConfig(streamLoader);
+				VarPlayer.unpackConfig(streamLoader);
+				VarBit.unpackConfig(streamLoader);
+			}
 
 			// preloadModels();
 			// constructMusic();
@@ -17589,7 +17655,7 @@ public class Client extends RSApplet {
 		spriteDrawY = -1;
 		anIntArray968 = new int[33];
 		anIntArray969 = new int[256];
-		decompressors = new Decompressor[5];
+		decompressors = new Decompressor[26]; // 0-24 + [25]=idx255
 		variousSettings = new int[25000];
 		aBoolean972 = false;
 		anInt975 = 50;
@@ -17815,6 +17881,8 @@ public class Client extends RSApplet {
 	private final int[] anIntArray968;
 	private final int[] anIntArray969;
 	final Decompressor[] decompressors;
+	final Decompressor[] legacyDecompressors = new Decompressor[5]; // 317 cache for sprites/interfaces in dat2 mode
+	Dat2ConfigLoader dat2ConfigLoader;
 	public int variousSettings[];
 	private boolean aBoolean972;
 	private final int anInt975;

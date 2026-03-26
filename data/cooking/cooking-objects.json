@@ -1,0 +1,198 @@
+[
+  {
+    "id": 114,
+    "name": "Cooking range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 7183,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 7184,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 7421,
+    "name": "Oven",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 8750,
+    "name": "Cooking range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 9682,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 9736,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 10377,
+    "name": "Clay Oven",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 12102,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 12269,
+    "name": "Stove",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 12611,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 16641,
+    "name": "Cooking range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 16702,
+    "name": "Cooker",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 16893,
+    "name": "Cooking range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 17131,
+    "name": "Gnome cooker",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 21302,
+    "name": "Clay oven",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 21792,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 22713,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 22714,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 25730,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 26181,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 27516,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 27517,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 27724,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 30932,
+    "name": "Cooking pot",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 31631,
+    "name": "Range",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 32631,
+    "name": "Simple stove",
+    "actions": [
+      "Cook"
+    ]
+  },
+  {
+    "id": 32739,
+    "name": "Cooking range",
+    "actions": [
+      "Cook"
+    ]
+  }
+]

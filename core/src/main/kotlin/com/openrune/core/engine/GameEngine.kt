@@ -19,6 +19,7 @@ import com.openrune.core.world.GroundItemManager
 import com.openrune.core.world.interaction.ObjectInteractionHandler
 import com.openrune.core.world.interaction.EquipmentHandler
 import com.openrune.cache.io.CacheReader
+import com.openrune.cache.io.XteaKeyLoader
 import com.openrune.cache.def.CacheNpcDefinition
 import com.openrune.cache.def.NpcDefinitionDecoder
 import org.slf4j.LoggerFactory
@@ -96,7 +97,25 @@ class GameEngine(
             cacheNpcDefs = NpcDefinitionDecoder.load(cacheReader)
         }
 
-        regionLoader = RegionLoader(collisionMap, cacheReader)
+        // Load XTEA keys if available (for dat2 caches with encrypted regions)
+        val xteaKeys = if (cachePath != null) {
+            val keysPath = cachePath.resolve("keys.json")
+            if (keysPath.toFile().exists()) {
+                XteaKeyLoader.load(keysPath)
+            } else {
+                // Also check parent directory
+                val parentKeys = cachePath.parent?.resolve("keys.json")
+                if (parentKeys != null && parentKeys.toFile().exists()) {
+                    XteaKeyLoader.load(parentKeys)
+                } else {
+                    emptyMap()
+                }
+            }
+        } else {
+            emptyMap()
+        }
+
+        regionLoader = RegionLoader(collisionMap, cacheReader, xteaKeys)
         regionLoader.initialize()  // Build map index from cache versionlist
         npcManager = NpcManager(16384, eventBus, collisionMap, movementProcessor)
 
@@ -104,7 +123,7 @@ class GameEngine(
         packetDispatcher.npcLookup = { index -> npcManager.getByIndex(index) }
 
         // Object interactions (doors, stairs, ladders) - engine-level
-        objectInteractionHandler = ObjectInteractionHandler(eventBus, playerManager)
+        objectInteractionHandler = ObjectInteractionHandler(eventBus, playerManager, regionLoader)
         objectInteractionHandler.initialize()
 
         // Equipment handler (equip, unequip, 2H conflicts) - engine-level
@@ -145,6 +164,7 @@ class GameEngine(
         engineThread = Thread({
             log.info("Game engine started ({}ms tick)", TICK_RATE_MS)
             log.info("  Collision map: {} regions loaded", collisionMap.regionCount())
+            log.info("  Object placements tracked: {}", regionLoader.placementCount())
             while (running) {
                 val tickStart = System.currentTimeMillis()
                 try { tick() } catch (e: Exception) { log.error("Error in tick {}", currentTick, e) }

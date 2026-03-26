@@ -264,15 +264,20 @@ public final class Buffer extends DualNode {
 
     public String readString() {
         int i = currentOffset;
-        while (buffer[currentOffset++] != 10)
-            ;
+        // Support both null-terminated (dat2) and newline-terminated (317) strings
+        while (currentOffset < buffer.length) {
+            byte b = buffer[currentOffset++];
+            if (b == 10 || b == 0) break;
+        }
         return new String(buffer, i, currentOffset - i - 1);
     }
 
     public byte[] readBytes() {
         int i = currentOffset;
-        while (buffer[currentOffset++] != 10)
-            ;
+        while (currentOffset < buffer.length) {
+            byte b = buffer[currentOffset++];
+            if (b == 10 || b == 0) break;
+        }
         byte abyte0[] = new byte[currentOffset - i - 1];
         System.arraycopy(buffer, i, abyte0, i - i, currentOffset - 1 - i);
         return abyte0;

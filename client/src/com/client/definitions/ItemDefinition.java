@@ -42,7 +42,22 @@ public final class ItemDefinition {
 		for (int index = 0; index < 10; index++) {
 			cache[index] = new ItemDefinition();
 		}
-		//itemDump();
+	}
+
+	public static void unpackConfigDat2(com.client.Dat2ConfigLoader loader) {
+		dat2Files = loader.loadGroup(com.client.Dat2ConfigLoader.GROUP_ITEMS);
+		if (dat2Files == null) {
+			System.out.println("[ItemDef] dat2: failed to load item group");
+			totalItems = 0;
+			dat2Files = new byte[0][];
+		} else {
+			totalItems = dat2Files.length;
+		}
+		System.out.println("[ItemDef] dat2: " + totalItems + " items loaded");
+		cache = new ItemDefinition[10];
+		for (int index = 0; index < 10; index++) {
+			cache[index] = new ItemDefinition();
+		}
 	}
 
 	public static ItemDefinition forID(int itemId) {
@@ -54,15 +69,22 @@ public final class ItemDefinition {
 
 		if (itemId == -1)
 			itemId = 0;
-		if (itemId > streamIndices.length)
-			itemId = 0;
+		if (dat2Files != null) {
+			if (itemId >= dat2Files.length) itemId = 0;
+		} else if (streamIndices != null) {
+			if (itemId >= streamIndices.length) itemId = 0;
+		}
 
 		cacheIndex = (cacheIndex + 1) % 10;
 		final ItemDefinition itemDef = cache[cacheIndex];
-		stream.currentOffset = streamIndices[itemId];
 		itemDef.id = itemId;
 		itemDef.setDefaults();
-		itemDef.readValues(stream);
+		if (dat2Files != null && itemId < dat2Files.length && dat2Files[itemId] != null && dat2Files[itemId].length > 0) {
+			itemDef.readValues(new Buffer(dat2Files[itemId]));
+		} else if (stream != null && streamIndices != null && itemId < streamIndices.length) {
+			stream.currentOffset = streamIndices[itemId];
+			itemDef.readValues(stream);
+		}
 
 		if (itemDef.certTemplateID != -1) {
 			itemDef.toNote();
@@ -2210,6 +2232,7 @@ break;
 	private int[] stackAmounts;
 	public int team;
 	public static int totalItems;
+	public static byte[][] dat2Files;
 	private int anInt204;
 	private byte aByte205;
 	public boolean searchableItem;

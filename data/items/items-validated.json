@@ -1,0 +1,1255 @@
+[
+  {
+    "id": 436,
+    "name": "Copper ore",
+    "stackable": false,
+    "value": 3,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of copper ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 437
+  },
+  {
+    "id": 438,
+    "name": "Tin ore",
+    "stackable": false,
+    "value": 3,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of tin ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 439
+  },
+  {
+    "id": 440,
+    "name": "Iron ore",
+    "stackable": false,
+    "value": 17,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of iron ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 441
+  },
+  {
+    "id": 442,
+    "name": "Silver ore",
+    "stackable": false,
+    "value": 75,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of silver ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 443
+  },
+  {
+    "id": 444,
+    "name": "Gold ore",
+    "stackable": false,
+    "value": 150,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of gold ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 445
+  },
+  {
+    "id": 447,
+    "name": "Mithril ore",
+    "stackable": false,
+    "value": 162,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of mithril ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 448
+  },
+  {
+    "id": 449,
+    "name": "Adamantite ore",
+    "stackable": false,
+    "value": 400,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of adamantite ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 450
+  },
+  {
+    "id": 451,
+    "name": "Runite ore",
+    "stackable": false,
+    "value": 3200,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A piece of runite ore.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 452
+  },
+  {
+    "id": 453,
+    "name": "Coal",
+    "stackable": false,
+    "value": 45,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A lump of coal.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 454
+  },
+  {
+    "id": 526,
+    "name": "Bones",
+    "stackable": false,
+    "value": 0,
+    "members": false,
+    "interfaceActions": [
+      "Bury",
+      null,
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Ew, bones.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 527
+  },
+  {
+    "id": 590,
+    "name": "Tinderbox",
+    "stackable": false,
+    "value": 0,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Useful for lighting fires.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 591
+  },
+  {
+    "id": 995,
+    "name": "Coins",
+    "stackable": true,
+    "value": 0,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Lovely money!",
+    "tradeable": true,
+    "weight": 0.0,
+    "noted": false
+  },
+  {
+    "id": 1265,
+    "name": "Bronze pickaxe",
+    "stackable": false,
+    "value": 0,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 1,
+      "mining": 1
+    },
+    "bonuses": {
+      "attackStab": 4,
+      "attackCrush": 2,
+      "meleeStrength": 5
+    },
+    "noted": false,
+    "noteId": 1266
+  },
+  {
+    "id": 1267,
+    "name": "Iron pickaxe",
+    "stackable": false,
+    "value": 140,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 1,
+      "mining": 1
+    },
+    "bonuses": {
+      "attackStab": 8,
+      "attackCrush": 4,
+      "meleeStrength": 9
+    },
+    "noted": false,
+    "noteId": 1268
+  },
+  {
+    "id": 1269,
+    "name": "Steel pickaxe",
+    "stackable": false,
+    "value": 500,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 6,
+      "mining": 6
+    },
+    "bonuses": {
+      "attackStab": 12,
+      "attackCrush": 6,
+      "meleeStrength": 13
+    },
+    "noted": false,
+    "noteId": 1270
+  },
+  {
+    "id": 1271,
+    "name": "Adamant pickaxe",
+    "stackable": false,
+    "value": 3200,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 31,
+      "mining": 31
+    },
+    "bonuses": {
+      "attackStab": 24,
+      "attackCrush": 12,
+      "meleeStrength": 27
+    },
+    "noted": false,
+    "noteId": 1272
+  },
+  {
+    "id": 1273,
+    "name": "Mithril pickaxe",
+    "stackable": false,
+    "value": 1300,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 21,
+      "mining": 21
+    },
+    "bonuses": {
+      "attackStab": 17,
+      "attackCrush": 9,
+      "meleeStrength": 19
+    },
+    "noted": false,
+    "noteId": 1274
+  },
+  {
+    "id": 1275,
+    "name": "Rune pickaxe",
+    "stackable": false,
+    "value": 32000,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Used for mining.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 41,
+      "mining": 41
+    },
+    "bonuses": {
+      "attackStab": 32,
+      "attackCrush": 16,
+      "meleeStrength": 36
+    },
+    "noted": false,
+    "noteId": 1276
+  },
+  {
+    "id": 1349,
+    "name": "Iron axe",
+    "stackable": false,
+    "value": 56,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A slightly better axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 1
+    },
+    "bonuses": {
+      "attackSlash": 8,
+      "attackCrush": 4,
+      "meleeStrength": 9
+    },
+    "noted": false,
+    "noteId": 1350
+  },
+  {
+    "id": 1351,
+    "name": "Bronze axe",
+    "stackable": false,
+    "value": 16,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A small axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 1
+    },
+    "bonuses": {
+      "attackSlash": 4,
+      "attackCrush": 2,
+      "meleeStrength": 5
+    },
+    "noted": false,
+    "noteId": 1352
+  },
+  {
+    "id": 1353,
+    "name": "Steel axe",
+    "stackable": false,
+    "value": 200,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A steel axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 6
+    },
+    "bonuses": {
+      "attackSlash": 12,
+      "attackCrush": 6,
+      "meleeStrength": 13
+    },
+    "noted": false,
+    "noteId": 1354
+  },
+  {
+    "id": 1355,
+    "name": "Mithril axe",
+    "stackable": false,
+    "value": 520,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A mithril axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 21
+    },
+    "bonuses": {
+      "attackSlash": 17,
+      "attackCrush": 9,
+      "meleeStrength": 19
+    },
+    "noted": false,
+    "noteId": 1356
+  },
+  {
+    "id": 1357,
+    "name": "Adamant axe",
+    "stackable": false,
+    "value": 1280,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "An adamant axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 31
+    },
+    "bonuses": {
+      "attackSlash": 24,
+      "attackCrush": 12,
+      "meleeStrength": 27
+    },
+    "noted": false,
+    "noteId": 1358
+  },
+  {
+    "id": 1359,
+    "name": "Rune axe",
+    "stackable": false,
+    "value": 12800,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A powerful axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 41
+    },
+    "bonuses": {
+      "attackSlash": 32,
+      "attackCrush": 16,
+      "meleeStrength": 36
+    },
+    "noted": false,
+    "noteId": 1360
+  },
+  {
+    "id": 1361,
+    "name": "Black axe",
+    "stackable": false,
+    "value": 384,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A black axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 6
+    },
+    "bonuses": {
+      "attackSlash": 14,
+      "attackCrush": 8,
+      "meleeStrength": 16
+    },
+    "noted": false,
+    "noteId": 1362
+  },
+  {
+    "id": 1511,
+    "name": "Logs",
+    "stackable": false,
+    "value": 4,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Some nicely cut logs.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1512
+  },
+  {
+    "id": 1513,
+    "name": "Magic logs",
+    "stackable": false,
+    "value": 320,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a magic tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1514
+  },
+  {
+    "id": 1515,
+    "name": "Yew logs",
+    "stackable": false,
+    "value": 160,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a yew tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1516
+  },
+  {
+    "id": 1517,
+    "name": "Maple logs",
+    "stackable": false,
+    "value": 80,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a maple tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1518
+  },
+  {
+    "id": 1519,
+    "name": "Willow logs",
+    "stackable": false,
+    "value": 40,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a willow tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1520
+  },
+  {
+    "id": 1521,
+    "name": "Oak logs",
+    "stackable": false,
+    "value": 20,
+    "members": false,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from an oak tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 1522
+  },
+  {
+    "id": 2309,
+    "name": "Bread",
+    "stackable": false,
+    "value": 12,
+    "members": false,
+    "interfaceActions": [
+      "Eat",
+      null,
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A loaf of bread.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 2310
+  },
+  {
+    "id": 2862,
+    "name": "Achey tree logs",
+    "stackable": false,
+    "value": 4,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from an achey tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 2863
+  },
+  {
+    "id": 3239,
+    "name": "Bark",
+    "stackable": false,
+    "value": 0,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "Bark from a hollow tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 3240
+  },
+  {
+    "id": 4151,
+    "name": "Abyssal whip",
+    "stackable": false,
+    "value": 120001,
+    "members": true,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A weapon from the Abyss.",
+    "tradeable": true,
+    "highAlch": 72000,
+    "lowAlch": 48000,
+    "equipSlot": 3,
+    "requirements": {
+      "attack": 70
+    },
+    "bonuses": {
+      "attackSlash": 82,
+      "meleeStrength": 82
+    },
+    "noted": false,
+    "noteId": 4152
+  },
+  {
+    "id": 6332,
+    "name": "Mahogany logs",
+    "stackable": false,
+    "value": 50,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a mahogany tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 8836
+  },
+  {
+    "id": 6333,
+    "name": "Teak logs",
+    "stackable": false,
+    "value": 30,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a teak tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 6334
+  },
+  {
+    "id": 6739,
+    "name": "Dragon axe",
+    "stackable": false,
+    "value": 55000,
+    "members": true,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A very powerful axe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 61
+    },
+    "bonuses": {
+      "attackSlash": 38,
+      "attackCrush": 20,
+      "meleeStrength": 42
+    },
+    "noted": false,
+    "noteId": 6740
+  },
+  {
+    "id": 10810,
+    "name": "Arctic pine logs",
+    "stackable": false,
+    "value": 35,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from an arctic pine.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 10811
+  },
+  {
+    "id": 11920,
+    "name": "Dragon pickaxe",
+    "stackable": false,
+    "value": 97950,
+    "members": true,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A very powerful pickaxe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 61,
+      "mining": 61
+    },
+    "bonuses": {
+      "attackStab": 38,
+      "attackCrush": 20,
+      "meleeStrength": 42
+    },
+    "noted": false,
+    "noteId": 11921
+  },
+  {
+    "id": 12297,
+    "name": "Black pickaxe",
+    "stackable": false,
+    "value": 145,
+    "members": false,
+    "interfaceActions": [
+      null,
+      "Wield",
+      null,
+      null,
+      "Drop"
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A black pickaxe.",
+    "tradeable": true,
+    "equipSlot": 3,
+    "twoHanded": false,
+    "requirements": {
+      "attack": 6,
+      "mining": 6
+    },
+    "bonuses": {
+      "attackStab": 14,
+      "attackCrush": 8,
+      "meleeStrength": 16
+    },
+    "noted": false,
+    "noteId": 12298
+  },
+  {
+    "id": 19669,
+    "name": "Redwood logs",
+    "stackable": false,
+    "value": 450,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      "Take",
+      "Light",
+      null
+    ],
+    "examine": "Logs cut from a redwood tree.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 19670
+  },
+  {
+    "id": 21347,
+    "name": "Amethyst",
+    "stackable": false,
+    "value": 3900,
+    "members": true,
+    "interfaceActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "groundActions": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "examine": "A semi-precious gemstone.",
+    "tradeable": true,
+    "noted": false,
+    "noteId": 21348
+  }
+]

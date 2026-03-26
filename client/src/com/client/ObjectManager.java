@@ -319,7 +319,11 @@ final class ObjectManager {
 					worldController.setTileLogicHeight(l, i10, j8, getCollisionPlane(j8, l, i10));
 			}
 		}
-		worldController.setLightDirection(-10, -50, -50);
+		try {
+			worldController.setLightDirection(-10, -50, -50);
+		} catch (Exception e) {
+			// Model lighting error — continue without
+		}
 		for (int j1 = 0; j1 < regionSizeX; j1++) {
 			for (int l1 = 0; l1 < regionSizeY; l1++)
 				if ((tileFlags[1][j1][l1] & 2) == 2)
@@ -575,7 +579,13 @@ final class ObjectManager {
 			if (definition.animation == -1 && definition.childrenIDs == null)
 				obj1 = definition.modelAt(10, j1, k1, l1, i2, j2, -1);
 			else
-				obj1 = new AnimatedSceneObject(id, j1, 10, l1, i2, k1, j2, definition.animation, true);
+			{
+				try {
+					obj1 = new AnimatedSceneObject(id, j1, 10, l1, i2, k1, j2, definition.animation, true);
+				} catch (Exception e) {
+					obj1 = null;
+				}
+			}
 			if (obj1 != null) {
 				int i5 = 0;
 				if (type == 11)
@@ -1015,7 +1025,11 @@ final class ObjectManager {
 							CollisionMap class11 = null;
 							if (l4 >= 0)
 								class11 = aclass11[l4];
-							renderObject(k4, worldController, class11, l3, l, j4, l1, i4 + j1 & 3);
+							try {
+								renderObject(k4, worldController, class11, l3, l, j4, l1, i4 + j1 & 3);
+							} catch (Exception e) {
+								// OSRS model format incompatibility
+							}
 						}
 					}
 				} while (true);
@@ -1313,7 +1327,7 @@ final class ObjectManager {
 						try {
 							renderObject(k3, worldController, class11, l2, j2, j3, l, i3);
 						} catch (Exception e) {
-							e.printStackTrace();
+							// OSRS model format incompatibility — skip this object
 						}
 					}
 				} while (true);

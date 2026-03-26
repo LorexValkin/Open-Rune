@@ -22,8 +22,11 @@ public final class ObjectDefinition {
 	}
 
 	public static ObjectDefinition forID(int i) {
-		if (i > streamIndices.length)
-			i = streamIndices.length - 2;
+		if (dat2Files != null) {
+			if (i >= dat2Files.length) i = 0;
+		} else if (streamIndices != null) {
+			if (i >= streamIndices.length) i = streamIndices.length - 2;
+		}
 
 		if (i == 25913 || i == 25916 || i == 25917)
 			i = 15552;
@@ -34,10 +37,18 @@ public final class ObjectDefinition {
 
 		cacheIndex = (cacheIndex + 1) % 20;
 		ObjectDefinition objectDef = cache[cacheIndex];
-		stream.currentOffset = streamIndices[i];
 		objectDef.type = i;
 		objectDef.setDefaults();
-		objectDef.readValues(stream);
+		try {
+			if (dat2Files != null && i < dat2Files.length && dat2Files[i] != null && dat2Files[i].length > 0) {
+				objectDef.readValues(new Buffer(dat2Files[i]));
+			} else if (stream != null && streamIndices != null && i < streamIndices.length) {
+				stream.currentOffset = streamIndices[i];
+				objectDef.readValues(stream);
+			}
+		} catch (Exception e) {
+			// Corrupt or incompatible definition — use defaults
+		}
 		if (i >= 26281 && i <= 26290) {
 			objectDef.actions = new String[] { "Choose", null, null, null, null };
 		}
@@ -458,7 +469,21 @@ public final class ObjectDefinition {
 		cache = new ObjectDefinition[20];
 		for (int k = 0; k < 20; k++)
 			cache[k] = new ObjectDefinition();
-		//dumpList();
+	}
+
+	public static void unpackConfigDat2(com.client.Dat2ConfigLoader loader) {
+		dat2Files = loader.loadGroup(com.client.Dat2ConfigLoader.GROUP_OBJECTS);
+		if (dat2Files == null) {
+			System.out.println("[ObjectDef] dat2: failed to load object group");
+			totalObjects = 0;
+			dat2Files = new byte[0][];
+		} else {
+			totalObjects = dat2Files.length;
+		}
+		System.out.println("[ObjectDef] dat2: " + totalObjects + " objects loaded");
+		cache = new ObjectDefinition[20];
+		for (int k = 0; k < 20; k++)
+			cache[k] = new ObjectDefinition();
 	}
 
 	public boolean isModelReadyForType(int i) {
@@ -483,11 +508,20 @@ public final class ObjectDefinition {
 	}
 
 	public Model modelAt(int i, int j, int k, int l, int i1, int j1, int k1) {
-		Model model = getModelForType(i, k1, j);
+		Model model;
+		try {
+			model = getModelForType(i, k1, j);
+		} catch (Exception e) {
+			return null; // Model data incompatible
+		}
 		if (model == null)
 			return null;
-		if (aBoolean762 || aBoolean769)
-			model = new Model(aBoolean762, aBoolean769, model);
+		try {
+			if (aBoolean762 || aBoolean769)
+				model = new Model(aBoolean762, aBoolean769, model);
+		} catch (Exception e) {
+			return null;
+		}
 		if (aBoolean762) {
 			int l1 = (k + l + i1 + j1) / 4;
 			for (int i2 = 0; i2 < model.numVertices; i2++) {
@@ -642,7 +676,11 @@ public final class ObjectDefinition {
 		// !aBoolean769);
 		// ORIGINAL^
 
-		model_3.applyLighting(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50, !aBoolean769);
+		try {
+			model_3.applyLighting(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50, !aBoolean769);
+		} catch (Exception e) {
+			// OSRS model format incompatibility — skip lighting
+		}
 
 		if (anInt760 == 1)
 			model_3.itemDropHeight = model_3.modelHeight;
@@ -931,6 +969,7 @@ public final class ObjectDefinition {
 	public static LRUCache mruNodes2 = new LRUCache(30);
 	public int animation;
 	private static ObjectDefinition[] cache;
+	public static byte[][] dat2Files;
 	private int anInt783;
 	private int[] modifiedModelColors;
 	public static LRUCache mruNodes1 = new LRUCache(500);

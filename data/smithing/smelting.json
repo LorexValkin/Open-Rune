@@ -1,0 +1,139 @@
+[
+  {
+    "barId": 2349,
+    "barName": "Bronze bar",
+    "requiredOres": [
+      {
+        "id": 436,
+        "name": "Copper ore",
+        "amount": 1
+      },
+      {
+        "id": 438,
+        "name": "Tin ore",
+        "amount": 1
+      }
+    ],
+    "level": 1,
+    "xp": 6.2,
+    "id": 2349
+  },
+  {
+    "barId": 2351,
+    "barName": "Iron bar",
+    "requiredOres": [
+      {
+        "id": 440,
+        "name": "Iron ore",
+        "amount": 1
+      }
+    ],
+    "level": 15,
+    "xp": 12.5,
+    "id": 2351
+  },
+  {
+    "barId": 2355,
+    "barName": "Silver bar",
+    "requiredOres": [
+      {
+        "id": 442,
+        "name": "Silver ore",
+        "amount": 1
+      }
+    ],
+    "level": 20,
+    "xp": 13.7,
+    "id": 2355
+  },
+  {
+    "barId": 2353,
+    "barName": "Steel bar",
+    "requiredOres": [
+      {
+        "id": 440,
+        "name": "Iron ore",
+        "amount": 1
+      },
+      {
+        "id": 453,
+        "name": "Coal",
+        "amount": 2
+      }
+    ],
+    "level": 30,
+    "xp": 17.5,
+    "id": 2353
+  },
+  {
+    "barId": 2357,
+    "barName": "Gold bar",
+    "requiredOres": [
+      {
+        "id": 444,
+        "name": "Gold ore",
+        "amount": 1
+      }
+    ],
+    "level": 40,
+    "xp": 22.5,
+    "id": 2357
+  },
+  {
+    "barId": 2359,
+    "barName": "Mithril bar",
+    "requiredOres": [
+      {
+        "id": 447,
+        "name": "Mithril ore",
+        "amount": 1
+      },
+      {
+        "id": 453,
+        "name": "Coal",
+        "amount": 4
+      }
+    ],
+    "level": 50,
+    "xp": 30,
+    "id": 2359
+  },
+  {
+    "barId": 2361,
+    "barName": "Adamantite bar",
+    "requiredOres": [
+      {
+        "id": 449,
+        "name": "Adamantite ore",
+        "amount": 1
+      },
+      {
+        "id": 453,
+        "name": "Coal",
+        "amount": 6
+      }
+    ],
+    "level": 70,
+    "xp": 37.5,
+    "id": 2361
+  },
+  {
+    "barId": 2363,
+    "barName": "Runite bar",
+    "requiredOres": [
+      {
+        "id": 451,
+        "name": "Runite ore",
+        "amount": 1
+      },
+      {
+        "id": 453,
+        "name": "Coal",
+        "amount": 8
+      }
+    ],
+    "level": 85,
+    "xp": 50,
+    "id": 2363
+  }
+]

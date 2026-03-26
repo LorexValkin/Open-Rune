@@ -1,5 +1,6 @@
 package com.client;
 
+import com.client.sign.Signlink;
 import java.io.*;
 
 final class Decompressor {
@@ -23,6 +24,12 @@ final class Decompressor {
 			int j1 = ((buffer[3] & 0xff) << 16) + ((buffer[4] & 0xff) << 8) + (buffer[5] & 0xff);
 			if (j1 <= 0 || (long) j1 > dataFile.length() / 520L)
 				return null;
+
+			// Determine if extended sector headers are needed (dat2 + fileId > 65535)
+			boolean extended = Signlink.isDat2 && i > 65535;
+			int headerSize = extended ? 10 : 8;
+			int dataSize = 520 - headerSize;
+
 			byte abyte0[] = new byte[i1];
 			int k1 = 0;
 			for (int l1 = 0; k1 < i1; l1++) {
@@ -31,26 +38,43 @@ final class Decompressor {
 				seekTo(dataFile, j1 * 520);
 				int k = 0;
 				int i2 = i1 - k1;
-				if (i2 > 512)
-					i2 = 512;
+				if (i2 > dataSize)
+					i2 = dataSize;
 				int j2;
-				for (; k < i2 + 8; k += j2) {
-					j2 = dataFile.read(buffer, k, (i2 + 8) - k);
+				for (; k < i2 + headerSize; k += j2) {
+					j2 = dataFile.read(buffer, k, (i2 + headerSize) - k);
 					if (j2 == -1)
 						return null;
 				}
-				int k2 = ((buffer[0] & 0xff) << 8) + (buffer[1] & 0xff);
-				int l2 = ((buffer[2] & 0xff) << 8) + (buffer[3] & 0xff);
-				int i3 = ((buffer[4] & 0xff) << 16) + ((buffer[5] & 0xff) << 8) + (buffer[6] & 0xff);
-				int j3 = buffer[7] & 0xff;
-				if (k2 != i || l2 != l1 || j3 != anInt311)
+
+				int sectorFileId;
+				int sectorChunk;
+				int nextSector;
+				int sectorIndex;
+
+				if (extended) {
+					// Extended header: 4-byte fileId, 2-byte chunk, 3-byte next, 1-byte index
+					sectorFileId = ((buffer[0] & 0xff) << 24) + ((buffer[1] & 0xff) << 16)
+							+ ((buffer[2] & 0xff) << 8) + (buffer[3] & 0xff);
+					sectorChunk = ((buffer[4] & 0xff) << 8) + (buffer[5] & 0xff);
+					nextSector = ((buffer[6] & 0xff) << 16) + ((buffer[7] & 0xff) << 8) + (buffer[8] & 0xff);
+					sectorIndex = buffer[9] & 0xff;
+				} else {
+					// Standard header: 2-byte fileId, 2-byte chunk, 3-byte next, 1-byte index
+					sectorFileId = ((buffer[0] & 0xff) << 8) + (buffer[1] & 0xff);
+					sectorChunk = ((buffer[2] & 0xff) << 8) + (buffer[3] & 0xff);
+					nextSector = ((buffer[4] & 0xff) << 16) + ((buffer[5] & 0xff) << 8) + (buffer[6] & 0xff);
+					sectorIndex = buffer[7] & 0xff;
+				}
+
+				if (sectorFileId != i || sectorChunk != l1 || sectorIndex != anInt311)
 					return null;
-				if (i3 < 0 || (long) i3 > dataFile.length() / 520L)
+				if (nextSector < 0 || (long) nextSector > dataFile.length() / 520L)
 					return null;
 				for (int k3 = 0; k3 < i2; k3++)
-					abyte0[k1++] = buffer[k3 + 8];
+					abyte0[k1++] = buffer[k3 + headerSize];
 
-				j1 = i3;
+				j1 = nextSector;
 			}
 
 			return abyte0;
@@ -159,11 +183,11 @@ final class Decompressor {
 	}
 
 	private static final byte[] buffer = new byte[520];
-	
+
 	private final RandomAccessFile dataFile;
-	
+
 	private final RandomAccessFile indexFile;
-	
+
 	private final int anInt311;
 
 }

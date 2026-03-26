@@ -1,0 +1,530 @@
+[
+  {
+    "name": "Attack potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2428
+      },
+      {
+        "dose": 3,
+        "id": 121
+      },
+      {
+        "dose": 2,
+        "id": 123
+      },
+      {
+        "dose": 1,
+        "id": 125
+      }
+    ],
+    "effect": "+3 + 10% Attack",
+    "members": false,
+    "id": 2428
+  },
+  {
+    "name": "Strength potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 113
+      },
+      {
+        "dose": 3,
+        "id": 115
+      },
+      {
+        "dose": 2,
+        "id": 117
+      },
+      {
+        "dose": 1,
+        "id": 119
+      }
+    ],
+    "effect": "+3 + 10% Strength",
+    "members": false,
+    "id": 113
+  },
+  {
+    "name": "Defence potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2432
+      },
+      {
+        "dose": 3,
+        "id": 133
+      },
+      {
+        "dose": 2,
+        "id": 135
+      },
+      {
+        "dose": 1,
+        "id": 137
+      }
+    ],
+    "effect": "+3 + 10% Defence",
+    "members": false,
+    "id": 2432
+  },
+  {
+    "name": "Combat potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 9739
+      },
+      {
+        "dose": 3,
+        "id": 9741
+      },
+      {
+        "dose": 2,
+        "id": 9743
+      },
+      {
+        "dose": 1,
+        "id": 9745
+      }
+    ],
+    "effect": "+3 + 10% Attack and Strength",
+    "members": true,
+    "id": 9739
+  },
+  {
+    "name": "Prayer potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2434
+      },
+      {
+        "dose": 3,
+        "id": 139
+      },
+      {
+        "dose": 2,
+        "id": 141
+      },
+      {
+        "dose": 1,
+        "id": 143
+      }
+    ],
+    "effect": "7 + floor(level/4) Prayer points",
+    "members": true,
+    "id": 2434
+  },
+  {
+    "name": "Restore potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2430
+      },
+      {
+        "dose": 3,
+        "id": 127
+      },
+      {
+        "dose": 2,
+        "id": 129
+      },
+      {
+        "dose": 1,
+        "id": 131
+      }
+    ],
+    "effect": "Restores Attack, Strength, Defence, Ranged, Magic",
+    "members": false,
+    "id": 2430
+  },
+  {
+    "name": "Super attack",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2436
+      },
+      {
+        "dose": 3,
+        "id": 145
+      },
+      {
+        "dose": 2,
+        "id": 147
+      },
+      {
+        "dose": 1,
+        "id": 149
+      }
+    ],
+    "effect": "+5 + 15% Attack",
+    "members": true,
+    "id": 2436
+  },
+  {
+    "name": "Super strength",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2440
+      },
+      {
+        "dose": 3,
+        "id": 157
+      },
+      {
+        "dose": 2,
+        "id": 159
+      },
+      {
+        "dose": 1,
+        "id": 161
+      }
+    ],
+    "effect": "+5 + 15% Strength",
+    "members": true,
+    "id": 2440
+  },
+  {
+    "name": "Super defence",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2442
+      },
+      {
+        "dose": 3,
+        "id": 163
+      },
+      {
+        "dose": 2,
+        "id": 165
+      },
+      {
+        "dose": 1,
+        "id": 167
+      }
+    ],
+    "effect": "+5 + 15% Defence",
+    "members": true,
+    "id": 2442
+  },
+  {
+    "name": "Ranging potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2444
+      },
+      {
+        "dose": 3,
+        "id": 169
+      },
+      {
+        "dose": 2,
+        "id": 171
+      },
+      {
+        "dose": 1,
+        "id": 173
+      }
+    ],
+    "effect": "+4 + 10% Ranged",
+    "members": true,
+    "id": 2444
+  },
+  {
+    "name": "Magic potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 3040
+      },
+      {
+        "dose": 3,
+        "id": 3042
+      },
+      {
+        "dose": 2,
+        "id": 3044
+      },
+      {
+        "dose": 1,
+        "id": 3046
+      }
+    ],
+    "effect": "+4 Magic",
+    "members": true,
+    "id": 3040
+  },
+  {
+    "name": "Antifire potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2452
+      },
+      {
+        "dose": 3,
+        "id": 2454
+      },
+      {
+        "dose": 2,
+        "id": 2456
+      },
+      {
+        "dose": 1,
+        "id": 2458
+      }
+    ],
+    "effect": "6 min dragonfire protection",
+    "members": true,
+    "id": 2452
+  },
+  {
+    "name": "Antipoison",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2446
+      },
+      {
+        "dose": 3,
+        "id": 175
+      },
+      {
+        "dose": 2,
+        "id": 177
+      },
+      {
+        "dose": 1,
+        "id": 179
+      }
+    ],
+    "effect": "Cures poison",
+    "members": false,
+    "id": 2446
+  },
+  {
+    "name": "Superantipoison",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2448
+      },
+      {
+        "dose": 3,
+        "id": 181
+      },
+      {
+        "dose": 2,
+        "id": 183
+      },
+      {
+        "dose": 1,
+        "id": 185
+      }
+    ],
+    "effect": "Cures poison + 6 min immunity",
+    "members": true,
+    "id": 2448
+  },
+  {
+    "name": "Saradomin brew",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 6685
+      },
+      {
+        "dose": 3,
+        "id": 6687
+      },
+      {
+        "dose": 2,
+        "id": 6689
+      },
+      {
+        "dose": 1,
+        "id": 6691
+      }
+    ],
+    "effect": "+15% Defence, +15% HP over max, -10% Atk/Str/Mage/Range",
+    "members": true,
+    "id": 6685
+  },
+  {
+    "name": "Super restore",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 3024
+      },
+      {
+        "dose": 3,
+        "id": 3026
+      },
+      {
+        "dose": 2,
+        "id": 3028
+      },
+      {
+        "dose": 1,
+        "id": 3030
+      }
+    ],
+    "effect": "Restores all stats including Prayer",
+    "members": true,
+    "id": 3024
+  },
+  {
+    "name": "Stamina potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 12625
+      },
+      {
+        "dose": 3,
+        "id": 12627
+      },
+      {
+        "dose": 2,
+        "id": 12629
+      },
+      {
+        "dose": 1,
+        "id": 12631
+      }
+    ],
+    "effect": "Reduces run energy drain 70% for 2 min",
+    "members": true,
+    "id": 12625
+  },
+  {
+    "name": "Energy potion",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 3008
+      },
+      {
+        "dose": 3,
+        "id": 3010
+      },
+      {
+        "dose": 2,
+        "id": 3012
+      },
+      {
+        "dose": 1,
+        "id": 3014
+      }
+    ],
+    "effect": "Restores 10 run energy",
+    "members": false,
+    "id": 3008
+  },
+  {
+    "name": "Super energy",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 3016
+      },
+      {
+        "dose": 3,
+        "id": 3018
+      },
+      {
+        "dose": 2,
+        "id": 3020
+      },
+      {
+        "dose": 1,
+        "id": 3022
+      }
+    ],
+    "effect": "Restores 20 run energy",
+    "members": true,
+    "id": 3016
+  },
+  {
+    "name": "Antidote+",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 5943
+      },
+      {
+        "dose": 3,
+        "id": 5945
+      },
+      {
+        "dose": 2,
+        "id": 5947
+      },
+      {
+        "dose": 1,
+        "id": 5949
+      }
+    ],
+    "effect": "Cures poison + 9 min immunity",
+    "members": true,
+    "id": 5943
+  },
+  {
+    "name": "Antidote++",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 5952
+      },
+      {
+        "dose": 3,
+        "id": 5954
+      },
+      {
+        "dose": 2,
+        "id": 5956
+      },
+      {
+        "dose": 1,
+        "id": 5958
+      }
+    ],
+    "effect": "Cures poison + 12 min immunity",
+    "members": true,
+    "id": 5952
+  },
+  {
+    "name": "Zamorak brew",
+    "doses": [
+      {
+        "dose": 4,
+        "id": 2450
+      },
+      {
+        "dose": 3,
+        "id": 189
+      },
+      {
+        "dose": 2,
+        "id": 191
+      },
+      {
+        "dose": 1,
+        "id": 193
+      }
+    ],
+    "effect": "+2 + 20% Attack, +2 + 12% Strength, -2 - 10% Defence, -10% HP",
+    "members": true,
+    "id": 2450
+  }
+]

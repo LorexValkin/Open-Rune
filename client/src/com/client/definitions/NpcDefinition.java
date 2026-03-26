@@ -29,9 +29,17 @@ public final class NpcDefinition {
 
 		anInt56 = (anInt56 + 1) % 20;
 		NpcDefinition entityDef = cache[anInt56] = new NpcDefinition();
-		stream.currentOffset = streamIndices[i];
 		entityDef.interfaceType = i;
-		entityDef.readValues(stream);
+		try {
+			if (dat2Files != null && i < dat2Files.length && dat2Files[i] != null && dat2Files[i].length > 0) {
+				entityDef.readValues(new Buffer(dat2Files[i]));
+			} else if (stream != null && streamIndices != null && i < streamIndices.length) {
+				stream.currentOffset = streamIndices[i];
+				entityDef.readValues(stream);
+			}
+		} catch (Exception e) {
+			// Corrupt or incompatible definition
+		}
 		if (i == 5693) {
 			entityDef.name = "Pet night beast";
 			entityDef.combatLevel = 0;
@@ -1284,13 +1292,22 @@ public final class NpcDefinition {
 		cache = new NpcDefinition[20];
 		for (int k = 0; k < 20; k++)
 			cache[k] = new NpcDefinition();
-		/*for (int index = 0; index < totalAmount; index++) {
-			NpcDefinition ed = forID(index);
-			if (ed == null)
-				continue;
-			if (ed.name == null)
-				continue;
-		}*/
+	}
+
+	public static void unpackConfigDat2(com.client.Dat2ConfigLoader loader) {
+		int fileCount = loader.getFileCount(com.client.Dat2ConfigLoader.GROUP_NPCS);
+		dat2Files = loader.loadGroup(com.client.Dat2ConfigLoader.GROUP_NPCS);
+		if (dat2Files == null) {
+			System.out.println("[NpcDef] dat2: failed to load NPC group");
+			totalAmount = 0;
+			dat2Files = new byte[0][];
+		} else {
+			totalAmount = dat2Files.length;
+		}
+		System.out.println("[NpcDef] dat2: " + totalAmount + " NPCs loaded");
+		cache = new NpcDefinition[20];
+		for (int k = 0; k < 20; k++)
+			cache[k] = new NpcDefinition();
 	}
 
 	
@@ -1401,9 +1418,67 @@ public final class NpcDefinition {
 			} else if (opcode == 107)
 				aBoolean84 = false;
 			else if(opcode == 111 || opcode == 107 || opcode == 109) {
-				
+
+			// ── OSRS-era opcodes (rev 194+ / Anguish cache) ──
+			// Must consume data bytes to keep the stream synchronized,
+			// even if we don't use the values.
+			} else if (opcode == 5) {
+				// Additional/secondary model IDs
+				int count = stream.readUnsignedByte();
+				for (int idx = 0; idx < count; idx++)
+					stream.readUnsignedWord();
+			} else if (opcode == 18) {
+				stream.readUnsignedWord(); // category ID
+			} else if (opcode == 61) {
+				// Models as int32 (higher rev caches)
+				int count = stream.readUnsignedByte();
+				for (int idx = 0; idx < count; idx++)
+					stream.readDWord();
+			} else if (opcode == 62) {
+				// Chathead models as int32
+				int count = stream.readUnsignedByte();
+				for (int idx = 0; idx < count; idx++)
+					stream.readDWord();
+			} else if (opcode >= 74 && opcode <= 79) {
+				stream.readUnsignedWord(); // stat level (u16)
+			} else if (opcode == 104 || opcode == 105) {
+				stream.readUnsignedWord(); // render param
+			} else if (opcode == 108 || opcode == 110) {
+				// boolean flags — zero data bytes
+			} else if (opcode == 112 || opcode == 113) {
+				stream.readUnsignedByte(); // render modifier
+			} else if (opcode == 114) {
+				stream.readUnsignedWord(); // runSequence
+			} else if (opcode == 115) {
+				// run + 3 turn anims (4 x u16)
+				stream.readUnsignedWord(); stream.readUnsignedWord();
+				stream.readUnsignedWord(); stream.readUnsignedWord();
+			} else if (opcode == 116) {
+				stream.readUnsignedWord(); // crawlSequence
+			} else if (opcode == 117) {
+				// crawl + 3 turn anims (4 x u16)
+				stream.readUnsignedWord(); stream.readUnsignedWord();
+				stream.readUnsignedWord(); stream.readUnsignedWord();
+			} else if (opcode == 119) {
+				stream.readUnsignedByte(); // follower priority
+			} else if (opcode == 122 || opcode == 123 || opcode == 129
+					|| opcode == 130 || opcode == 145 || opcode == 147) {
+				// boolean flags — zero data bytes
+			} else if (opcode == 124 || opcode == 126 || opcode == 146) {
+				stream.readUnsignedWord(); // height / footprint / tint (u16)
+			} else if (opcode == 249) {
+				// Params key-value map
+				int count = stream.readUnsignedByte();
+				for (int idx = 0; idx < count; idx++) {
+					boolean isString = stream.readUnsignedByte() == 1;
+					stream.read3Bytes(); // param key (3 bytes)
+					if (isString)
+						stream.readString();
+					else
+						stream.readDWord();
+				}
 			} else {
-				System.out.println("Missing NPC opcode " + opcode + "last: " + last);
+				System.out.println("Missing NPC opcode " + opcode + " last: " + last);
 				continue;
 			}
 			last = opcode;
@@ -1614,6 +1689,7 @@ public final class NpcDefinition {
 	public long interfaceType;
 	public int getDegreesToTurn;
 	public static NpcDefinition[] cache;
+	public static byte[][] dat2Files; // dat2: individual file data per NPC
 	public static Client clientInstance;
 	public int anInt83;
 	public boolean aBoolean84;

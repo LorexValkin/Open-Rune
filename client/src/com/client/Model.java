@@ -220,11 +220,20 @@ public class Model extends Renderable {
                 }
             }
         }
+        boolean hasFaceRenderTypes = (l1 & 1) != 0;
+        boolean hasFaceTextures = (l2 & 1) != 0;
+        if (model525DebugCount < 5) {
+            model525DebugCount++;
+            System.out.println("[Model525] id=" + modelID + " verts=" + numVertices + " faces=" + numTriangles
+                + " tex=" + numTexTriangles + " l1=" + l1 + " hasFRT=" + hasFaceRenderTypes
+                + " l2=" + l2 + " hasFT=" + hasFaceTextures + " dataLen=" + abyte0.length);
+        }
+
         int k5 = numTexTriangles;
         int l5 = k5;
         k5 += numVertices;
         int i6 = k5;
-        if (l1 == 1) {
+        if (hasFaceRenderTypes) {
             k5 += numTriangles;
         }
         int j6 = k5;
@@ -248,7 +257,7 @@ public class Model extends Renderable {
         int k7 = k5;
         k5 += i4;
         int l7 = k5;
-        if (l2 == 1) {
+        if (hasFaceTextures) {
             k5 += numTriangles * 2;
         }
         int i8 = k5;
@@ -300,10 +309,10 @@ public class Model extends Renderable {
         if (k2 == 1) {
             anIntArray1656 = new int[numTriangles];
         }
-        if (l2 == 1) {
+        if (hasFaceTextures) {
             D = new short[numTriangles];
         }
-        if (l2 == 1 && numTexTriangles > 0) {
+        if (hasFaceTextures && numTexTriangles > 0) {
             x = new byte[numTriangles];
         }
         triangleColours2 = new int[numTriangles];
@@ -368,7 +377,7 @@ public class Model extends Renderable {
         nc7.currentOffset = i8;
         for (int i12 = 0; i12 < numTriangles; i12++) {
             triangleColours2[i12] = nc1.readUnsignedWord();
-            if (l1 == 1) {
+            if (hasFaceRenderTypes) {
                 face_render_type[i12] = nc2.readSignedByte();
                 if (face_render_type[i12] == 2) {
                     triangleColours2[i12] = 65535;
@@ -387,7 +396,7 @@ public class Model extends Renderable {
             if (k2 == 1) {
                 anIntArray1656[i12] = nc5.readUnsignedByte();
             }
-            if (l2 == 1) {
+            if (hasFaceTextures) {
                 D[i12] = (short) (nc6.readUnsignedWord() - 1);
             }
             if (x != null) {
@@ -543,11 +552,22 @@ public class Model extends Renderable {
             return;
         }
         byte[] data = aClass21Array1661[model].aByteArray368;
-        //data = read(signlink.findcachedir() + "/Raw/" + model + ".dat");
-        if (data[data.length - 1] == -1 && data[data.length - 2] == -1) {
-            read622Model(data, model);
-        } else {
-            readOldModel(model);
+        if (data == null || data.length < 18) {
+            return; // Too small for any model format
+        }
+        try {
+            int lastByte = data[data.length - 1] & 0xFF;
+            int penByte = data[data.length - 2] & 0xFF;
+            // OSRS models end with FF FF, FF FE, or FF FD
+            if (penByte == 0xFF && (lastByte == 0xFF || lastByte == 0xFE || lastByte == 0xFD)) {
+                read622Model(data, model);
+            } else {
+                readOldModel(model);
+            }
+        } catch (Exception e) {
+            // Model data corrupt or incompatible — render as empty model
+            numVertices = 0;
+            numberOfTriangleFaces = 0;
         }
         if (newmodel[model]) {
             scale2(4);// 2 is too big -- 3 is almost right
@@ -605,6 +625,8 @@ public class Model extends Renderable {
         int k2 = nc1.readUnsignedByte();
         int l2 = nc1.readUnsignedByte();
         int i3 = nc1.readUnsignedByte();
+        boolean hasFaceRenderTypes = (l1 & 1) != 0;
+        boolean hasFaceTextures = l2 == 1;
         int j3 = nc1.readUnsignedWord();
         int k3 = nc1.readUnsignedWord();
         int l3 = nc1.readUnsignedWord();
@@ -732,10 +754,10 @@ public class Model extends Renderable {
         if (k2 == 1) {
             anIntArray1656 = new int[numTriangles];
         }
-        if (l2 == 1) {
+        if (hasFaceTextures) {
             D = new short[numTriangles];
         }
-        if (l2 == 1 && numTexTriangles > 0) {
+        if (hasFaceTextures && numTexTriangles > 0) {
             x = new byte[numTriangles];
         }
         triangleColours2 = new int[numTriangles];
@@ -1270,74 +1292,225 @@ public class Model extends Renderable {
                 class21.anInt371 = 0;
                 return;
             }
-            Buffer stream = new Buffer(abyte0);
-            stream.currentOffset = abyte0.length - 18;
-            ModelHeader class21_1 = aClass21Array1661[j] = new ModelHeader();
-            class21_1.aByteArray368 = abyte0;
-            class21_1.anInt369 = stream.readUnsignedWord();
-            class21_1.anInt370 = stream.readUnsignedWord();
-            class21_1.anInt371 = stream.readUnsignedByte();
-            int k = stream.readUnsignedByte();
-            int l = stream.readUnsignedByte();
-            int i1 = stream.readUnsignedByte();
-            int j1 = stream.readUnsignedByte();
-            int k1 = stream.readUnsignedByte();
-            int l1 = stream.readUnsignedWord();
-            int i2 = stream.readUnsignedWord();
-            int j2 = stream.readUnsignedWord();
-            int k2 = stream.readUnsignedWord();
-            int l2 = 0;
-            class21_1.anInt372 = l2;
-            l2 += class21_1.anInt369;
-            class21_1.anInt378 = l2;
-            l2 += class21_1.anInt370;
-            class21_1.anInt381 = l2;
-            if (l == 255) {
-                l2 += class21_1.anInt370;
+
+            // Detect model format from last 2 bytes (RuneLite convention)
+            int lastByte = abyte0.length >= 2 ? abyte0[abyte0.length - 1] & 0xFF : 0;
+            int penultimateByte = abyte0.length >= 2 ? abyte0[abyte0.length - 2] & 0xFF : 0;
+            boolean isOsrsFormat = (penultimateByte == 0xFF && (lastByte == 0xFF || lastByte == 0xFE || lastByte == 0xFD));
+
+            if (isOsrsFormat) {
+                loadModelHeaderOSRS(abyte0, j, lastByte);
             } else {
-                class21_1.anInt381 = -l - 1;
+                loadModelHeader317(abyte0, j);
             }
-            class21_1.anInt383 = l2;
-            if (j1 == 1) {
-                l2 += class21_1.anInt370;
-            } else {
-                class21_1.anInt383 = -1;
+            // Sanity check: if claimed vertex count exceeds data size, reject
+            ModelHeader hdr = aClass21Array1661[j];
+            if (hdr != null && (hdr.anInt369 > abyte0.length || hdr.anInt370 > abyte0.length)) {
+                hdr.anInt369 = 0;
+                hdr.anInt370 = 0;
+                hdr.anInt371 = 0;
             }
-            class21_1.anInt380 = l2;
-            if (k == 1) {
-                l2 += class21_1.anInt370;
-            } else {
-                class21_1.anInt380 = -1;
-            }
-            class21_1.anInt376 = l2;
-            if (k1 == 1) {
-                l2 += class21_1.anInt369;
-            } else {
-                class21_1.anInt376 = -1;
-            }
-            class21_1.anInt382 = l2;
-            if (i1 == 1) {
-                l2 += class21_1.anInt370;
-            } else {
-                class21_1.anInt382 = -1;
-            }
-            class21_1.anInt377 = l2;
-            l2 += k2;
-            class21_1.anInt379 = l2;
-            l2 += class21_1.anInt370 * 2;
-            class21_1.anInt384 = l2;
-            l2 += class21_1.anInt371 * 6;
-            class21_1.anInt373 = l2;
-            l2 += l1;
-            class21_1.anInt374 = l2;
-            l2 += i2;
-            class21_1.anInt375 = l2;
-            l2 += j2;
         } catch (Exception _ex) {
+            ModelHeader hdr = aClass21Array1661[j] = new ModelHeader();
+            hdr.aByteArray368 = abyte0;
+            hdr.anInt369 = 0;
+            hdr.anInt370 = 0;
+            hdr.anInt371 = 0;
         }
     }
 
+    /** Load 317 model header — trailer at length - 18 (18 bytes). */
+    private static void loadModelHeader317(byte abyte0[], int j) {
+        Buffer stream = new Buffer(abyte0);
+        stream.currentOffset = abyte0.length - 18;
+        ModelHeader class21_1 = aClass21Array1661[j] = new ModelHeader();
+        class21_1.aByteArray368 = abyte0;
+        class21_1.anInt369 = stream.readUnsignedWord();
+        class21_1.anInt370 = stream.readUnsignedWord();
+        class21_1.anInt371 = stream.readUnsignedByte();
+        int k = stream.readUnsignedByte();
+        int l = stream.readUnsignedByte();
+        int i1 = stream.readUnsignedByte();
+        int j1 = stream.readUnsignedByte();
+        int k1 = stream.readUnsignedByte();
+        int l1 = stream.readUnsignedWord();
+        int i2 = stream.readUnsignedWord();
+        int j2 = stream.readUnsignedWord();
+        int k2 = stream.readUnsignedWord();
+        int l2 = 0;
+        class21_1.anInt372 = l2;
+        l2 += class21_1.anInt369;
+        class21_1.anInt378 = l2;
+        l2 += class21_1.anInt370;
+        class21_1.anInt381 = l2;
+        if (l == 255) {
+            l2 += class21_1.anInt370;
+        } else {
+            class21_1.anInt381 = -l - 1;
+        }
+        class21_1.anInt383 = l2;
+        if (j1 == 1) {
+            l2 += class21_1.anInt370;
+        } else {
+            class21_1.anInt383 = -1;
+        }
+        class21_1.anInt380 = l2;
+        if (k == 1) {
+            l2 += class21_1.anInt370;
+        } else {
+            class21_1.anInt380 = -1;
+        }
+        class21_1.anInt376 = l2;
+        if (k1 == 1) {
+            l2 += class21_1.anInt369;
+        } else {
+            class21_1.anInt376 = -1;
+        }
+        class21_1.anInt382 = l2;
+        if (i1 == 1) {
+            l2 += class21_1.anInt370;
+        } else {
+            class21_1.anInt382 = -1;
+        }
+        class21_1.anInt377 = l2;
+        l2 += k2;
+        class21_1.anInt379 = l2;
+        l2 += class21_1.anInt370 * 2;
+        class21_1.anInt384 = l2;
+        l2 += class21_1.anInt371 * 6;
+        class21_1.anInt373 = l2;
+        l2 += l1;
+        class21_1.anInt374 = l2;
+        l2 += i2;
+        class21_1.anInt375 = l2;
+        l2 += j2;
+    }
+
+    /**
+     * Load OSRS model header — trailer at length-23 (Type1/2) or length-26 (Type3).
+     * Maps OSRS fields to 317 ModelHeader fields as closely as possible.
+     * Face textures are ignored (317 renderer doesn't support them).
+     */
+    private static void loadModelHeaderOSRS(byte abyte0[], int j, int formatByte) {
+        int trailerSize = (formatByte == 0xFD) ? 26 : 23;
+        if (abyte0.length < trailerSize) return;
+
+        Buffer stream = new Buffer(abyte0);
+        stream.currentOffset = abyte0.length - trailerSize;
+
+        ModelHeader hdr = aClass21Array1661[j] = new ModelHeader();
+        hdr.aByteArray368 = abyte0;
+
+        int vertexCount = stream.readUnsignedWord();
+        int faceCount = stream.readUnsignedWord();
+        int textureCount = stream.readUnsignedByte();
+        int hasFaceRenderTypes = stream.readUnsignedByte();
+        int faceRenderPriority = stream.readUnsignedByte();
+        int hasFaceTransparencies = stream.readUnsignedByte();
+        int hasPackedTranspVtxGrp = stream.readUnsignedByte();
+        int hasFaceTextures = stream.readUnsignedByte();
+        int hasPackedVertexGroups = stream.readUnsignedByte();
+
+        int hasAnimaya = 0;
+        if (formatByte == 0xFD) {
+            hasAnimaya = stream.readUnsignedByte();
+        }
+
+        int vertexXBytes = stream.readUnsignedWord();
+        int vertexYBytes = stream.readUnsignedWord();
+        int vertexZBytes = stream.readUnsignedWord();
+        int faceIndexBytes = stream.readUnsignedWord();
+        int faceTextureIdxBytes = stream.readUnsignedWord();
+
+        int animayaBytes = 0;
+        if (formatByte == 0xFD) {
+            animayaBytes = stream.readUnsignedWord();
+        }
+
+        // Map to 317 header fields
+        hdr.anInt369 = vertexCount;
+        hdr.anInt370 = faceCount;
+        hdr.anInt371 = textureCount;
+
+        // Build data section offsets (same layout logic as 317, with extra fields)
+        int offset = 0;
+        hdr.anInt372 = offset;       // vertex flags
+        offset += vertexCount;
+        hdr.anInt378 = offset;       // face type
+        offset += faceCount;
+
+        // Face render priority
+        hdr.anInt381 = offset;
+        if (faceRenderPriority == 255) {
+            offset += faceCount;
+        } else {
+            hdr.anInt381 = -faceRenderPriority - 1;
+        }
+
+        // Face bone groups (packed transparency + vertex groups)
+        hdr.anInt383 = offset;
+        if (hasPackedTranspVtxGrp == 1) {
+            offset += faceCount;
+        } else {
+            hdr.anInt383 = -1;
+        }
+
+        // Face render types
+        hdr.anInt380 = offset;
+        if (hasFaceRenderTypes == 1) {
+            offset += faceCount;
+        } else {
+            hdr.anInt380 = -1;
+        }
+
+        // Vertex bone groups
+        hdr.anInt376 = offset;
+        if (hasPackedVertexGroups == 1) {
+            offset += vertexCount;
+        } else {
+            hdr.anInt376 = -1;
+        }
+
+        // Face transparencies
+        hdr.anInt382 = offset;
+        if (hasFaceTransparencies == 1) {
+            offset += faceCount;
+        } else {
+            hdr.anInt382 = -1;
+        }
+
+        // Face indices
+        hdr.anInt377 = offset;
+        offset += faceIndexBytes;
+
+        // Face textures (OSRS only — skip for 317 rendering)
+        if (hasFaceTextures == 1) {
+            offset += faceCount * 2;
+        }
+
+        // Face colors
+        hdr.anInt379 = offset;
+        offset += faceCount * 2;
+
+        // Texture coordinates
+        hdr.anInt384 = offset;
+        offset += textureCount * 6;
+
+        // Vertex X
+        hdr.anInt373 = offset;
+        offset += vertexXBytes;
+
+        // Vertex Y
+        hdr.anInt374 = offset;
+        offset += vertexYBytes;
+
+        // Vertex Z
+        hdr.anInt375 = offset;
+        offset += vertexZBytes;
+    }
+
     public static boolean newmodel[];
+    private static int model525DebugCount = 0;
 
     public static void initModelCache(int i, OnDemandFetcherParent onDemandFetcherParent) {
         aClass21Array1661 = new ModelHeader[80000];

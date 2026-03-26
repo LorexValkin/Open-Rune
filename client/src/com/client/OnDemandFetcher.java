@@ -114,6 +114,13 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 		for (int k2 = 0; k2 < length; k2++)
 			anIntArray1348[k2] = stream.readUnsignedByte();
 		clientInstance = client;
+
+		// Load XTEA keys and build dat2 map index
+		if (com.client.sign.Signlink.isDat2) {
+			loadXteaKeys();
+			buildDat2MapIndex();
+		}
+
 		running = true;
 		clientInstance.startRunnable(this, 2);
 	}
@@ -362,7 +369,37 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 			return onDemandData;
 		int i = 0;
 		try {
-			GZIPInputStream gzipinputstream = new GZIPInputStream(new ByteArrayInputStream(onDemandData.buffer));
+			byte[] rawData = onDemandData.buffer;
+
+			// dat2: data is a Container (compression header + data), not raw GZIP
+			if (com.client.sign.Signlink.isDat2 && rawData.length >= 5) {
+				// For map data (type 3), try with XTEA key if available
+				int[] xteaKey = null;
+				if (onDemandData.dataType == 3) {
+					xteaKey = getXteaKey(onDemandData.ID);
+				}
+				byte[] decompressed = ContainerDecompressor.decompress(rawData, xteaKey);
+				if (decompressed != null) {
+					onDemandData.buffer = decompressed;
+					return onDemandData;
+				}
+				// Try without XTEA key (some maps are unencrypted)
+				if (xteaKey != null) {
+					decompressed = ContainerDecompressor.decompress(rawData, null);
+					if (decompressed != null) {
+						onDemandData.buffer = decompressed;
+						return onDemandData;
+					}
+				}
+				// Container decompress failed — return null so client skips this file
+				if (onDemandData.dataType == 3) {
+					onDemandData.buffer = null;
+					return onDemandData;
+				}
+				// Fall through to legacy GZIP for other types
+			}
+
+			GZIPInputStream gzipinputstream = new GZIPInputStream(new ByteArrayInputStream(rawData));
 			do {
 				if (i == gzipInputBuffer.length)
 					throw new RuntimeException("buffer overflow!");
@@ -372,7 +409,6 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 				i += k;
 			} while (true);
 		} catch (IOException _ex) {
-			// RuntimeException("error unzipping");
 			System.out.println("Failed to unzip model [" + onDemandData.ID + "] type = " + onDemandData.dataType);
 			_ex.printStackTrace();
 			return null;
@@ -454,6 +490,209 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 	public void clearPrefetch() {
 		synchronized (aClass19_1344) {
 			aClass19_1344.removeAll();
+		}
+	}
+
+	// dat2 map index: regionKey -> [landscapeArchiveId, objectArchiveId]
+	private java.util.Map<Integer, int[]> dat2MapArchiveIds;
+
+	private int[] getXteaKey(int fileId) {
+		if (xteaKeys == null || fileIdToRegion == null) return null;
+		Integer regionKey = fileIdToRegion.get(fileId);
+		if (regionKey == null) return null;
+		return xteaKeys.get(regionKey);
+	}
+
+	/**
+	 * Build dat2 map index by reading the index 5 reference table from idx255.
+	 * Maps region keys to dat2 archive IDs using djb2 name hashes.
+	 */
+	private void buildDat2MapIndex() {
+		dat2MapArchiveIds = new java.util.HashMap<>();
+
+		if (clientInstance.decompressors[25] == null || clientInstance.decompressors[4] == null) {
+			System.out.println("[OnDemand] Cannot build dat2 map index: missing decompressors");
+			return;
+		}
+
+		// Read reference table for index 5 (maps) from idx255
+		byte[] refRaw = clientInstance.decompressors[25].decompress(5); // idx255, archive 5
+		if (refRaw == null) {
+			System.out.println("[OnDemand] Cannot read map reference table from idx255");
+			return;
+		}
+		byte[] refData = ContainerDecompressor.decompress(refRaw);
+		if (refData == null) {
+			System.out.println("[OnDemand] Cannot decompress map reference table");
+			return;
+		}
+
+		// Parse the reference table to extract name hashes
+		Buffer buf = new Buffer(refData);
+		int protocol = buf.readUnsignedByte();
+		if (protocol >= 6) buf.readDWord(); // revision
+		int flags = buf.readUnsignedByte();
+		boolean named = (flags & 0x01) != 0;
+
+		int groupCount;
+		if (protocol >= 7) {
+			groupCount = readBigSmartBuf(buf);
+		} else {
+			groupCount = buf.readUnsignedWord();
+		}
+
+		int[] groupIds = new int[groupCount];
+		int accum = 0;
+		for (int i = 0; i < groupCount; i++) {
+			accum += (protocol >= 7) ? readBigSmartBuf(buf) : buf.readUnsignedWord();
+			groupIds[i] = accum;
+		}
+
+		// Read name hashes
+		int[] nameHashes = new int[groupCount];
+		if (named) {
+			for (int i = 0; i < groupCount; i++) {
+				nameHashes[i] = buf.readDWord();
+			}
+		}
+
+		if (!named) {
+			System.out.println("[OnDemand] Map index is not named — cannot build region mapping");
+			return;
+		}
+
+		// Build djb2 hash → groupId lookup
+		java.util.Map<Integer, Integer> hashToGroup = new java.util.HashMap<>();
+		for (int i = 0; i < groupCount; i++) {
+			hashToGroup.put(nameHashes[i], groupIds[i]);
+		}
+
+		// Map each region to its landscape and object archive IDs
+		int mapped = 0;
+		for (int rx = 0; rx < 256; rx++) {
+			for (int ry = 0; ry < 256; ry++) {
+				int landscapeHash = djb2("m" + rx + "_" + ry);
+				int objectHash = djb2("l" + rx + "_" + ry);
+
+				Integer landscapeId = hashToGroup.get(landscapeHash);
+				Integer objectId = hashToGroup.get(objectHash);
+
+				if (landscapeId != null || objectId != null) {
+					int regionKey = (rx << 8) | ry;
+					dat2MapArchiveIds.put(regionKey,
+						new int[] { landscapeId != null ? landscapeId : -1,
+									objectId != null ? objectId : -1 });
+					mapped++;
+				}
+			}
+		}
+
+		// Also remap mapIndices for the legacy code paths
+		// Replace the 317 map_index entries with dat2 archive IDs
+		java.util.List<Integer> regions = new java.util.ArrayList<>();
+		java.util.List<Integer> landscapes = new java.util.ArrayList<>();
+		java.util.List<Integer> objects = new java.util.ArrayList<>();
+
+		for (java.util.Map.Entry<Integer, int[]> entry : dat2MapArchiveIds.entrySet()) {
+			regions.add(entry.getKey());
+			landscapes.add(entry.getValue()[0]);
+			objects.add(entry.getValue()[1]);
+		}
+
+		mapIndices1 = new int[regions.size()];
+		mapIndices2 = new int[regions.size()];
+		mapIndices3 = new int[regions.size()];
+		mapIndices4 = new int[regions.size()];
+		for (int i = 0; i < regions.size(); i++) {
+			mapIndices1[i] = regions.get(i);
+			mapIndices2[i] = landscapes.get(i);
+			mapIndices3[i] = objects.get(i);
+		}
+
+		// Build fileId → regionKey mapping for XTEA lookup
+		fileIdToRegion = new java.util.HashMap<>();
+		for (java.util.Map.Entry<Integer, int[]> entry : dat2MapArchiveIds.entrySet()) {
+			int regionKey = entry.getKey();
+			if (entry.getValue()[0] >= 0) fileIdToRegion.put(entry.getValue()[0], regionKey);
+			if (entry.getValue()[1] >= 0) fileIdToRegion.put(entry.getValue()[1], regionKey);
+		}
+
+		// Resize versions and fileStatus arrays to accommodate dat2 archive IDs
+		int maxArchiveId = 0;
+		for (int[] ids : dat2MapArchiveIds.values()) {
+			if (ids[0] > maxArchiveId) maxArchiveId = ids[0];
+			if (ids[1] > maxArchiveId) maxArchiveId = ids[1];
+		}
+		if (maxArchiveId >= 0) {
+			int needed = maxArchiveId + 1;
+			if (versions[3] == null || versions[3].length < needed) {
+				int[] newVersions = new int[needed];
+				java.util.Arrays.fill(newVersions, 1); // non-zero so requestRegionFile doesn't skip
+				if (versions[3] != null) System.arraycopy(versions[3], 0, newVersions, 0, versions[3].length);
+				versions[3] = newVersions;
+			}
+			if (fileStatus[3] == null || fileStatus[3].length < needed) {
+				byte[] newStatus = new byte[needed];
+				if (fileStatus[3] != null) System.arraycopy(fileStatus[3], 0, newStatus, 0, fileStatus[3].length);
+				fileStatus[3] = newStatus;
+			}
+		}
+
+		System.out.println("[OnDemand] dat2 map index: " + mapped + " regions mapped, maxArchiveId=" + maxArchiveId);
+	}
+
+	private int djb2(String str) {
+		int hash = 0;
+		for (int i = 0; i < str.length(); i++) {
+			hash = str.charAt(i) + ((hash << 5) - hash);
+		}
+		return hash;
+	}
+
+	private int readBigSmartBuf(Buffer buf) {
+		int peek = buf.buffer[buf.currentOffset] & 0xFF;
+		if (peek >= 128) {
+			return buf.readDWord() & 0x7FFFFFFF;
+		} else {
+			return buf.readUnsignedWord();
+		}
+	}
+
+	private void loadXteaKeys() {
+		xteaKeys = new java.util.HashMap<>();
+		try {
+			String keysPath = System.getProperty("user.home") + System.getProperty("file.separator")
+					+ ".openrune" + System.getProperty("file.separator")
+					+ "cache-232" + System.getProperty("file.separator") + "keys.json";
+			java.io.File keysFile = new java.io.File(keysPath);
+			if (!keysFile.exists()) {
+				System.out.println("[OnDemand] XTEA keys.json not found at: " + keysPath);
+				return;
+			}
+			// Simple JSON parsing — each entry has "mapsquare" and "key" array
+			String json = new String(java.nio.file.Files.readAllBytes(keysFile.toPath()));
+			// Parse mapsquare and key values using simple string scanning
+			int idx = 0;
+			while ((idx = json.indexOf("\"mapsquare\"", idx)) != -1) {
+				int colonIdx = json.indexOf(':', idx + 11);
+				int commaIdx = json.indexOf(',', colonIdx);
+				int mapsquare = Integer.parseInt(json.substring(colonIdx + 1, commaIdx).trim());
+
+				int keyStart = json.indexOf("\"key\"", idx);
+				int bracketStart = json.indexOf('[', keyStart);
+				int bracketEnd = json.indexOf(']', bracketStart);
+				String keyStr = json.substring(bracketStart + 1, bracketEnd);
+				String[] keyParts = keyStr.split(",");
+				if (keyParts.length == 4) {
+					int[] key = new int[4];
+					for (int i = 0; i < 4; i++) key[i] = Integer.parseInt(keyParts[i].trim());
+					xteaKeys.put(mapsquare, key);
+				}
+				idx = bracketEnd;
+			}
+			System.out.println("[OnDemand] Loaded " + xteaKeys.size() + " XTEA keys");
+		} catch (Exception e) {
+			System.out.println("[OnDemand] Failed to load XTEA keys: " + e.getMessage());
 		}
 	}
 
@@ -578,6 +817,9 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
 	private boolean waiting;
 	private final DoublyLinkedList aClass19_1358;
 	private final byte[] gzipInputBuffer;
+	private int containerDebugCount = 0;
+	private java.util.Map<Integer, int[]> xteaKeys; // mapsquare -> 4-int key
+	private java.util.Map<Integer, Integer> fileIdToRegion; // fileId -> mapsquare
 	private final DualLinkedList nodeSubList;
 	private InputStream inputStream;
 	private Socket socket;
